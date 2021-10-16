@@ -84,7 +84,16 @@
     <ClCompile Include="cMathHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sFireworkObject.cpp">
+    <ClCompile Include="cFireworkObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cFireworkDebris.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cFireworkDebrisObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cFancyFirework1Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -140,7 +149,16 @@
     <ClInclude Include="cMathHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sFireworkObject.h">
+    <ClInclude Include="cFireworkObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cFireworkDebris.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cFancyFirework1Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cFireworkDebrisObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

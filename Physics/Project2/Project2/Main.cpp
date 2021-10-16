@@ -25,8 +25,10 @@
 #include "cFirework.h"
 #include "cWorldSpace.h"
 #include "cMathHelper.h"
-#include "sFireworkObject.h"
+#include "cFireworkObject.h"
+#include "cFancyFirework1Object.h"
 
+//TODO: Remove
 //DEBUG FOR MEMORY LEAK INVESTIGATION
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
@@ -46,18 +48,13 @@ configManager* _configManager = new configManager();
 
 glm::vec3 cameraEye = _configManager->_cameraStartingPosition;
 
-std::vector<sFireworkObject*> particleObjs;
-glm::mat3 axes;
+std::vector<cFireworkObject*> particleObjs;
 
 //TODO: Separate into own class?
 
 GLuint program = 0;     // 0 means "no shader program"
 float ratio;
-int width, height;
-glm::mat4 matModel;    // used to be "m"; Sometimes it's called "world"
-glm::mat4 p;
-glm::mat4 v;
-glm::mat4 mvp;    
+int width, height;  
 GLint matModel_Location;
 GLint matView_Location;
 GLint matProjection_Location;
@@ -79,7 +76,7 @@ static void captureCameraPosition() {
 void InitProject1Variables(cFirework* particle)
 {
     // because our "sphere" has a radius of 1
-    glm::vec3 position(0.0, 1.1f, 0.0);
+    glm::vec3 position = (worldSpace->axes[0] * mathHelper->getRandom(-5.f, 5.f)) + (worldSpace->axes[1] * 1.1f) + (worldSpace->axes[2] * mathHelper->getRandom(-5.f, 5.f));
     glm::vec3 velocity = (worldSpace->axes[0] * mathHelper->getRandom(-2.f, 2.f)) + (worldSpace->axes[1] * 5.f) + (worldSpace->axes[2] * mathHelper->getRandom(-2.f, 2.f));
     velocity = glm::normalize(velocity);
     velocity *= 50.f;
@@ -90,26 +87,25 @@ void InitProject1Variables(cFirework* particle)
 void InitFirework() {
     //TODO: Separate into own class.
     //Add model to vector.
-    sFireworkObject* newObj = new sFireworkObject();
-    cModel* firework = new cModel();
-    firework->modelName = "assets/pokeball.ply";
-    firework->bOverriveVertexColourHACK = true;
-    firework->bIsWireframe = false;
-    firework->positionXYZ = glm::vec3(0.f, 1.0f, 0.f);
-    newObj->model = firework;
+    cFireworkObject* newObj = new cFancyFirework1Object();
+    cModel* model = new cModel();
+    model->modelName = "assets/pokeball.ply";
+    model->bOverriveVertexColourHACK = true;
+    model->bIsWireframe = false;
+    model->positionXYZ = glm::vec3(0.f, 1.0f, 0.f);
+    newObj->model = model;
     //Add particle to particle list
-    cFirework* newParticle = new cFirework(1.0f, glm::vec3(0.f, 1.f, 0.f));
-    worldSpace->_world->GetForceRegistry()->Register(newParticle, worldSpace->_gravityGenerator);
-    newObj->particle = newParticle;
+    cFirework* newFirework = new cFirework(1.0f, glm::vec3(0.f, 1.f, 0.f));
+    worldSpace->_world->GetForceRegistry()->Register(newFirework, worldSpace->_gravityGenerator);
+    InitProject1Variables(newFirework);
+    newObj->particle = newFirework;
 
     particleObjs.push_back(newObj);
 
-    if (worldSpace->_world->AddParticle(newParticle))
+    if (worldSpace->_world->AddParticle(newFirework))
     {
         std::cout << "Hurray!" << std::endl;
     }
-
-    InitProject1Variables(newParticle);
 }
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -175,7 +171,7 @@ void shutDown(GLFWwindow* window) {
     exit(EXIT_SUCCESS);
 }
 
-void updatePositions(std::vector<sFireworkObject*> particles) {
+void updatePositions(std::vector<cFireworkObject*> particles) {
     glm::vec3 position;
     for (size_t x = 0; x < particles.size(); x++) {
         particles[x]->particle->GetPosition(position);
@@ -255,7 +251,7 @@ int main(void)
     initGround();
     float timeElapsed = 0;
 
-    for (sFireworkObject* p : particleObjs)
+    for (cFireworkObject* p : particleObjs)
     {
         InitProject1Variables(p->particle);
     }
@@ -281,7 +277,7 @@ int main(void)
         // Screen is cleared and we are ready to draw the scene...
         // *******************************************************
 
-
+        updatePositions(particleObjs);
         worldSpace->_world->TimeStep(deltaTime);
 
         // Safety, mostly for first frame
@@ -290,28 +286,29 @@ int main(void)
             deltaTime = 0.03f;
         }
 
+        for (int x = 0; x < particleObjs.size(); x++)
+        {
+            if (particleObjs[x]->particle->isReadyForStageTwo()) {
+                std::vector<cFireworkObject*> newFireworks = particleObjs[x]->triggerStageTwo();
+                if (newFireworks.size() > 0) {
+                    particleObjs.insert(particleObjs.end(), newFireworks.begin(), newFireworks.end());
+                }
+                worldSpace->_world->RemoveParticle(particleObjs[x]->particle);
+                delete particleObjs[x];
+                particleObjs[x] = 0;
+                particleObjs.erase(particleObjs.begin() + x);
+                // Decrement x. Size of vector shrunk, so index has decreased by 1.
+                x--;
+            }
+        }
+
         for (unsigned int index = 0; index != particleObjs.size(); index++)
         {
             renderModel(*particleObjs[index]->model);
         }
 
         renderModel(g_groundModel);
-        updatePositions(particleObjs);
-
         // Scene is drawn
-
-        for (int x = 0; x < particleObjs.size(); x++)
-        {
-            if (particleObjs[x]->particle->isReadyForStageTwo()) {
-                delete particleObjs[x];
-                particleObjs[x] = 0;
-                particleObjs.erase(particleObjs.begin() + x);
-                // Decrement x. Size of vector shrunk, so index has decreased by 1.
-                if (x > 0) {
-                    x--;
-                }
-            }
-        }
 
         // "Present" what we've drawn.
         glfwSwapBuffers(window);
@@ -322,6 +319,11 @@ int main(void)
 }
 
 void renderModel(cModel model) {
+    glm::mat4 matModel;    // used to be "m"; Sometimes it's called "world"
+    glm::mat4 p;
+    glm::mat4 v;
+    glm::mat4 mvp;
+
     matModel = model.buildWorldMatrix();
 
     p = glm::perspective(0.6f,
