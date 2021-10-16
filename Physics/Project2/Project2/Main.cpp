@@ -25,13 +25,18 @@
 #include "cFirework.h"
 #include "cWorldSpace.h"
 #include "cMathHelper.h"
+#include "sFireworkObject.h"
+
+//DEBUG FOR MEMORY LEAK INVESTIGATION
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 
 #pragma region Globals
 
 cVAOManager     gVAOManager;
 cShaderManager  gShaderManager;
 
-std::vector<cModel> g_vecFireworkModels;
 cModel g_groundModel;
 
 cWorldSpace* worldSpace = cWorldSpace::Instance();
@@ -41,7 +46,7 @@ configManager* _configManager = new configManager();
 
 glm::vec3 cameraEye = _configManager->_cameraStartingPosition;
 
-std::vector<cFirework*> particles;
+std::vector<sFireworkObject*> particleObjs;
 glm::mat3 axes;
 
 //TODO: Separate into own class?
@@ -82,6 +87,31 @@ void InitProject1Variables(cFirework* particle)
     particle->SetVelocity(velocity);
 }
 
+void InitFirework() {
+    //TODO: Separate into own class.
+    //Add model to vector.
+    sFireworkObject* newObj = new sFireworkObject();
+    cModel* firework = new cModel();
+    firework->modelName = "assets/pokeball.ply";
+    firework->bOverriveVertexColourHACK = true;
+    firework->bIsWireframe = false;
+    firework->positionXYZ = glm::vec3(0.f, 1.0f, 0.f);
+    newObj->model = firework;
+    //Add particle to particle list
+    cFirework* newParticle = new cFirework(1.0f, glm::vec3(0.f, 1.f, 0.f));
+    worldSpace->_world->GetForceRegistry()->Register(newParticle, worldSpace->_gravityGenerator);
+    newObj->particle = newParticle;
+
+    particleObjs.push_back(newObj);
+
+    if (worldSpace->_world->AddParticle(newParticle))
+    {
+        std::cout << "Hurray!" << std::endl;
+    }
+
+    InitProject1Variables(newParticle);
+}
+
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     float cameraSpeed = 0.3f;
@@ -119,29 +149,11 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     }
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
     {
-        //TODO: Separate into own class.
-        //Add model to vector.
-        cModel firework;
-        firework.modelName = "assets/pokeball.ply";
-        firework.bOverriveVertexColourHACK = true;
-        firework.bIsWireframe = false;
-        firework.positionXYZ = glm::vec3(0.f, 1.0f, 0.f);
-        g_vecFireworkModels.push_back(firework);
-
-        //Add particle to particle list
-        cFirework* newParticle = new cFirework(1.0f, glm::vec3(0.f,1.f,0.f));
-        worldSpace->_world->GetForceRegistry()->Register(newParticle, worldSpace->_gravityGenerator);
-        particles.push_back(newParticle);
-
-        if (worldSpace->_world->AddParticle(newParticle))
-        {
-            std::cout << "Hurray!" << std::endl;
-        }
-
-        InitProject1Variables(newParticle);
+        InitFirework();
     }
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
+        _CrtDumpMemoryLeaks();
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
 }
@@ -163,11 +175,11 @@ void shutDown(GLFWwindow* window) {
     exit(EXIT_SUCCESS);
 }
 
-void updatePositions(std::vector<cFirework*>& particles) {
+void updatePositions(std::vector<sFireworkObject*> particles) {
     glm::vec3 position;
     for (size_t x = 0; x < particles.size(); x++) {
-        particles[x]->GetPosition(position);
-        g_vecFireworkModels[x].positionXYZ = position;
+        particles[x]->particle->GetPosition(position);
+        particles[x]->model->positionXYZ = position;
     }
 }
 
@@ -243,9 +255,9 @@ int main(void)
     initGround();
     float timeElapsed = 0;
 
-    for (cFirework* p : particles)
+    for (sFireworkObject* p : particleObjs)
     {
-        InitProject1Variables(p);
+        InitProject1Variables(p->particle);
     }
 
     while (!glfwWindowShouldClose(window))
@@ -278,21 +290,22 @@ int main(void)
             deltaTime = 0.03f;
         }
 
-        for (unsigned int index = 0; index != g_vecFireworkModels.size(); index++)
+        for (unsigned int index = 0; index != particleObjs.size(); index++)
         {
-            renderModel(g_vecFireworkModels[index]);
+            renderModel(*particleObjs[index]->model);
         }
 
         renderModel(g_groundModel);
-        updatePositions(particles);
+        updatePositions(particleObjs);
 
         // Scene is drawn
 
-        for (int x = 0; x < particles.size(); x++)
+        for (int x = 0; x < particleObjs.size(); x++)
         {
-            if (particles[x]->isReadyForStageTwo()) {
-                g_vecFireworkModels.erase(g_vecFireworkModels.begin() + x);
-                particles.erase(particles.begin() + x);
+            if (particleObjs[x]->particle->isReadyForStageTwo()) {
+                delete particleObjs[x];
+                particleObjs[x] = 0;
+                particleObjs.erase(particleObjs.begin() + x);
                 // Decrement x. Size of vector shrunk, so index has decreased by 1.
                 if (x > 0) {
                     x--;
