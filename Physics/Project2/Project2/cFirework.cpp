@@ -12,8 +12,14 @@ bool cFirework::isInTheAir()
 
 bool cFirework::isReadyForStageTwo() {
     if (!isGoingUp()) {
-        //std::cout << "Bang" << std::endl;
         return true;
     }
     return false;
+}
+
+void cFirework::cleanUp() {
+    // Cleanup the firework if it hits the ground without exploding.
+    if (!isInTheAir()) {
+        delete this;
+    }
 }

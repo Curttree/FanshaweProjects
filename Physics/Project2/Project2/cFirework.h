@@ -10,10 +10,12 @@
 
 class cFirework : public nPhysics::cParticle{
 public:
+	using nPhysics::cParticle::cParticle;
 	glm::vec3 colorOverride;
 	virtual bool isReadyForStageTwo();
 	virtual bool isInTheAir();
 	virtual bool isGoingUp();
+	virtual void cleanUp();
 private:
 	static cWorldSpace* _world;
 	bool _inTheAir;

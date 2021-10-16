@@ -22,6 +22,7 @@
 #include <physics/cParticleWorld.h>
 #include <physics/particle_force_generators.h>
 
+#include "cFirework.h"
 #include "cWorldSpace.h"
 #include "cMathHelper.h"
 
@@ -40,7 +41,7 @@ configManager* _configManager = new configManager();
 
 glm::vec3 cameraEye = _configManager->_cameraStartingPosition;
 
-std::vector<nPhysics::cParticle*> particles;
+std::vector<cFirework*> particles;
 glm::mat3 axes;
 
 //TODO: Separate into own class?
@@ -70,7 +71,7 @@ static void captureCameraPosition() {
     std::cout << "Camera is currently positioned at x: " << cameraEye.x << " y: " << cameraEye.y << " z: " << cameraEye.z << std::endl;
 }
 
-void InitProject1Variables(nPhysics::cParticle* particle)
+void InitProject1Variables(cFirework* particle)
 {
     // because our "sphere" has a radius of 1
     glm::vec3 position(0.0, 1.1f, 0.0);
@@ -128,7 +129,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         g_vecFireworkModels.push_back(firework);
 
         //Add particle to particle list
-        nPhysics::cParticle* newParticle = new nPhysics::cParticle(1.0f, glm::vec3(0.f,1.f,0.f));
+        cFirework* newParticle = new cFirework(1.0f, glm::vec3(0.f,1.f,0.f));
         worldSpace->_world->GetForceRegistry()->Register(newParticle, worldSpace->_gravityGenerator);
         particles.push_back(newParticle);
 
@@ -162,7 +163,8 @@ void shutDown(GLFWwindow* window) {
     exit(EXIT_SUCCESS);
 }
 
-void updatePositions(std::vector<nPhysics::cParticle*>& particles, glm::vec3 position) {
+void updatePositions(std::vector<cFirework*>& particles) {
+    glm::vec3 position;
     for (size_t x = 0; x < particles.size(); x++) {
         particles[x]->GetPosition(position);
         g_vecFireworkModels[x].positionXYZ = position;
@@ -239,15 +241,9 @@ int main(void)
     _configManager->loadModelsIntoVAO(program, gVAOManager);
 
     initGround();
-
-    //TODO: Remove when moving to a dynamic model.
-    nPhysics::cParticle* particle = nullptr;
-    if (particles.size() > 0) {
-        particle = particles[0];
-    }
     float timeElapsed = 0;
 
-    for (nPhysics::cParticle* p : particles)
+    for (cFirework* p : particles)
     {
         InitProject1Variables(p);
     }
@@ -273,13 +269,6 @@ int main(void)
         // Screen is cleared and we are ready to draw the scene...
         // *******************************************************
 
-        //TODO: Remove when moving to a dynamic model.
-        glm::vec3 position = glm::vec3(0.f, 0.f, 0.f);
-        glm::vec3 velocity = glm::vec3(0.f, 0.f, 0.f);
-        if (particle != nullptr) {
-            glm::vec3 position = particle->GetPosition();
-            glm::vec3 velocity = particle->GetVelocity();
-        }
 
         worldSpace->_world->TimeStep(deltaTime);
 
@@ -295,10 +284,21 @@ int main(void)
         }
 
         renderModel(g_groundModel);
+        updatePositions(particles);
 
         // Scene is drawn
 
-        updatePositions(particles, position);
+        for (int x = 0; x < particles.size(); x++)
+        {
+            if (particles[x]->isReadyForStageTwo()) {
+                g_vecFireworkModels.erase(g_vecFireworkModels.begin() + x);
+                particles.erase(particles.begin() + x);
+                // Decrement x. Size of vector shrunk, so index has decreased by 1.
+                if (x > 0) {
+                    x--;
+                }
+            }
+        }
 
         // "Present" what we've drawn.
         glfwSwapBuffers(window);
