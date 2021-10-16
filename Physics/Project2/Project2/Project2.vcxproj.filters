@@ -84,16 +84,19 @@
     <ClCompile Include="cMathHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cFireworkObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cFireworkDebris.cpp">
+    <ClCompile Include="iFireworkObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cFireworkDebrisObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cFancyFirework1Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cFireworkFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cFancyFirework2Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -114,15 +117,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cFirework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cFancyFirework1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cFancyFirework2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cFancyFirework3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\sVertex_types.h">
@@ -149,16 +143,19 @@
     <ClInclude Include="cMathHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cFireworkObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cFireworkDebris.h">
+    <ClInclude Include="iFireworkObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cFancyFirework1Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cFireworkDebrisObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cFireworkFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cFancyFirework2Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

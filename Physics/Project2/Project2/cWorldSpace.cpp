@@ -12,9 +12,6 @@ cWorldSpace* cWorldSpace::Instance() {
 	if (_instance == 0) {
 		_instance = new cWorldSpace;
 
-		//Initialize Helpers
-		//TODO: Double check if this is the correct approach, or if there is something more efficient.
-
 		//Initialize physics
 		_instance->_gravityGenerator = new nPhysics::cParticleGravityGenerator(glm::vec3(0.0f, -9.81f, 0.0f));
 		_instance->_world = new nPhysics::cParticleWorld();

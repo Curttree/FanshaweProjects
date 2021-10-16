@@ -3,8 +3,7 @@
 #include "iFireworkObject.h"
 #include "cFireworkFactory.h"
 
-class cFancyFirework1Object : public iFireworkObject {
-public:
+class cFancyFirework2Object : public iFireworkObject {
 	using iFireworkObject::iFireworkObject;
 	virtual std::vector<iFireworkObject*> triggerStageTwo();
 	virtual bool isReadyForStageTwo();

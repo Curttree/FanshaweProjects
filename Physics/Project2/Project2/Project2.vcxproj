@@ -157,12 +157,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cFancyFirework1Object.cpp" />
+    <ClCompile Include="cFancyFirework2Object.cpp" />
     <ClCompile Include="cFirework.cpp" />
-    <ClCompile Include="cFireworkDebris.cpp" />
     <ClCompile Include="cFireworkDebrisObject.cpp" />
+    <ClCompile Include="cFireworkFactory.cpp" />
     <ClCompile Include="cMathHelper.cpp" />
     <ClCompile Include="cWorldSpace.cpp" />
-    <ClCompile Include="cFireworkObject.cpp" />
+    <ClCompile Include="iFireworkObject.cpp" />
     <ClCompile Include="src\graphics\cModel.cpp" />
     <ClCompile Include="src\graphics\cShader.cpp" />
     <ClCompile Include="src\graphics\cShaderManager.cpp" />
@@ -176,13 +177,11 @@
     <ClCompile Include="src\physics\particle_force_generators.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cFancyFirework1.h" />
     <ClInclude Include="cFancyFirework1Object.h" />
-    <ClInclude Include="cFancyFirework2.h" />
-    <ClInclude Include="cFancyFirework3.h" />
+    <ClInclude Include="cFancyFirework2Object.h" />
     <ClInclude Include="cFirework.h" />
-    <ClInclude Include="cFireworkDebris.h" />
     <ClInclude Include="cFireworkDebrisObject.h" />
+    <ClInclude Include="cFireworkFactory.h" />
     <ClInclude Include="cMathHelper.h" />
     <ClInclude Include="cWorldSpace.h" />
     <ClInclude Include="include\extern_includes.h" />
@@ -191,7 +190,7 @@
     <ClInclude Include="include\physics\cParticleWorld.h" />
     <ClInclude Include="include\physics\iParticleForceGenerator.h" />
     <ClInclude Include="include\physics\particle_force_generators.h" />
-    <ClInclude Include="cFireworkObject.h" />
+    <ClInclude Include="iFireworkObject.h" />
     <ClInclude Include="src\graphics\cModel.h" />
     <ClInclude Include="src\graphics\configManager.h" />
     <ClInclude Include="src\graphics\cShaderManager.h" />

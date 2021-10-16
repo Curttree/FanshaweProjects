@@ -22,11 +22,11 @@
 #include <physics/cParticleWorld.h>
 #include <physics/particle_force_generators.h>
 
+#include "cFireworkFactory.h"
 #include "cFirework.h"
 #include "cWorldSpace.h"
 #include "cMathHelper.h"
-#include "cFireworkObject.h"
-#include "cFancyFirework1Object.h"
+#include "iFireworkObject.h"
 
 //TODO: Remove
 //DEBUG FOR MEMORY LEAK INVESTIGATION
@@ -43,12 +43,13 @@ cModel g_groundModel;
 
 cWorldSpace* worldSpace = cWorldSpace::Instance();
 cMathHelper* mathHelper = cMathHelper::Instance();
+cFireworkFactory* fireworkFactory = cFireworkFactory::Instance();
 
 configManager* _configManager = new configManager();
 
 glm::vec3 cameraEye = _configManager->_cameraStartingPosition;
 
-std::vector<cFireworkObject*> particleObjs;
+std::vector<iFireworkObject*> particleObjs;
 
 //TODO: Separate into own class?
 
@@ -73,39 +74,15 @@ static void captureCameraPosition() {
     std::cout << "Camera is currently positioned at x: " << cameraEye.x << " y: " << cameraEye.y << " z: " << cameraEye.z << std::endl;
 }
 
-void InitProject1Variables(cFirework* particle)
-{
-    // because our "sphere" has a radius of 1
+void InitFirework(int type) {
+    //TODO: Remove dependency on velocity, defer to factory/individual class definitions..
     glm::vec3 position = (worldSpace->axes[0] * mathHelper->getRandom(-5.f, 5.f)) + (worldSpace->axes[1] * 1.1f) + (worldSpace->axes[2] * mathHelper->getRandom(-5.f, 5.f));
     glm::vec3 velocity = (worldSpace->axes[0] * mathHelper->getRandom(-2.f, 2.f)) + (worldSpace->axes[1] * 5.f) + (worldSpace->axes[2] * mathHelper->getRandom(-2.f, 2.f));
     velocity = glm::normalize(velocity);
     velocity *= 50.f;
-    particle->SetPosition(position);
-    particle->SetVelocity(velocity);
-}
-
-void InitFirework() {
-    //TODO: Separate into own class.
-    //Add model to vector.
-    cFireworkObject* newObj = new cFancyFirework1Object();
-    cModel* model = new cModel();
-    model->modelName = "assets/pokeball.ply";
-    model->bOverriveVertexColourHACK = true;
-    model->bIsWireframe = false;
-    model->positionXYZ = glm::vec3(0.f, 1.0f, 0.f);
-    newObj->model = model;
-    //Add particle to particle list
-    cFirework* newFirework = new cFirework(1.0f, glm::vec3(0.f, 1.f, 0.f));
-    worldSpace->_world->GetForceRegistry()->Register(newFirework, worldSpace->_gravityGenerator);
-    InitProject1Variables(newFirework);
-    newObj->particle = newFirework;
+    iFireworkObject* newObj = fireworkFactory->createFireworkObject(type,position,velocity);
 
     particleObjs.push_back(newObj);
-
-    if (worldSpace->_world->AddParticle(newFirework))
-    {
-        std::cout << "Hurray!" << std::endl;
-    }
 }
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -139,13 +116,17 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         break;
     }
 
+    if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+    {
+        InitFirework(1);
+    }
+    if (key == GLFW_KEY_2 && action == GLFW_PRESS)
+    {
+        InitFirework(2);
+    }
     if (key == GLFW_KEY_C && action == GLFW_PRESS)
     {
         captureCameraPosition();
-    }
-    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-    {
-        InitFirework();
     }
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
@@ -171,7 +152,7 @@ void shutDown(GLFWwindow* window) {
     exit(EXIT_SUCCESS);
 }
 
-void updatePositions(std::vector<cFireworkObject*> particles) {
+void updatePositions(std::vector<iFireworkObject*> particles) {
     glm::vec3 position;
     for (size_t x = 0; x < particles.size(); x++) {
         particles[x]->particle->GetPosition(position);
@@ -251,11 +232,6 @@ int main(void)
     initGround();
     float timeElapsed = 0;
 
-    for (cFireworkObject* p : particleObjs)
-    {
-        InitProject1Variables(p->particle);
-    }
-
     while (!glfwWindowShouldClose(window))
     {
         //        mat4x4 m, p, mvp;
@@ -288,8 +264,8 @@ int main(void)
 
         for (int x = 0; x < particleObjs.size(); x++)
         {
-            if (particleObjs[x]->particle->isReadyForStageTwo()) {
-                std::vector<cFireworkObject*> newFireworks = particleObjs[x]->triggerStageTwo();
+            if (particleObjs[x]->isReadyForStageTwo()) {
+                std::vector<iFireworkObject*> newFireworks = particleObjs[x]->triggerStageTwo();
                 if (newFireworks.size() > 0) {
                     particleObjs.insert(particleObjs.end(), newFireworks.begin(), newFireworks.end());
                 }
