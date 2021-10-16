@@ -1,0 +1,21 @@
+{"Archer":{
+  "AliveModel":"character_skeleton_archer.ply",
+  "DeadModel":"character_skeleton_archer_broken.ply",
+  "Scale":0.95
+  },
+  "Mage":{
+  "AliveModel":"character_skeleton_mage.ply",
+  "DeadModel":"character_skeleton_mage_broken.ply",
+  "Scale":0.90
+  },
+  "Minion":{
+  "AliveModel":"character_skeleton_minion.ply",
+  "DeadModel":"assets/ground.ply",
+  "Scale":1.0
+  },
+  "Warrior":{
+  "AliveModel":"character_skeleton_warrior.ply",
+  "DeadModel":"character_skeleton_warrior_broken.ply",
+  "Scale":1.1
+  }
+}

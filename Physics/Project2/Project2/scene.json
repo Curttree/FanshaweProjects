@@ -1,0 +1,29 @@
+{
+  "Camera": {
+    "Position": {
+    "x_backup": 0.0,
+    "y_backup": 20.0,
+    "z_backup": -150.0,
+    "x": 0.0,
+    "y": 160.0,
+    "z": -330.0
+	},
+    "Focus":{
+		"x": 0.0,
+		"y": 40,
+		"z": 0.0
+	  }
+  },
+  "Audience": [
+    "Warrior",
+    "Archer",
+    "Mage",
+    "Mage",
+    "Warrior",
+    "Archer",
+    "Minion",
+    "Warrior",
+    "Mage",
+    "Minion"
+  ]
+}
