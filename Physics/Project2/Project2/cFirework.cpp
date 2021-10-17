@@ -9,6 +9,6 @@ void cFirework::update() {
 
 bool cFirework::isInTheAir()
 {
-    return GetPosition().y > 0.f; // TODO: Determine if radius of particle should factor in.
+    return GetPosition().y > 0.f;
 }
 

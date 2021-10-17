@@ -25,9 +25,6 @@ public:
 	rapidjson::Document _sceneDescription;
 	glm::vec3 _cameraStartingPosition;
 	glm::vec3 _cameraStartingFocus;
-	glm::vec3 _bodyPosition;
-	std::vector<cModel> _audience;
-	cModel _body;
 	std::vector<sModelDrawInfo> _modelDrawInfo;
 	configManager(); 
 	void loadModelsIntoVAO(GLuint program, cVAOManager& gVAOManager);
@@ -38,7 +35,5 @@ private:
 	std::vector<std::string> _modelsToLoad;
 	rapidjson::Document readJSONFile(std::string fileName);
 	void initCamera();
-	void initAudience();
 	void initModels();
-	cModel initMesh(std::string actorName, bool isAlive = true);
 };

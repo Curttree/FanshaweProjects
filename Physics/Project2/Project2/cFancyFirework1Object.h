@@ -5,7 +5,8 @@
 
 class cFancyFirework1Object : public iFireworkObject {
 public:
-	using iFireworkObject::iFireworkObject;
+	cFancyFirework1Object();
+	cFancyFirework1Object(cFirework* _particle, cModel* _model);
 	virtual std::vector<iFireworkObject*> triggerStageTwo();
 protected:
 	cFireworkBuilder* fireworkBuilder = cFireworkBuilder::Instance();

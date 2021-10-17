@@ -11,7 +11,6 @@
 class cFirework : public nPhysics::cParticle{
 public:
 	using nPhysics::cParticle::cParticle;
-	glm::vec3 colorOverride;
 	virtual bool isInTheAir();
 	virtual void update();
 	bool hitApex = false;

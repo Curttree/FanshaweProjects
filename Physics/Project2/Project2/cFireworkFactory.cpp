@@ -17,7 +17,7 @@ cFireworkFactory* cFireworkFactory::Instance() {
 	return _instance;
 }
 
-iFireworkObject* cFireworkFactory::createFireworkObject(int type, glm::vec3 position, glm::vec3 velocity) {
+iFireworkObject* cFireworkFactory::createFireworkObject(int type, glm::vec3 position, glm::vec3 velocity, glm::vec3 debrisColour) {
 	cFirework* firework = new cFirework(1.0f, position);
 	firework->SetVelocity(velocity);
 	cModel* newModel = new cModel();
@@ -26,12 +26,14 @@ iFireworkObject* cFireworkFactory::createFireworkObject(int type, glm::vec3 posi
 	switch (type) {
 	case(1):
 		obj = new cFancyFirework1Object(firework, newModel);
+		obj->model->vertexColourOverrideHACK = glm::vec3(1.f, 0.f, 0.f);
 		break;
 	case(2):
 		obj = new cFancyFirework2Object(firework, newModel);
+		obj->model->vertexColourOverrideHACK = glm::vec3(0.f, 1.f, 0.f);
 		break;
 	default:
-		obj = new cFireworkDebrisObject(firework, newModel);
+		obj = new cFireworkDebrisObject(firework, newModel, debrisColour);
 		break;
 	}
 	// Check to make sure obj has been set in case things have went horribly wrong.
@@ -41,14 +43,10 @@ iFireworkObject* cFireworkFactory::createFireworkObject(int type, glm::vec3 posi
 	return obj;
 }
 
-bool cFireworkFactory::buildSharedFireworkDetails(iFireworkObject*& obj) {
+void cFireworkFactory::buildSharedFireworkDetails(iFireworkObject*& obj) {
 	worldSpace->_world->AddParticle(obj->particle);
 	worldSpace->_world->GetForceRegistry()->Register(obj->particle, worldSpace->_gravityGenerator);
 	obj->model->modelName = "assets/pokeball.ply";
 	obj->model->bOverriveVertexColourHACK = true;
 	obj->model->bIsWireframe = false; 
-
-	//Return value in case we want to verify values are properly set.
-	// TODO: I may want to set to void.
-	return true;
 }

@@ -4,7 +4,6 @@ iFireworkObject::iFireworkObject(cFirework* _particle, cModel* _model) {
 	model = _model;
 }
 iFireworkObject::iFireworkObject() {
-
 }
 iFireworkObject::~iFireworkObject() {
 	if (particle) {
@@ -19,4 +18,7 @@ iFireworkObject::~iFireworkObject() {
 		delete fuse;
 		fuse = NULL;
 	}
+}
+void iFireworkObject::changeColour(glm::vec3 colour) {
+	model->vertexColourOverrideHACK = colour;
 }

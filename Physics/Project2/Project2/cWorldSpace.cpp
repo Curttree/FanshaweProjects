@@ -21,7 +21,6 @@ cWorldSpace* cWorldSpace::Instance() {
 }
 
 // MATH/Starter code from first physics assignment
-// TODO: Rewrite my own version.
 
 glm::vec3 cWorldSpace::getRandomXVector()
 {
@@ -37,8 +36,7 @@ glm::vec3 cWorldSpace::getRandomZVector()
 // The input vectors are unaffected.
 glm::mat3 cWorldSpace::orthonormalBasis(const glm::vec3& xVec, const glm::vec3& zVec)
 {
-	//TODO: Should this be a standard axis rather than randomly determined?
-
+	// If randomized orthonormal basis complicates simulation in the future, replace with standard axis.
 	glm::vec3 _xVec = glm::vec3(xVec);
 	glm::vec3 _yVec = glm::cross(zVec, _xVec);
 	glm::vec3 _zVec = glm::cross(_xVec, _yVec);

@@ -28,12 +28,6 @@
 #include "cMathHelper.h"
 #include "iFireworkObject.h"
 
-//TODO: Remove
-//DEBUG FOR MEMORY LEAK INVESTIGATION
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
-
 #pragma region Globals
 
 cVAOManager     gVAOManager;
@@ -51,8 +45,6 @@ glm::vec3 cameraEye = _configManager->_cameraStartingPosition;
 
 std::vector<iFireworkObject*> particleObjs;
 
-//TODO: Separate into own class?
-
 GLuint program = 0;     // 0 means "no shader program"
 float ratio;
 int width, height;  
@@ -62,7 +54,6 @@ GLint matProjection_Location;
 
 #pragma endregion
 
-//TODO: Determine if there is a better place for this.
 void renderModel(cModel model);
 
 static void error_callback(int error, const char* description)
@@ -87,7 +78,7 @@ void InitFirework(int type) {
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    float cameraSpeed = 0.3f;
+    float cameraSpeed = 1.f;
 
     switch (key) {
     case GLFW_KEY_A:
@@ -116,11 +107,11 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         break;
     }
 
-    if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+    if ((key == GLFW_KEY_1 || key == GLFW_KEY_KP_1) && action == GLFW_PRESS)
     {
         InitFirework(1);
     }
-    if (key == GLFW_KEY_2 && action == GLFW_PRESS)
+    if ((key == GLFW_KEY_2 || key == GLFW_KEY_KP_2) && action == GLFW_PRESS)
     {
         InitFirework(2);
     }
@@ -130,7 +121,6 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     }
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
-        _CrtDumpMemoryLeaks();
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
 }

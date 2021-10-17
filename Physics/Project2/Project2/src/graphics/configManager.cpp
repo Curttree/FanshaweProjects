@@ -9,7 +9,6 @@ configManager::configManager() {
     _sceneDescription = readJSONFile(sceneStream.str());
     if (!_modelsDoc.HasParseError() && !_sceneDescription.HasParseError()) {
         initCamera();
-        initAudience();
         initModels();
     }
 }
@@ -60,43 +59,6 @@ void configManager::initModels() {
         rapidjson::GenericArray<false, rapidjson::Value> models = _modelsDoc["Misc"].GetArray();
         for (rapidjson::SizeType current = 0; current < models.Size(); current++) {
             _modelsToLoad.push_back(_modelsDoc["Misc"][current].GetString());
-        }
-    }
-}
-
-cModel configManager::initMesh(std::string actorName, bool isAlive) {
-    cModel result;
-    // TODO: Remove temp hack
-    result.modelName = "assets/pokeball.ply";
-    // By default, all mesh objects will have their colors set by the program, and will be filled.
-    result.bOverriveVertexColourHACK = true;
-    result.bIsWireframe = false;
-
-    // Check to see if we already have the model flagged to be loaded.
-    if (std::find(_modelsToLoad.begin(), _modelsToLoad.end(), result.modelName) == _modelsToLoad.end())
-    {
-        _modelsToLoad.push_back(result.modelName);
-    }
-
-    return result;
-}
-
-//TODO: Remove and replace with dynamic generation of fireworks.
-void configManager::initAudience() {
-    if (_sceneDescription.HasMember("Audience")) {
-        rapidjson::GenericArray<false,rapidjson::Value> list = _sceneDescription["Audience"].GetArray();
-        std::string answer;
-        const float pi = 3.14159265358979323846f;       // Approx value of pi for calculation (can replace with value from math library if require additional precision).
-        float test;
-        cModel actor;
-        for (rapidjson::SizeType current = 0; current < list.Size(); current++)
-        {
-            actor = initMesh(_sceneDescription["Audience"][current].GetString());
-            // Determine relative position to the body using mathematical formula for equidistant points on a circle.
-            actor.positionXYZ.x = _bodyPosition.x - _bodyHeight/2 + _radius * cos(2 * pi * current /list.Size());     // Since center of gravity for the model is seemingly located at the foot of the model, offset x to try to centralize the body.
-            actor.positionXYZ.z = _bodyPosition.z + _radius * sin(2 * pi * current / list.Size());
-            actor.orientationXYZ.y = (1.5 * pi) - (float)(current) / list.Size() * (2.f * pi);    // Rotate around y axis so they are roughly facing the center of the circle. 1st actor required a rotation of 1.5 pi, others should be rotated accordingly based on their placement.
-            _audience.push_back(actor);
         }
     }
 }
