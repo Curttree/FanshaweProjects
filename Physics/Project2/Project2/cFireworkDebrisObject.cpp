@@ -12,6 +12,6 @@ cFireworkDebrisObject::cFireworkDebrisObject(cFirework* _particle, cModel* _mode
 	changeColour(_colour);
 }
 
-std::vector<iFireworkObject*> cFireworkDebrisObject::triggerStageTwo() {
+std::vector<iFireworkObject*> cFireworkDebrisObject::triggerNextStage() {
 	return std::vector<iFireworkObject*>();
 }

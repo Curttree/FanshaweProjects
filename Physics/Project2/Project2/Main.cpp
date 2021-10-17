@@ -66,12 +66,10 @@ static void captureCameraPosition() {
 }
 
 void InitFirework(int type) {
-    //TODO: Remove dependency on velocity, defer to factory/individual class definitions..
     glm::vec3 position = (worldSpace->axes[0] * mathHelper->getRandom(-5.f, 5.f)) + (worldSpace->axes[1] * 1.1f) + (worldSpace->axes[2] * mathHelper->getRandom(-5.f, 5.f));
-    glm::vec3 velocity = (worldSpace->axes[0] * mathHelper->getRandom(-2.f, 2.f)) + (worldSpace->axes[1] * 5.f) + (worldSpace->axes[2] * mathHelper->getRandom(-2.f, 2.f));
-    velocity = glm::normalize(velocity);
-    velocity *= 50.f;
-    iFireworkObject* newObj = fireworkBuilder->buildFirework(type,position,velocity);
+    glm::vec3 direction = (worldSpace->axes[0] * mathHelper->getRandom(-2.f, 2.f)) + (worldSpace->axes[1] * 5.f) + (worldSpace->axes[2] * mathHelper->getRandom(-2.f, 2.f));
+    direction = glm::normalize(direction);
+    iFireworkObject* newObj = fireworkBuilder->buildFirework(type,position, direction);
 
     particleObjs.push_back(newObj);
 }
@@ -114,6 +112,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     if ((key == GLFW_KEY_2 || key == GLFW_KEY_KP_2) && action == GLFW_PRESS)
     {
         InitFirework(2);
+    }
+    if ((key == GLFW_KEY_3 || key == GLFW_KEY_KP_3) && action == GLFW_PRESS)
+    {
+        InitFirework(3);
     }
     if (key == GLFW_KEY_C && action == GLFW_PRESS)
     {
@@ -255,8 +257,8 @@ int main(void)
         for (int x = 0; x < particleObjs.size(); x++)
         {
             particleObjs[x]->particle->update();
-            if (particleObjs[x]->fuse->isReadyForStageTwo()) {
-                std::vector<iFireworkObject*> newFireworks = particleObjs[x]->triggerStageTwo();
+            if (particleObjs[x]->fuse->isReadyForNextStage()) {
+                std::vector<iFireworkObject*> newFireworks = particleObjs[x]->triggerNextStage();
                 if (newFireworks.size() > 0) {
                     particleObjs.insert(particleObjs.end(), newFireworks.begin(), newFireworks.end());
                 }

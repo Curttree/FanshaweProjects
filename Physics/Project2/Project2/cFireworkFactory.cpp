@@ -2,6 +2,8 @@
 
 #include "cFancyFirework1Object.h"
 #include "cFancyFirework2Object.h"
+#include "cFancyFirework3Object.h"
+#include "cFancyFirework4Object.h"
 #include "cFireworkDebrisObject.h"
 
 cFireworkFactory* cFireworkFactory::_instance = 0;
@@ -26,11 +28,15 @@ iFireworkObject* cFireworkFactory::createFireworkObject(int type, glm::vec3 posi
 	switch (type) {
 	case(1):
 		obj = new cFancyFirework1Object(firework, newModel);
-		obj->model->vertexColourOverrideHACK = glm::vec3(1.f, 0.f, 0.f);
 		break;
 	case(2):
 		obj = new cFancyFirework2Object(firework, newModel);
-		obj->model->vertexColourOverrideHACK = glm::vec3(0.f, 1.f, 0.f);
+		break;
+	case(3):
+		obj = new cFancyFirework3Object(firework, newModel);
+		break;
+	case(4):
+		obj = new cFancyFirework4Object(firework, newModel);
 		break;
 	default:
 		obj = new cFireworkDebrisObject(firework, newModel, debrisColour);

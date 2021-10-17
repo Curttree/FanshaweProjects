@@ -135,6 +135,12 @@
     <ClCompile Include="cFireworkBuilder.cpp">
       <Filter>Fireworks\Builder</Filter>
     </ClCompile>
+    <ClCompile Include="cFancyFirework3Object.cpp">
+      <Filter>Fireworks\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="cFancyFirework4Object.cpp">
+      <Filter>Fireworks\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\cShaderManager.h">
@@ -208,6 +214,12 @@
     </ClInclude>
     <ClInclude Include="cFireworkBuilder.h">
       <Filter>Fireworks\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="cFancyFirework3Object.h">
+      <Filter>Fireworks\Objects\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cFancyFirework4Object.h">
+      <Filter>Fireworks\Objects\Headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

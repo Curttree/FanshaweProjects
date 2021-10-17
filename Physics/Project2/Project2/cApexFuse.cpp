@@ -11,6 +11,6 @@ cApexFuse::~cApexFuse() {
 	}
 }
 
-bool cApexFuse::isReadyForStageTwo() {
+bool cApexFuse::isReadyForNextStage() {
 	return *hitApex;
 }

@@ -159,6 +159,8 @@
     <ClCompile Include="cApexFuse.cpp" />
     <ClCompile Include="cFancyFirework1Object.cpp" />
     <ClCompile Include="cFancyFirework2Object.cpp" />
+    <ClCompile Include="cFancyFirework3Object.cpp" />
+    <ClCompile Include="cFancyFirework4Object.cpp" />
     <ClCompile Include="cFirework.cpp" />
     <ClCompile Include="cFireworkBuilder.cpp" />
     <ClCompile Include="cFireworkDebrisObject.cpp" />
@@ -184,6 +186,8 @@
     <ClInclude Include="cApexFuse.h" />
     <ClInclude Include="cFancyFirework1Object.h" />
     <ClInclude Include="cFancyFirework2Object.h" />
+    <ClInclude Include="cFancyFirework3Object.h" />
+    <ClInclude Include="cFancyFirework4Object.h" />
     <ClInclude Include="cFirework.h" />
     <ClInclude Include="cFireworkBuilder.h" />
     <ClInclude Include="cFireworkDebrisObject.h" />

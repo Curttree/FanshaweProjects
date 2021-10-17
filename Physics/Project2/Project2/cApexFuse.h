@@ -7,7 +7,7 @@ class cApexFuse : public iFuse {
 	public:
 		cApexFuse(bool* _hitApex);
 		~cApexFuse();
-		virtual bool isReadyForStageTwo();
+		virtual bool isReadyForNextStage();
 	private:
 		bool* hitApex;
 };
