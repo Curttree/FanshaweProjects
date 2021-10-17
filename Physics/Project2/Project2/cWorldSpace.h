@@ -10,6 +10,7 @@ class cWorldSpace {
 		nPhysics::cParticleGravityGenerator* _gravityGenerator;
 		nPhysics::cParticleWorld* _world; 
 		static glm::mat3 axes;
+		static glm::vec3 getRandomVector3(float magnitude, bool overrideAlpha = false, float alpha = 0);
 	private:
 		cWorldSpace();
 

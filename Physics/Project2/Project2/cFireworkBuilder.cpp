@@ -19,35 +19,41 @@ cFireworkBuilder* cFireworkBuilder::Instance() {
 
 	return _instance;
 }
-iFireworkObject* cFireworkBuilder::buildFirework(int fireworkNum, glm::vec3 position, glm::vec3 direction, glm::vec3 debrisColour) {
+iFireworkObject* cFireworkBuilder::buildFirework(int fireworkNum, glm::vec3 position, glm::vec3 debrisDirection, glm::vec3 debrisColour) {
 	iFireworkObject* result;
 	switch (fireworkNum) {
 	case(0):
-		result = cFireworkFactory::Instance()->createFireworkObject(0, position, direction * 1.f, debrisColour);
+		result = cFireworkFactory::Instance()->createFireworkObject(0, position, debrisDirection * 1.f, debrisColour);
 		result->fuse = cFuseFactory::Instance()->createFuse(TIMED_FUSE, &result->particle->hitApex, 120.f);
 		break;
 	case(1):
-		result = cFireworkFactory::Instance()->createFireworkObject(1, position, direction * 150.f);
-		result->fuse = cFuseFactory::Instance()->createFuse(TIMED_FUSE, &result->particle->hitApex, 45.f);
+		result = cFireworkFactory::Instance()->createFireworkObject(1, position, determineDirection(-1.f,1.f) * 150.f);
+		result->fuse = cFuseFactory::Instance()->createFuse(TIMED_FUSE, &result->particle->hitApex, 40.f);
 		break;
 	case(2):
-		result = cFireworkFactory::Instance()->createFireworkObject(2, position, direction * 40.f);
+		result = cFireworkFactory::Instance()->createFireworkObject(2, position, determineDirection(-3.f, 3.f) * 40.f);
 		result->fuse = cFuseFactory::Instance()->createFuse(APEX_FUSE, &result->particle->hitApex, 0.f);
 		break;
 	case(3):
-		result = cFireworkFactory::Instance()->createFireworkObject(3, position, direction * 120.f);
-		result->fuse = cFuseFactory::Instance()->createFuse(TIMED_FUSE, &result->particle->hitApex, 40.f);
+		result = cFireworkFactory::Instance()->createFireworkObject(3, position, determineDirection(-2.f, 2.f) * 120.f);
+		result->fuse = cFuseFactory::Instance()->createFuse(TIMED_FUSE, &result->particle->hitApex, 30.f);
 		break;
 	case(4):
-		result = cFireworkFactory::Instance()->createFireworkObject(4, position, direction * 20.f);
+		result = cFireworkFactory::Instance()->createFireworkObject(4, position, debrisDirection * 20.f);
 		result->fuse = cFuseFactory::Instance()->createFuse(TIMED_FUSE, &result->particle->hitApex, 60.f);
 		break;
 	default:
 		// Invalid selection. Build a firwork that will fizzle out immediately.
-		result = cFireworkFactory::Instance()->createFireworkObject(0,position,direction);
+		result = cFireworkFactory::Instance()->createFireworkObject(0,position, debrisDirection);
 		result->fuse = cFuseFactory::Instance()->createFuse(TIMED_FUSE, &result->particle->hitApex, 0.f);
 		break;
 	}
 
+	return result;
+}
+
+glm::vec3 cFireworkBuilder::determineDirection(float lowerBound, float upperBound) {
+	glm::vec3 result = (worldSpace->axes[0] * mathHelper->getRandom(lowerBound, upperBound)) + (worldSpace->axes[1] * 5.f) + (worldSpace->axes[2] * mathHelper->getRandom(lowerBound, upperBound));
+	result = glm::normalize(result);
 	return result;
 }

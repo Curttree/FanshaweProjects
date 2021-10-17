@@ -11,6 +11,8 @@ cModel::cModel()
 
 	this->vertexColourOverrideHACK = glm::vec3(1.0f, 1.0f, 1.0f);	// White
 	this->bOverriveVertexColourHACK = false;
+
+    this->bDontLightObject = false;
 }
 
 glm::mat4 cModel::buildWorldMatrix() {

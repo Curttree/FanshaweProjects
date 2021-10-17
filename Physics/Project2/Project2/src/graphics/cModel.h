@@ -23,6 +23,7 @@ public:
 	glm::vec3 vertexColourOverrideHACK;
 	bool bOverriveVertexColourHACK;
 	bool bIsWireframe;
+	bool bDontLightObject;
 
 	glm::mat4 buildWorldMatrix();
 };

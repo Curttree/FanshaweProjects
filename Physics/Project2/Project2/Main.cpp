@@ -186,7 +186,6 @@ int main(void)
 
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetKeyCallback(window, key_callback);
-
     glfwMakeContextCurrent(window);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     glfwSwapInterval(1);
@@ -317,6 +316,7 @@ void renderModel(cModel model) {
 
     GLint bUseVertexColour_Location = glGetUniformLocation(program, "bUseVertexColour");
     GLint vertexColourOverride_Location = glGetUniformLocation(program, "vertexColourOverride");
+    GLint bDontLightObject_Location = glGetUniformLocation(program, "bDontLightObject");
 
     glUniform3f(vertexColourOverride_Location, 0.0f, 1.0f, 1.0f);
     glUniform1f(bUseVertexColour_Location, (float)GL_TRUE);
@@ -335,6 +335,18 @@ void renderModel(cModel model) {
     {
         // DON'T override the colour
         glUniform1f(bUseVertexColour_Location, (float)GL_FALSE);
+    }
+
+    // See if mesh is wanting to ignore lighting.
+    if (model.bDontLightObject)
+    {
+        // Override the colour...
+        glUniform1f(bDontLightObject_Location, (float)GL_TRUE);
+    }
+    else
+    {
+        // DON'T override the colour
+        glUniform1f(bDontLightObject_Location, (float)GL_FALSE);
     }
 
     // Wireframe

@@ -11,9 +11,10 @@ cFancyFirework4Object::cFancyFirework4Object(cFirework* _particle, cModel* _mode
 std::vector<iFireworkObject*> cFancyFirework4Object::triggerNextStage() {
 	std::vector<iFireworkObject*> newFireworks;
 	float multiplier = 1.f;
-	for (int x = 0; x < 10; x++) {
-		newFireworks.push_back(fireworkBuilder->buildFirework(0, particle->GetPosition(), glm::vec3(float(x)/2.f * multiplier, 0.1f, float(x)), model->vertexColourOverrideHACK));
-		multiplier *= -1.f;
+	glm::vec3 direction;
+	for (int x = 0; x < 20; x++) {
+		direction = worldSpace->getRandomVector3(3.f);
+		newFireworks.push_back(fireworkBuilder->buildFirework(0, particle->GetPosition(), direction, model->vertexColourOverrideHACK));
 	}
 	return newFireworks;
 }

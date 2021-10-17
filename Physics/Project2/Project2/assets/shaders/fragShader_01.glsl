@@ -6,10 +6,20 @@ in vec4 fVertWorldLocation;
 in vec4 fNormal;
 in vec4 fUVx2;
 
+uniform bool bDontLightObject;	
+
 void main()
 {
 	// This is the pixel colour on the screen.
-	// Just ONE pixel, though.
+	// Just ONE pixel, though.	
+	
+	// Give option to not apply lighting to object.
+	if ( bDontLightObject )
+	{
+		gl_FragColor = fColour;
+		// Early exit from shader
+		return;
+	}
 	
 	vec4 lightLocation = vec4(-5.0, 15.0f, 5.0f, 1.0f); 
 	

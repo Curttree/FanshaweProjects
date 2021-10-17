@@ -32,6 +32,22 @@ glm::vec3 cWorldSpace::getRandomZVector()
 	return glm::vec3(-_mathHelper->getRandom(0.1f, 1.f), 0.f, _mathHelper->getRandom(0.1f, 1.f));
 }
 
+// If the user decides to override the alpha value, use the provided value rather than randomly assigning.
+glm::vec3 cWorldSpace::getRandomVector3(float magnitude, bool overrideAlpha, float alpha)
+{
+	if (!overrideAlpha){
+		alpha = _mathHelper->getRandom(glm::pi<float>());
+	}
+	float sinAlpha = glm::sin(alpha);
+	float cosAlpha = glm::cos(alpha);
+
+	float delta = _mathHelper->getRandom(-glm::pi<float>(), glm::pi<float>());
+	float sinDelta = glm::sin(delta);
+	float cosDelta = glm::cos(delta);
+
+	return glm::vec3(magnitude * sinAlpha * cosDelta, magnitude * sinAlpha * sinDelta, magnitude * cosAlpha);
+}
+
 // Generate an orthonormal basis, given two linearly independent vectors.
 // The input vectors are unaffected.
 glm::mat3 cWorldSpace::orthonormalBasis(const glm::vec3& xVec, const glm::vec3& zVec)
