@@ -15,4 +15,8 @@ iFireworkObject::~iFireworkObject() {
 		delete model;
 		model = NULL;
 	}
+	if (fuse) {
+		delete fuse;
+		fuse = NULL;
+	}
 }

@@ -4,14 +4,7 @@
 std::vector<iFireworkObject*> cFancyFirework1Object::triggerStageTwo() {
 	std::vector<iFireworkObject*> newFireworks;
 	for (int x = 0; x < 2; x++) {
-		newFireworks.push_back(fireworkFactory->createFireworkObject(0, particle->GetPosition(), glm::vec3(float(x), 0.f, 0.f)));
+		newFireworks.push_back(fireworkBuilder->buildFirework(0, particle->GetPosition(), glm::vec3(float(x), 0.f, 0.f)));
 	}
 	return newFireworks;
-}
-
-bool cFancyFirework1Object::isReadyForStageTwo() {
-	if (!particle->isGoingUp()) {
-		return true;
-	}
-	return false;
 }

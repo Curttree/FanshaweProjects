@@ -156,12 +156,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cApexFuse.cpp" />
     <ClCompile Include="cFancyFirework1Object.cpp" />
     <ClCompile Include="cFancyFirework2Object.cpp" />
     <ClCompile Include="cFirework.cpp" />
+    <ClCompile Include="cFireworkBuilder.cpp" />
     <ClCompile Include="cFireworkDebrisObject.cpp" />
     <ClCompile Include="cFireworkFactory.cpp" />
+    <ClCompile Include="cFuseFactory.cpp" />
     <ClCompile Include="cMathHelper.cpp" />
+    <ClCompile Include="cTimedFuse.cpp" />
     <ClCompile Include="cWorldSpace.cpp" />
     <ClCompile Include="iFireworkObject.cpp" />
     <ClCompile Include="src\graphics\cModel.cpp" />
@@ -177,13 +181,18 @@
     <ClCompile Include="src\physics\particle_force_generators.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cApexFuse.h" />
     <ClInclude Include="cFancyFirework1Object.h" />
     <ClInclude Include="cFancyFirework2Object.h" />
     <ClInclude Include="cFirework.h" />
+    <ClInclude Include="cFireworkBuilder.h" />
     <ClInclude Include="cFireworkDebrisObject.h" />
     <ClInclude Include="cFireworkFactory.h" />
+    <ClInclude Include="cFuseFactory.h" />
     <ClInclude Include="cMathHelper.h" />
+    <ClInclude Include="cTimedFuse.h" />
     <ClInclude Include="cWorldSpace.h" />
+    <ClInclude Include="iFuse.h" />
     <ClInclude Include="include\extern_includes.h" />
     <ClInclude Include="include\physics\cParticle.h" />
     <ClInclude Include="include\physics\cParticleForceRegistry.h" />

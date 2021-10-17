@@ -22,7 +22,7 @@
 #include <physics/cParticleWorld.h>
 #include <physics/particle_force_generators.h>
 
-#include "cFireworkFactory.h"
+#include "cFireworkBuilder.h"
 #include "cFirework.h"
 #include "cWorldSpace.h"
 #include "cMathHelper.h"
@@ -43,7 +43,7 @@ cModel g_groundModel;
 
 cWorldSpace* worldSpace = cWorldSpace::Instance();
 cMathHelper* mathHelper = cMathHelper::Instance();
-cFireworkFactory* fireworkFactory = cFireworkFactory::Instance();
+cFireworkBuilder* fireworkBuilder = cFireworkBuilder::Instance();
 
 configManager* _configManager = new configManager();
 
@@ -80,7 +80,7 @@ void InitFirework(int type) {
     glm::vec3 velocity = (worldSpace->axes[0] * mathHelper->getRandom(-2.f, 2.f)) + (worldSpace->axes[1] * 5.f) + (worldSpace->axes[2] * mathHelper->getRandom(-2.f, 2.f));
     velocity = glm::normalize(velocity);
     velocity *= 50.f;
-    iFireworkObject* newObj = fireworkFactory->createFireworkObject(type,position,velocity);
+    iFireworkObject* newObj = fireworkBuilder->buildFirework(type,position,velocity);
 
     particleObjs.push_back(newObj);
 }
@@ -264,7 +264,8 @@ int main(void)
 
         for (int x = 0; x < particleObjs.size(); x++)
         {
-            if (particleObjs[x]->isReadyForStageTwo()) {
+            particleObjs[x]->particle->update();
+            if (particleObjs[x]->fuse->isReadyForStageTwo()) {
                 std::vector<iFireworkObject*> newFireworks = particleObjs[x]->triggerStageTwo();
                 if (newFireworks.size() > 0) {
                     particleObjs.insert(particleObjs.end(), newFireworks.begin(), newFireworks.end());

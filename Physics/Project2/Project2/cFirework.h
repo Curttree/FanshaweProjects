@@ -13,7 +13,8 @@ public:
 	using nPhysics::cParticle::cParticle;
 	glm::vec3 colorOverride;
 	virtual bool isInTheAir();
-	virtual bool isGoingUp();
+	virtual void update();
+	bool hitApex = false;
 private:
 	static cWorldSpace* _world;
 };

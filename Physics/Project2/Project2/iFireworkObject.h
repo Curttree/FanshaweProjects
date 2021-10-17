@@ -1,5 +1,6 @@
 #pragma once
 #include "cFirework.h"
+#include "iFuse.h"
 #include "src/graphics/cModel.h"
 
 struct iFireworkObject {
@@ -10,7 +11,7 @@ public:
 	cFirework* particle;
 	cModel* model; 
 	virtual std::vector<iFireworkObject*> triggerStageTwo()=0;
-	virtual bool isReadyForStageTwo()=0;
+	iFuse* fuse;
 protected:
 	cWorldSpace* worldSpace = cWorldSpace::Instance();
 };

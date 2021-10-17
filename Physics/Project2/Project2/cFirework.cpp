@@ -1,8 +1,10 @@
 #include "cFirework.h"
 
 cWorldSpace* cFirework::_world = cWorldSpace::Instance();
-bool cFirework::isGoingUp() {
-    return glm::dot(GetVelocity(), _world->axes[1]) > 0;
+void cFirework::update() {
+    if (glm::dot(GetVelocity(), _world->axes[1]) <= 0){
+        hitApex = true;
+    }
 }
 
 bool cFirework::isInTheAir()
