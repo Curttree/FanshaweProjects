@@ -67,16 +67,14 @@ static void captureCameraPosition() {
 
 void InitFirework(int type) {
     glm::vec3 position = (worldSpace->axes[0] * mathHelper->getRandom(-5.f, 5.f)) + (worldSpace->axes[1] * 1.1f) + (worldSpace->axes[2] * mathHelper->getRandom(-5.f, 5.f));
-    glm::vec3 direction = (worldSpace->axes[0] * mathHelper->getRandom(-2.f, 2.f)) + (worldSpace->axes[1] * 5.f) + (worldSpace->axes[2] * mathHelper->getRandom(-2.f, 2.f));
-    direction = glm::normalize(direction);
-    iFireworkObject* newObj = fireworkBuilder->buildFirework(type,position, direction);
+    iFireworkObject* newObj = fireworkBuilder->buildFirework(type,position);
 
     particleObjs.push_back(newObj);
 }
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    float cameraSpeed = 1.f;
+    float cameraSpeed = 10.f;
 
     switch (key) {
     case GLFW_KEY_A:
