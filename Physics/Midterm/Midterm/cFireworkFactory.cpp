@@ -52,7 +52,7 @@ iFireworkObject* cFireworkFactory::createFireworkObject(int type, glm::vec3 posi
 void cFireworkFactory::buildSharedFireworkDetails(iFireworkObject*& obj) {
 	worldSpace->_world->AddParticle(obj->particle);
 	worldSpace->_world->GetForceRegistry()->Register(obj->particle, worldSpace->_gravityGenerator);
-	obj->model->modelName = "assets/pokeball.ply";
+	obj->model->modelName = "assets/ball.ply";
 	obj->model->bOverriveVertexColourHACK = true;
 	obj->model->bIsWireframe = false;
 	obj->model->bDontLightObject = true;

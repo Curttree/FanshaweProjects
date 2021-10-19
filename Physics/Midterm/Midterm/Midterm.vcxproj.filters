@@ -64,6 +64,12 @@
     <Filter Include="Fireworks\Builder">
       <UniqueIdentifier>{2d2b2169-8f44-48ca-9ed3-abea0553ec01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cannon">
+      <UniqueIdentifier>{8db9f75a-eafd-4e6b-bdb1-d2c1c636eea6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cannon\Headers">
+      <UniqueIdentifier>{e51eef2b-7dcf-44af-881a-9a07a5e2a5bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -140,6 +146,12 @@
     </ClCompile>
     <ClCompile Include="cFancyFirework4Object.cpp">
       <Filter>Fireworks\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="cProjectileFactory.cpp">
+      <Filter>Cannon</Filter>
+    </ClCompile>
+    <ClCompile Include="cParticleObject.cpp">
+      <Filter>Cannon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +232,18 @@
     </ClInclude>
     <ClInclude Include="cFancyFirework4Object.h">
       <Filter>Fireworks\Objects\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cProjectileFactory.h">
+      <Filter>Cannon\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="sCannonDef.h">
+      <Filter>Cannon\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="sParticleTemplate.h">
+      <Filter>Cannon\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cParticleObject.h">
+      <Filter>Cannon\Headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,14 +1,58 @@
 {
   "Camera": {
     "Position": {
-    "x": 15.0,
-    "y": 4.0,
-    "z": 17.0
-	},
-    "Focus":{
-		"x": 0.0,
-		"y": 0,
-		"z": 0.0
-	  }
+      "x": 0,
+      "y": 2,
+      "z": -20
+    },
+    "Focus": {
+      "x": 0,
+      "y": 2,
+      "z": 0
+    }
+  },
+  "Cannon": {
+    "Pitch": {
+      "MinDegrees": 0,
+      "MaxDegrees": 78
+    },
+    "Yaw": {
+      "MinDegrees": -45,
+      "MaxDegrees": 45
+    }
+  },
+  "Projectiles": {
+    "Bullet": {
+      "Size": 1,
+      "Damping": 1,
+      "Mass": 1,
+      "MuzzleVelocity": 1,
+      "TimeLimit": 1,
+      "DistanceLimit": 1
+    },
+    "Laser": {
+      "Size": 1,
+      "Damping": 1,
+      "Mass": 1,
+      "MuzzleVelocity": 1,
+      "TimeLimit": 1,
+      "DistanceLimit": 1
+    },
+    "CannonBall": {
+      "Size": 1,
+      "Damping": 1,
+      "Mass": 1,
+      "MuzzleVelocity": 1,
+      "TimeLimit": 1,
+      "DistanceLimit": 1
+    },
+    "EnergyBall": {
+      "Size": 1,
+      "Damping": 1,
+      "Mass": 1,
+      "MuzzleVelocity": 1,
+      "TimeLimit": 1,
+      "DistanceLimit": 1
+    }
   }
 }

@@ -167,6 +167,8 @@
     <ClCompile Include="cFireworkFactory.cpp" />
     <ClCompile Include="cFuseFactory.cpp" />
     <ClCompile Include="cMathHelper.cpp" />
+    <ClCompile Include="cParticleObject.cpp" />
+    <ClCompile Include="cProjectileFactory.cpp" />
     <ClCompile Include="cTimedFuse.cpp" />
     <ClCompile Include="cWorldSpace.cpp" />
     <ClCompile Include="iFireworkObject.cpp" />
@@ -194,6 +196,8 @@
     <ClInclude Include="cFireworkFactory.h" />
     <ClInclude Include="cFuseFactory.h" />
     <ClInclude Include="cMathHelper.h" />
+    <ClInclude Include="cProjectileFactory.h" />
+    <ClInclude Include="cParticleObject.h" />
     <ClInclude Include="cTimedFuse.h" />
     <ClInclude Include="cWorldSpace.h" />
     <ClInclude Include="iFuse.h" />
@@ -204,6 +208,8 @@
     <ClInclude Include="include\physics\iParticleForceGenerator.h" />
     <ClInclude Include="include\physics\particle_force_generators.h" />
     <ClInclude Include="iFireworkObject.h" />
+    <ClInclude Include="sCannonDef.h" />
+    <ClInclude Include="sParticleTemplate.h" />
     <ClInclude Include="src\graphics\cModel.h" />
     <ClInclude Include="src\graphics\configManager.h" />
     <ClInclude Include="src\graphics\cShaderManager.h" />

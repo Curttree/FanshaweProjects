@@ -27,6 +27,7 @@
 #include "cWorldSpace.h"
 #include "cMathHelper.h"
 #include "iFireworkObject.h"
+#include "sCannonDef.h"
 
 #pragma region Globals
 
@@ -35,14 +36,17 @@ cShaderManager  gShaderManager;
 
 cModel g_groundModel;
 cModel g_cannonModel;
-glm::vec3 cannonStartingOrientation =  glm::vec3(-3.14f / 2.f, 0.f, 0.f);
 
 cWorldSpace* worldSpace = cWorldSpace::Instance();
 cMathHelper* mathHelper = cMathHelper::Instance();
 cFireworkBuilder* fireworkBuilder = cFireworkBuilder::Instance();
 
-configManager* _configManager = new configManager();
+sCannonDef* _cannonDef = new sCannonDef();
+configManager* _configManager = new configManager(_cannonDef);
+//TODO: REMOVE AND REPLACE ONCE ROTATIONS ARE FIGURED OUT PROPERLY.
+float objToWorld = -1.f;
 
+glm::vec3 cameraTarget = _configManager->_cameraStartingFocus;
 glm::vec3 cameraEye = _configManager->_cameraStartingPosition;
 
 std::vector<iFireworkObject*> particleObjs;
@@ -67,6 +71,10 @@ static void captureCameraPosition() {
     std::cout << "Camera is currently positioned at x: " << cameraEye.x << " y: " << cameraEye.y << " z: " << cameraEye.z << std::endl;
 }
 
+static void captureCannonOrientation() {
+    std::cout << "Cannon is orientated at x: " << g_cannonModel.orientationXYZ.x << " y: " << g_cannonModel.orientationXYZ.y << " z: " << g_cannonModel.orientationXYZ.z << std::endl;
+}
+
 void InitFirework(int type) {
     glm::vec3 position = (worldSpace->axes[0] * mathHelper->getRandom(-5.f, 5.f)) + (worldSpace->axes[1] * 1.1f) + (worldSpace->axes[2] * mathHelper->getRandom(-5.f, 5.f));
     iFireworkObject* newObj = fireworkBuilder->buildFirework(type,position);
@@ -76,6 +84,8 @@ void InitFirework(int type) {
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+    // TODO: Orientation changes seem to be reverse of what I would expect.
+    // Rewatch graphics lecture about this to make sure I understand the concepts.
     float cameraSpeed = 1.f;
     float cannonSpeed = 0.05f;
 
@@ -84,25 +94,33 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         cameraEye.x -= cameraSpeed;
         break;
     case GLFW_KEY_LEFT:
-        g_cannonModel.orientationXYZ += glm::vec3(0.f, cannonSpeed, 0.f);
+        if ((g_cannonModel.orientationXYZ.y + cannonSpeed) * objToWorld >= (_cannonDef->lowerYaw)) {
+            g_cannonModel.orientationXYZ += glm::vec3(0.f, cannonSpeed, 0.f);
+        }
         break;
     case GLFW_KEY_D:
         cameraEye.x += cameraSpeed;
         break;
     case GLFW_KEY_RIGHT:
-        g_cannonModel.orientationXYZ -= glm::vec3(0.f, cannonSpeed, 0.f);
+        if ((g_cannonModel.orientationXYZ.y - cannonSpeed) * objToWorld <= (_cannonDef->upperYaw)) {
+            g_cannonModel.orientationXYZ -= glm::vec3(0.f, cannonSpeed, 0.f);
+        }
         break;
     case GLFW_KEY_W:
         cameraEye.z += cameraSpeed;
         break;
     case GLFW_KEY_UP:
-        g_cannonModel.orientationXYZ += glm::vec3(cannonSpeed, 0.f, 0.f);
+        if ((g_cannonModel.orientationXYZ.x - cannonSpeed) * objToWorld <= (_cannonDef->upperPitch)) {
+            g_cannonModel.orientationXYZ -= glm::vec3(cannonSpeed, 0.f, 0.f);
+        }
         break;
     case GLFW_KEY_S:
         cameraEye.z -= cameraSpeed;
         break;
     case GLFW_KEY_DOWN:
-        g_cannonModel.orientationXYZ -= glm::vec3(cannonSpeed, 0.f, 0.f);
+        if ((g_cannonModel.orientationXYZ.x + cannonSpeed) * objToWorld >= (_cannonDef->lowerPitch)) {
+            g_cannonModel.orientationXYZ += glm::vec3(cannonSpeed, 0.f, 0.f);
+        }
         break;
     case GLFW_KEY_E:
         cameraEye.y += cameraSpeed;
@@ -130,6 +148,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     {
         captureCameraPosition();
     }
+    if (key == GLFW_KEY_N && action == GLFW_PRESS)
+    {
+        captureCannonOrientation();
+    }
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
@@ -138,7 +160,9 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     cameraEye.x += xoffset;
+    cameraTarget.x += xoffset;
     cameraEye.y += yoffset;
+    cameraTarget.y += yoffset;
 }
 
 void shutDown(GLFWwindow* window) {
@@ -173,7 +197,6 @@ void initCannon() {
     g_cannonModel.modelName = "assets/cylinder.ply";
     g_cannonModel.scale = 10.f;
     g_cannonModel.positionXYZ = glm::vec3(0.f, 0.5f, 0.f);
-    g_cannonModel.orientationXYZ = cannonStartingOrientation;    // Rotate the model so it starts laying down.
     g_cannonModel.bOverriveVertexColourHACK = true;
     g_cannonModel.bIsWireframe = false;
     g_cannonModel.vertexColourOverrideHACK = glm::vec3(0.f, 0.f, 1.f);
@@ -184,6 +207,7 @@ int main(void)
     GLFWwindow* window;
     GLint mvp_location = -1;        // Because glGetAttribLocation() returns -1 on error
     float previousTime = static_cast<float>(glfwGetTime());
+
 
     glfwSetErrorCallback(error_callback);
 
@@ -322,7 +346,6 @@ void renderModel(cModel model) {
 
     v = glm::mat4(1.0f);
 
-    glm::vec3 cameraTarget = _configManager->_cameraStartingFocus;
     glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
     v = glm::lookAt(cameraEye,     // "eye"

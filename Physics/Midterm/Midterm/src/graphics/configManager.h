@@ -17,6 +17,8 @@
 
 #include "cModel.h"
 #include "cVAOManager.h"
+#include "../../cProjectileFactory.h"
+#include "../../sCannonDef.h"
 
 
 class configManager {
@@ -26,14 +28,15 @@ public:
 	glm::vec3 _cameraStartingPosition;
 	glm::vec3 _cameraStartingFocus;
 	std::vector<sModelDrawInfo> _modelDrawInfo;
-	configManager(); 
+	configManager(sCannonDef* _cannonDef); 
 	void loadModelsIntoVAO(GLuint program, cVAOManager& gVAOManager);
-
 private:
-	float _radius;
-	float _bodyHeight;
+	cProjectileFactory* projectileFactory = cProjectileFactory::Instance();
 	std::vector<std::string> _modelsToLoad;
 	rapidjson::Document readJSONFile(std::string fileName);
 	void initCamera();
 	void initModels();
+	void initProjectiles();
+	void initCannon(sCannonDef* cannon); 
+	void projectileParser(const char* name, int type);
 };

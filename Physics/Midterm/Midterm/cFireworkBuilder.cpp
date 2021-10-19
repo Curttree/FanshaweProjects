@@ -24,7 +24,7 @@ iFireworkObject* cFireworkBuilder::buildFirework(int fireworkNum, glm::vec3 posi
 	switch (fireworkNum) {
 	case(0):
 		result = cFireworkFactory::Instance()->createFireworkObject(0, position, debrisDirection * 1.f, debrisColour);
-		result->fuse = cFuseFactory::Instance()->createFuse(TIMED_FUSE, &result->particle->hitApex, 120.f);
+		result->fuse = cFuseFactory::Instance()->createFuse(TIMED_FUSE, &result->particle->hitApex, 60.f);
 		break;
 	case(1):
 		result = cFireworkFactory::Instance()->createFireworkObject(1, position, determineDirection(-1.f,1.f) * 150.f);
