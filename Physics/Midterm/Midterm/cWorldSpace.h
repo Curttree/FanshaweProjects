@@ -1,6 +1,7 @@
 #pragma once
 #include <physics/cParticleWorld.h>
 #include <physics/particle_force_generators.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "cMathHelper.h"
 
@@ -11,6 +12,7 @@ class cWorldSpace {
 		nPhysics::cParticleWorld* _world; 
 		static glm::mat3 axes;
 		static glm::vec3 getRandomVector3(float magnitude, bool overrideAlpha = false, float alpha = 0);
+		static glm::vec3 getPositionInWorldSpace(const glm::vec3 orientationXYZ, const glm::vec3 startPositionXYZ);
 	private:
 		cWorldSpace();
 

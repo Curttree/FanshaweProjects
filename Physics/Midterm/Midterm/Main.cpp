@@ -29,6 +29,8 @@
 #include "iFireworkObject.h"
 #include "sCannonDef.h"
 
+
+
 #pragma region Globals
 
 cVAOManager     gVAOManager;
@@ -40,16 +42,26 @@ cModel g_cannonModel;
 cWorldSpace* worldSpace = cWorldSpace::Instance();
 cMathHelper* mathHelper = cMathHelper::Instance();
 cFireworkBuilder* fireworkBuilder = cFireworkBuilder::Instance();
+cProjectileFactory* projectileFactory = cProjectileFactory::Instance();
 
 sCannonDef* _cannonDef = new sCannonDef();
 configManager* _configManager = new configManager(_cannonDef);
-//TODO: REMOVE AND REPLACE ONCE ROTATIONS ARE FIGURED OUT PROPERLY.
+
+// Orientation vector is meant to be applied to world space. Invert the values to align with expected direction without applying calculation.
+// Setting this as a variable so I do not have a 'magic number' floating around.
 float objToWorld = -1.f;
+
+
+glm::vec3 _direction;
+glm::vec3 _position;
+glm::vec3 cannonStartingDirection = glm::vec3(0.f, 0.f, 1.f);
+glm::vec3 cannonStartingPosition = glm::vec3(0.f, 0.5f, 3.f);
 
 glm::vec3 cameraTarget = _configManager->_cameraStartingFocus;
 glm::vec3 cameraEye = _configManager->_cameraStartingPosition;
 
-std::vector<iFireworkObject*> particleObjs;
+std::vector<iFireworkObject*> fireworkObjs;
+std::vector<cParticleObject*> projectileObjs;
 
 GLuint program = 0;     // 0 means "no shader program"
 float ratio;
@@ -79,13 +91,16 @@ void InitFirework(int type) {
     glm::vec3 position = (worldSpace->axes[0] * mathHelper->getRandom(-5.f, 5.f)) + (worldSpace->axes[1] * 1.1f) + (worldSpace->axes[2] * mathHelper->getRandom(-5.f, 5.f));
     iFireworkObject* newObj = fireworkBuilder->buildFirework(type,position);
 
-    particleObjs.push_back(newObj);
+    fireworkObjs.push_back(newObj);
+}
+
+void InitProjectile(int type, glm::vec3 direction, glm::vec3 position) {
+    cParticleObject* newObj = projectileFactory->createParticle(type, direction, position);
+    projectileObjs.push_back(newObj);
 }
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    // TODO: Orientation changes seem to be reverse of what I would expect.
-    // Rewatch graphics lecture about this to make sure I understand the concepts.
     float cameraSpeed = 1.f;
     float cannonSpeed = 0.05f;
 
@@ -134,15 +149,27 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
     if ((key == GLFW_KEY_1 || key == GLFW_KEY_KP_1) && action == GLFW_PRESS)
     {
-        InitFirework(1);
+        _direction = worldSpace->getPositionInWorldSpace(g_cannonModel.orientationXYZ, cannonStartingDirection);
+        _position = worldSpace->getPositionInWorldSpace(g_cannonModel.orientationXYZ, cannonStartingPosition);
+        InitProjectile(1, _direction, _position);
     }
     if ((key == GLFW_KEY_2 || key == GLFW_KEY_KP_2) && action == GLFW_PRESS)
     {
-        InitFirework(2);
+        _direction = worldSpace->getPositionInWorldSpace(g_cannonModel.orientationXYZ, cannonStartingDirection);
+        _position = worldSpace->getPositionInWorldSpace(g_cannonModel.orientationXYZ, cannonStartingPosition);
+        InitProjectile(2, _direction, _position);
     }
     if ((key == GLFW_KEY_3 || key == GLFW_KEY_KP_3) && action == GLFW_PRESS)
     {
-        InitFirework(3);
+        _direction = worldSpace->getPositionInWorldSpace(g_cannonModel.orientationXYZ, cannonStartingDirection);
+        _position = worldSpace->getPositionInWorldSpace(g_cannonModel.orientationXYZ, cannonStartingPosition);
+        InitProjectile(3, _direction, _position);
+    }
+    if ((key == GLFW_KEY_4 || key == GLFW_KEY_KP_4) && action == GLFW_PRESS)
+    {
+        _direction = worldSpace->getPositionInWorldSpace(g_cannonModel.orientationXYZ, cannonStartingDirection);
+        _position = worldSpace->getPositionInWorldSpace(g_cannonModel.orientationXYZ, cannonStartingPosition);
+        InitProjectile(4, _direction, _position);
     }
     if (key == GLFW_KEY_C && action == GLFW_PRESS)
     {
@@ -185,6 +212,14 @@ void updatePositions(std::vector<iFireworkObject*> particles) {
     }
 }
 
+void updateProjPositions(std::vector<cParticleObject*> particles) {
+    glm::vec3 position;
+    for (size_t x = 0; x < particles.size(); x++) {
+        particles[x]->particle->GetPosition(position);
+        particles[x]->model->positionXYZ = position;
+    }
+}
+
 void initGround() {
     g_groundModel.modelName = "assets/ground.ply";
     g_groundModel.scale = 1.f;
@@ -201,6 +236,14 @@ void initCannon() {
     g_cannonModel.bIsWireframe = false;
     g_cannonModel.vertexColourOverrideHACK = glm::vec3(0.f, 0.f, 1.f);
 }
+//void initCannonDebug() {
+//    g_cannonDebugModel.modelName = "assets/ball.ply";
+//    g_cannonDebugModel.scale = 1.f;
+//    g_cannonDebugModel.positionXYZ = glm::vec3(0.f, 0.5f, 3.f);
+//    g_cannonDebugModel.bOverriveVertexColourHACK = true;
+//    g_cannonDebugModel.bIsWireframe = false;
+//    g_cannonDebugModel.vertexColourOverrideHACK = glm::vec3(1.f, 0.f, 0.f);
+//}
 
 int main(void)
 {
@@ -219,7 +262,7 @@ int main(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    window = glfwCreateWindow(1200, 640, "INFO-6019 - Project 2 (Curtis Tremblay-1049697)", NULL, NULL);
+    window = glfwCreateWindow(1200, 640, "INFO-6019 - Midterm (Curtis Tremblay-1049697)", NULL, NULL);
 
     if (!window)
     {
@@ -288,7 +331,8 @@ int main(void)
         // Screen is cleared and we are ready to draw the scene...
         // *******************************************************
 
-        updatePositions(particleObjs);
+        updatePositions(fireworkObjs);
+        updateProjPositions(projectileObjs);
         worldSpace->_world->TimeStep(deltaTime);
 
         // Safety, mostly for first frame
@@ -297,26 +341,50 @@ int main(void)
             deltaTime = 0.03f;
         }
 
-        for (int x = 0; x < particleObjs.size(); x++)
+        // TODO: Handle projectile timestep.
+        for (int x = 0; x < projectileObjs.size(); x++)
         {
-            particleObjs[x]->particle->update();
-            if (particleObjs[x]->fuse->isReadyForNextStage()) {
-                std::vector<iFireworkObject*> newFireworks = particleObjs[x]->triggerNextStage();
-                if (newFireworks.size() > 0) {
-                    particleObjs.insert(particleObjs.end(), newFireworks.begin(), newFireworks.end());
-                }
-                worldSpace->_world->RemoveParticle(particleObjs[x]->particle);
-                delete particleObjs[x];
-                particleObjs[x] = 0;
-                particleObjs.erase(particleObjs.begin() + x);
+            bool shouldDestroy=false;
+            shouldDestroy |= projectileObjs[x]->isAtDistanceLimit();
+            shouldDestroy |= projectileObjs[x]->isAtTimeLimit();
+            shouldDestroy |= !projectileObjs[x]->isAboveGround();
+            if (shouldDestroy) {
+                worldSpace->_world->RemoveParticle(projectileObjs[x]->particle);
+                delete projectileObjs[x];
+                projectileObjs[x] = 0;
+                projectileObjs.erase(projectileObjs.begin() + x);
                 // Decrement x. Size of vector shrunk, so index has decreased by 1.
                 x--;
             }
         }
 
-        for (unsigned int index = 0; index != particleObjs.size(); index++)
+        // Handle fireworks timestep.
+        // TODO: Determine if I want to leave fireworks in the submission.
+        for (int x = 0; x < fireworkObjs.size(); x++)
         {
-            renderModel(*particleObjs[index]->model);
+            fireworkObjs[x]->particle->update();
+            if (fireworkObjs[x]->fuse->isReadyForNextStage()) {
+                std::vector<iFireworkObject*> newFireworks = fireworkObjs[x]->triggerNextStage();
+                if (newFireworks.size() > 0) {
+                    fireworkObjs.insert(fireworkObjs.end(), newFireworks.begin(), newFireworks.end());
+                }
+                worldSpace->_world->RemoveParticle(fireworkObjs[x]->particle);
+                delete fireworkObjs[x];
+                fireworkObjs[x] = 0;
+                fireworkObjs.erase(fireworkObjs.begin() + x);
+                // Decrement x. Size of vector shrunk, so index has decreased by 1.
+                x--;
+            }
+        }
+
+        for (unsigned int index = 0; index != fireworkObjs.size(); index++)
+        {
+            renderModel(*fireworkObjs[index]->model);
+        }
+
+        for (unsigned int index = 0; index != projectileObjs.size(); index++)
+        {
+            renderModel(*projectileObjs[index]->model);
         }
 
         renderModel(g_groundModel);

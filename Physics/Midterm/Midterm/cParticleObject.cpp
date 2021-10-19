@@ -14,14 +14,19 @@ cParticleObject::cParticleObject(sParticleTemplate* _particleTemp, cModel* _mode
 	particle->SetDamping(_particleTemp->damping);
 	model = _model;
 	model->scale = _particleTemp->size;
-	age = 0;
+	distanceLimit = _particleTemp->distanceLimit;
+	timeLimit = _particleTemp->timeLimit;
+	age = 0.f;
 	origin = position;
+	worldSpace->_world->AddParticle(particle);
+	worldSpace->_world->GetForceRegistry()->Register(particle, worldSpace->_gravityGenerator);
 }
 
 // Always return false if distance limit is negative.
 bool cParticleObject::isAtDistanceLimit() {
 	if (distanceLimit > 0) {
-		return (glm::length(particle->GetPosition() - origin) >= distanceLimit);
+		float testVal = glm::length(particle->GetPosition() - origin);
+		return (testVal >= distanceLimit);
 	}
 	return false;
 }
@@ -36,4 +41,8 @@ bool cParticleObject::isAtTimeLimit() {
 		return false;
 	}
 	return false;
+}
+
+bool cParticleObject::isAboveGround() {
+	return particle->GetPosition().y >= 0;
 }

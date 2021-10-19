@@ -3,6 +3,7 @@
 #include <physics/cParticle.h>
 
 #include "sParticleTemplate.h"
+#include "cWorldSpace.h"
 
 class cParticleObject {
 public:
@@ -12,7 +13,10 @@ public:
 	nPhysics::cParticle* particle;
 	cModel* model;
 	bool isAtDistanceLimit();
-	bool isAtTimeLimit();
+	bool isAtTimeLimit(); 
+	bool isAboveGround();
+protected:
+	cWorldSpace* worldSpace = cWorldSpace::Instance();
 private:
 	glm::vec3 origin;
 	float age;

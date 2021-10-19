@@ -63,3 +63,18 @@ glm::mat3 cWorldSpace::orthonormalBasis(const glm::vec3& xVec, const glm::vec3& 
 	_zVec = glm::normalize(_zVec);
 	return glm::mat3(_xVec, _yVec, _zVec);
 }
+
+glm::vec3 cWorldSpace::getPositionInWorldSpace(const glm::vec3 orientationXYZ, const glm::vec3 startPositionXYZ) {
+	glm::mat4 identity = glm::mat4(1.f);
+	glm::mat4 result = identity;
+
+	glm::mat4 rotateZ = glm::rotate(identity, orientationXYZ.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4 rotateY = glm::rotate(identity, orientationXYZ.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 rotateX = glm::rotate(identity, orientationXYZ.x, glm::vec3(1.0f, 0.0f, 0.0f));
+
+	result *= rotateZ;
+	result *= rotateY;
+	result *= rotateX;
+
+	return result * glm::vec4(startPositionXYZ.x, startPositionXYZ.y, startPositionXYZ.z, 1.f);
+}

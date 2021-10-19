@@ -46,6 +46,36 @@ bool cProjectileFactory::InitProjectile(int projectileNumber, sParticleTemplate*
 	return true;
 }
 
+cParticleObject* cProjectileFactory::createParticle(int projNumber, glm::vec3 direction, glm::vec3 position) {
+	cParticleObject* result = 0;
+
+	//Define shared attributes.
+	cModel* model = new cModel();
+	model->modelName = "assets/ball.ply";
+	model->bOverriveVertexColourHACK = true;
+	model->bIsWireframe = false;
+	model->bDontLightObject = false;
+
+	switch (projNumber) {
+	case(BULLET_PROJ):
+		result = new cParticleObject(bullet, model, direction, position);
+		break;
+	case(LASER_PROJ):
+		result = new cParticleObject(laser, model, direction, position);
+		break;
+	case(CANNON_PROJ):
+		result = new cParticleObject(cannonBall, model, direction, position);
+		break;
+	case(ENERGY_PROJ):
+		result = new cParticleObject(energyBall, model, direction, position);
+		break;
+	default:
+		break;
+}
+return result;
+
+}
+
 cProjectileFactory* cProjectileFactory::Instance() {
 	if (_instance == 0) {
 		_instance = new cProjectileFactory;
