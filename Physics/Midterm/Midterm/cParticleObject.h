@@ -1,16 +1,16 @@
 #pragma once
 #include "src/graphics/cModel.h"
-#include <physics/cParticle.h>
 
 #include "sParticleTemplate.h"
 #include "cWorldSpace.h"
+#include "cParticle.h"
 
 class cParticleObject {
 public:
 	cParticleObject();
-	cParticleObject(nPhysics::cParticle* _particle, cModel* _model);
+	cParticleObject(cParticle* _particle, cModel* _model);
 	cParticleObject(sParticleTemplate* _particleTemp, cModel* _model, glm::vec3 direction, glm::vec3 position);
-	nPhysics::cParticle* particle;
+	cParticle* particle;
 	cModel* model;
 	bool isAtDistanceLimit();
 	bool isAtTimeLimit(); 

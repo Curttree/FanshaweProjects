@@ -18,9 +18,9 @@
 #include "src/graphics/cShaderManager.h"
 #include "src/graphics/configManager.h"
 
-#include <physics/cParticle.h>
-#include <physics/cParticleWorld.h>
-#include <physics/particle_force_generators.h>
+#include "cParticle.h"
+#include "cParticleWorld.h"
+#include "cGravityGenerator.h"
 
 #include "cFireworkBuilder.h"
 #include "cFirework.h"
@@ -207,7 +207,7 @@ void shutDown(GLFWwindow* window) {
 void updatePositions(std::vector<iFireworkObject*> particles) {
     glm::vec3 position;
     for (size_t x = 0; x < particles.size(); x++) {
-        particles[x]->particle->GetPosition(position);
+        position = particles[x]->particle->GetPosition();
         particles[x]->model->positionXYZ = position;
     }
 }
@@ -215,7 +215,7 @@ void updatePositions(std::vector<iFireworkObject*> particles) {
 void updateProjPositions(std::vector<cParticleObject*> particles) {
     glm::vec3 position;
     for (size_t x = 0; x < particles.size(); x++) {
-        particles[x]->particle->GetPosition(position);
+        position = particles[x]->particle->GetPosition();
         particles[x]->model->positionXYZ = position;
     }
 }
@@ -333,7 +333,7 @@ int main(void)
 
         updatePositions(fireworkObjs);
         updateProjPositions(projectileObjs);
-        worldSpace->_world->TimeStep(deltaTime);
+        worldSpace->_world->Update(deltaTime);
 
         // Safety, mostly for first frame
         if (deltaTime == 0.f)

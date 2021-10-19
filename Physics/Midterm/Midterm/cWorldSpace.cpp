@@ -13,8 +13,8 @@ cWorldSpace* cWorldSpace::Instance() {
 		_instance = new cWorldSpace;
 
 		//Initialize physics
-		_instance->_gravityGenerator = new nPhysics::cParticleGravityGenerator(glm::vec3(0.0f, -9.81f, 0.0f));
-		_instance->_world = new nPhysics::cParticleWorld();
+		_instance->_gravityGenerator = new cGravityGenerator(glm::vec3(0.0f, -9.81f, 0.0f));
+		_instance->_world = new cParticleWorld();
 	}
 
 	return _instance;

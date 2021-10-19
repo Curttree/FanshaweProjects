@@ -2,15 +2,15 @@
 
 #include <iostream>
 
-#include <physics/cParticle.h>
-#include <physics/cParticleWorld.h>
-#include <physics/particle_force_generators.h>
+#include "cParticle.h"
+#include "cParticleWorld.h"
+#include "cGravityGenerator.h"
 
 #include "cWorldSpace.h"
 
-class cFirework : public nPhysics::cParticle{
+class cFirework : public cParticle{
 public:
-	using nPhysics::cParticle::cParticle;
+	using cParticle::cParticle;
 	virtual bool isInTheAir();
 	virtual void update();
 	bool hitApex = false;
