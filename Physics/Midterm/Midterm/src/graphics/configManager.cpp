@@ -97,6 +97,28 @@ void configManager::projectileParser(const char* name, int type) {
     if (_sceneDescription["Projectiles"][name].HasMember("DistanceLimit")) {
         candidate->distanceLimit = _sceneDescription["Projectiles"][name]["DistanceLimit"].GetFloat();
     }
+    if (_sceneDescription["Projectiles"][name].HasMember("ApplyGravity")) {
+        candidate->applyGravity = _sceneDescription["Projectiles"][name]["ApplyGravity"].GetBool();
+    }
+    if (_sceneDescription["Projectiles"][name].HasMember("Accelerate")) {
+        candidate->accelerate = _sceneDescription["Projectiles"][name]["Accelerate"].GetBool();
+    }
+    if (_sceneDescription["Projectiles"][name].HasMember("Colour")) {
+        // Even if they declare colour, don't override unless a r,g, or b value has been declared.
+        if (_sceneDescription["Projectiles"][name]["Colour"].HasMember("r") || _sceneDescription["Projectiles"][name]["Colour"].HasMember("g") || _sceneDescription["Projectiles"][name]["Colour"].HasMember("b")) {
+            float r = 0.f, g = 0.f, b = 0.f;
+            if (_sceneDescription["Projectiles"][name]["Colour"].HasMember("r")) {
+                r = _sceneDescription["Projectiles"][name]["Colour"]["r"].GetFloat();
+            }
+            if (_sceneDescription["Projectiles"][name]["Colour"].HasMember("g")) {
+                g = _sceneDescription["Projectiles"][name]["Colour"]["g"].GetFloat();
+            }
+            if (_sceneDescription["Projectiles"][name]["Colour"].HasMember("b")) {
+                b = _sceneDescription["Projectiles"][name]["Colour"]["b"].GetFloat();
+            }
+            candidate->colour = glm::vec3(r,g,b);
+        }
+    }
     projectileFactory->InitProjectile(type, candidate);
 }
 

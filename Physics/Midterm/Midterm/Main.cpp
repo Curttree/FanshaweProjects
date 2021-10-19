@@ -102,7 +102,7 @@ void InitProjectile(int type, glm::vec3 direction, glm::vec3 position) {
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     float cameraSpeed = 1.f;
-    float cannonSpeed = 0.05f;
+    float cannonSpeed = 0.1f;
 
     switch (key) {
     case GLFW_KEY_A:

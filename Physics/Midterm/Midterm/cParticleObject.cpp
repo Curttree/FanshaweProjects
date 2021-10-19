@@ -12,14 +12,21 @@ cParticleObject::cParticleObject(sParticleTemplate* _particleTemp, cModel* _mode
 	particle = new nPhysics::cParticle(_particleTemp->mass,position);
 	particle->SetVelocity(_particleTemp->muzzleVelocity * direction);
 	particle->SetDamping(_particleTemp->damping);
+	if (_particleTemp->accelerate) {
+		particle->SetAcceleration(direction * 2.f);		// Playing up acceleration so it is more obvious.
+	}
 	model = _model;
 	model->scale = _particleTemp->size;
+	model->bOverriveVertexColourHACK = true;
+	model->vertexColourOverrideHACK = _particleTemp->colour;
 	distanceLimit = _particleTemp->distanceLimit;
 	timeLimit = _particleTemp->timeLimit;
 	age = 0.f;
 	origin = position;
 	worldSpace->_world->AddParticle(particle);
-	worldSpace->_world->GetForceRegistry()->Register(particle, worldSpace->_gravityGenerator);
+	if (_particleTemp->applyGravity) {
+		worldSpace->_world->GetForceRegistry()->Register(particle, worldSpace->_gravityGenerator);
+	}
 }
 
 // Always return false if distance limit is negative.
