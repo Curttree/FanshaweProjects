@@ -1,12 +1,8 @@
 #include "configManager.h"
 
 configManager::configManager(sCannonDef* _cannonDef) {
-    std::stringstream modelsStream;
-    std::stringstream sceneStream;
-    modelsStream << PROJECT_DIR << "models.json";
-    sceneStream << PROJECT_DIR << "scene.json";
-    _modelsDoc = readJSONFile(modelsStream.str());
-    _sceneDescription = readJSONFile(sceneStream.str());
+    _modelsDoc = readJSONFile("models.json");
+    _sceneDescription = readJSONFile("scene.json");
     if (!_modelsDoc.HasParseError() && !_sceneDescription.HasParseError()) {
         initCamera();
         initCannon(_cannonDef);
