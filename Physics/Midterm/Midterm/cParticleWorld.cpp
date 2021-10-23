@@ -24,7 +24,8 @@ bool cParticleWorld::RemoveParticle(cParticle* particle) {
 	if (!particle || std::find(particles.begin(), particles.end(), particle) != particles.end()) {
 		return false;
 	}
-	//TODO: Force registry
+
+	forceRegistry->DeregisterParticle(particle);
 
 	particles.erase(std::find(particles.begin(), particles.end(), particle));
 	return true;

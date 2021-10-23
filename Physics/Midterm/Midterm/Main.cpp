@@ -22,14 +22,9 @@
 #include "cParticleWorld.h"
 #include "cGravityGenerator.h"
 
-#include "cFireworkBuilder.h"
-#include "cFirework.h"
 #include "cWorldSpace.h"
 #include "cMathHelper.h"
-#include "iFireworkObject.h"
 #include "sCannonDef.h"
-
-
 
 #pragma region Globals
 
@@ -41,7 +36,6 @@ cModel g_cannonModel;
 
 cWorldSpace* worldSpace = cWorldSpace::Instance();
 cMathHelper* mathHelper = cMathHelper::Instance();
-cFireworkBuilder* fireworkBuilder = cFireworkBuilder::Instance();
 cProjectileFactory* projectileFactory = cProjectileFactory::Instance();
 
 sCannonDef* _cannonDef = new sCannonDef();
@@ -60,7 +54,6 @@ glm::vec3 cannonStartingPosition = glm::vec3(0.f, 0.5f, 3.f);
 glm::vec3 cameraTarget = _configManager->_cameraStartingFocus;
 glm::vec3 cameraEye = _configManager->_cameraStartingPosition;
 
-std::vector<iFireworkObject*> fireworkObjs;
 std::vector<cParticleObject*> projectileObjs;
 
 GLuint program = 0;     // 0 means "no shader program"
@@ -85,13 +78,6 @@ static void captureCameraPosition() {
 
 static void captureCannonOrientation() {
     std::cout << "Cannon is orientated at x: " << g_cannonModel.orientationXYZ.x << " y: " << g_cannonModel.orientationXYZ.y << " z: " << g_cannonModel.orientationXYZ.z << std::endl;
-}
-
-void InitFirework(int type) {
-    glm::vec3 position = (worldSpace->axes[0] * mathHelper->getRandom(-5.f, 5.f)) + (worldSpace->axes[1] * 1.1f) + (worldSpace->axes[2] * mathHelper->getRandom(-5.f, 5.f));
-    iFireworkObject* newObj = fireworkBuilder->buildFirework(type,position);
-
-    fireworkObjs.push_back(newObj);
 }
 
 void InitProjectile(int type, glm::vec3 direction, glm::vec3 position) {
@@ -204,14 +190,6 @@ void shutDown(GLFWwindow* window) {
     exit(EXIT_SUCCESS);
 }
 
-void updatePositions(std::vector<iFireworkObject*> particles) {
-    glm::vec3 position;
-    for (size_t x = 0; x < particles.size(); x++) {
-        position = particles[x]->particle->GetPosition();
-        particles[x]->model->positionXYZ = position;
-    }
-}
-
 void updateProjPositions(std::vector<cParticleObject*> particles) {
     glm::vec3 position;
     for (size_t x = 0; x < particles.size(); x++) {
@@ -236,21 +214,12 @@ void initCannon() {
     g_cannonModel.bIsWireframe = false;
     g_cannonModel.vertexColourOverrideHACK = glm::vec3(0.f, 0.f, 1.f);
 }
-//void initCannonDebug() {
-//    g_cannonDebugModel.modelName = "assets/ball.ply";
-//    g_cannonDebugModel.scale = 1.f;
-//    g_cannonDebugModel.positionXYZ = glm::vec3(0.f, 0.5f, 3.f);
-//    g_cannonDebugModel.bOverriveVertexColourHACK = true;
-//    g_cannonDebugModel.bIsWireframe = false;
-//    g_cannonDebugModel.vertexColourOverrideHACK = glm::vec3(1.f, 0.f, 0.f);
-//}
 
 int main(void)
 {
     GLFWwindow* window;
     GLint mvp_location = -1;        // Because glGetAttribLocation() returns -1 on error
     float previousTime = static_cast<float>(glfwGetTime());
-
 
     glfwSetErrorCallback(error_callback);
 
@@ -331,7 +300,6 @@ int main(void)
         // Screen is cleared and we are ready to draw the scene...
         // *******************************************************
 
-        updatePositions(fireworkObjs);
         updateProjPositions(projectileObjs);
         worldSpace->_world->Update(deltaTime);
 
@@ -356,30 +324,6 @@ int main(void)
                 // Decrement x. Size of vector shrunk, so index has decreased by 1.
                 x--;
             }
-        }
-
-        // Handle fireworks timestep.
-        // TODO: Determine if I want to leave fireworks in the submission.
-        for (int x = 0; x < fireworkObjs.size(); x++)
-        {
-            fireworkObjs[x]->particle->update();
-            if (fireworkObjs[x]->fuse->isReadyForNextStage()) {
-                std::vector<iFireworkObject*> newFireworks = fireworkObjs[x]->triggerNextStage();
-                if (newFireworks.size() > 0) {
-                    fireworkObjs.insert(fireworkObjs.end(), newFireworks.begin(), newFireworks.end());
-                }
-                worldSpace->_world->RemoveParticle(fireworkObjs[x]->particle);
-                delete fireworkObjs[x];
-                fireworkObjs[x] = 0;
-                fireworkObjs.erase(fireworkObjs.begin() + x);
-                // Decrement x. Size of vector shrunk, so index has decreased by 1.
-                x--;
-            }
-        }
-
-        for (unsigned int index = 0; index != fireworkObjs.size(); index++)
-        {
-            renderModel(*fireworkObjs[index]->model);
         }
 
         for (unsigned int index = 0; index != projectileObjs.size(); index++)

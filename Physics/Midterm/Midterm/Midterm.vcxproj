@@ -162,16 +162,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cApexFuse.cpp" />
-    <ClCompile Include="cFancyFirework1Object.cpp" />
-    <ClCompile Include="cFancyFirework2Object.cpp" />
-    <ClCompile Include="cFancyFirework3Object.cpp" />
-    <ClCompile Include="cFancyFirework4Object.cpp" />
-    <ClCompile Include="cFirework.cpp" />
-    <ClCompile Include="cFireworkBuilder.cpp" />
-    <ClCompile Include="cFireworkDebrisObject.cpp" />
-    <ClCompile Include="cFireworkFactory.cpp" />
-    <ClCompile Include="cFuseFactory.cpp" />
     <ClCompile Include="cGravityGenerator.cpp" />
     <ClCompile Include="cMathHelper.cpp" />
     <ClCompile Include="cParticle.cpp" />
@@ -179,9 +169,7 @@
     <ClCompile Include="cParticleObject.cpp" />
     <ClCompile Include="cParticleWorld.cpp" />
     <ClCompile Include="cProjectileFactory.cpp" />
-    <ClCompile Include="cTimedFuse.cpp" />
     <ClCompile Include="cWorldSpace.cpp" />
-    <ClCompile Include="iFireworkObject.cpp" />
     <ClCompile Include="src\graphics\cModel.cpp" />
     <ClCompile Include="src\graphics\cShader.cpp" />
     <ClCompile Include="src\graphics\cShaderManager.cpp" />
@@ -191,16 +179,6 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cApexFuse.h" />
-    <ClInclude Include="cFancyFirework1Object.h" />
-    <ClInclude Include="cFancyFirework2Object.h" />
-    <ClInclude Include="cFancyFirework3Object.h" />
-    <ClInclude Include="cFancyFirework4Object.h" />
-    <ClInclude Include="cFirework.h" />
-    <ClInclude Include="cFireworkBuilder.h" />
-    <ClInclude Include="cFireworkDebrisObject.h" />
-    <ClInclude Include="cFireworkFactory.h" />
-    <ClInclude Include="cFuseFactory.h" />
     <ClInclude Include="cGravityGenerator.h" />
     <ClInclude Include="cMathHelper.h" />
     <ClInclude Include="cParticle.h" />
@@ -208,12 +186,9 @@
     <ClInclude Include="cParticleWorld.h" />
     <ClInclude Include="cProjectileFactory.h" />
     <ClInclude Include="cParticleObject.h" />
-    <ClInclude Include="cTimedFuse.h" />
     <ClInclude Include="cWorldSpace.h" />
     <ClInclude Include="iForceGenerator.h" />
-    <ClInclude Include="iFuse.h" />
     <ClInclude Include="include\extern_includes.h" />
-    <ClInclude Include="iFireworkObject.h" />
     <ClInclude Include="sCannonDef.h" />
     <ClInclude Include="sParticleTemplate.h" />
     <ClInclude Include="src\graphics\cModel.h" />

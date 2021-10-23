@@ -253,7 +253,6 @@ int main(void)
 
         for (int x = 0; x < particleObjs.size(); x++)
         {
-            particleObjs[x]->particle->update();
             if (particleObjs[x]->fuse->isReadyForNextStage()) {
                 std::vector<iFireworkObject*> newFireworks = particleObjs[x]->triggerNextStage();
                 if (newFireworks.size() > 0) {
