@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{023fad01-9a2e-4356-9c98-5a0d67bf564e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\ShaderManager">
+      <UniqueIdentifier>{eb440f52-eda1-4cd0-a2bf-a9e44bc6719c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Models">
+      <UniqueIdentifier>{967227ee-b23d-414a-9c53-231f0754735b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Models\VAOManager">
+      <UniqueIdentifier>{c819e8bb-2abe-4d67-8f4f-8f335cf7077d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{fd0058d1-72cf-447c-9e70-0804f393a155}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Particles">
+      <UniqueIdentifier>{e20dfcf7-9197-4e69-94d6-a0f740fb9b2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Particles\Headers">
+      <UniqueIdentifier>{84e1e5b7-e356-492e-b47c-4eec250aaa13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Particles\Source Files">
+      <UniqueIdentifier>{92dbb257-ec3d-40a0-8b45-60c17d26af88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Headers">
+      <UniqueIdentifier>{7ea67e77-0a25-4bdb-a0a0-c34dc2fe24ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fireworks">
+      <UniqueIdentifier>{2dc95785-9faa-4c8c-9060-89b37344cce7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fireworks\Objects">
+      <UniqueIdentifier>{55a662cf-0722-4322-a8a8-27bbac96681f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fireworks\Objects\Headers">
+      <UniqueIdentifier>{b50a3a73-9dd5-4821-8d4c-63b2c945fdf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fireworks\Factories">
+      <UniqueIdentifier>{a01d0c30-0f20-4753-8c6b-bdf63e9242ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fireworks\Factories\Headers">
+      <UniqueIdentifier>{44fd43a7-f9ab-4506-9648-f24e97f269ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fireworks\Fuses">
+      <UniqueIdentifier>{427fed9d-65fa-437e-bfb2-de645e13d66d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fireworks\Fuses\Headers">
+      <UniqueIdentifier>{88b98518-c6fb-4206-9a09-66ff23e446f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fireworks\Builder">
+      <UniqueIdentifier>{2d2b2169-8f44-48ca-9ed3-abea0553ec01}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\cShader.cpp">
+      <Filter>Graphics\ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\cShaderManager.cpp">
+      <Filter>Graphics\ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\cVAOManager.cpp">
+      <Filter>Graphics\Models\VAOManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\cModel.cpp">
+      <Filter>Graphics\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\configManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\cParticle.cpp">
+      <Filter>Physics\Particles\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\cParticleForceRegistry.cpp">
+      <Filter>Physics\Particles\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\cParticleWorld.cpp">
+      <Filter>Physics\Particles\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\particle_force_generators.cpp">
+      <Filter>Physics\Particles\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cWorldSpace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cMathHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cFirework.cpp">
+      <Filter>Fireworks</Filter>
+    </ClCompile>
+    <ClCompile Include="cFancyFirework1Object.cpp">
+      <Filter>Fireworks\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="cFancyFirework2Object.cpp">
+      <Filter>Fireworks\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="cFireworkDebrisObject.cpp">
+      <Filter>Fireworks\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="cFireworkObject.cpp">
+      <Filter>Fireworks\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="cFireworkFactory.cpp">
+      <Filter>Fireworks\Factories</Filter>
+    </ClCompile>
+    <ClCompile Include="cTimedFuse.cpp">
+      <Filter>Fireworks\Fuses</Filter>
+    </ClCompile>
+    <ClCompile Include="cApexFuse.cpp">
+      <Filter>Fireworks\Fuses</Filter>
+    </ClCompile>
+    <ClCompile Include="cFuseFactory.cpp">
+      <Filter>Fireworks\Factories</Filter>
+    </ClCompile>
+    <ClCompile Include="cFireworkBuilder.cpp">
+      <Filter>Fireworks\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="cFancyFirework3Object.cpp">
+      <Filter>Fireworks\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="cFireworkMediator.cpp">
+      <Filter>Fireworks</Filter>
+    </ClCompile>
+    <ClCompile Include="cFancyFirework4Object.cpp">
+      <Filter>Fireworks\Objects</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\graphics\cShaderManager.h">
+      <Filter>Graphics\ShaderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\cVAOManager.h">
+      <Filter>Graphics\Models\VAOManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\cModel.h">
+      <Filter>Graphics\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\configManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\extern_includes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\sVertex_types.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\physics\cParticle.h">
+      <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\physics\cParticleForceRegistry.h">
+      <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\physics\cParticleWorld.h">
+      <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\physics\iParticleForceGenerator.h">
+      <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\physics\particle_force_generators.h">
+      <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cWorldSpace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cMathHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cFirework.h">
+      <Filter>Fireworks</Filter>
+    </ClInclude>
+    <ClInclude Include="cFancyFirework1Object.h">
+      <Filter>Fireworks\Objects\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cFancyFirework2Object.h">
+      <Filter>Fireworks\Objects\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cFireworkDebrisObject.h">
+      <Filter>Fireworks\Objects\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cFireworkObject.h">
+      <Filter>Fireworks\Objects\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cFireworkFactory.h">
+      <Filter>Fireworks\Factories\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iFuse.h">
+      <Filter>Fireworks\Fuses\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cTimedFuse.h">
+      <Filter>Fireworks\Fuses\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cApexFuse.h">
+      <Filter>Fireworks\Fuses\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cFuseFactory.h">
+      <Filter>Fireworks\Factories\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cFireworkBuilder.h">
+      <Filter>Fireworks\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="cFancyFirework3Object.h">
+      <Filter>Fireworks\Objects\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cFireworkMediator.h">
+      <Filter>Fireworks</Filter>
+    </ClInclude>
+    <ClInclude Include="cFirework_Implementation.h">
+      <Filter>Fireworks\Objects\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iMediator.h">
+      <Filter>Fireworks</Filter>
+    </ClInclude>
+    <ClInclude Include="cFancyFirework4Object.h">
+      <Filter>Fireworks\Objects\Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
