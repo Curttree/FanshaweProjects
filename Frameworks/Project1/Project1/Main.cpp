@@ -38,14 +38,11 @@ cModel g_groundModel;
 
 cWorldSpace* worldSpace = cWorldSpace::Instance();
 cMathHelper* mathHelper = cMathHelper::Instance();
-cFireworkBuilder* fireworkBuilder = cFireworkBuilder::Instance();
 
 configManager* _configManager = new configManager();
 cFireworkMediator* _mediator = new cFireworkMediator();
 
 glm::vec3 cameraEye = _configManager->_cameraStartingPosition;
-
-std::vector<cFireworkObject*> particleObjs;
 
 GLuint program = 0;     // 0 means "no shader program"
 float ratio;

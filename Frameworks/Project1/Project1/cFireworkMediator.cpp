@@ -3,6 +3,7 @@
 bool cFireworkMediator::RecieveMessage(sMessage theMessage) {
 	if (theMessage.command == "CREATE FIREWORK") {
 		cFireworkObject* newObj = fireworkBuilder->buildFirework(theMessage.vec_iData[0], theMessage.vec_v4Data[0]);
+		newObj->SetReciever(this);
 		fireworkObjs.push_back(newObj);
 		return true;
 	}
