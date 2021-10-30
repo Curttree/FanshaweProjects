@@ -26,7 +26,7 @@
 #include "cFirework.h"
 #include "cWorldSpace.h"
 #include "cMathHelper.h"
-#include "iFireworkObject.h"
+#include "cFireworkObject.h"
 
 #pragma region Globals
 
@@ -43,7 +43,7 @@ configManager* _configManager = new configManager();
 
 glm::vec3 cameraEye = _configManager->_cameraStartingPosition;
 
-std::vector<iFireworkObject*> particleObjs;
+std::vector<cFireworkObject*> particleObjs;
 
 GLuint program = 0;     // 0 means "no shader program"
 float ratio;
@@ -67,7 +67,7 @@ static void captureCameraPosition() {
 
 void InitFirework(int type) {
     glm::vec3 position = (worldSpace->axes[0] * mathHelper->getRandom(-5.f, 5.f)) + (worldSpace->axes[1] * 1.1f) + (worldSpace->axes[2] * mathHelper->getRandom(-5.f, 5.f));
-    iFireworkObject* newObj = fireworkBuilder->buildFirework(type,position);
+    cFireworkObject* newObj = fireworkBuilder->buildFirework(type,position);
 
     particleObjs.push_back(newObj);
 }
@@ -142,7 +142,7 @@ void shutDown(GLFWwindow* window) {
     exit(EXIT_SUCCESS);
 }
 
-void updatePositions(std::vector<iFireworkObject*> particles) {
+void updatePositions(std::vector<cFireworkObject*> particles) {
     glm::vec3 position;
     for (size_t x = 0; x < particles.size(); x++) {
         particles[x]->particle->GetPosition(position);
@@ -254,7 +254,7 @@ int main(void)
         for (int x = 0; x < particleObjs.size(); x++)
         {
             if (particleObjs[x]->fuse->isReadyForNextStage()) {
-                std::vector<iFireworkObject*> newFireworks = particleObjs[x]->triggerNextStage();
+                std::vector<cFireworkObject*> newFireworks = particleObjs[x]->triggerNextStage();
                 if (newFireworks.size() > 0) {
                     particleObjs.insert(particleObjs.end(), newFireworks.begin(), newFireworks.end());
                 }

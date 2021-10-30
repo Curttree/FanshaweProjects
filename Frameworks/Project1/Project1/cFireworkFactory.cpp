@@ -3,7 +3,6 @@
 #include "cFancyFirework1Object.h"
 #include "cFancyFirework2Object.h"
 #include "cFancyFirework3Object.h"
-#include "cFancyFirework4Object.h"
 #include "cFireworkDebrisObject.h"
 
 cFireworkFactory* cFireworkFactory::_instance = 0;
@@ -19,12 +18,12 @@ cFireworkFactory* cFireworkFactory::Instance() {
 	return _instance;
 }
 
-iFireworkObject* cFireworkFactory::createFireworkObject(int type, glm::vec3 position, glm::vec3 velocity, glm::vec3 debrisColour) {
+cFireworkObject* cFireworkFactory::createFireworkObject(int type, glm::vec3 position, glm::vec3 velocity, glm::vec3 debrisColour) {
 	cFirework* firework = new cFirework(1.0f, position);
 	firework->SetVelocity(velocity);
 	cModel* newModel = new cModel();
 	newModel->positionXYZ = position;
-	iFireworkObject* obj = 0;
+	cFireworkObject* obj = 0;
 	switch (type) {
 	case(1):
 		obj = new cFancyFirework1Object(firework, newModel);
@@ -34,9 +33,6 @@ iFireworkObject* cFireworkFactory::createFireworkObject(int type, glm::vec3 posi
 		break;
 	case(3):
 		obj = new cFancyFirework3Object(firework, newModel);
-		break;
-	case(4):
-		obj = new cFancyFirework4Object(firework, newModel);
 		break;
 	default:
 		obj = new cFireworkDebrisObject(firework, newModel, debrisColour);
@@ -49,7 +45,7 @@ iFireworkObject* cFireworkFactory::createFireworkObject(int type, glm::vec3 posi
 	return obj;
 }
 
-void cFireworkFactory::buildSharedFireworkDetails(iFireworkObject*& obj) {
+void cFireworkFactory::buildSharedFireworkDetails(cFireworkObject*& obj) {
 	worldSpace->_world->AddParticle(obj->particle);
 	worldSpace->_world->GetForceRegistry()->Register(obj->particle, worldSpace->_gravityGenerator);
 	obj->model->modelName = "assets/pokeball.ply";

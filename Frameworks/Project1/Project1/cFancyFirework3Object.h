@@ -1,13 +1,12 @@
 #pragma once
 
-#include "iFireworkObject.h"
+#include "cFireworkObject.h"
 #include "cFireworkBuilder.h"
 
-class cFancyFirework3Object : public iFireworkObject {
+class cFancyFirework3Object : public cFireworkObject {
 public:
-	cFancyFirework3Object();
 	cFancyFirework3Object(cFirework* _particle, cModel* _model);
-	virtual std::vector<iFireworkObject*> triggerNextStage();
+	virtual std::vector<cFireworkObject*> triggerNextStage();
 protected:
 	cFireworkBuilder* fireworkBuilder = cFireworkBuilder::Instance();
 };

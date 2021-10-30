@@ -1,13 +1,12 @@
 #pragma once
 
-#include "iFireworkObject.h"
+#include "cFireworkObject.h"
 
-class cFireworkDebrisObject : public iFireworkObject {
+class cFireworkDebrisObject : public cFireworkObject {
 public:
 	cFireworkDebrisObject(cFirework* _particle, cModel* _model, glm::vec3 _colour);
-	cFireworkDebrisObject();
 	cFireworkDebrisObject(cFirework* _particle, cModel* _model);
-	virtual std::vector<iFireworkObject*> triggerNextStage();
+	virtual std::vector<cFireworkObject*> triggerNextStage();
 private:
 	float _counter = 0;
 };

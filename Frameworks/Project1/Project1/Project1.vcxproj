@@ -24,7 +24,7 @@
     <ProjectGuid>{4d04c30f-77bc-428f-92e3-337995b3a421}</ProjectGuid>
     <RootNamespace>Project1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Project2</ProjectName>
+    <ProjectName>Project1</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -160,16 +160,16 @@
     <ClCompile Include="cFancyFirework1Object.cpp" />
     <ClCompile Include="cFancyFirework2Object.cpp" />
     <ClCompile Include="cFancyFirework3Object.cpp" />
-    <ClCompile Include="cFancyFirework4Object.cpp" />
     <ClCompile Include="cFirework.cpp" />
     <ClCompile Include="cFireworkBuilder.cpp" />
     <ClCompile Include="cFireworkDebrisObject.cpp" />
     <ClCompile Include="cFireworkFactory.cpp" />
+    <ClCompile Include="cFireworkMediator.cpp" />
     <ClCompile Include="cFuseFactory.cpp" />
     <ClCompile Include="cMathHelper.cpp" />
     <ClCompile Include="cTimedFuse.cpp" />
     <ClCompile Include="cWorldSpace.cpp" />
-    <ClCompile Include="iFireworkObject.cpp" />
+    <ClCompile Include="cFireworkObject.cpp" />
     <ClCompile Include="src\graphics\cModel.cpp" />
     <ClCompile Include="src\graphics\cShader.cpp" />
     <ClCompile Include="src\graphics\cShaderManager.cpp" />
@@ -187,23 +187,25 @@
     <ClInclude Include="cFancyFirework1Object.h" />
     <ClInclude Include="cFancyFirework2Object.h" />
     <ClInclude Include="cFancyFirework3Object.h" />
-    <ClInclude Include="cFancyFirework4Object.h" />
     <ClInclude Include="cFirework.h" />
     <ClInclude Include="cFireworkBuilder.h" />
     <ClInclude Include="cFireworkDebrisObject.h" />
     <ClInclude Include="cFireworkFactory.h" />
+    <ClInclude Include="cFireworkMediator.h" />
+    <ClInclude Include="cFirework_Implementation.h" />
     <ClInclude Include="cFuseFactory.h" />
     <ClInclude Include="cMathHelper.h" />
     <ClInclude Include="cTimedFuse.h" />
     <ClInclude Include="cWorldSpace.h" />
     <ClInclude Include="iFuse.h" />
+    <ClInclude Include="iMessage.h" />
     <ClInclude Include="include\extern_includes.h" />
     <ClInclude Include="include\physics\cParticle.h" />
     <ClInclude Include="include\physics\cParticleForceRegistry.h" />
     <ClInclude Include="include\physics\cParticleWorld.h" />
     <ClInclude Include="include\physics\iParticleForceGenerator.h" />
     <ClInclude Include="include\physics\particle_force_generators.h" />
-    <ClInclude Include="iFireworkObject.h" />
+    <ClInclude Include="cFireworkObject.h" />
     <ClInclude Include="src\graphics\cModel.h" />
     <ClInclude Include="src\graphics\configManager.h" />
     <ClInclude Include="src\graphics\cShaderManager.h" />

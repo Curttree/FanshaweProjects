@@ -117,7 +117,7 @@
     <ClCompile Include="cFireworkDebrisObject.cpp">
       <Filter>Fireworks\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="iFireworkObject.cpp">
+    <ClCompile Include="cFireworkObject.cpp">
       <Filter>Fireworks\Objects</Filter>
     </ClCompile>
     <ClCompile Include="cFireworkFactory.cpp">
@@ -138,8 +138,8 @@
     <ClCompile Include="cFancyFirework3Object.cpp">
       <Filter>Fireworks\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="cFancyFirework4Object.cpp">
-      <Filter>Fireworks\Objects</Filter>
+    <ClCompile Include="cFireworkMediator.cpp">
+      <Filter>Fireworks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -194,7 +194,7 @@
     <ClInclude Include="cFireworkDebrisObject.h">
       <Filter>Fireworks\Objects\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="iFireworkObject.h">
+    <ClInclude Include="cFireworkObject.h">
       <Filter>Fireworks\Objects\Headers</Filter>
     </ClInclude>
     <ClInclude Include="cFireworkFactory.h">
@@ -218,8 +218,14 @@
     <ClInclude Include="cFancyFirework3Object.h">
       <Filter>Fireworks\Objects\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="cFancyFirework4Object.h">
+    <ClInclude Include="cFireworkMediator.h">
+      <Filter>Fireworks</Filter>
+    </ClInclude>
+    <ClInclude Include="cFirework_Implementation.h">
       <Filter>Fireworks\Objects\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iMessage.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
