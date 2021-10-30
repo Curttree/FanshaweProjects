@@ -141,6 +141,9 @@
     <ClCompile Include="cFireworkMediator.cpp">
       <Filter>Fireworks</Filter>
     </ClCompile>
+    <ClCompile Include="cFancyFirework4Object.cpp">
+      <Filter>Fireworks\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\cShaderManager.h">
@@ -226,6 +229,12 @@
     </ClInclude>
     <ClInclude Include="iMessage.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iMediator.h">
+      <Filter>Fireworks</Filter>
+    </ClInclude>
+    <ClInclude Include="cFancyFirework4Object.h">
+      <Filter>Fireworks\Objects\Headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

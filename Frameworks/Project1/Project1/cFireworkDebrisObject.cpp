@@ -11,3 +11,18 @@ cFireworkDebrisObject::cFireworkDebrisObject(cFirework* _particle, cModel* _mode
 std::vector<cFireworkObject*> cFireworkDebrisObject::triggerNextStage() {
 	return std::vector<cFireworkObject*>();
 }
+
+bool cFireworkDebrisObject::RecieveMessage(sMessage theMessage) {
+
+	return true;
+}
+
+bool cFireworkDebrisObject::RecieveMessage(sMessage theMessage, sMessage& theResponse) {
+
+	return true;
+}
+
+bool cFireworkDebrisObject::SetReciever(iMediator* pTheReciever) {
+	this->p_Mediator = pTheReciever;
+	return true;
+}

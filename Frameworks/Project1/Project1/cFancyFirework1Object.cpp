@@ -15,3 +15,18 @@ std::vector<cFireworkObject*> cFancyFirework1Object::triggerNextStage() {
 	}
 	return newFireworks;
 }
+
+bool cFancyFirework1Object::RecieveMessage(sMessage theMessage) {
+
+	return true;
+}
+
+bool cFancyFirework1Object::RecieveMessage(sMessage theMessage, sMessage& theResponse) {
+
+	return true;
+}
+
+bool cFancyFirework1Object::SetReciever(iMediator* pTheReciever) {
+	this->p_Mediator = pTheReciever;
+	return true;
+}

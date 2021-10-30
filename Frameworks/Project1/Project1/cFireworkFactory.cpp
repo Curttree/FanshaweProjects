@@ -3,6 +3,7 @@
 #include "cFancyFirework1Object.h"
 #include "cFancyFirework2Object.h"
 #include "cFancyFirework3Object.h"
+#include "cFancyFirework4Object.h"
 #include "cFireworkDebrisObject.h"
 
 cFireworkFactory* cFireworkFactory::_instance = 0;
@@ -33,6 +34,9 @@ cFireworkObject* cFireworkFactory::createFireworkObject(int type, glm::vec3 posi
 		break;
 	case(3):
 		obj = new cFancyFirework3Object(firework, newModel);
+		break;	
+	case(4):
+		obj = new cFancyFirework4Object(firework, newModel);
 		break;
 	default:
 		obj = new cFireworkDebrisObject(firework, newModel, debrisColour);

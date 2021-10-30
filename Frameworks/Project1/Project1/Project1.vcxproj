@@ -160,6 +160,7 @@
     <ClCompile Include="cFancyFirework1Object.cpp" />
     <ClCompile Include="cFancyFirework2Object.cpp" />
     <ClCompile Include="cFancyFirework3Object.cpp" />
+    <ClCompile Include="cFancyFirework4Object.cpp" />
     <ClCompile Include="cFirework.cpp" />
     <ClCompile Include="cFireworkBuilder.cpp" />
     <ClCompile Include="cFireworkDebrisObject.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="cFancyFirework1Object.h" />
     <ClInclude Include="cFancyFirework2Object.h" />
     <ClInclude Include="cFancyFirework3Object.h" />
+    <ClInclude Include="cFancyFirework4Object.h" />
     <ClInclude Include="cFirework.h" />
     <ClInclude Include="cFireworkBuilder.h" />
     <ClInclude Include="cFireworkDebrisObject.h" />
@@ -197,6 +199,7 @@
     <ClInclude Include="cMathHelper.h" />
     <ClInclude Include="cTimedFuse.h" />
     <ClInclude Include="cWorldSpace.h" />
+    <ClInclude Include="iMediator.h" />
     <ClInclude Include="iFuse.h" />
     <ClInclude Include="iMessage.h" />
     <ClInclude Include="include\extern_includes.h" />

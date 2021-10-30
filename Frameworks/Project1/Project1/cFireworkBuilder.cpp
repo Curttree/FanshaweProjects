@@ -37,6 +37,10 @@ cFireworkObject* cFireworkBuilder::buildFirework(int fireworkNum, glm::vec3 posi
 	case(3):
 		result = cFireworkFactory::Instance()->createFireworkObject(3, position, determineDirection(-2.f, 2.f) * 120.f);
 		result->fuse = cFuseFactory::Instance()->createFuse(TIMED_FUSE, result->particle, 30.f);
+		break; 
+	case(4):
+		result = cFireworkFactory::Instance()->createFireworkObject(4, position, debrisDirection * 20.f);
+		result->fuse = cFuseFactory::Instance()->createFuse(TIMED_FUSE, result->particle, 60.f);
 		break;
 	default:
 		// Invalid selection. Build a firwork that will fizzle out immediately.

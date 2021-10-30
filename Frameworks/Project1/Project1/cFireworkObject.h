@@ -1,11 +1,12 @@
 #pragma once
 #include "cFirework.h"
 #include "iFuse.h"
+#include "iMessage.h"
 #include "src/graphics/cModel.h"
 
 class cFirework_Implementation;		//Forward declaration of firework implementation class (for PIMPL)
 
-struct cFireworkObject {
+class cFireworkObject : public iMessage {
 public:
 	virtual ~cFireworkObject();
 	cFireworkObject();

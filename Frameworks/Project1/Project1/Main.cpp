@@ -27,6 +27,7 @@
 #include "cWorldSpace.h"
 #include "cMathHelper.h"
 #include "cFireworkObject.h"
+#include "cFireworkMediator.h"
 
 #pragma region Globals
 
@@ -40,6 +41,7 @@ cMathHelper* mathHelper = cMathHelper::Instance();
 cFireworkBuilder* fireworkBuilder = cFireworkBuilder::Instance();
 
 configManager* _configManager = new configManager();
+cFireworkMediator* _mediator = new cFireworkMediator();
 
 glm::vec3 cameraEye = _configManager->_cameraStartingPosition;
 
@@ -67,9 +69,12 @@ static void captureCameraPosition() {
 
 void InitFirework(int type) {
     glm::vec3 position = (worldSpace->axes[0] * mathHelper->getRandom(-5.f, 5.f)) + (worldSpace->axes[1] * 1.1f) + (worldSpace->axes[2] * mathHelper->getRandom(-5.f, 5.f));
-    cFireworkObject* newObj = fireworkBuilder->buildFirework(type,position);
 
-    particleObjs.push_back(newObj);
+    sMessage initFireworkMessage;
+    initFireworkMessage.command = "CREATE FIREWORK";
+    initFireworkMessage.vec_iData.push_back(type);
+    initFireworkMessage.vec_v4Data.push_back(glm::vec4(position, 1.f));
+    _mediator->RecieveMessage(initFireworkMessage);
 }
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -140,14 +145,6 @@ void shutDown(GLFWwindow* window) {
     }
 
     exit(EXIT_SUCCESS);
-}
-
-void updatePositions(std::vector<cFireworkObject*> particles) {
-    glm::vec3 position;
-    for (size_t x = 0; x < particles.size(); x++) {
-        particles[x]->particle->GetPosition(position);
-        particles[x]->model->positionXYZ = position;
-    }
 }
 
 void initGround() {
@@ -221,6 +218,18 @@ int main(void)
     initGround();
     float timeElapsed = 0;
 
+    // Prepare our mediator messages (to be used later)
+    sMessage updatePosMessage;
+    updatePosMessage.command = "UPDATE POSITIONS";
+
+    sMessage timeStepMessage;
+    timeStepMessage.command = "TIME STEP";
+
+    sMessage retrieveMessage;
+    retrieveMessage.command = "GET FIREWORKS";
+
+    sMessage retrieveResponse;
+
     while (!glfwWindowShouldClose(window))
     {
         //        mat4x4 m, p, mvp;
@@ -242,34 +251,24 @@ int main(void)
         // Screen is cleared and we are ready to draw the scene...
         // *******************************************************
 
-        updatePositions(particleObjs);
-        worldSpace->_world->TimeStep(deltaTime);
+        _mediator->RecieveMessage(updatePosMessage);
 
         // Safety, mostly for first frame
         if (deltaTime == 0.f)
         {
             deltaTime = 0.03f;
         }
+        timeStepMessage.vec_fData.push_back(deltaTime);
 
-        for (int x = 0; x < particleObjs.size(); x++)
-        {
-            if (particleObjs[x]->fuse->isReadyForNextStage()) {
-                std::vector<cFireworkObject*> newFireworks = particleObjs[x]->triggerNextStage();
-                if (newFireworks.size() > 0) {
-                    particleObjs.insert(particleObjs.end(), newFireworks.begin(), newFireworks.end());
-                }
-                worldSpace->_world->RemoveParticle(particleObjs[x]->particle);
-                delete particleObjs[x];
-                particleObjs[x] = 0;
-                particleObjs.erase(particleObjs.begin() + x);
-                // Decrement x. Size of vector shrunk, so index has decreased by 1.
-                x--;
-            }
-        }
+        _mediator->RecieveMessage(timeStepMessage);
+        //Clear the delta time value we had previously sent so vector is clean for next iteration.
+        timeStepMessage.vec_fData.clear();
 
-        for (unsigned int index = 0; index != particleObjs.size(); index++)
+        _mediator->RecieveMessage(retrieveMessage, retrieveResponse);
+
+        for (unsigned int index = 0; index != retrieveResponse.vec_fireworkData.size(); index++)
         {
-            renderModel(*particleObjs[index]->model);
+            renderModel(*retrieveResponse.vec_fireworkData[index]->model);
         }
 
         renderModel(g_groundModel);
