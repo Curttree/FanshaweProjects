@@ -14,7 +14,6 @@ uniform vec4 wholeObjectDiffuseColour;	// Whole object diffuse colour
 uniform bool bUseWholeObjectDiffuseColour;	// If true, the whole object colour is used (instead of vertex colour)
 uniform vec4 wholeObjectSpecularColour;	// Colour of the specular highlight (optional)
 
-
 // This is used for wireframe or whole object colour. 
 // If bUseDebugColour is TRUE, then the fragment colour is "objectDebugColour".
 uniform bool bUseDebugColour;	
@@ -24,7 +23,6 @@ uniform vec4 objectDebugColour;
 // i.e. shows object colour "as is". 
 // Used for wireframe or debug type objects
 uniform bool bDontLightObject;			// 1 if you want to AVOID lighting
-
 
 // This is the camera eye location (update every frame)
 uniform vec4 eyeLocation;
@@ -47,7 +45,6 @@ const int POINT_LIGHT_TYPE = 0;
 const int SPOT_LIGHT_TYPE = 1;
 const int DIRECTIONAL_LIGHT_TYPE = 2;
 
-
 const int NUMBEROFLIGHTS = 10;
 uniform sLight theLights[NUMBEROFLIGHTS];  	// 80 uniforms
 // 
@@ -61,12 +58,8 @@ uniform sLight theLights[NUMBEROFLIGHTS];  	// 80 uniforms
 vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal, 
                             vec3 vertexWorldPos, vec4 vertexSpecular );
 
-
 void main()
 {
-	// This is the pixel colour on the screen.
-	// Just ONE pixel, though.
-	
 	// Copy model vertex colours?
 	vec4 vertexDiffuseColour = fVertexColour;
 	
@@ -91,18 +84,13 @@ void main()
 		return;
 	}
 	
-	
 	vec4 outColour = calcualteLightContrib( vertexDiffuseColour.rgb,		
 	                                        fNormal.xyz, 		// Normal at the vertex (in world coords)
                                             fVertWorldLocation.xyz,	// Vertex WORLD position
 											wholeObjectSpecularColour.rgba );
 											
 	pixelColour = outColour;
-	
-
 };
-
-
 
 // Calculates the colour of the vertex based on the lighting and vertex information:
 vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal, 
@@ -124,16 +112,10 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 		// Cast to an int (note with c'tor)
 		int intLightType = int(theLights[index].param1.x);
 		
-		// We will do the directional light here... 
-		// (BEFORE the attenuation, since sunlight has no attenuation, really)
+		// Check for directional light prior to attribution calculation since it is not
+		// needed for this kind of light.
 		if ( intLightType == DIRECTIONAL_LIGHT_TYPE )		// = 2
 		{
-			// This is supposed to simulate sunlight. 
-			// SO: 
-			// -- There's ONLY direction, no position
-			// -- Almost always, there's only 1 of these in a scene
-			// Cheapest light to calculate. 
-
 			vec3 lightContrib = theLights[index].diffuse.rgb;
 			
 			// Get the dot product of the light and normalize
@@ -144,7 +126,6 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 		
 			lightContrib *= dotProduct;		
 			
-//			finalObjectColour.rgb += (vertexMaterialColour.rgb * theLights[index].diffuse.rgb * lightContrib); 
 			finalObjectColour.rgb += (vertexMaterialColour.rgb * lightContrib); 
 									 //+ (materialSpecular.rgb * lightSpecularContrib.rgb);
 			// NOTE: There isn't any attenuation, like with sunlight.
@@ -152,9 +133,6 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 			
 			return finalObjectColour;		
 		}
-		
-		// Assume it's a point light 
-		// intLightType = 0
 		
 		// Contribution for this light
 		vec3 vLightToVertex = theLights[index].position.xyz - vertexWorldPos.xyz;
@@ -165,7 +143,6 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 		dotProduct = max( 0.0f, dotProduct );	
 		
 		vec3 lightDiffuseContrib = dotProduct * theLights[index].diffuse.rgb;
-			
 
 		// Specular 
 		vec3 lightSpecularContrib = vec3(0.0f);
@@ -179,8 +156,6 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 		// To simplify, we are NOT using the light specular value, just the object’s.
 		float objectSpecularPower = vertexSpecular.w; 
 		
-//		lightSpecularContrib = pow( max(0.0f, dot( eyeVector, reflectVector) ), objectSpecularPower )
-//			                   * vertexSpecular.rgb;	//* theLights[lightIndex].Specular.rgb
 		lightSpecularContrib = pow( max(0.0f, dot( eyeVector, reflectVector) ), objectSpecularPower )
 			                   * theLights[index].specular.rgb;
 							   
@@ -190,17 +165,13 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 				  theLights[index].atten.y * distanceToLight +						
 				  theLights[index].atten.z * distanceToLight*distanceToLight );  	
 				  
-		// total light contribution is Diffuse + Specular
+		// Total light contribution is Diffuse + Specular
 		lightDiffuseContrib *= attenuation;
 		lightSpecularContrib *= attenuation;
 		
-		
-		// But is it a spot light
+		// Check for spot light which requires extra calculations
 		if ( intLightType == SPOT_LIGHT_TYPE )		// = 1
 		{	
-		
-
-			// Yes, it's a spotlight
 			// Calcualate light vector (light to vertex, in world)
 			vec3 vertexToLight = vertexWorldPos.xyz - theLights[index].position.xyz;
 
@@ -211,9 +182,6 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 					
 			currentLightRayAngle = max(0.0f, currentLightRayAngle);
 
-			//vec4 param1;	
-			// x = lightType, y = inner angle, z = outer angle, w = TBD
-
 			// Is this inside the cone? 
 			float outerConeAngleCos = cos(radians(theLights[index].param1.z));
 			float innerConeAngleCos = cos(radians(theLights[index].param1.y));
@@ -221,14 +189,12 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 			// Is it completely outside of the spot?
 			if ( currentLightRayAngle < outerConeAngleCos )
 			{
-				// Nope. so it's in the dark
 				lightDiffuseContrib = vec3(0.0f, 0.0f, 0.0f);
 				lightSpecularContrib = vec3(0.0f, 0.0f, 0.0f);
 			}
 			else if ( currentLightRayAngle < innerConeAngleCos )
 			{
-				// Angle is between the inner and outer cone
-				// (this is called the penumbra of the spot light, by the way)
+				// Angle is between the inner and outer cone (penumbra)
 				// 
 				// This blends the brightness from full brightness, near the inner cone
 				//	to black, near the outter cone
@@ -240,8 +206,6 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 			}
 						
 		}// if ( intLightType == 1 )
-		
-		
 					
 		finalObjectColour.rgb += (vertexMaterialColour.rgb * lightDiffuseContrib.rgb)
 								  + (vertexSpecular.rgb  * lightSpecularContrib.rgb );

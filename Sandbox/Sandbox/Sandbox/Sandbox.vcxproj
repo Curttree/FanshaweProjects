@@ -72,20 +72,20 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)common/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)common/assets;$(SolutionDir)common/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)common/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)common/assets;$(SolutionDir)common/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)common/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)common/assets;$(SolutionDir)common/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>$(SolutionDir)common/lib/Debug_x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)common/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)common/assets;$(SolutionDir)common/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>$(SolutionDir)common/lib/Release_x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -148,7 +148,33 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c" />
+    <ClCompile Include="..\common\include\FlyCamera\cFlyCamera.cpp" />
+    <ClCompile Include="..\common\include\Graphics\cLightHelper.cpp" />
+    <ClCompile Include="..\common\include\Graphics\cLightManager.cpp" />
+    <ClCompile Include="..\common\include\Graphics\cShader.cpp" />
+    <ClCompile Include="..\common\include\Graphics\cShaderManager.cpp" />
+    <ClCompile Include="..\common\include\Graphics\cVAOManager.cpp" />
+    <ClCompile Include="cWinContextMenu.cpp" />
+    <ClCompile Include="globals.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Shutdown.cpp" />
+    <ClCompile Include="Startup.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\include\FlyCamera\cFlyCamera.h" />
+    <ClInclude Include="..\common\include\FlyCamera\iCamera.h" />
+    <ClInclude Include="..\common\include\Graphics\cLightHelper.h" />
+    <ClInclude Include="..\common\include\Graphics\cLightManager.h" />
+    <ClInclude Include="..\common\include\Graphics\cShaderManager.h" />
+    <ClInclude Include="..\common\include\Graphics\cVAOManager.h" />
+    <ClInclude Include="..\common\include\Graphics\GLCommon.h" />
+    <ClInclude Include="..\common\include\Graphics\sVertex_types.h" />
+    <ClInclude Include="cWinContextMenu.h" />
+    <ClInclude Include="globals.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\fragShader_01.glsl" />
+    <None Include="assets\shaders\vertShader_01.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
