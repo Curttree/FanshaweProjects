@@ -13,7 +13,7 @@ cLightManager* g_pTheLights = NULL;
 std::vector< cMesh* > g_vec_pMeshes;
 
 cMesh* g_pDebugSphere = NULL;
-bool g_bShowDebugShere = true;
+bool g_bShowDebugShere = false;
 
 
 unsigned int g_selectedObject = 0;

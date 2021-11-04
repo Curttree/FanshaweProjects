@@ -127,8 +127,8 @@ int main(void) {
     ::g_pTheLights->theLights[0].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
     ::g_pTheLights->theLights[0].atten = glm::vec4(0.001f, 0.036f, 0.0003f, 100.f);
     ::g_pTheLights->theLights[0].param1.x = 1.0f;    // spot light
-    ::g_pTheLights->theLights[0].param1.y = 25.0f;
-    ::g_pTheLights->theLights[0].param1.z = 50.0f;
+    ::g_pTheLights->theLights[0].param1.y = 10.0f;
+    ::g_pTheLights->theLights[0].param1.z = 20.0f;
     ::g_pTheLights->TurnOnLight(0);
 
     ::g_pTheLights->theLights[1].position = glm::vec4(0.f, 25.f, 75.f, 1.f);
@@ -137,8 +137,8 @@ int main(void) {
     ::g_pTheLights->theLights[1].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
     ::g_pTheLights->theLights[1].atten = glm::vec4(0.001f, 0.036f, 0.0003f, 100.f);
     ::g_pTheLights->theLights[1].param1.x = 1.0f;    // spot light
-    ::g_pTheLights->theLights[1].param1.y = 25.0f;
-    ::g_pTheLights->theLights[1].param1.z = 50.0f;
+    ::g_pTheLights->theLights[1].param1.y = 10.0f;
+    ::g_pTheLights->theLights[1].param1.z = 20.0f;
     ::g_pTheLights->TurnOnLight(1);
 
     ::g_pTheLights->theLights[2].position = glm::vec4(0.f, 24.f, 125.f, 1.f);
@@ -147,8 +147,8 @@ int main(void) {
     ::g_pTheLights->theLights[2].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
     ::g_pTheLights->theLights[2].atten = glm::vec4(0.001f, 0.036f, 0.0003f, 100.f);
     ::g_pTheLights->theLights[2].param1.x = 1.0f;    // spot light
-    ::g_pTheLights->theLights[2].param1.y = 25.0f;
-    ::g_pTheLights->theLights[2].param1.z = 50.0f;
+    ::g_pTheLights->theLights[2].param1.y = 10.0f;
+    ::g_pTheLights->theLights[2].param1.z = 20.0f;
     ::g_pTheLights->TurnOnLight(2);
 
     ::g_pTheLights->theLights[3].position = glm::vec4(0.f, 24.f, 175.f, 1.f);
@@ -157,8 +157,8 @@ int main(void) {
     ::g_pTheLights->theLights[3].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
     ::g_pTheLights->theLights[3].atten = glm::vec4(0.001f, 0.036f, 0.0003f, 100.f);
     ::g_pTheLights->theLights[3].param1.x = 1.0f;    // spot light
-    ::g_pTheLights->theLights[3].param1.y = 25.0f;
-    ::g_pTheLights->theLights[3].param1.z = 50.0f;
+    ::g_pTheLights->theLights[3].param1.y = 10.0f;
+    ::g_pTheLights->theLights[3].param1.z = 20.0f;
     ::g_pTheLights->TurnOnLight(3);
 
     ::g_pTheLights->theLights[4].position = glm::vec4(10.f, 365.f, 500.f, 1.f);
@@ -411,7 +411,7 @@ int main(void) {
         // **********************************************************************   
 
 
-        DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
+        //DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
 
 
         // "Present" what we've drawn.
@@ -650,7 +650,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec0_l->orientationXYZ = glm::vec3(0.f, -glm::pi<float>()/2, 0.f);
     curvedWall_sec0_l->scale = 10.f;
     curvedWall_sec0_l->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec0_l->wholeObjectDiffuseRGBA = GetColour("offwhite");
+    curvedWall_sec0_l->wholeObjectSpecularRGB = GetColour("offwhite");
 
     cMesh* curvedWall_sec0_r = new cMesh();
     curvedWall_sec0_r->meshName = "SM_Env_Wall_Curved_02_xyz_n_rgba_uv.ply";
@@ -658,7 +658,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec0_r->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     curvedWall_sec0_r->scale = 10.f;
     curvedWall_sec0_r->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec0_r->wholeObjectDiffuseRGBA = GetColour("offwhite");
+    curvedWall_sec0_r->wholeObjectSpecularRGB = GetColour("offwhite");
 
     cMesh* curvedWall_sec0_floor = new cMesh();
     curvedWall_sec0_floor->meshName = "SM_Env_Floor_04_xyz_n_rgba_uv.ply";
@@ -666,7 +666,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec0_floor->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     curvedWall_sec0_floor->scale = 10.f;
     curvedWall_sec0_floor->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec0_floor->wholeObjectDiffuseRGBA = GetColour("offwhite");
+    curvedWall_sec0_floor->wholeObjectSpecularRGB = GetColour("offwhite");
 
     cMesh* curvedWall_sec0_ceiling = new cMesh();
     curvedWall_sec0_ceiling->meshName = "SM_Env_Floor_04_xyz_n_rgba_uv.ply";
@@ -674,7 +674,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec0_ceiling->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     curvedWall_sec0_ceiling->scale = 10.f;
     curvedWall_sec0_ceiling->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec0_ceiling->wholeObjectDiffuseRGBA = GetColour("offwhite");
+    curvedWall_sec0_ceiling->wholeObjectSpecularRGB = GetColour("offwhite");
 
     cMesh* curvedWall_sec0_light = new cMesh();
     curvedWall_sec0_light->meshName = "SM_Env_Ceiling_Light_02_xyz_n_rgba_uv.ply";
@@ -682,7 +682,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec0_light->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     curvedWall_sec0_light->scale = 10.f;
     curvedWall_sec0_light->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec0_light->wholeObjectDiffuseRGBA = GetColour("white");
+    curvedWall_sec0_light->wholeObjectSpecularRGB = GetColour("white");
 
     ::g_vec_pMeshes.push_back(curvedWall_sec0_l);
     ::g_vec_pMeshes.push_back(curvedWall_sec0_r);
@@ -744,7 +744,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec2_l->orientationXYZ = glm::vec3(0.f, -glm::pi<float>() / 2, 0.f);
     curvedWall_sec2_l->scale = 10.f;
     curvedWall_sec2_l->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec2_l->wholeObjectDiffuseRGBA = GetColour("offwhite");
+    curvedWall_sec2_l->wholeObjectSpecularRGB = GetColour("offwhite");
 
     cMesh* curvedWall_sec2_r = new cMesh();
     curvedWall_sec2_r->meshName = "SM_Env_Wall_Curved_01_xyz_n_rgba_uv.ply";
@@ -752,7 +752,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec2_r->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     curvedWall_sec2_r->scale = 10.f;
     curvedWall_sec2_r->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec2_r->wholeObjectDiffuseRGBA = GetColour("offwhite");
+    curvedWall_sec2_r->wholeObjectSpecularRGB = GetColour("offwhite");
 
     cMesh* curvedWall_sec2_floor = new cMesh();
     curvedWall_sec2_floor->meshName = "SM_Env_Floor_04_xyz_n_rgba_uv.ply";
@@ -760,7 +760,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec2_floor->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     curvedWall_sec2_floor->scale = 10.f;
     curvedWall_sec2_floor->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec2_floor->wholeObjectDiffuseRGBA = GetColour("offwhite");
+    curvedWall_sec2_floor->wholeObjectSpecularRGB = GetColour("offwhite");
 
     cMesh* curvedWall_sec2_ceiling = new cMesh();
     curvedWall_sec2_ceiling->meshName = "SM_Env_Floor_04_xyz_n_rgba_uv.ply";
@@ -768,7 +768,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec2_ceiling->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     curvedWall_sec2_ceiling->scale = 10.f;
     curvedWall_sec2_ceiling->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec2_ceiling->wholeObjectDiffuseRGBA = GetColour("offwhite");
+    curvedWall_sec2_ceiling->wholeObjectSpecularRGB = GetColour("offwhite");
 
     cMesh* curvedWall_sec2_light = new cMesh();
     curvedWall_sec2_light->meshName = "SM_Env_Ceiling_Light_02_xyz_n_rgba_uv.ply";
@@ -776,7 +776,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec2_light->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     curvedWall_sec2_light->scale = 10.f;
     curvedWall_sec2_light->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec2_light->wholeObjectDiffuseRGBA = GetColour("white");
+    curvedWall_sec2_light->wholeObjectSpecularRGB = GetColour("white");
 
     ::g_vec_pMeshes.push_back(curvedWall_sec2_l);
     ::g_vec_pMeshes.push_back(curvedWall_sec2_r);
@@ -791,7 +791,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec3_l->orientationXYZ = glm::vec3(0.f, -glm::pi<float>() / 2, 0.f);
     curvedWall_sec3_l->scale = 10.f;
     curvedWall_sec3_l->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec3_l->wholeObjectDiffuseRGBA = GetColour("offwhite");
+    curvedWall_sec3_l->wholeObjectSpecularRGB = GetColour("offwhite");
 
     cMesh* curvedWall_sec3_r = new cMesh();
     curvedWall_sec3_r->meshName = "SM_Env_Wall_Curved_05_xyz_n_rgba_uv.ply";
@@ -799,7 +799,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec3_r->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     curvedWall_sec3_r->scale = 10.f;
     curvedWall_sec3_r->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec3_r->wholeObjectDiffuseRGBA = GetColour("offwhite");
+    curvedWall_sec3_r->wholeObjectSpecularRGB = GetColour("offwhite");
 
     cMesh* curvedWall_sec3_floor = new cMesh();
     curvedWall_sec3_floor->meshName = "SM_Env_Floor_04_xyz_n_rgba_uv.ply";
@@ -807,7 +807,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec3_floor->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     curvedWall_sec3_floor->scale = 10.f;
     curvedWall_sec3_floor->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec3_floor->wholeObjectDiffuseRGBA = GetColour("offwhite");
+    curvedWall_sec3_floor->wholeObjectSpecularRGB = GetColour("offwhite");
 
     cMesh* curvedWall_sec3_ceiling = new cMesh();
     curvedWall_sec3_ceiling->meshName = "SM_Env_Floor_04_xyz_n_rgba_uv.ply";
@@ -815,7 +815,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec3_ceiling->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     curvedWall_sec3_ceiling->scale = 10.f;
     curvedWall_sec3_ceiling->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec3_ceiling->wholeObjectDiffuseRGBA = GetColour("offwhite");
+    curvedWall_sec3_ceiling->wholeObjectSpecularRGB = GetColour("offwhite");
 
     cMesh* curvedWall_sec3_light = new cMesh();
     curvedWall_sec3_light->meshName = "SM_Env_Ceiling_Light_02_xyz_n_rgba_uv.ply";
@@ -823,7 +823,7 @@ void EnvironmentModelSetup() {
     curvedWall_sec3_light->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     curvedWall_sec3_light->scale = 10.f;
     curvedWall_sec3_light->bUseWholeObjectDiffuseColour = true;
-    curvedWall_sec3_light->wholeObjectDiffuseRGBA = GetColour("white");
+    curvedWall_sec3_light->wholeObjectSpecularRGB = GetColour("white");
 
     ::g_vec_pMeshes.push_back(curvedWall_sec3_l);
     ::g_vec_pMeshes.push_back(curvedWall_sec3_r);
@@ -838,7 +838,7 @@ void EnvironmentModelSetup() {
     transitionDoor->bUseWholeObjectDiffuseColour = true;
     transitionDoor->scale = 10.f;
     transitionDoor->wholeObjectDiffuseRGBA = GetColour("grey");
-    transitionDoor->bDontLight = true;
+    transitionDoor->wholeObjectSpecularRGB = GetColour("grey");
 
     cMesh* transitionDoorFrame = new cMesh();
     transitionDoorFrame->meshName = "SM_Env_Transition_Door_Curved_01_xyz_n_rgba_uv.ply";
@@ -847,7 +847,7 @@ void EnvironmentModelSetup() {
     transitionDoorFrame->bUseWholeObjectDiffuseColour = true;
     transitionDoorFrame->scale = 10.f;
     transitionDoorFrame->wholeObjectDiffuseRGBA = GetColour("offwhite");
-    transitionDoorFrame->bDontLight = true;
+    transitionDoorFrame->wholeObjectSpecularRGB = GetColour("offwhite");
 
     ::g_vec_pMeshes.push_back(transitionDoor);
     ::g_vec_pMeshes.push_back(transitionDoorFrame);
@@ -962,7 +962,7 @@ void EnvironmentModelSetup() {
 
     cMesh* lab_desk1 = new cMesh();
     lab_desk1->meshName = "SM_Prop_Desk_Lab_01_xyz_n_rgba_uv.ply";
-    lab_desk1->positionXYZ = glm::vec3(-100.f, -25.f, 600.f);
+    lab_desk1->positionXYZ = glm::vec3(-120.f, -25.f, 600.f);
     lab_desk1->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     lab_desk1->scale = 10.f;
     lab_desk1->bUseWholeObjectDiffuseColour = true;
@@ -978,7 +978,164 @@ void EnvironmentModelSetup() {
     lab_desk2->wholeObjectSpecularRGB = GetColour("brown");
     lab_desk2->wholeObjectDiffuseRGBA = GetColour("brown");
 
+    cMesh* desk1 = new cMesh();
+    desk1->meshName = "SM_Prop_Desk_01_xyz_n_rgba_uv.ply";
+    desk1->positionXYZ = glm::vec3(100.f, -25.f, 600.f);
+    desk1->orientationXYZ = glm::vec3(0.f,  glm::pi<float>() / 4, 0.f);
+    desk1->scale = 10.f;
+    desk1->bUseWholeObjectDiffuseColour = true;
+    desk1->wholeObjectSpecularRGB = GetColour("brown");
+    desk1->wholeObjectDiffuseRGBA = GetColour("brown");
+
+    cMesh* desk2 = new cMesh();
+    desk2->meshName = "SM_Prop_Desk_04_xyz_n_rgba_uv.ply";
+    desk2->positionXYZ = glm::vec3(-100.f, -25.f, 400.f);
+    desk2->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 4, 0.f);
+    desk2->scale = 10.f;
+    desk2->bUseWholeObjectDiffuseColour = true;
+    desk2->wholeObjectSpecularRGB = GetColour("brown");
+    desk2->wholeObjectDiffuseRGBA = GetColour("brown");
+
+    cMesh* beaker1 = new cMesh();
+    beaker1->meshName = "SM_Prop_Beaker_01_xyz_n_rgba_uv.ply";
+    beaker1->positionXYZ = glm::vec3(100.f, -10.f, 600.f);
+    beaker1->orientationXYZ = glm::vec3(0.f, -3 * glm::pi<float>() / 4, 0.f);
+    beaker1->scale = 10.f;
+    beaker1->bUseWholeObjectDiffuseColour = true;
+    beaker1->wholeObjectDiffuseRGBA = glm::vec4(1.f, 0.f, 0.f, 0.01f);
+
+    cMesh* beaker2 = new cMesh();
+    beaker2->meshName = "SM_Prop_Beaker_01_xyz_n_rgba_uv.ply";
+    beaker2->positionXYZ = glm::vec3(95.f, -10.f, 605.f);
+    beaker2->orientationXYZ = glm::vec3(0.f, -3 * glm::pi<float>() / 4, 0.f);
+    beaker2->scale = 10.f;
+    beaker2->bUseWholeObjectDiffuseColour = true;
+    beaker2->wholeObjectDiffuseRGBA = glm::vec4(1.f, 0.f, 0.f, 0.01f);
+
+    cMesh* beaker3 = new cMesh();
+    beaker3->meshName = "SM_Prop_Beaker_01_xyz_n_rgba_uv.ply";
+    beaker3->positionXYZ = glm::vec3(105.f, -10.f, 595.f);
+    beaker3->orientationXYZ = glm::vec3(0.f, -3 * glm::pi<float>() / 4, 0.f);
+    beaker3->scale = 10.f;
+    beaker3->bUseWholeObjectDiffuseColour = true;
+    beaker3->wholeObjectDiffuseRGBA = glm::vec4(1.f, 0.f, 0.f, 0.01f);
+
+    cMesh* beaker4 = new cMesh();
+    beaker4->meshName = "SM_Prop_Beaker_01_xyz_n_rgba_uv.ply";
+    beaker4->positionXYZ = glm::vec3(110.f, -10.f, 590.f);
+    beaker4->orientationXYZ = glm::vec3(0.f, -3 * glm::pi<float>() / 4, 0.f);
+    beaker4->scale = 10.f;
+    beaker4->bUseWholeObjectDiffuseColour = true;
+    beaker4->wholeObjectDiffuseRGBA = glm::vec4(1.f, 0.f, 0.f, 0.01f);
+
+    cMesh* cart = new cMesh();
+    cart->meshName = "SM_Prop_Cart_01_xyz_n_rgba_uv.ply";
+    cart->positionXYZ = glm::vec3(-82.5f, -25.f, 382.5f);
+    cart->orientationXYZ = glm::vec3(0.f, 3 * glm::pi<float>() / 4, 0.f);
+    cart->scale = 10.f;
+    cart->bUseWholeObjectDiffuseColour = true;
+    cart->wholeObjectSpecularRGB = GetColour("grey");
+    cart->wholeObjectDiffuseRGBA = GetColour("grey");
+
+    cMesh* stepladder = new cMesh();
+    stepladder->meshName = "SM_Prop_StepLadder_01_xyz_n_rgba_uv.ply";
+    stepladder->positionXYZ = glm::vec3(-60.f, -25.f, 560.f);
+    stepladder->orientationXYZ = glm::vec3(0.f, -3 *glm::pi<float>() / 4, 0.f);
+    stepladder->scale = 10.f;
+    stepladder->bUseWholeObjectDiffuseColour = true;
+    stepladder->wholeObjectSpecularRGB = GetColour("grey");
+    stepladder->wholeObjectDiffuseRGBA = GetColour("grey");
+
+    cMesh* scales = new cMesh();
+    scales->meshName = "SM_Prop_Scales_01_xyz_n_rgba_uv.ply";
+    scales->positionXYZ = glm::vec3(-95.f, -10.f, 395.f);
+    scales->orientationXYZ = glm::vec3(0.f, -3* glm::pi<float>() / 4, 0.f);
+    scales->scale = 10.f;
+    scales->bUseWholeObjectDiffuseColour = true;
+    scales->wholeObjectSpecularRGB = GetColour("grey");
+    scales->wholeObjectDiffuseRGBA = GetColour("grey");
+
+    cMesh* stepladder2 = new cMesh();
+    stepladder2->meshName = "SM_Prop_StepLadder_01_xyz_n_rgba_uv.ply";
+    stepladder2->positionXYZ = glm::vec3(40.f, -25.f, 560.f);
+    stepladder2->orientationXYZ = glm::vec3(0.f, 3 * glm::pi<float>() / 4, 0.f);
+    stepladder2->scale = 10.f;
+    stepladder2->bUseWholeObjectDiffuseColour = true;
+    stepladder2->wholeObjectSpecularRGB = GetColour("grey");
+    stepladder2->wholeObjectDiffuseRGBA = GetColour("grey");
+
+    cMesh* rocket = new cMesh();
+    rocket->meshName = "SM_Prop_Rocket_01_xyz_n_rgba_uv.ply";
+    rocket->positionXYZ = glm::vec3(0.f, -25.f, 590.f);
+    rocket->orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
+    rocket->scale = 10.f;
+    rocket->bUseWholeObjectDiffuseColour = true;
+    rocket->wholeObjectSpecularRGB = GetColour("red");
+    rocket->wholeObjectDiffuseRGBA = GetColour("red");
+
+    cMesh* locker1 = new cMesh();
+    locker1->meshName = "SM_Prop_Lockers_01_xyz_n_rgba_uv.ply";
+    locker1->positionXYZ = glm::vec3(120.f, -30.f, 790.f);
+    locker1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+    locker1->scale = 10.f;
+    locker1->bUseWholeObjectDiffuseColour = true;
+    locker1->wholeObjectSpecularRGB = GetColour("green");
+    locker1->wholeObjectDiffuseRGBA = GetColour("green");
+
+    cMesh* locker2 = new cMesh();
+    locker2->meshName = "SM_Prop_Lockers_01_xyz_n_rgba_uv.ply";
+    locker2->positionXYZ = glm::vec3(100.f, -30.f, 790.f);
+    locker2->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+    locker2->scale = 10.f;
+    locker2->bUseWholeObjectDiffuseColour = true;
+    locker2->wholeObjectSpecularRGB = GetColour("green");
+    locker2->wholeObjectDiffuseRGBA = GetColour("green");
+
+    cMesh* chair = new cMesh();
+    chair->meshName = "SM_Prop_SwivelChair_01_xyz_n_rgba_uv.ply";
+    chair->positionXYZ = glm::vec3(-105.f, -25.f, 600.f);
+    chair->orientationXYZ = glm::vec3(0.f, -glm::pi<float>() / 2, 0.f);
+    chair->scale = 10.f;
+    chair->bUseWholeObjectDiffuseColour = true;
+    chair->wholeObjectSpecularRGB = GetColour("black");
+    chair->wholeObjectDiffuseRGBA = GetColour("black");
+
+    cMesh* server = new cMesh();
+    server->meshName = "SM_Prop_ServerRack_01_xyz_n_rgba_uv.ply";
+    server->positionXYZ = glm::vec3(-165.f, -25.f, 500.f);
+    server->orientationXYZ = glm::vec3(0.f, -glm::pi<float>() / 2, 0.f);
+    server->scale = 10.f;
+    server->bUseWholeObjectDiffuseColour = true;
+    server->wholeObjectSpecularRGB = GetColour("grey");
+    server->wholeObjectDiffuseRGBA = GetColour("grey");
+
+    cMesh* chair2 = new cMesh();
+    chair2->meshName = "SM_Prop_SwivelChair_04_xyz_n_rgba_uv.ply";
+    chair2->positionXYZ = glm::vec3(85.f, -25.f, 400.f);
+    chair2->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
+    chair2->scale = 10.f;
+    chair2->bUseWholeObjectDiffuseColour = true;
+    chair2->wholeObjectSpecularRGB = GetColour("black");
+    chair2->wholeObjectDiffuseRGBA = GetColour("black");
+
     ::g_vec_pMeshes.push_back(lab_desk1);
     ::g_vec_pMeshes.push_back(lab_desk2);
+    ::g_vec_pMeshes.push_back(desk1);
+    ::g_vec_pMeshes.push_back(desk2);
+    ::g_vec_pMeshes.push_back(beaker1);
+    ::g_vec_pMeshes.push_back(beaker2);
+    ::g_vec_pMeshes.push_back(beaker3);
+    ::g_vec_pMeshes.push_back(beaker4);
+
+    ::g_vec_pMeshes.push_back(cart);
+    ::g_vec_pMeshes.push_back(stepladder);
+    ::g_vec_pMeshes.push_back(scales);
+    ::g_vec_pMeshes.push_back(stepladder2);
+    ::g_vec_pMeshes.push_back(rocket);
+    ::g_vec_pMeshes.push_back(locker1);
+    ::g_vec_pMeshes.push_back(locker2);
+    ::g_vec_pMeshes.push_back(chair);
+    ::g_vec_pMeshes.push_back(server);
+    ::g_vec_pMeshes.push_back(chair2);
     return;
 }
