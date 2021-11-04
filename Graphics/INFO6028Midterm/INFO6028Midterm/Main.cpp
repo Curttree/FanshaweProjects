@@ -132,12 +132,22 @@ int main(void) {
     //gTheLights.theLights[0].param2.x = 1.0f;
  //   ::g_pTheLights->TurnOnLight(0);  // Or this!
 
-    ::g_pTheLights->theLights[1].position = glm::vec4(5000.0f, 10000.0f, 0.0f, 1.0f);
+    ::g_pTheLights->theLights[1].position = glm::vec4(0.0f, 25.f, 25.f, 1.0f);
     ::g_pTheLights->theLights[1].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    ::g_pTheLights->theLights[1].param1.x = 0.0f;    // point light
-    ::g_pTheLights->theLights[1].atten.y = 0.000001f;
-    ::g_pTheLights->theLights[1].atten.z = 0.00000001f;
-    //    ::g_pTheLights->TurnOnLight(1);  // Or this!
+    ::g_pTheLights->theLights[1].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLights->theLights[1].param1.x = 1.0f;    // point light
+    ::g_pTheLights->theLights[1].param1.y = 15.0f;
+    ::g_pTheLights->theLights[1].param1.z = 30.0f;
+    ::g_pTheLights->TurnOnLight(1);  // Or this!
+
+    ::g_pTheLights->theLights[2].position = glm::vec4(0.0f, 25.f, 25.f, 1.0f);
+    ::g_pTheLights->theLights[2].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLights->theLights[2].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLights->theLights[2].param1.x = 0.0f;    // point light
+    ::g_pTheLights->theLights[2].param1.y = 100.0f;
+    ::g_pTheLights->theLights[2].param1.z = 100.0f;
+    ::g_pTheLights->theLights[2].atten = glm::vec4(100.f, 100.f, 100.f, 1.f);
+    ::g_pTheLights->TurnOnLight(2);  // Or this!
 
         // Sunlight: https://encycolorpedia.com/fdfbd3#:~:text=The%20hexadecimal%20color%20code%20%23fdfbd3,%25%20saturation%20and%2091%25%20lightness.
         //The hexadecimal color code #fdfbd3 is a very light shade of yellow. In the RGB color model #fdfbd3 is comprised of 99.22% red, 98.43% green and 82.75% blue. 
@@ -184,6 +194,16 @@ int main(void) {
     vecModelsToLoad.push_back("SM_Prop_StepLadder_01_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("SM_Prop_SwivelChair_01_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("SM_Prop_SwivelChair_04_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("SM_Env_Ceiling_Light_01_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("SM_Env_Construction_Wall_01_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("SM_Env_Floor_01_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("SM_Prop_Beaker_01_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("SM_Prop_Desk_01_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("SM_Prop_Desk_02_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("SM_Prop_Desk_03_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("SM_Prop_Desk_04_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("SM_Prop_Desk_Lab_01_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("SM_Prop_Desk_Lab_02_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("Mercurio_xyz_n_rgba_x100_Bigger_perturbed_surface.ply");
 
 
@@ -531,9 +551,32 @@ glm::vec4 GetColour(std::string colourName) {
     }
 }
 
+cMesh* GenFloorTile(glm::vec3 position) {
+    cMesh* floorTile = new cMesh();
+    floorTile->meshName = "SM_Env_Floor_01_xyz_n_rgba_uv.ply";
+    floorTile->positionXYZ = position;
+    floorTile->bUseWholeObjectDiffuseColour = true;
+    floorTile->scale = 10.f;
+    floorTile->wholeObjectDiffuseRGBA = GetColour("offwhite");
+    return floorTile;
+}
+
+void GenWallStack(glm::vec3 position, glm::vec3 orientation, int additionalHeight = 200) {
+    //TODO: Name walls so can refer back to for part 4.
+    for (int y = position.y; y <= position.y+ additionalHeight; y += 50) {
+        cMesh* wall = new cMesh();
+        wall->meshName = "SM_Env_Construction_Wall_01_xyz_n_rgba_uv.ply";
+        wall->positionXYZ = glm::vec3(position.x, y, position.z);
+        wall->orientationXYZ = orientation;
+        wall->bUseWholeObjectDiffuseColour = true;
+        wall->scale = 10.f;
+        wall->wholeObjectDiffuseRGBA = GetColour("offwhite");
+        ::g_vec_pMeshes.push_back(wall);
+    }
+}
+
 void EnvironmentModelSetup() {
-    // TODO: Define color palette in separate class.
-    // QUESTION 1 : Setup corridor
+    // =========== QUESTION 1 : Setup corridor==============================
 
     //SECTION 1
     cMesh* curvedWall_sec0_l = new cMesh();
@@ -725,7 +768,8 @@ void EnvironmentModelSetup() {
 
     cMesh* transitionDoor = new cMesh();
     transitionDoor->meshName = "SM_Env_Door_01_xyz_n_rgba_uv.ply";
-    transitionDoor->positionXYZ = glm::vec3(-10.f, -25.f, 175.f);
+    transitionDoor->positionXYZ = glm::vec3(10.f, -25.f, 225.f);
+    transitionDoor->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
     transitionDoor->bUseWholeObjectDiffuseColour = true;
     transitionDoor->scale = 10.f;
     transitionDoor->wholeObjectDiffuseRGBA = GetColour("grey");
@@ -733,7 +777,8 @@ void EnvironmentModelSetup() {
 
     cMesh* transitionDoorFrame = new cMesh();
     transitionDoorFrame->meshName = "SM_Env_Transition_Door_Curved_01_xyz_n_rgba_uv.ply";
-    transitionDoorFrame->positionXYZ = glm::vec3(-25.f, -25.f, 175.f);
+    transitionDoorFrame->positionXYZ = glm::vec3(25.f, -25.f, 225.f);
+    transitionDoorFrame->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
     transitionDoorFrame->bUseWholeObjectDiffuseColour = true;
     transitionDoorFrame->scale = 10.f;
     transitionDoorFrame->wholeObjectDiffuseRGBA = GetColour("offwhite");
@@ -742,6 +787,105 @@ void EnvironmentModelSetup() {
     ::g_vec_pMeshes.push_back(transitionDoor);
     ::g_vec_pMeshes.push_back(transitionDoorFrame);
 
+    // =========== QUESTION 2 : Setup lab ==============================
+
+    // Floor tiles
+    for (int z = 200; z <= 750; z += 50) {
+        for (int x = -125; x <= 225; x += 50) {
+            ::g_vec_pMeshes.push_back(GenFloorTile(glm::vec3((float)x, -25.f, (float)z)));
+        }
+    }
+
+    // Ceiling tiles
+    for (int z = 200; z <= 750; z += 50) {
+        for (int x = -125; x <= 225; x += 50) {
+            ::g_vec_pMeshes.push_back(GenFloorTile(glm::vec3((float)x, 225.f, (float)z)));
+        }
+    }
+    
+    // Front wall (near entrance)
+    GenWallStack(glm::vec3(25.f, -25.f, 200.f), glm::vec3(0.f));
+    GenWallStack(glm::vec3(125.f, -25.f, 200.f), glm::vec3(0.f));
+    GenWallStack(glm::vec3(-75.f, 25.f, 200.f), glm::vec3(0.f), 150);
+    GenWallStack(glm::vec3(-175.f, -25.f, 200.f), glm::vec3(0.f));
+
+    // Back wall
+    GenWallStack(glm::vec3(-75.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>(), 0.f));
+    GenWallStack(glm::vec3(25.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>(), 0.f));
+    GenWallStack(glm::vec3(125.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>(), 0.f));
+    GenWallStack(glm::vec3(225.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>(), 0.f));
+
+    // Right wall
+    GenWallStack(glm::vec3(-175.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>()/2, 0.f));
+    GenWallStack(glm::vec3(-175.f, -25.f, 700.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
+    GenWallStack(glm::vec3(-175.f, -25.f, 600.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
+    GenWallStack(glm::vec3(-175.f, -25.f, 500.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
+    GenWallStack(glm::vec3(-175.f, -25.f, 400.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
+    GenWallStack(glm::vec3(-175.f, -25.f, 300.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
+
+    // Left wall
+    GenWallStack(glm::vec3(225.f, -25.f, 700.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
+    GenWallStack(glm::vec3(225.f, -25.f, 600.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
+    GenWallStack(glm::vec3(225.f, -25.f, 500.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
+    GenWallStack(glm::vec3(225.f, -25.f, 400.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
+    GenWallStack(glm::vec3(225.f, -25.f, 300.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
+    GenWallStack(glm::vec3(225.f, -25.f, 200.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
+
+    cMesh* lab_light1 = new cMesh();
+    lab_light1->meshName = "SM_Env_Ceiling_Light_01_xyz_n_rgba_uv.ply";
+    lab_light1->positionXYZ = glm::vec3(0.f, 200.f, 300.f);
+    lab_light1->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
+    lab_light1->scale = 10.f;
+    lab_light1->bUseWholeObjectDiffuseColour = true;
+    lab_light1->wholeObjectDiffuseRGBA = GetColour("red");
+
+    cMesh* lab_light2 = new cMesh();
+    lab_light2->meshName = "SM_Env_Ceiling_Light_01_xyz_n_rgba_uv.ply";
+    lab_light2->positionXYZ = glm::vec3(100.f, 200.f, 300.f);
+    lab_light2->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
+    lab_light2->scale = 10.f;
+    lab_light2->bUseWholeObjectDiffuseColour = true;
+    lab_light2->wholeObjectDiffuseRGBA = GetColour("red");
+
+    cMesh* lab_light3 = new cMesh();
+    lab_light3->meshName = "SM_Env_Ceiling_Light_01_xyz_n_rgba_uv.ply";
+    lab_light3->positionXYZ = glm::vec3(0.f, 200.f, 600.f);
+    lab_light3->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
+    lab_light3->scale = 10.f;
+    lab_light3->bUseWholeObjectDiffuseColour = true;
+    lab_light3->wholeObjectDiffuseRGBA = GetColour("red");
+
+    cMesh* lab_light4 = new cMesh();
+    lab_light4->meshName = "SM_Env_Ceiling_Light_01_xyz_n_rgba_uv.ply";
+    lab_light4->positionXYZ = glm::vec3(100.f, 200.f, 600.f);
+    lab_light4->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
+    lab_light4->scale = 10.f;
+    lab_light4->bUseWholeObjectDiffuseColour = true;
+    lab_light4->wholeObjectDiffuseRGBA = GetColour("red");
+
+    cMesh* lab_light5 = new cMesh();
+    lab_light5->meshName = "SM_Env_Ceiling_Light_01_xyz_n_rgba_uv.ply";
+    lab_light5->positionXYZ = glm::vec3(-100.f, 200.f, 300.f);
+    lab_light5->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
+    lab_light5->scale = 10.f;
+    lab_light5->bUseWholeObjectDiffuseColour = true;
+    lab_light5->wholeObjectDiffuseRGBA = GetColour("red");
+
+    cMesh* lab_light6 = new cMesh();
+    lab_light6->meshName = "SM_Env_Ceiling_Light_01_xyz_n_rgba_uv.ply";
+    lab_light6->positionXYZ = glm::vec3(-100.f, 200.f, 600.f);
+    lab_light6->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
+    lab_light6->scale = 10.f;
+    lab_light6->bUseWholeObjectDiffuseColour = true;
+    lab_light6->wholeObjectDiffuseRGBA = GetColour("red");
+
+
+    ::g_vec_pMeshes.push_back(lab_light1);
+    ::g_vec_pMeshes.push_back(lab_light2);
+    ::g_vec_pMeshes.push_back(lab_light3);
+    ::g_vec_pMeshes.push_back(lab_light4);
+    ::g_vec_pMeshes.push_back(lab_light5);
+    ::g_vec_pMeshes.push_back(lab_light6);
 
     return;
 }

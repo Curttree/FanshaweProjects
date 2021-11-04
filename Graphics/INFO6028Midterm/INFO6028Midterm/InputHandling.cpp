@@ -52,6 +52,17 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
             ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
         }
 
+        if (glfwGetKey(pWindow, GLFW_KEY_1) == GLFW_PRESS)	// "Position 1"
+        {
+            ::g_pFlyCamera->setAt(glm::vec3(0.f,0.f,1.f));
+            ::g_pFlyCamera->setEye(glm::vec3(0.f, 0.f, 0.f));
+        }
+        if (glfwGetKey(pWindow, GLFW_KEY_2) == GLFW_PRESS)	// "Position 2"
+        {
+            ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
+            ::g_pFlyCamera->setEye(glm::vec3(0.f, 0.f, 240.f));
+        }
+
         std::stringstream strTitle;
         // std::cout << 
         glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
