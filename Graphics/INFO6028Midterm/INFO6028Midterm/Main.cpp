@@ -10,6 +10,9 @@
 
 #include "globals.h"
 
+float SPOTLIGHT_INNER = 20.f;
+float SPOTLIGHT_OUTER = 50.f;
+
 // Function signature for DrawObject()
 void DrawObject(
     cMesh* pCurrentMesh,
@@ -111,51 +114,123 @@ int main(void) {
     GLint matProjection_Location = glGetUniformLocation(program, "matProjection");
     GLint matModelInverseTranspose_Location = glGetUniformLocation(program, "matModelInverseTranspose");
 
-    ::g_pTheLights->theLights[0].position = glm::vec4(-5000.0f, 10000.0f, 0.0f, 1.0f);
-    ::g_pTheLights->theLights[0].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    //... and so on...
+    // LIGHTS 
 //    	vec4 param1;	// x = lightType, y = inner angle, z = outer angle, w = TBD
 //	                // 0 = pointlight
 //					// 1 = spot light
 //					// 2 = directional light
-//    ::g_pTheLights->theLights[0].param1.x = 1.0f;    // Spot light
-    ::g_pTheLights->theLights[0].param1.x = 0.0f;    // point light
-    // Direction RELATIVE TO THE LIGHT
-    // (-1 in y is straight down)
+// 
+    // Hallway lights
+    ::g_pTheLights->theLights[0].position = glm::vec4(0.f, 24.f, 25.f, 1.f);
+    ::g_pTheLights->theLights[0].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[0].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
     ::g_pTheLights->theLights[0].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
-    ::g_pTheLights->theLights[0].param1.y = 15.0f;   // Inner
-    ::g_pTheLights->theLights[0].param1.z = 30.0f;   // Outer
+    ::g_pTheLights->theLights[0].atten = glm::vec4(0.001f, 0.036f, 0.0003f, 100.f);
+    ::g_pTheLights->theLights[0].param1.x = 1.0f;    // spot light
+    ::g_pTheLights->theLights[0].param1.y = 25.0f;
+    ::g_pTheLights->theLights[0].param1.z = 50.0f;
+    ::g_pTheLights->TurnOnLight(0);
 
-    ::g_pTheLights->theLights[0].atten.y = 0.000001f;
-    ::g_pTheLights->theLights[0].atten.z = 0.00000001f;
-
-    //gTheLights.theLights[0].param2.x = 1.0f;
- //   ::g_pTheLights->TurnOnLight(0);  // Or this!
-
-    ::g_pTheLights->theLights[1].position = glm::vec4(0.0f, 25.f, 25.f, 1.0f);
-    ::g_pTheLights->theLights[1].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLights->theLights[1].position = glm::vec4(0.f, 25.f, 75.f, 1.f);
+    ::g_pTheLights->theLights[1].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[1].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
     ::g_pTheLights->theLights[1].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
-    ::g_pTheLights->theLights[1].param1.x = 1.0f;    // point light
-    ::g_pTheLights->theLights[1].param1.y = 15.0f;
-    ::g_pTheLights->theLights[1].param1.z = 30.0f;
-    ::g_pTheLights->TurnOnLight(1);  // Or this!
+    ::g_pTheLights->theLights[1].atten = glm::vec4(0.001f, 0.036f, 0.0003f, 100.f);
+    ::g_pTheLights->theLights[1].param1.x = 1.0f;    // spot light
+    ::g_pTheLights->theLights[1].param1.y = 25.0f;
+    ::g_pTheLights->theLights[1].param1.z = 50.0f;
+    ::g_pTheLights->TurnOnLight(1);
 
-    ::g_pTheLights->theLights[2].position = glm::vec4(0.0f, 25.f, 25.f, 1.0f);
-    ::g_pTheLights->theLights[2].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ::g_pTheLights->theLights[2].position = glm::vec4(0.f, 24.f, 125.f, 1.f);
+    ::g_pTheLights->theLights[2].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[2].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
     ::g_pTheLights->theLights[2].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
-    ::g_pTheLights->theLights[2].param1.x = 0.0f;    // point light
-    ::g_pTheLights->theLights[2].param1.y = 100.0f;
-    ::g_pTheLights->theLights[2].param1.z = 100.0f;
-    ::g_pTheLights->theLights[2].atten = glm::vec4(100.f, 100.f, 100.f, 1.f);
-    ::g_pTheLights->TurnOnLight(2);  // Or this!
+    ::g_pTheLights->theLights[2].atten = glm::vec4(0.001f, 0.036f, 0.0003f, 100.f);
+    ::g_pTheLights->theLights[2].param1.x = 1.0f;    // spot light
+    ::g_pTheLights->theLights[2].param1.y = 25.0f;
+    ::g_pTheLights->theLights[2].param1.z = 50.0f;
+    ::g_pTheLights->TurnOnLight(2);
 
-        // Sunlight: https://encycolorpedia.com/fdfbd3#:~:text=The%20hexadecimal%20color%20code%20%23fdfbd3,%25%20saturation%20and%2091%25%20lightness.
-        //The hexadecimal color code #fdfbd3 is a very light shade of yellow. In the RGB color model #fdfbd3 is comprised of 99.22% red, 98.43% green and 82.75% blue. 
-    ::g_pTheLights->theLights[0].param1.x = 2.0f;    // directional
-    ::g_pTheLights->theLights[0].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
-    ::g_pTheLights->theLights[0].diffuse = glm::vec4(0.9922f, 0.9843f, 0.8275f, 1.0f);
-    ::g_pTheLights->TurnOnLight(0);  // Or this!
+    ::g_pTheLights->theLights[3].position = glm::vec4(0.f, 24.f, 175.f, 1.f);
+    ::g_pTheLights->theLights[3].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[3].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[3].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLights->theLights[3].atten = glm::vec4(0.001f, 0.036f, 0.0003f, 100.f);
+    ::g_pTheLights->theLights[3].param1.x = 1.0f;    // spot light
+    ::g_pTheLights->theLights[3].param1.y = 25.0f;
+    ::g_pTheLights->theLights[3].param1.z = 50.0f;
+    ::g_pTheLights->TurnOnLight(3);
 
+    ::g_pTheLights->theLights[4].position = glm::vec4(10.f, 365.f, 500.f, 1.f);
+    ::g_pTheLights->theLights[4].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[4].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[4].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLights->theLights[4].atten = glm::vec4(0.005f, 0.05f, 0.0001f, 200.f);
+    ::g_pTheLights->theLights[4].param1.x = 0.0f;    // point light
+    ::g_pTheLights->theLights[4].param1.y = 1.0f;
+    ::g_pTheLights->theLights[4].param1.z = 100.0f;
+    ::g_pTheLights->TurnOnLight(4);
+
+    // HARD SPOT LIGHT
+    ::g_pTheLights->theLights[5].position = glm::vec4(0.f, 200.f, 600.f, 1.f);
+    ::g_pTheLights->theLights[5].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[5].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[5].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLights->theLights[5].atten = glm::vec4(0.001f, 0.003f, 0.0001f, 100.f);
+    ::g_pTheLights->theLights[5].param1.x = 1.0f;    // spot light
+    ::g_pTheLights->theLights[5].param1.y = SPOTLIGHT_INNER;
+    ::g_pTheLights->theLights[5].param1.z = SPOTLIGHT_INNER;
+    ::g_pTheLights->TurnOnLight(5);
+
+    ::g_pTheLights->theLights[6].position = glm::vec4(-100.f, 200.f, 600.f, 1.f);
+    ::g_pTheLights->theLights[6].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[6].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[6].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLights->theLights[6].atten = glm::vec4(0.001f, 0.003f, 0.0001f, 100.f);
+    ::g_pTheLights->theLights[6].param1.x = 1.0f;    // spot light
+    ::g_pTheLights->theLights[6].param1.y = SPOTLIGHT_INNER;
+    ::g_pTheLights->theLights[6].param1.z = SPOTLIGHT_OUTER;
+    ::g_pTheLights->TurnOnLight(6);
+
+    ::g_pTheLights->theLights[7].position = glm::vec4(0.f, 200.f, 300.f, 1.f);
+    ::g_pTheLights->theLights[7].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[7].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[7].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLights->theLights[7].atten = glm::vec4(0.001f, 0.003f, 0.0001f, 100.f);
+    ::g_pTheLights->theLights[7].param1.x = 1.0f;    // spot light
+    ::g_pTheLights->theLights[7].param1.y = SPOTLIGHT_INNER;
+    ::g_pTheLights->theLights[7].param1.z = SPOTLIGHT_OUTER;
+    ::g_pTheLights->TurnOnLight(7);
+
+    ::g_pTheLights->theLights[8].position = glm::vec4(-100.f, 200.f, 300.f, 1.f);
+    ::g_pTheLights->theLights[8].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[8].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[8].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLights->theLights[8].atten = glm::vec4(0.001f, 0.003f, 0.0001f, 100.f);
+    ::g_pTheLights->theLights[8].param1.x = 1.0f;    // spot light
+    ::g_pTheLights->theLights[8].param1.y = SPOTLIGHT_INNER;
+    ::g_pTheLights->theLights[8].param1.z = SPOTLIGHT_OUTER;
+    ::g_pTheLights->TurnOnLight(8);
+
+    ::g_pTheLights->theLights[9].position = glm::vec4(100.f, 200.f, 300.f, 1.f);
+    ::g_pTheLights->theLights[9].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[9].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[9].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLights->theLights[9].atten = glm::vec4(0.001f, 0.003f, 0.0001f, 100.f);
+    ::g_pTheLights->theLights[9].param1.x = 1.0f;    // spot light
+    ::g_pTheLights->theLights[9].param1.y = SPOTLIGHT_INNER;
+    ::g_pTheLights->theLights[9].param1.z = SPOTLIGHT_OUTER;
+    ::g_pTheLights->TurnOnLight(9);
+
+    ::g_pTheLights->theLights[10].position = glm::vec4(100.f, 200.f, 600.f, 1.f);
+    ::g_pTheLights->theLights[10].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[10].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[10].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLights->theLights[10].atten = glm::vec4(0.001f, 0.003f, 0.0001f, 100.f);
+    ::g_pTheLights->theLights[10].param1.x = 1.0f;    // spot light
+    ::g_pTheLights->theLights[10].param1.y = SPOTLIGHT_INNER;
+    ::g_pTheLights->theLights[10].param1.z = SPOTLIGHT_OUTER;
+    ::g_pTheLights->TurnOnLight(10);
 
     // Get the uniform locations of the light shader values
     ::g_pTheLights->SetUpUniformLocations(program);
@@ -177,6 +252,7 @@ int main(void) {
     std::vector<std::string> vecModelsToLoad;
     vecModelsToLoad.push_back("Sphere_xyz_n_rgba.ply");
     vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba.ply");
+    vecModelsToLoad.push_back("ISO_Shphere_flat_4div_xyz_n_rgba.ply");
     vecModelsToLoad.push_back("SM_Env_Ceiling_Light_02_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("SM_Env_Door_01_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("SM_Env_Floor_04_xyz_n_rgba_uv.ply");
@@ -204,25 +280,11 @@ int main(void) {
     vecModelsToLoad.push_back("SM_Prop_Desk_04_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("SM_Prop_Desk_Lab_01_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("SM_Prop_Desk_Lab_02_xyz_n_rgba_uv.ply");
-    vecModelsToLoad.push_back("Mercurio_xyz_n_rgba_x100_Bigger_perturbed_surface.ply");
 
 
     //Enviornment setup
     EnvironmentModelSetup();
 
-    cMesh* pPlanetMercury = new cMesh();
-    pPlanetMercury->meshName = "Mercurio_xyz_n_rgba_x100_Bigger_perturbed_surface.ply";
-    pPlanetMercury->positionXYZ = glm::vec3(100'000.0f, -250'000.0f, 100'000.0f);
-    //pPlanetMercury->bIsWireframe = true;
-    //pPlanetMercury->bDontLight = true;
-    pPlanetMercury->bUseWholeObjectDiffuseColour = true;
-    // https://encycolorpedia.com/743027: General Motors Sierra Rust / #743027
-    // 45.49% red, 18.82% green and 15.29% blue
-    pPlanetMercury->wholeObjectDiffuseRGBA = glm::vec4(0.4549f, 0.1882f, 0.1529f, 1.0f);
-
-
-    //    ::g_vec_pMeshes.push_back(pTheGround);
-    ::g_vec_pMeshes.push_back(pPlanetMercury);
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -290,7 +352,7 @@ int main(void) {
         // Copy the light information into the shader to draw the scene
         ::g_pTheLights->CopyLightInfoToShader();
 
-        ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[0].position;
+        ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[::g_selectedLight].position;
         // Place the "debug sphere" at the same location as the selected light (again)
         // HACK: Debug sphere is 5th item added
 //        ::g_vecMeshes[5].positionXYZ = gTheLights.theLights[0].position;
@@ -544,6 +606,9 @@ glm::vec4 GetColour(std::string colourName) {
     }
     else if (colourName == "red") {
         return glm::vec4(1.f, 0.f, 0.f, 0.f);
+    }
+    else if (colourName == "brown") {
+        return glm::vec4(0.6f, 0.3f, 0.f, 0.f);
     }
     else {
         // No valid selection. Return white.
@@ -837,7 +902,8 @@ void EnvironmentModelSetup() {
     lab_light1->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     lab_light1->scale = 10.f;
     lab_light1->bUseWholeObjectDiffuseColour = true;
-    lab_light1->wholeObjectDiffuseRGBA = GetColour("red");
+    lab_light1->wholeObjectDiffuseRGBA = GetColour("white");
+    lab_light1->wholeObjectSpecularRGB = GetColour("white");
 
     cMesh* lab_light2 = new cMesh();
     lab_light2->meshName = "SM_Env_Ceiling_Light_01_xyz_n_rgba_uv.ply";
@@ -845,7 +911,8 @@ void EnvironmentModelSetup() {
     lab_light2->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     lab_light2->scale = 10.f;
     lab_light2->bUseWholeObjectDiffuseColour = true;
-    lab_light2->wholeObjectDiffuseRGBA = GetColour("red");
+    lab_light2->wholeObjectDiffuseRGBA = GetColour("white");
+    lab_light2->wholeObjectSpecularRGB = GetColour("white");
 
     cMesh* lab_light3 = new cMesh();
     lab_light3->meshName = "SM_Env_Ceiling_Light_01_xyz_n_rgba_uv.ply";
@@ -853,7 +920,8 @@ void EnvironmentModelSetup() {
     lab_light3->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     lab_light3->scale = 10.f;
     lab_light3->bUseWholeObjectDiffuseColour = true;
-    lab_light3->wholeObjectDiffuseRGBA = GetColour("red");
+    lab_light3->wholeObjectDiffuseRGBA = GetColour("white");
+    lab_light3->wholeObjectSpecularRGB = GetColour("white");
 
     cMesh* lab_light4 = new cMesh();
     lab_light4->meshName = "SM_Env_Ceiling_Light_01_xyz_n_rgba_uv.ply";
@@ -861,7 +929,8 @@ void EnvironmentModelSetup() {
     lab_light4->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     lab_light4->scale = 10.f;
     lab_light4->bUseWholeObjectDiffuseColour = true;
-    lab_light4->wholeObjectDiffuseRGBA = GetColour("red");
+    lab_light4->wholeObjectDiffuseRGBA = GetColour("white");
+    lab_light4->wholeObjectSpecularRGB = GetColour("white");
 
     cMesh* lab_light5 = new cMesh();
     lab_light5->meshName = "SM_Env_Ceiling_Light_01_xyz_n_rgba_uv.ply";
@@ -869,7 +938,8 @@ void EnvironmentModelSetup() {
     lab_light5->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     lab_light5->scale = 10.f;
     lab_light5->bUseWholeObjectDiffuseColour = true;
-    lab_light5->wholeObjectDiffuseRGBA = GetColour("red");
+    lab_light5->wholeObjectDiffuseRGBA = GetColour("white");
+    lab_light5->wholeObjectSpecularRGB = GetColour("white");
 
     cMesh* lab_light6 = new cMesh();
     lab_light6->meshName = "SM_Env_Ceiling_Light_01_xyz_n_rgba_uv.ply";
@@ -877,8 +947,8 @@ void EnvironmentModelSetup() {
     lab_light6->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
     lab_light6->scale = 10.f;
     lab_light6->bUseWholeObjectDiffuseColour = true;
-    lab_light6->wholeObjectDiffuseRGBA = GetColour("red");
-
+    lab_light6->wholeObjectDiffuseRGBA = GetColour("white");
+    lab_light6->wholeObjectSpecularRGB = GetColour("white");
 
     ::g_vec_pMeshes.push_back(lab_light1);
     ::g_vec_pMeshes.push_back(lab_light2);
@@ -887,5 +957,28 @@ void EnvironmentModelSetup() {
     ::g_vec_pMeshes.push_back(lab_light5);
     ::g_vec_pMeshes.push_back(lab_light6);
 
+
+    // =========== QUESTION 2 : Populate lab ==============================
+
+    cMesh* lab_desk1 = new cMesh();
+    lab_desk1->meshName = "SM_Prop_Desk_Lab_01_xyz_n_rgba_uv.ply";
+    lab_desk1->positionXYZ = glm::vec3(-100.f, -25.f, 600.f);
+    lab_desk1->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
+    lab_desk1->scale = 10.f;
+    lab_desk1->bUseWholeObjectDiffuseColour = true;
+    lab_desk1->wholeObjectSpecularRGB = GetColour("brown");
+    lab_desk1->wholeObjectDiffuseRGBA = GetColour("brown");
+
+    cMesh* lab_desk2 = new cMesh();
+    lab_desk2->meshName = "SM_Prop_Desk_Lab_02_xyz_n_rgba_uv.ply";
+    lab_desk2->positionXYZ = glm::vec3(100.f, -25.f, 400.f);
+    lab_desk2->orientationXYZ = glm::vec3(0.f, -glm::pi<float>() / 2, 0.f);
+    lab_desk2->scale = 10.f;
+    lab_desk2->bUseWholeObjectDiffuseColour = true;
+    lab_desk2->wholeObjectSpecularRGB = GetColour("brown");
+    lab_desk2->wholeObjectDiffuseRGBA = GetColour("brown");
+
+    ::g_vec_pMeshes.push_back(lab_desk1);
+    ::g_vec_pMeshes.push_back(lab_desk2);
     return;
 }

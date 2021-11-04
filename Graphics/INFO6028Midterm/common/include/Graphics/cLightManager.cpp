@@ -157,49 +157,50 @@ void cLightManager::SetUpUniformLocations(unsigned int shaderProgram)
 // Copies the values from the array into the shader
 void cLightManager::CopyLightInfoToShader(void)
 {
-	glUniform4f(this->theLights[0].position_uniform_location,
-					this->theLights[0].position.x,
-					this->theLights[0].position.y,
-					this->theLights[0].position.z,
-					this->theLights[0].position.w);		
+	for (sLight light : this->theLights) {
 
-	glUniform4f(this->theLights[0].diffuse_uniform_location,
-					this->theLights[0].diffuse.x,
-					this->theLights[0].diffuse.y,
-					this->theLights[0].diffuse.z,
-					this->theLights[0].diffuse.w);
+		glUniform4f(light.position_uniform_location,
+			light.position.x,
+			light.position.y,
+			light.position.z,
+			light.position.w);
 
-	glUniform4f(this->theLights[0].specular_uniform_location,
-					this->theLights[0].specular.x,
-					this->theLights[0].specular.y,
-					this->theLights[0].specular.z,
-					this->theLights[0].specular.w);
+		glUniform4f(light.diffuse_uniform_location,
+			light.diffuse.x,
+			light.diffuse.y,
+			light.diffuse.z,
+			light.diffuse.w);
 
-	glUniform4f(this->theLights[0].atten_uniform_location,
-					this->theLights[0].atten.x,
-					this->theLights[0].atten.y,
-					this->theLights[0].atten.z,
-					this->theLights[0].atten.w);
+		glUniform4f(light.specular_uniform_location,
+			light.specular.x,
+			light.specular.y,
+			light.specular.z,
+			light.specular.w);
 
-	glUniform4f(this->theLights[0].direction_uniform_location,
-					this->theLights[0].direction.x,
-					this->theLights[0].direction.y,
-					this->theLights[0].direction.z,
-					this->theLights[0].direction.w);
+		glUniform4f(light.atten_uniform_location,
+			light.atten.x,
+			light.atten.y,
+			light.atten.z,
+			light.atten.w);
 
-	glUniform4f(this->theLights[0].param1_uniform_location,
-					this->theLights[0].param1.x,
-					this->theLights[0].param1.y,
-					this->theLights[0].param1.z,
-					this->theLights[0].param1.w);
+		glUniform4f(light.direction_uniform_location,
+			light.direction.x,
+			light.direction.y,
+			light.direction.z,
+			light.direction.w);
 
-	glUniform4f(this->theLights[0].param2_uniform_location,
-					this->theLights[0].param2.x,
-					this->theLights[0].param2.y,
-					this->theLights[0].param2.z,
-					this->theLights[0].param2.w);
+		glUniform4f(light.param1_uniform_location,
+			light.param1.x,
+			light.param1.y,
+			light.param1.z,
+			light.param1.w);
 
-	// And so on...
+		glUniform4f(light.param2_uniform_location,
+			light.param2.x,
+			light.param2.y,
+			light.param2.z,
+			light.param2.w);
+	}
 
 
 	return;

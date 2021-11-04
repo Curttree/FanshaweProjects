@@ -98,7 +98,7 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
 //    }//if ( areAllModsUp(window) )...
 
     // If JUST the ALT is down, move the "selected" light
-    if ( cGFLWKeyboardModifiers::isModifierDown(pWindow, false, true, false) )
+    if ( cGFLWKeyboardModifiers::isModifierDown(pWindow,false,false,true))
     {
         if ( glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS ) { ::g_pTheLights->theLights[::g_selectedLight].position.x -= lightMovementSpeed; } // Go left
         if ( glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_PRESS ) { ::g_pTheLights->theLights[::g_selectedLight].position.x += lightMovementSpeed; } // Go right
