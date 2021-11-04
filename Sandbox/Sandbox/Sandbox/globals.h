@@ -7,6 +7,7 @@
 #include "Graphics/cVAOManager.h"
 #include "Graphics/cShaderManager.h"
 #include "Graphics/cLightManager.h"
+#include "cMesh.h"
 #include <vector>
 
 
@@ -44,6 +45,7 @@ extern cLightManager* g_pTheLights;
 //extern cLightHelper* g_pTheLightHelper;
 
 
+extern cMesh* g_pDebugSphere;	// = NULL;
 extern bool g_bShowDebugShere;	// = true;
 
 
@@ -53,6 +55,21 @@ extern unsigned int g_selectedLight;	// = 0;
 
 // This will be printed in the title bar
 extern std::string g_TitleText;	// = "";
+
+
+
+// List of objects to draw
+extern std::vector< cMesh* > g_vec_pMeshes;
+
+// Note: This returns a COPY of the object as a stack variable (not a pointer)
+bool g_FindObjectByUniqueID(unsigned int uniqueID_toFind, cMesh& theObjectIFound);
+// This returns a pointer to the object
+bool g_FindObjectByUniqueID(unsigned int uniqueID_toFind, cMesh*& theObjectIFound);
+
+// If not found, return NULL (0)
+cMesh* g_FindObjectByUniqueID(unsigned int uniqueID_toFind);
+cMesh* g_findObjectByFriendlyName(std::string NametoFind);
+
 
 
 // ************************************************
@@ -125,11 +142,9 @@ void GLFW_window_size_callback(GLFWwindow* window, int width, int height);
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <extern/GLFW/glfw3native.h>
 
-#endif  // YO_NERDS_WE_USING_WINDOWS_CONTEXT_MENUS_IN_THIS_THANG
+#endif  // Windows_Context_Menu_Usage_Custom
 
 // Note that this is declared no matter what:
 void ShowWindowsContextMenu(GLFWwindow* window, int button, int action, int mods);
 
-
 #endif // _globalThings_HG_
-

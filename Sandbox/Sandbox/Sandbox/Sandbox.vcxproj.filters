@@ -31,6 +31,9 @@
     <Filter Include="Graphics\ShaderManager\Shaders">
       <UniqueIdentifier>{4bcf918b-033b-49cf-8467-2fffa556428b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{bfd51c49-9dea-4d7e-a05f-3074cd08fe12}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -69,6 +72,24 @@
     <ClCompile Include="globals.cpp">
       <Filter>Global</Filter>
     </ClCompile>
+    <ClCompile Include="cMesh.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GLFW_error_callback.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="GLFW_key_callback.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandling.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="cGFLWKeyboardModifiers.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawObject_function.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -100,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="cWinContextMenu.h">
       <Filter>Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="cMesh.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

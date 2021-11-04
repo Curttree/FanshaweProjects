@@ -59,7 +59,12 @@ int main(void) {
         exit(EXIT_FAILURE);
     }
 
-    //TODO: Set input callbacks.
+    glfwSetKeyCallback(pWindow, GLFW_key_callback);
+    glfwSetCursorEnterCallback(pWindow, GLFW_cursor_enter_callback);
+    glfwSetCursorPosCallback(pWindow, GLFW_cursor_position_callback);
+    glfwSetScrollCallback(pWindow, GLFW_scroll_callback);
+    glfwSetMouseButtonCallback(pWindow, GLFW_mouse_button_callback);
+    glfwSetWindowSizeCallback(pWindow, GLFW_window_size_callback);
 
     glfwMakeContextCurrent(pWindow);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);

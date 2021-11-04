@@ -6,6 +6,7 @@
 #include <extern/glm/mat4x4.hpp> // glm::mat4
 #include <extern/glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 
+#include <sstream>
 
 cFlyCamera::cFlyCamera()
 {
@@ -43,6 +44,9 @@ cFlyCamera::cFlyCamera()
 
 	return;
 }
+
+//static 
+const double cFlyCamera::m_DEFAULT_MIN_DELTA_TIME_STEP = 0.1;
 
 glm::vec3 cFlyCamera::getAtInWorldSpace(void)
 {
@@ -430,4 +434,112 @@ glm::vec3 cFlyCamera::getData(std::string command)
 
 	// What?
 	return glm::vec3(0.0f);
+}
+
+void cFlyCamera::MoveForward_Z(float amount, double deltaTime)
+{
+	// Clamp timestep
+	deltaTime = (deltaTime > this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
+
+	amount = amount * (float)deltaTime;
+
+	this->MoveForward_Z(amount);
+
+	return;
+}
+
+void cFlyCamera::MoveLeftRight_X(float amount, double deltaTime)
+{
+	// Clamp timestep
+	deltaTime = (deltaTime > this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
+
+	amount = amount * (float)deltaTime;
+
+	this->MoveLeftRight_X(amount);
+
+	return;
+}
+
+void cFlyCamera::MoveUpDown_Y(float amount, double deltaTime)
+{
+	// Clamp timestep
+	deltaTime = (deltaTime > this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
+
+	amount = amount * (float)deltaTime;
+
+	this->MoveUpDown_Y(amount);
+
+	return;
+}
+
+void cFlyCamera::Pitch_UpDown(float angleDegrees, double deltaTime)		// around X
+{
+	// Clamp timestep
+	deltaTime = (deltaTime > this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
+
+	angleDegrees = angleDegrees * (float)deltaTime;
+
+	this->Pitch_UpDown(angleDegrees);
+
+	return;
+}
+
+void cFlyCamera::Yaw_LeftRight(float angleDegrees, double deltaTime)	// around y
+{
+	// Clamp timestep
+	deltaTime = (deltaTime > this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
+
+	angleDegrees = angleDegrees * (float)deltaTime;
+
+	this->Yaw_LeftRight(angleDegrees);
+
+	return;
+}
+
+void cFlyCamera::Roll_CW_CCW(float angleDegrees, double deltaTime)		// around z
+{
+	// Clamp timestep
+	deltaTime = (deltaTime > this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
+
+	angleDegrees = angleDegrees * (float)deltaTime;
+
+	this->Roll_CW_CCW(angleDegrees);
+
+	return;
+}
+
+
+
+// Note: This will never go below m_DEFAULT_MIN_DELTA_TIME_STEP
+void cFlyCamera::setMinimumDeltaTimeStep(double newMinDeltaTimeStep)
+{
+	if (newMinDeltaTimeStep > cFlyCamera::m_DEFAULT_MIN_DELTA_TIME_STEP)
+	{
+		newMinDeltaTimeStep = cFlyCamera::m_DEFAULT_MIN_DELTA_TIME_STEP;
+	}
+	this->m_MinimumDeltaTimeStep = newMinDeltaTimeStep;
+	return;
+}
+
+double cFlyCamera::getMinimumDeltaTimeStep(void)
+{
+	return this->m_MinimumDeltaTimeStep;
+}
+
+// This is used by the update to tokenize or parse the command string
+void cFlyCamera::m_tokenizeString(std::string theString, std::vector<std::string>& vecTokens)
+{
+	std::stringstream ssString;
+	ssString.str() = theString;
+
+	// This is just like cin or ifstream:
+	//	We 'stream' (operator>>) each word (separated by white space) into
+	//	a string, until there's nothing left to stream.
+
+	std::string token;
+	while (ssString >> token)
+	{
+		vecTokens.push_back(token);
+	}
+	return;
 }

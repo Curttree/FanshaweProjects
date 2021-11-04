@@ -9,17 +9,11 @@ cVAOManager* g_pVAOManager = NULL;
 cShaderManager* g_pShaderManager = NULL;
 
 cLightManager* g_pTheLights = NULL;
-// This got moved into the light manager class
-//extern cLightHelper* g_pTheLightHelper;
-//
-//// List of objects to draw
-//std::vector< cMesh* > g_vec_pMeshes;
-//
-//// Here's the ships that we are going to use
-//std::vector< iShip* > g_vec_pShips;
-//
-//cMesh* g_pDebugSphere = NULL;
-//bool g_bShowDebugShere = true;
+
+std::vector< cMesh* > g_vec_pMeshes;
+
+cMesh* g_pDebugSphere = NULL;
+bool g_bShowDebugShere = true;
 
 
 unsigned int g_selectedObject = 0;

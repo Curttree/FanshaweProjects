@@ -6,6 +6,7 @@
 #include <extern/glm/gtx/quaternion.hpp>	// Note strange folder
 
 #include "iCamera.h"
+#include <vector>
 
 class cFlyCamera : public iCamera
 {
@@ -92,6 +93,23 @@ public:
 	void Yaw_LeftRight(float angleDegrees);	// around y
 	void Roll_CW_CCW(float angleDegrees);	// around z
 
+	// Same as above, but interpolates amount with deltaTime
+	// (Making the motion smoother)
+	// (FYI: These call the methods above)
+	void MoveForward_Z(float amount, double deltaTime);
+	void MoveLeftRight_X(float amount, double deltaTime);
+	void MoveUpDown_Y(float amount, double deltaTime);
+
+	void Pitch_UpDown(float angleDegrees, double deltaTime);	// around X
+	void Yaw_LeftRight(float angleDegrees, double deltaTime);	// around y
+	void Roll_CW_CCW(float angleDegrees, double deltaTime);		// around z
+
+	// Note: This will never go below m_DEFAULT_MIN_DELTA_TIME_STEP
+	void setMinimumDeltaTimeStep(double newMinDeltaTimeStep);
+	double getMinimumDeltaTimeStep(void);
+
+	double m_MinimumDeltaTimeStep;
+	static const double m_DEFAULT_MIN_DELTA_TIME_STEP;// = 0.1;
 
 	glm::quat getQOrientation(void) { return this->qOrientation; };
 	void setMeshOrientationEulerAngles(glm::vec3 newAnglesEuler, bool bIsDegrees = false);
@@ -99,6 +117,9 @@ public:
 	void adjMeshOrientationEulerAngles(glm::vec3 adjAngleEuler, bool bIsDegrees = false);
 	void adjMeshOrientationEulerAngles(float x, float y, float z, bool bIsDegrees = false);
 	void adjMeshOrientationQ(glm::quat adjOrientQ);
+
+	// This is used by the update to tokenize or parse the command string
+	void m_tokenizeString(std::string theString, std::vector<std::string>& vecTokens);
 private:
 	// This will lead to direction, etc.
 	glm::quat qOrientation;
