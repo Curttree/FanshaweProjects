@@ -302,6 +302,8 @@ int main(void) {
         glfwPollEvents();
 
         // Handle OUR keyboard, mouse stuff
+        handleAsyncKeyboard(pWindow, deltaTime);
+        handleAsyncMouse(pWindow, deltaTime);
 
     }
 

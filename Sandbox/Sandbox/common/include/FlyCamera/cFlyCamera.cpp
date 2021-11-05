@@ -5,8 +5,8 @@
 #include <extern/glm/vec4.hpp> // glm::vec4
 #include <extern/glm/mat4x4.hpp> // glm::mat4
 #include <extern/glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
-
 #include <sstream>
+
 
 cFlyCamera::cFlyCamera()
 {
@@ -18,7 +18,7 @@ cFlyCamera::cFlyCamera()
 	this->m_upIsYVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
 
-	this->movementSpeed = 1.0f;
+	this->movementSpeed = 10.0f;
 
 
 	// Set initial orientation (all zero on Euler axes)
@@ -42,11 +42,14 @@ cFlyCamera::cFlyCamera()
 	this->farPlane = 10'000'000.0f;
 	this->FOV = 0.6f;			// Field of view
 
+	this->m_CurrentState = cFlyCamera::DEFAULT_OR_UNSPECIFIED;
+
 	return;
 }
 
 //static 
 const double cFlyCamera::m_DEFAULT_MIN_DELTA_TIME_STEP = 0.1;
+
 
 glm::vec3 cFlyCamera::getAtInWorldSpace(void)
 {
@@ -152,8 +155,8 @@ void cFlyCamera::setMeshOrientationEulerAngles(glm::vec3 newAnglesEuler, bool bI
 	if (bIsDegrees)
 	{
 		newAnglesEuler = glm::vec3(glm::radians(newAnglesEuler.x),
-								   glm::radians(newAnglesEuler.y),
-								   glm::radians(newAnglesEuler.z));
+			glm::radians(newAnglesEuler.y),
+			glm::radians(newAnglesEuler.z));
 	}
 
 	this->qOrientation = glm::quat(glm::vec3(newAnglesEuler.x, newAnglesEuler.y, newAnglesEuler.z));
@@ -170,8 +173,8 @@ void cFlyCamera::adjMeshOrientationEulerAngles(glm::vec3 adjAngleEuler, bool bIs
 	if (bIsDegrees)
 	{
 		adjAngleEuler = glm::vec3(glm::radians(adjAngleEuler.x),
-								  glm::radians(adjAngleEuler.y),
-								  glm::radians(adjAngleEuler.z));
+			glm::radians(adjAngleEuler.y),
+			glm::radians(adjAngleEuler.z));
 	}
 
 	// Step 1: make a quaternion that represents the angle we want to rotate
@@ -349,47 +352,73 @@ void cFlyCamera::setUp(glm::vec3 newUp)
 
 bool cFlyCamera::Update(std::string command, float data)
 {
-	if (command == "setMouseWheelDelta")
-	{
-		this->setMouseWheelDelta(data);
-		return true;
+	std::vector<std::string> vecTokens;
+	this->m_tokenizeString(command, vecTokens);
+
+	if (command == "")
+	{	// Nothing to do.
+		return false;
 	}
-	else if (command == "Yaw_LeftRight")
+
+	switch ((unsigned int)vecTokens.size())
 	{
-		this->Yaw_LeftRight(data);
-		return true;
+	case 0:
+		// Nothing to do. The tokenized vector is empty
+		return false;
+		break;
+
+	case 1:	// 1 word commands 
+
+		if (vecTokens[0] == "setMouseWheelDelta")	// if (command == "setMouseWheelDelta")
+		{
+			this->setMouseWheelDelta(data);
+			return true;
+		}
+		else if (vecTokens[0] == "Yaw_LeftRight")
+		{
+			this->Yaw_LeftRight(data);
+			return true;
+		}
+		else if (vecTokens[0] == "Pitch_UpDown")
+		{
+			this->Pitch_UpDown(data);
+			return true;
+		}
+		else if (vecTokens[0] == "setMovementSpeed")
+		{
+			this->movementSpeed = data;
+			return true;
+		}
+		else if (vecTokens[0] == "MoveForward_Z")
+		{
+			this->MoveForward_Z(data);
+			return true;
+		}
+		else if (vecTokens[0] == "MoveLeftRight_X")
+		{
+			this->MoveLeftRight_X(data);
+			return true;
+		}
+		else if (vecTokens[0] == "MoveUpDown_Y")
+		{
+			this->MoveUpDown_Y(data);
+			return true;
+		}
+		else if (vecTokens[0] == "Roll_CW_CCW")
+		{
+			this->Roll_CW_CCW(data);
+			return true;
+		}
+		break;
+
+	case 2:	// 2 word commands 
+
+		break;
 	}
-	else if (command == "Pitch_UpDown")
-	{
-		this->Pitch_UpDown(data);
-		return true;
-	}
-	else if (command == "setMovementSpeed")
-	{
-		this->movementSpeed = data;
-		return true;
-	}
-	else if (command == "MoveForward_Z")
-	{
-		this->MoveForward_Z(data);
-		return true;
-	}
-	else if (command == "MoveLeftRight_X")
-	{
-		this->MoveLeftRight_X(data);
-		return true;
-	}
-	else if (command == "MoveUpDown_Y")
-	{
-		this->MoveUpDown_Y(data);
-		return true;
-	}
-	else if (command == "Roll_CW_CCW")
-	{
-		this->Roll_CW_CCW(data);
-		return true;
-	}
-	// What? 
+
+
+
+	// What? (unknown command)
 	return false;
 }
 
@@ -407,6 +436,37 @@ bool cFlyCamera::Update(std::string command, glm::vec2 data)
 
 bool cFlyCamera::Update(std::string command, glm::vec3 data)
 {
+	std::vector<std::string> vecTokens;
+	this->m_tokenizeString(command, vecTokens);
+
+	if (command == "")
+	{	// Nothing to do.
+		return false;
+	}
+
+	switch ((unsigned int)vecTokens.size())
+	{
+	case 0:
+		// Nothing to do. The tokenized vector is empty
+		return false;
+		break;
+
+		//	case 1:	// 1 word commands 
+		//		// No commands like this
+		//		return true;
+		//		break;
+
+	case 2:	// 2 word commands 
+
+		// Here's a setEye command that can optionally track
+		// command = "Track Eye"
+		// data = location of the target
+		if (vecTokens[0] == "Track" && vecTokens[0] == "At")
+		{
+
+		}
+		break;
+	}
 
 
 	return true;
@@ -543,3 +603,4 @@ void cFlyCamera::m_tokenizeString(std::string theString, std::vector<std::string
 	}
 	return;
 }
+

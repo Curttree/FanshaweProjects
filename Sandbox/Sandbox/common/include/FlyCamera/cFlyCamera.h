@@ -1,3 +1,4 @@
+#pragma once
 #ifndef _cFlyCamera_HG_
 #define _cFlyCamera_HG_
 
@@ -5,8 +6,9 @@
 #define GLM_ENABLE_EXPERIMENTAL		// To get glm quaternion stuff to compile
 #include <extern/glm/gtx/quaternion.hpp>	// Note strange folder
 
-#include "iCamera.h"
 #include <vector>
+
+#include "iCamera.h"
 
 class cFlyCamera : public iCamera
 {
@@ -46,6 +48,9 @@ private:
 	// THESE DON'T LIKELY CHANGE
 	glm::vec3 m_frontOfCamera;// = glm::vec3(0,0,1);
 	glm::vec3 m_upIsYVector;	// = glm::vec3(0,1,0);
+
+	// This is used by the update to tokenize or parse the command string
+	void m_tokenizeString(std::string theString, std::vector<std::string>& vecTokens);
 
 public:
 	glm::vec3 getAtInWorldSpace(void);
@@ -108,8 +113,6 @@ public:
 	void setMinimumDeltaTimeStep(double newMinDeltaTimeStep);
 	double getMinimumDeltaTimeStep(void);
 
-	double m_MinimumDeltaTimeStep;
-	static const double m_DEFAULT_MIN_DELTA_TIME_STEP;// = 0.1;
 
 	glm::quat getQOrientation(void) { return this->qOrientation; };
 	void setMeshOrientationEulerAngles(glm::vec3 newAnglesEuler, bool bIsDegrees = false);
@@ -117,9 +120,6 @@ public:
 	void adjMeshOrientationEulerAngles(glm::vec3 adjAngleEuler, bool bIsDegrees = false);
 	void adjMeshOrientationEulerAngles(float x, float y, float z, bool bIsDegrees = false);
 	void adjMeshOrientationQ(glm::quat adjOrientQ);
-
-	// This is used by the update to tokenize or parse the command string
-	void m_tokenizeString(std::string theString, std::vector<std::string>& vecTokens);
 private:
 	// This will lead to direction, etc.
 	glm::quat qOrientation;
@@ -127,6 +127,19 @@ private:
 	void m_UpdateAtFromOrientation(void);
 	void m_UpdateUpFromOrientation(void);
 
+	// This is used with some functions to clamp the maximum delta time that can be passed.
+	// Defaults to 0.1s or 100 ms (which is WAY too high at 10 FPS)
+	double m_MinimumDeltaTimeStep = 0.001;
+	static const double m_DEFAULT_MIN_DELTA_TIME_STEP;// = 0.1;
+
+	// This is used for commands that are asynchronous, like the "look at tracking" command
+	enum eState
+	{
+		DEFAULT_OR_UNSPECIFIED,		// The usual state
+		TRACKING_AT_TO_TARGET
+	};
+
+	eState m_CurrentState;
 
 };
 
