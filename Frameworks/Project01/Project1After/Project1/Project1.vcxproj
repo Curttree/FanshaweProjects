@@ -161,12 +161,14 @@
     <ClCompile Include="cFancyFirework2Object.cpp" />
     <ClCompile Include="cFancyFirework3Object.cpp" />
     <ClCompile Include="cFancyFirework4Object.cpp" />
+    <ClCompile Include="cFancyFirework5Object.cpp" />
     <ClCompile Include="cFirework.cpp" />
     <ClCompile Include="cFireworkBuilder.cpp" />
     <ClCompile Include="cFireworkDebrisObject.cpp" />
     <ClCompile Include="cFireworkFactory.cpp" />
     <ClCompile Include="cFireworkMediator.cpp" />
     <ClCompile Include="cFuseFactory.cpp" />
+    <ClCompile Include="cManualFuse.cpp" />
     <ClCompile Include="cMathHelper.cpp" />
     <ClCompile Include="cTimedFuse.cpp" />
     <ClCompile Include="cWorldSpace.cpp" />
@@ -189,6 +191,7 @@
     <ClInclude Include="cFancyFirework2Object.h" />
     <ClInclude Include="cFancyFirework3Object.h" />
     <ClInclude Include="cFancyFirework4Object.h" />
+    <ClInclude Include="cFancyFirework5Object.h" />
     <ClInclude Include="cFirework.h" />
     <ClInclude Include="cFireworkBuilder.h" />
     <ClInclude Include="cFireworkDebrisObject.h" />
@@ -196,6 +199,7 @@
     <ClInclude Include="cFireworkMediator.h" />
     <ClInclude Include="cFirework_Implementation.h" />
     <ClInclude Include="cFuseFactory.h" />
+    <ClInclude Include="cManualFuse.h" />
     <ClInclude Include="cMathHelper.h" />
     <ClInclude Include="cTimedFuse.h" />
     <ClInclude Include="cWorldSpace.h" />

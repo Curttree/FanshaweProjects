@@ -351,6 +351,7 @@ MigrationBackup/
 
 # Video files
 *.mkv
+*.mp4
 
 # Zip files
 *.zip

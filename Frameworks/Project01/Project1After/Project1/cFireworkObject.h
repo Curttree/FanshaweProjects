@@ -19,4 +19,5 @@ public:
 protected:
 	cWorldSpace* worldSpace = cWorldSpace::Instance();
 	cFirework_Implementation* implementation;
+	sMessage outgoingMessage;
 };

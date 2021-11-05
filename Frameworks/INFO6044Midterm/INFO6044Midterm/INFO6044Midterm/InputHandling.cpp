@@ -26,30 +26,50 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
 
     if ( cGFLWKeyboardModifiers::areAllModsUp(pWindow) )
     {
-        // Use "fly" camera (keyboard for movement, mouse for aim)
-        if ( glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS )
+        //TODO: Have the tank be able to point different directions than movement.
+        if (glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS &&
+            glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_RELEASE &&
+            glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_RELEASE&&
+            glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_RELEASE)	// "up"
         {
-            ::g_pFlyCamera->MoveForward_Z(+cameraMoveSpeed);
+            ::g_pPlayerTank->MoveUpDown_Y(deltaTime, 1.f);
         }
-        if ( glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_PRESS )	// "backwards"
+        if (glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_RELEASE &&
+            glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_RELEASE &&
+            glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_PRESS &&
+            glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_RELEASE)	// "down"
         {
-            ::g_pFlyCamera->MoveForward_Z(-cameraMoveSpeed);
+            ::g_pPlayerTank->MoveUpDown_Y(deltaTime, -1.f);
         }
-        if ( glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS )	// "left"
+        if (glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_RELEASE &&
+            glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS &&
+            glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_RELEASE &&
+            glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_RELEASE)	// "left"
         {
-            ::g_pFlyCamera->MoveLeftRight_X(-cameraMoveSpeed);
+            ::g_pPlayerTank->MoveLeftRight_X(deltaTime, 1.f);
         }
-        if ( glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_PRESS )	// "right"
+        if (glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_RELEASE &&
+            glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_RELEASE &&
+            glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_RELEASE &&
+            glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_PRESS)	// "right"
         {
-            ::g_pFlyCamera->MoveLeftRight_X(+cameraMoveSpeed);
+            ::g_pPlayerTank->MoveLeftRight_X(deltaTime, -1.f);
+        }
+        if (glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_RELEASE &&
+            glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_RELEASE &&
+            glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_RELEASE &&
+            glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_RELEASE &&
+            ::g_pPlayerTank->GetState() == TankState::MOVING)	// "stopped moving"
+        {
+            ::g_pPlayerTank->StopMoving();
         }
         if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS )	// "up"
         {
-            ::g_pFlyCamera->MoveUpDown_Y(-cameraMoveSpeed);
+            ::g_pFlyCamera->MoveForward_Z(-cameraMoveSpeed);
         }
         if ( glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS )	// "down"
         {
-            ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
+            ::g_pFlyCamera->MoveForward_Z(+cameraMoveSpeed);
         }
 
         std::stringstream strTitle;

@@ -1,5 +1,6 @@
 #include "cApexFuse.h"
 #include "cTimedFuse.h"
+#include "cManualFuse.h"
 #include "cFuseFactory.h"
 
 cFuseFactory* cFuseFactory::_instance = 0;
@@ -23,6 +24,9 @@ iFuse* cFuseFactory::createFuse(int type, nPhysics::cParticle* attachedParticle,
 		break;
 	case(2):
 		fuse = new cTimedFuse(maxTime);
+		break;
+	case(3):
+		fuse = new cManualFuse();
 		break;
 	default:
 		// If not defined, return a fuse that will trigger immediately.

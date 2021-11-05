@@ -185,16 +185,18 @@ int main(void) {
     mazeMesh->bUseWholeObjectDiffuseColour = false;
     ::g_vec_pMeshes.push_back(mazeMesh);
 
-    cMesh* playerTankMesh = new cMesh();
-    playerTankMesh->meshName = "Low Poly Tank Model 3D model.ply";
-    playerTankMesh->positionXYZ = glm::vec3(1.f, 5.f, 20.f);
-    playerTankMesh->orientationXYZ = glm::vec3(-glm::pi<float>()/2, 0.f, 0.f);
-    playerTankMesh->scale = 0.25f;
-    playerTankMesh->bUseWholeObjectDiffuseColour = false;
-    ::g_vec_pMeshes.push_back(playerTankMesh);
-
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
     double previousTime = glfwGetTime();
+    float cameraEyeNewDepth = 0.f;
+
+    sMessage initGame;
+    initGame.command = "INITIALIZE GAME";
+    initGame.vec_sData.push_back("Maze_1049697.txt");
+    ::g_pCombatMediator->RecieveMessage(initGame);
+
+
+    sMessage timeStepMessage;
+    timeStepMessage.command = "TIME STEP";
 
 
     while (!glfwWindowShouldClose(pWindow)) {
@@ -205,7 +207,7 @@ int main(void) {
         glm::mat4 matView;              // used to be "v";
 
         double currentTime = glfwGetTime();
-        double deltaTime = previousTime - currentTime;
+        double deltaTime = currentTime - previousTime;
         deltaTime = (deltaTime > MAX_DELTA_TIME ? MAX_DELTA_TIME : deltaTime);
         previousTime = currentTime;
 
@@ -248,7 +250,11 @@ int main(void) {
         //    1'000'000.0f);   // Far plane (as small as possible)
 
         ::g_pFlyCamera->Update(deltaTime);
-        ::g_pFlyCamera->Update("Track At", glm::vec3(playerTankMesh->positionXYZ.x, playerTankMesh->positionXYZ.y, playerTankMesh->positionXYZ.z - 20));
+
+        //Clamp camera depth. You can zoom out, but not in further than default.
+        // TODO: Cheating a bit since the player is always the first index in our vector of messages. Consider swapping this out with a pointer to the player tank instead.
+        cameraEyeNewDepth = ::g_pFlyCamera->eye.z < ::g_vec_pMeshes[1]->positionXYZ.z - 20 ? ::g_pFlyCamera->eye.z : ::g_vec_pMeshes[1]->positionXYZ.z - 20;
+        ::g_pFlyCamera->Update("Track At", glm::vec3(::g_vec_pMeshes[1]->positionXYZ.x, ::g_vec_pMeshes[1]->positionXYZ.y, cameraEyeNewDepth));
         glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
         glm::vec3 cameraAt = ::g_pFlyCamera->getAtInWorldSpace();
         glm::vec3 cameraUp = ::g_pFlyCamera->getUpVector();
@@ -262,6 +268,11 @@ int main(void) {
 
         glUniformMatrix4fv(matView_Location, 1, GL_FALSE, glm::value_ptr(matView));
         glUniformMatrix4fv(matProjection_Location, 1, GL_FALSE, glm::value_ptr(matProjection));
+
+        // Do time step
+        timeStepMessage.vec_fData.push_back(deltaTime);
+        ::g_pCombatMediator->RecieveMessage(timeStepMessage);
+        timeStepMessage.vec_fData.clear();
 
 
         // **********************************************************************

@@ -8,7 +8,9 @@
 #include "Graphics/cShaderManager.h"
 #include "Graphics/cLightManager.h"
 #include "cMesh.h"
+#include "iMediator.h"
 #include <vector>
+#include "iTank.h"
 
 
 // These are all things that are "project global", 
@@ -44,9 +46,12 @@ extern cLightManager* g_pTheLights;
 // This got moved into the light manager class
 //extern cLightHelper* g_pTheLightHelper;
 
+extern iMediator* g_pCombatMediator;
 
 extern cMesh* g_pDebugSphere;	// = NULL;
 extern bool g_bShowDebugShere;	// = true;
+
+extern iTank* g_pPlayerTank;
 
 
 extern unsigned int g_selectedObject;	// = 0;
@@ -146,5 +151,16 @@ void GLFW_window_size_callback(GLFWwindow* window, int width, int height);
 
 // Note that this is declared no matter what:
 void ShowWindowsContextMenu(GLFWwindow* window, int button, int action, int mods);
+
+// Here's a more useful templated one, based on this one:
+//https://stackoverflow.com/questions/686353/random-float-number-generation
+template <class T>
+T gGetRandBetween(T LO, T HI)
+{
+    float fLO = static_cast<float>(LO);
+    float fHI = static_cast<float>(HI);
+    float r3 = fLO + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (fHI - fLO)));
+    return r3;
+}
 
 #endif // _globalThings_HG_

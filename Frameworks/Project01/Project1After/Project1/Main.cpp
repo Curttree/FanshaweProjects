@@ -117,6 +117,16 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     {
         InitFirework(3);
     }
+    if ((key == GLFW_KEY_4 || key == GLFW_KEY_KP_4) && action == GLFW_PRESS)
+    {
+        InitFirework(5);
+    }
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+    {
+        sMessage manualExplosionMessage;
+        manualExplosionMessage.command = "MANUAL EXPLOSION";
+        _mediator->RecieveMessage(manualExplosionMessage);
+    }
     if (key == GLFW_KEY_C && action == GLFW_PRESS)
     {
         captureCameraPosition();

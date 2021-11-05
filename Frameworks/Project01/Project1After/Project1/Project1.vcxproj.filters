@@ -144,6 +144,12 @@
     <ClCompile Include="cFancyFirework4Object.cpp">
       <Filter>Fireworks\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="cFancyFirework5Object.cpp">
+      <Filter>Fireworks\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="cManualFuse.cpp">
+      <Filter>Fireworks\Fuses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\cShaderManager.h">
@@ -230,11 +236,17 @@
     <ClInclude Include="iMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="iMediator.h">
-      <Filter>Fireworks</Filter>
-    </ClInclude>
     <ClInclude Include="cFancyFirework4Object.h">
       <Filter>Fireworks\Objects\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iMediator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cFancyFirework5Object.h">
+      <Filter>Fireworks\Objects\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cManualFuse.h">
+      <Filter>Fireworks\Fuses\Headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,18 +1,19 @@
 #pragma once
 
-#include "iMediator.h"
 #include "cFireworkObject.h"
 #include "cFireworkBuilder.h"
+#include "iMediator.h"
 
-class cFireworkMediator: public iMediator {
+class cFancyFirework5Object : public cFireworkObject {
 public:
+	cFancyFirework5Object(cFirework* _particle, cModel* _model);
+	virtual std::vector<cFireworkObject*> triggerNextStage();
+	// FROM iMessage
 	virtual bool RecieveMessage(sMessage theMessage);
 	virtual bool RecieveMessage(sMessage theMessage, sMessage& theResponse);
 	virtual bool SetReciever(iMediator* pTheReciever);
-private:
-	virtual void TimeStep(float deltaTime);
-	virtual void BroadcastManualExplosion();
-	std::vector<cFireworkObject*> fireworkObjs;
+protected:
 	cFireworkBuilder* fireworkBuilder = cFireworkBuilder::Instance();
-	cWorldSpace* worldSpace = cWorldSpace::Instance();
+private:
+	iMediator* p_Mediator = 0;
 };

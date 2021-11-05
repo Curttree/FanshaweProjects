@@ -10,10 +10,14 @@ cShaderManager* g_pShaderManager = NULL;
 
 cLightManager* g_pTheLights = NULL;
 
+iMediator* g_pCombatMediator = NULL;
+
 std::vector< cMesh* > g_vec_pMeshes;
 
 cMesh* g_pDebugSphere = NULL;
-bool g_bShowDebugShere = true;
+bool g_bShowDebugShere = false;
+
+iTank* g_pPlayerTank = NULL;
 
 
 unsigned int g_selectedObject = 0;

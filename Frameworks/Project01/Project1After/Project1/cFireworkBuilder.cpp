@@ -6,6 +6,7 @@
 // Define fuses.
 #define APEX_FUSE 1
 #define TIMED_FUSE 2
+#define MANUAL_FUSE 3
 
 cFireworkBuilder* cFireworkBuilder::_instance = 0;
 cFireworkBuilder::cFireworkBuilder() {
@@ -41,6 +42,10 @@ cFireworkObject* cFireworkBuilder::buildFirework(int fireworkNum, glm::vec3 posi
 	case(4):
 		result = cFireworkFactory::Instance()->createFireworkObject(4, position, debrisDirection * 20.f);
 		result->fuse = cFuseFactory::Instance()->createFuse(TIMED_FUSE, result->particle, 60.f);
+		break;
+	case(5):
+		result = cFireworkFactory::Instance()->createFireworkObject(5, position, determineDirection(-3.f, 3.f) * 40.f);
+		result->fuse = cFuseFactory::Instance()->createFuse(MANUAL_FUSE, result->particle, 0.f);
 		break;
 	default:
 		// Invalid selection. Build a firwork that will fizzle out immediately.

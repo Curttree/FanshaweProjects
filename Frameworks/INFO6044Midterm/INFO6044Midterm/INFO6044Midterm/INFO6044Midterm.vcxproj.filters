@@ -34,6 +34,15 @@
     <Filter Include="Input">
       <UniqueIdentifier>{bfd51c49-9dea-4d7e-a05f-3074cd08fe12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Patterns">
+      <UniqueIdentifier>{1b421cac-41df-47f1-88db-348465ecc843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tanks">
+      <UniqueIdentifier>{2a18564c-6a35-437e-b8ad-6a69fc6d8e56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Maze">
+      <UniqueIdentifier>{64ba01dc-eda6-4c7f-9fb7-3882f8414924}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -90,6 +99,18 @@
     <ClCompile Include="DrawObject_function.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cPlayerTank.cpp">
+      <Filter>Tanks</Filter>
+    </ClCompile>
+    <ClCompile Include="cCombatMediator.cpp">
+      <Filter>Patterns</Filter>
+    </ClCompile>
+    <ClCompile Include="cMazeManager.cpp">
+      <Filter>Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="cAITank.cpp">
+      <Filter>Tanks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -124,6 +145,30 @@
     </ClInclude>
     <ClInclude Include="cMesh.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="cCombatMediator.h">
+      <Filter>Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="iTank.h">
+      <Filter>Tanks</Filter>
+    </ClInclude>
+    <ClInclude Include="cPlayerTank.h">
+      <Filter>Tanks</Filter>
+    </ClInclude>
+    <ClInclude Include="iMediator.h">
+      <Filter>Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="iMessage.h">
+      <Filter>Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="cMazeManager.h">
+      <Filter>Maze</Filter>
+    </ClInclude>
+    <ClInclude Include="eState.h">
+      <Filter>Tanks</Filter>
+    </ClInclude>
+    <ClInclude Include="cAITank.h">
+      <Filter>Tanks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -18,6 +18,9 @@ bool cFireworkMediator::RecieveMessage(sMessage theMessage) {
 	else if (theMessage.command == "TIME STEP") {
 		TimeStep(theMessage.vec_fData[0]);
 	}
+	else if (theMessage.command == "MANUAL EXPLOSION") {
+		BroadcastManualExplosion();
+	}
 	return true;
 }
 
@@ -52,4 +55,22 @@ void cFireworkMediator::TimeStep(float deltaTime) {
 		}
 	}
 	worldSpace->_world->TimeStep(deltaTime);
+}
+
+void cFireworkMediator::BroadcastManualExplosion() {
+	sMessage manualExplosionMessage;
+	manualExplosionMessage.command = "MANUAL EXPLOSION";
+	for (size_t x = 0; x < fireworkObjs.size(); x++) {
+		sMessage explosionResponse;
+		fireworkObjs[x]->RecieveMessage(manualExplosionMessage, explosionResponse);
+		if (explosionResponse.vec_fireworkData.size() > 0) {
+			fireworkObjs.insert(fireworkObjs.end(), explosionResponse.vec_fireworkData.begin(), explosionResponse.vec_fireworkData.end());
+			worldSpace->_world->RemoveParticle(fireworkObjs[x]->particle);
+			delete fireworkObjs[x];
+			fireworkObjs[x] = 0;
+			fireworkObjs.erase(fireworkObjs.begin() + x);
+			// Decrement x. Size of vector shrunk, so index has decreased by 1.
+			x--;
+		}
+	}
 }
