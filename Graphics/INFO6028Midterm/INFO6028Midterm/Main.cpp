@@ -181,7 +181,8 @@ int main(void) {
     ::g_pTheLights->theLights[5].param1.y = SPOTLIGHT_INNER;
     ::g_pTheLights->theLights[5].param1.z = SPOTLIGHT_INNER;
     ::g_pTheLights->TurnOnLight(5);
-
+    
+    // SOFT SPOT LIGHTS
     ::g_pTheLights->theLights[6].position = glm::vec4(-100.f, 200.f, 600.f, 1.f);
     ::g_pTheLights->theLights[6].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
     ::g_pTheLights->theLights[6].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
@@ -232,6 +233,16 @@ int main(void) {
     ::g_pTheLights->theLights[10].param1.z = SPOTLIGHT_OUTER;
     ::g_pTheLights->TurnOnLight(10);
 
+    // ALARM LIGHT
+    ::g_pTheLights->theLights[11].position = glm::vec4(0.f, 200.f, 600.f, 1.f);
+    ::g_pTheLights->theLights[11].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[11].specular = glm::vec4(1.f, 0.f, 0.f, 1.0f);
+    ::g_pTheLights->theLights[11].direction = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+    ::g_pTheLights->theLights[11].atten = glm::vec4(0.001f, 0.003f, 0.0001f, 100.f);
+    ::g_pTheLights->theLights[11].param1.x = 1.0f;    // spot light
+    ::g_pTheLights->theLights[11].param1.y = 1.f;
+    ::g_pTheLights->theLights[11].param1.z = 100.f;
+
     // Get the uniform locations of the light shader values
     ::g_pTheLights->SetUpUniformLocations(program);
 
@@ -272,6 +283,7 @@ int main(void) {
     vecModelsToLoad.push_back("SM_Prop_SwivelChair_04_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("SM_Env_Ceiling_Light_01_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("SM_Env_Construction_Wall_01_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("SM_Env_Construction_HalfWall_01_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("SM_Env_Floor_01_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("SM_Prop_Beaker_01_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("SM_Prop_Desk_01_xyz_n_rgba_uv.ply");
@@ -312,6 +324,50 @@ int main(void) {
     std::cout << "Total vertices loaded = " << totalVerticesLoaded << std::endl;
     std::cout << "Total triangles loaded = " << totalTrianglesLoaded << std::endl;
 
+    // Slight variation on star generation code from class.
+    const unsigned int NUMBER_OF_STARS = 500;
+    unsigned int starCount = 0;
+    float maxPickDistance = 1'000'000.0f;
+    while (starCount < NUMBER_OF_STARS)
+    {
+        glm::vec3 starLocation = glm::vec3(
+            gGetRandBetween<float>(-maxPickDistance/2, maxPickDistance/2),
+            gGetRandBetween<float>(-maxPickDistance / 2, maxPickDistance/2),
+            gGetRandBetween<float>(maxPickDistance/2, maxPickDistance));
+        // Far enough?
+        if (glm::distance(glm::vec3(0.0f), starLocation) >= maxPickDistance * 0.8f)
+        {
+            cMesh* pStar = new cMesh();
+            pStar->positionXYZ = starLocation;
+            pStar->scale = gGetRandBetween<float>(200.0f, 500.0f);
+            pStar->bUseWholeObjectDiffuseColour = true;
+            // Pick some star colours
+            // 90% white
+            // 7.5% Yellow, red, or orange
+            // 2.5% blue white
+            float starColour = gGetRandBetween<float>(0.0f, 1.0f);
+            if (starColour <= 0.025f)
+            {   // 2.5% blue white
+                pStar->wholeObjectDiffuseRGBA = glm::vec4(gGetRandBetween<float>(0.9f, 1.0f), 1.0f, 0.0f, 1.0f);
+            }
+            else if (starColour <= 0.075f)
+            {   // 7.5% Yellow, red, or orange
+                pStar->wholeObjectDiffuseRGBA = glm::vec4(1.0f, gGetRandBetween<float>(0.5f, 1.0f), 0.0f, 1.0f);
+            }
+            else
+            {   // 90% white
+                pStar->wholeObjectDiffuseRGBA = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+            }
+
+            pStar->bDontLight = true;
+            //pStar->bIsWireframe = true;
+            pStar->meshName = "ISO_Shphere_flat_3div_xyz_n_rgba.ply";
+            // Add it
+            ::g_vec_pMeshes.push_back(pStar);
+            //
+            starCount++;
+        }
+    }//while (starCount < NUMBER_OF_STARS)
 
     //TODO: Load lights and models.
 
@@ -370,6 +426,14 @@ int main(void) {
         //    1'000'000.0f);   // Far plane (as small as possible)
 
         ::g_pFlyCamera->Update(deltaTime);
+
+
+        if (g_doorsMoving && g_doorsOpened) {
+            g_CloseDoor(deltaTime);
+        }
+        else if (g_doorsMoving && !g_doorsOpened){
+            g_OpenDoor(deltaTime);
+        }
 
         glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
         glm::vec3 cameraAt = ::g_pFlyCamera->getAtInWorldSpace();
@@ -626,7 +690,7 @@ cMesh* GenFloorTile(glm::vec3 position) {
     return floorTile;
 }
 
-void GenWallStack(glm::vec3 position, glm::vec3 orientation, int additionalHeight = 200) {
+void GenWallStack(glm::vec3 position, glm::vec3 orientation, std::vector<unsigned int>& ids, int additionalHeight = 200 ) {
     //TODO: Name walls so can refer back to for part 4.
     for (int y = position.y; y <= position.y+ additionalHeight; y += 50) {
         cMesh* wall = new cMesh();
@@ -637,6 +701,7 @@ void GenWallStack(glm::vec3 position, glm::vec3 orientation, int additionalHeigh
         wall->scale = 10.f;
         wall->wholeObjectDiffuseRGBA = GetColour("offwhite");
         ::g_vec_pMeshes.push_back(wall);
+        ids.push_back(wall->getUniqueID());
     }
 }
 
@@ -867,34 +932,42 @@ void EnvironmentModelSetup() {
             ::g_vec_pMeshes.push_back(GenFloorTile(glm::vec3((float)x, 225.f, (float)z)));
         }
     }
-    
+    std::vector<unsigned int> temp;
     // Front wall (near entrance)
-    GenWallStack(glm::vec3(25.f, -25.f, 200.f), glm::vec3(0.f));
-    GenWallStack(glm::vec3(125.f, -25.f, 200.f), glm::vec3(0.f));
-    GenWallStack(glm::vec3(-75.f, 25.f, 200.f), glm::vec3(0.f), 150);
-    GenWallStack(glm::vec3(-175.f, -25.f, 200.f), glm::vec3(0.f));
+    GenWallStack(glm::vec3(25.f, -25.f, 200.f), glm::vec3(0.f), temp);
+    GenWallStack(glm::vec3(125.f, -25.f, 200.f), glm::vec3(0.f), temp);
+    GenWallStack(glm::vec3(-75.f, 25.f, 200.f), glm::vec3(0.f), temp, 150);
+    GenWallStack(glm::vec3(-175.f, -25.f, 200.f), glm::vec3(0.f), temp);
 
     // Back wall
-    GenWallStack(glm::vec3(-75.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>(), 0.f));
-    GenWallStack(glm::vec3(25.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>(), 0.f));
-    GenWallStack(glm::vec3(125.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>(), 0.f));
-    GenWallStack(glm::vec3(225.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>(), 0.f));
+    GenWallStack(glm::vec3(-75.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>(), 0.f), wallPanel1);
+    GenWallStack(glm::vec3(25.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>(), 0.f), wallPanel2);
+    GenWallStack(glm::vec3(125.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>(), 0.f), wallPanel3);
+    GenWallStack(glm::vec3(225.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>(), 0.f), wallPanel4);
 
     // Right wall
-    GenWallStack(glm::vec3(-175.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>()/2, 0.f));
-    GenWallStack(glm::vec3(-175.f, -25.f, 700.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
-    GenWallStack(glm::vec3(-175.f, -25.f, 600.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
-    GenWallStack(glm::vec3(-175.f, -25.f, 500.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
-    GenWallStack(glm::vec3(-175.f, -25.f, 400.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
-    GenWallStack(glm::vec3(-175.f, -25.f, 300.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
+    GenWallStack(glm::vec3(-175.f, -25.f, 800.f), glm::vec3(0.f, glm::pi<float>()/2, 0.f), temp);
+    GenWallStack(glm::vec3(-175.f, -25.f, 700.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f), temp);
+    GenWallStack(glm::vec3(-175.f, -25.f, 600.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f), temp);
+    GenWallStack(glm::vec3(-175.f, -25.f, 500.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f), temp);
+    GenWallStack(glm::vec3(-175.f, -25.f, 400.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f), temp);
+    GenWallStack(glm::vec3(-175.f, -25.f, 300.f), glm::vec3(0.f, glm::pi<float>() / 2, 0.f), temp);
 
     // Left wall
-    GenWallStack(glm::vec3(225.f, -25.f, 700.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
-    GenWallStack(glm::vec3(225.f, -25.f, 600.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
-    GenWallStack(glm::vec3(225.f, -25.f, 500.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
-    GenWallStack(glm::vec3(225.f, -25.f, 400.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
-    GenWallStack(glm::vec3(225.f, -25.f, 300.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
-    GenWallStack(glm::vec3(225.f, -25.f, 200.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
+    GenWallStack(glm::vec3(225.f, -25.f, 700.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f), temp);
+    GenWallStack(glm::vec3(225.f, -25.f, 600.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f), temp);
+    GenWallStack(glm::vec3(225.f, -25.f, 500.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f), temp);
+    GenWallStack(glm::vec3(225.f, -25.f, 400.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f), temp);
+    GenWallStack(glm::vec3(225.f, -25.f, 300.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f), temp);
+    GenWallStack(glm::vec3(225.f, -25.f, 200.f), glm::vec3(0.f, -glm::pi<float>() / 2, 0.f), temp);
+
+    cMesh* halfwall = new cMesh();
+    halfwall->meshName = "SM_Env_Construction_HalfWall_01_xyz_n_rgba_uv.ply";
+    halfwall->positionXYZ = glm::vec3(-75.f, -25.f, 200.f);
+    halfwall->bUseWholeObjectDiffuseColour = true;
+    halfwall->scale = 10.f;
+    halfwall->wholeObjectDiffuseRGBA = GetColour("offwhite");
+    ::g_vec_pMeshes.push_back(halfwall);
 
     cMesh* lab_light1 = new cMesh();
     lab_light1->meshName = "SM_Env_Ceiling_Light_01_xyz_n_rgba_uv.ply";
@@ -958,7 +1031,7 @@ void EnvironmentModelSetup() {
     ::g_vec_pMeshes.push_back(lab_light6);
 
 
-    // =========== QUESTION 2 : Populate lab ==============================
+    // =========== QUESTION 3 : Populate lab ==============================
 
     cMesh* lab_desk1 = new cMesh();
     lab_desk1->meshName = "SM_Prop_Desk_Lab_01_xyz_n_rgba_uv.ply";
@@ -1075,8 +1148,8 @@ void EnvironmentModelSetup() {
 
     cMesh* locker1 = new cMesh();
     locker1->meshName = "SM_Prop_Lockers_01_xyz_n_rgba_uv.ply";
-    locker1->positionXYZ = glm::vec3(120.f, -30.f, 790.f);
-    locker1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+    locker1->positionXYZ = glm::vec3(215.f, -30.f, 700.f);
+    locker1->orientationXYZ = glm::vec3(0.f, -glm::pi<float>() / 2, 0.f);
     locker1->scale = 10.f;
     locker1->bUseWholeObjectDiffuseColour = true;
     locker1->wholeObjectSpecularRGB = GetColour("green");
@@ -1084,8 +1157,8 @@ void EnvironmentModelSetup() {
 
     cMesh* locker2 = new cMesh();
     locker2->meshName = "SM_Prop_Lockers_01_xyz_n_rgba_uv.ply";
-    locker2->positionXYZ = glm::vec3(100.f, -30.f, 790.f);
-    locker2->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+    locker2->positionXYZ = glm::vec3(215.f, -30.f, 680.f);
+    locker2->orientationXYZ = glm::vec3(0.f, -glm::pi<float>() / 2, 0.f);
     locker2->scale = 10.f;
     locker2->bUseWholeObjectDiffuseColour = true;
     locker2->wholeObjectSpecularRGB = GetColour("green");
@@ -1137,5 +1210,6 @@ void EnvironmentModelSetup() {
     ::g_vec_pMeshes.push_back(chair);
     ::g_vec_pMeshes.push_back(server);
     ::g_vec_pMeshes.push_back(chair2);
+
     return;
 }

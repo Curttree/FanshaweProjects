@@ -62,6 +62,13 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
             ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
             ::g_pFlyCamera->setEye(glm::vec3(0.f, 0.f, 240.f));
         }
+        if (glfwGetKey(pWindow, GLFW_KEY_SPACE) == GLFW_PRESS)	// "Position 2"
+        {
+            if (!g_doorsMoving) {
+                g_pTheLights->TurnOnLight(11);
+                g_doorsMoving = true;
+            }
+        }
 
         std::stringstream strTitle;
         // std::cout << 

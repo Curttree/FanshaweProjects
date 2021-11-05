@@ -45,7 +45,7 @@ const int POINT_LIGHT_TYPE = 0;
 const int SPOT_LIGHT_TYPE = 1;
 const int DIRECTIONAL_LIGHT_TYPE = 2;
 
-const int NUMBEROFLIGHTS = 11;
+const int NUMBEROFLIGHTS = 12;
 uniform sLight theLights[NUMBEROFLIGHTS];  	// 80 uniforms
 // 
 // uniform vec4 theLights[0].position;

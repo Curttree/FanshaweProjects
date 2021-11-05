@@ -56,7 +56,16 @@ extern unsigned int g_selectedLight;	// = 0;
 // This will be printed in the title bar
 extern std::string g_TitleText;	// = "";
 
+extern bool g_doorsOpened;
+extern bool g_doorsMoving;
 
+extern std::vector<unsigned int> wallPanel1;
+extern std::vector<unsigned int> wallPanel2;
+extern std::vector<unsigned int> wallPanel3;
+extern std::vector<unsigned int> wallPanel4;
+
+void g_OpenDoor(double deltaTime);
+void g_CloseDoor(double deltaTime);
 
 // List of objects to draw
 extern std::vector< cMesh* > g_vec_pMeshes;
@@ -69,6 +78,8 @@ bool g_FindObjectByUniqueID(unsigned int uniqueID_toFind, cMesh*& theObjectIFoun
 // If not found, return NULL (0)
 cMesh* g_FindObjectByUniqueID(unsigned int uniqueID_toFind);
 cMesh* g_findObjectByFriendlyName(std::string NametoFind);
+
+
 
 
 
@@ -146,5 +157,16 @@ void GLFW_window_size_callback(GLFWwindow* window, int width, int height);
 
 // Note that this is declared no matter what:
 void ShowWindowsContextMenu(GLFWwindow* window, int button, int action, int mods);
+
+// Here's a more useful templated one, based on this one:
+//https://stackoverflow.com/questions/686353/random-float-number-generation
+template <class T>
+T gGetRandBetween(T LO, T HI)
+{
+    float fLO = static_cast<float>(LO);
+    float fHI = static_cast<float>(HI);
+    float r3 = fLO + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (fHI - fLO)));
+    return r3;
+}
 
 #endif // _globalThings_HG_
