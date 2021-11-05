@@ -1,4 +1,5 @@
 #include "cPlayerTank.h"
+#include "globals.h"
 #include <iostream>
 #include <extern/glm/gtc/matrix_transform.hpp>  // glm::translate, glm::rotate, glm::scale, glm::perspective
 
@@ -9,6 +10,18 @@ cPlayerTank::cPlayerTank(cMesh* _model) {
 
 bool cPlayerTank::RecieveMessage(sMessage theMessage) {
 
+	if (theMessage.command == "FIRE BULLET") {
+		if (!activeBullet) {
+			activeBullet = new cBullet(GetId(), model->positionXYZ, heading);
+			activeBullet->SetReciever(p_Mediator);
+		}
+	}
+	else if (theMessage.command == "DESTROY BULLET") {
+		if (activeBullet) {
+			delete activeBullet;
+			activeBullet = 0;
+		}
+	}
 	return true;
 }
 
@@ -30,11 +43,16 @@ TankState cPlayerTank::GetState() {
 	return state;
 }
 
+int cPlayerTank::GetId() { return model->getUniqueID(); }
+
+glm::vec3 cPlayerTank::GetHeading() {
+	return heading;
+}
+
 void cPlayerTank::TimeStep(float deltaTime) {
-	//PSEUDOCODE:
-	//CHECK NEXT POSITION BASED ON SPEED * DELTATIME
-	//CALL CHECK COLLISIONS WHICH FIRES MESSAGE TO THE MEDIATOR WITH NEW POSITION (MEDIATOR CAN EITHER TRACK MAZE OR CALL ANOTHER CLASS THAT DOES)
-	//MEDIATOR RETURNS YES OR NO. ON NO DO NOTHING, ON YES CALL APPROPRIATE MOVEMENT AND ROTATE IF NEEDED.
+	if (activeBullet) {
+		activeBullet->TimeStep(deltaTime);
+	}
 }	
 bool cPlayerTank::CheckValidMove(glm::vec3 newPos, glm::vec3 heading) {
 	if (p_Mediator) {

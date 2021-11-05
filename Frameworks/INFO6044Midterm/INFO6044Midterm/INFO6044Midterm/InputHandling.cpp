@@ -63,6 +63,14 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
         {
             ::g_pPlayerTank->StopMoving();
         }
+        if (glfwGetKey(pWindow, GLFW_KEY_1) == GLFW_PRESS ||
+            glfwGetKey(pWindow, GLFW_KEY_KP_1) == GLFW_PRESS)	// "fire bullet"
+        {
+            sMessage fire;
+            fire.command = "FIRE BULLET";
+            fire.vec_iData.push_back(::g_pPlayerTank->GetId());
+            ::g_pCombatMediator->RecieveMessage(fire);
+        }
         if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS )	// "up"
         {
             ::g_pFlyCamera->MoveForward_Z(-cameraMoveSpeed);

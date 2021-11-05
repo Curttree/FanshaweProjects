@@ -11,6 +11,8 @@ public:
 	virtual void MoveUpDown_Y(float deltaTime, float amount) = 0;
 	virtual glm::vec3 GetPosition() = 0;
 	virtual TankState GetState() = 0;
+	virtual int GetId() = 0;
+	virtual glm::vec3 GetHeading() = 0;
 	virtual void SnapToGrid(glm::vec3 position) = 0;
 	virtual void StopMoving() = 0;
 };

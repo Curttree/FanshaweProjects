@@ -20,8 +20,15 @@ bool cCombatMediator::RecieveMessage(sMessage theMessage) {
 		mazeManager->LoadMazeFromFile(theMessage.vec_sData[0]);
 		InitializeTanks();
 	}
-	if (theMessage.command == "TIME STEP") {
+	else if (theMessage.command == "TIME STEP") {
 		TimeStep(theMessage.vec_fData[0]);
+	}
+	else if (theMessage.command == "VALIDATE BULLET POSITION") {
+		ValidateBulletPosition(theMessage.vec_iData[0], theMessage.vec_v4Data[0]);
+	}
+	else if (theMessage.command == "FIRE BULLET" && theMessage.vec_iData[0] == ::g_pPlayerTank->GetId()) {
+		// Forward message so we can track its origin through the mediator.
+		::g_pPlayerTank->RecieveMessage(theMessage);
 	}
 	return true;
 }
@@ -41,8 +48,71 @@ bool cCombatMediator::RecieveMessage(sMessage theMessage, sMessage& theResponse)
 			theResponse.command = "MOVE";
 		}
 	}
+	else if (theMessage.command == "CHECK SIGHT") {
+		for (iTank* tank : tanks) {
+			if (tank->GetId() == theMessage.vec_iData[0]) {
+				ValidateSight(tank, theResponse);
+				break;
+			}
+		}
+	}
 
 	return true;
+}
+
+void cCombatMediator::ValidateBulletPosition(int ownerID, glm::vec3 position) {
+	if (position.x > 60 || position.x < 0 || position.y > 100 || position.y < 0) {
+		// Out of bounds
+		CleanupBullet(ownerID);
+	}
+	else if (!mazeManager->ValidatePosition(position, glm::vec3(0.f))) {
+		// Hit a wall
+		CleanupBullet(ownerID);
+	}
+}
+
+void cCombatMediator::CleanupBullet(int ownerID) {
+	// Know there is a more scalable way to do this, but I am pressed for time and number of tanks is small.
+	for (iTank* tank : tanks) {
+		if (tank->GetId() == ownerID) {
+			sMessage bulletMessage;
+			bulletMessage.command = "DESTROY BULLET";
+			tank->RecieveMessage(bulletMessage);
+			break;
+		}
+	}
+}
+
+void cCombatMediator::ValidateSight(iTank* observer, sMessage& response) {
+	glm::vec3 heading = observer->GetHeading();
+	glm::vec3 position = observer->GetPosition();
+
+	for (iTank* otherTank : tanks) {
+		if (otherTank->GetId() != observer->GetId()) {
+			//facing left
+			if (heading.x > 0 && otherTank->GetPosition().y == position.y && otherTank->GetPosition().x > position.x) {
+				response.vec_iData.push_back(otherTank->GetId());
+			}
+			//facing right
+			if (heading.x < 0 && otherTank->GetPosition().y == position.y && otherTank->GetPosition().x < position.x) {
+				response.vec_iData.push_back(otherTank->GetId());
+			}
+			//facing up
+			if (heading.y > 0 && otherTank->GetPosition().x == position.x && otherTank->GetPosition().y > position.y) {
+				response.vec_iData.push_back(otherTank->GetId());
+			}
+			//facing down
+			if (heading.y < 0 && otherTank->GetPosition().x == position.x && otherTank->GetPosition().y < position.y) {
+				response.vec_iData.push_back(otherTank->GetId());
+			}
+		}
+	}
+	if (response.vec_iData.size() > 0) {
+		response.command = "SPOTTED";
+	}
+	else {
+		response.command = "CLEAR";
+	}
 }
 
 bool cCombatMediator::SetReciever(iMediator* pTheReciever) {
@@ -51,7 +121,7 @@ bool cCombatMediator::SetReciever(iMediator* pTheReciever) {
 }
 
 void cCombatMediator::TimeStep(float deltaTime) {
-	for (int x = 1; x < tanks.size(); x++) {
+	for (int x = 0; x < tanks.size(); x++) {
 		tanks[x]->TimeStep(deltaTime);
 	}
 }
@@ -63,6 +133,8 @@ void cCombatMediator::InitializeTanks() {
 	float y1 = 14.f;
 	float y2 = 50.f;
 	float y3 = 85.f;
+
+	// Forgoing Builder/Factory as we are creating only a few tanks that are almost identical, and have almost identical configurations. Would implement these patterns if variety was greater.
 
 	cMesh* playerTankMesh = new cMesh();
 	playerTankMesh->meshName = "Low Poly Tank Model 3D model.ply";

@@ -43,6 +43,9 @@
     <Filter Include="Maze">
       <UniqueIdentifier>{64ba01dc-eda6-4c7f-9fb7-3882f8414924}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Projectiles">
+      <UniqueIdentifier>{6e880aa8-da47-4c40-a03c-374a18f0d218}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -111,6 +114,9 @@
     <ClCompile Include="cAITank.cpp">
       <Filter>Tanks</Filter>
     </ClCompile>
+    <ClCompile Include="cBullet.cpp">
+      <Filter>Projectiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -169,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="cAITank.h">
       <Filter>Tanks</Filter>
+    </ClInclude>
+    <ClInclude Include="cBullet.h">
+      <Filter>Projectiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

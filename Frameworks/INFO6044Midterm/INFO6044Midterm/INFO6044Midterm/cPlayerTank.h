@@ -1,6 +1,7 @@
 #pragma once
 #include "iTank.h"
 #include "cMesh.h"
+#include "cBullet.h"
 #include "iMediator.h"
 
 class cPlayerTank : public iTank {
@@ -14,6 +15,8 @@ public:
 	virtual void MoveUpDown_Y(float deltaTime, float amount);
 	virtual glm::vec3 GetPosition();
 	virtual TankState GetState();
+	virtual int GetId();
+	virtual glm::vec3 GetHeading();
 	virtual void SnapToGrid(glm::vec3 position);
 	virtual void StopMoving();
 	//From iMessage
@@ -22,10 +25,11 @@ public:
 	virtual bool SetReciever(iMediator* pTheReciever);
 protected:
 	cMesh* model = 0;
-	glm::vec3 heading = glm::vec3(0.f);
+	glm::vec3 heading = glm::vec3(0.f, 1.f, 0.f);
 	TankState state = TankState::WAITING;
 	int health = 100;
 	float speed = 10; 
+	cBullet* activeBullet = 0;
 private:
 	iMediator* p_Mediator = 0;
 };

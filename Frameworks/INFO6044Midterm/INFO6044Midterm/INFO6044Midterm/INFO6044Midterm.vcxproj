@@ -155,6 +155,7 @@
     <ClCompile Include="..\common\include\Graphics\cShaderManager.cpp" />
     <ClCompile Include="..\common\include\Graphics\cVAOManager.cpp" />
     <ClCompile Include="cAITank.cpp" />
+    <ClCompile Include="cBullet.cpp" />
     <ClCompile Include="cCombatMediator.cpp" />
     <ClCompile Include="cGFLWKeyboardModifiers.cpp" />
     <ClCompile Include="cMazeManager.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="..\common\include\Graphics\GLCommon.h" />
     <ClInclude Include="..\common\include\Graphics\sVertex_types.h" />
     <ClInclude Include="cAITank.h" />
+    <ClInclude Include="cBullet.h" />
     <ClInclude Include="cMazeManager.h" />
     <ClInclude Include="cMesh.h" />
     <ClInclude Include="cCombatMediator.h" />

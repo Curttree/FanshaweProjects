@@ -14,6 +14,9 @@ class cCombatMediator : public iMediator {
 	private:
 		virtual void InitializeTanks();
 		virtual void TimeStep(float deltaTime);
+		virtual void ValidateSight(iTank* observer, sMessage& response);
+		virtual void ValidateBulletPosition(int ownerID, glm::vec3 position);
+		virtual void CleanupBullet(int ownerID);
 		std::vector<iTank*> tanks;
 		cMazeManager* mazeManager;
 };

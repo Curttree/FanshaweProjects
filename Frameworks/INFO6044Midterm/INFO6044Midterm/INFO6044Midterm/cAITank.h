@@ -2,6 +2,7 @@
 #include "iTank.h"
 #include "cMesh.h"
 #include "iMediator.h"
+#include "cBullet.h"
 
 class cAITank : public iTank {
 public:
@@ -13,15 +14,18 @@ public:
 	virtual void MoveUpDown_Y(float deltaTime, float amount);
 	virtual glm::vec3 GetPosition();
 	virtual TankState GetState();
+	virtual int GetId();
+	virtual glm::vec3 GetHeading();
 	virtual void SnapToGrid(glm::vec3 position);
 	virtual void StopMoving();
 	// From iMessage
 	virtual bool RecieveMessage(sMessage theMessage);
 	virtual bool RecieveMessage(sMessage theMessage, sMessage& theResponse);
 	virtual bool SetReciever(iMediator* pTheReciever);
+	virtual bool CheckLineOfSight();
 protected:
 	cMesh* model = 0;
-	glm::vec3 heading = glm::vec3(0.f);
+	glm::vec3 heading = glm::vec3(0.f,1.f,0.f);
 	int direction = 0;
 	TankState state = TankState::WAITING;
 	int health = 100;
@@ -29,4 +33,5 @@ protected:
 	float maxWaitTime = 1.f;
 	float waitTime = 0.f;
 	iMediator* p_Mediator = 0;
+	cBullet* activeBullet = 0;
 };

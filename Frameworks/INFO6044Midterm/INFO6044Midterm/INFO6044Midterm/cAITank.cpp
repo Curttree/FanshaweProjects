@@ -8,6 +8,9 @@ cAITank::cAITank(cMesh* _model) {
 }
 
 void cAITank::TimeStep(float deltaTime) {
+	if (activeBullet) {
+		activeBullet->TimeStep(deltaTime);
+	}
 	if (state == TankState::BLOCKED) {
 		waitTime += deltaTime;
 		if (waitTime >= maxWaitTime) {
@@ -34,6 +37,7 @@ void cAITank::TimeStep(float deltaTime) {
 	default:
 		break;
 	}
+	CheckLineOfSight();
 }
 bool cAITank::CheckValidMove(glm::vec3 newPos, glm::vec3 heading) {
 	//TODO: Check with mediator if will be colliding with other tank.
@@ -53,6 +57,34 @@ bool cAITank::CheckValidMove(glm::vec3 newPos, glm::vec3 heading) {
 	}
 	else {
 		// Flying blind. Better not move until someone is directing traffic.
+		return false;
+	}
+}
+
+bool cAITank::CheckLineOfSight() {
+	if (p_Mediator) {
+		sMessage outgoingMessage;
+		sMessage responseMessage;
+		outgoingMessage.command = "CHECK SIGHT";
+		outgoingMessage.vec_iData.push_back(GetId());
+		p_Mediator->RecieveMessage(outgoingMessage, responseMessage);
+		if (responseMessage.command == "SPOTTED") {
+			for (int x = 0; x < responseMessage.vec_iData.size(); x++) {
+				if (responseMessage.vec_iData[x] != model->getUniqueID()) {
+					// There is someone else here! Fire!!
+					if (!activeBullet) {
+						activeBullet = new cBullet(GetId(), model->positionXYZ, heading);
+						activeBullet->SetReciever(p_Mediator);
+					}
+					return true;
+				}
+			}
+		}
+		// Just us.
+		return false;
+	}
+	else {
+		// Flying blind. Better not fire until someone is directing traffic.
 		return false;
 	}
 }
@@ -105,6 +137,12 @@ glm::vec3 cAITank::GetPosition() { return model->positionXYZ; }
 
 TankState cAITank::GetState() { return state; }
 
+int cAITank::GetId() { return model->getUniqueID(); }
+
+glm::vec3 cAITank::GetHeading() {
+	return heading;
+}
+
 void cAITank::SnapToGrid(glm::vec3 position) {
 	if (heading.x != 0.f) {
 		model->positionXYZ.x = (float)((int)position.x);
@@ -124,6 +162,12 @@ void cAITank::StopMoving() {
 }
 
 bool cAITank::RecieveMessage(sMessage theMessage) {
+	if (theMessage.command == "DESTROY BULLET") {
+		if (activeBullet) {
+			delete activeBullet;
+			activeBullet = 0;
+		}
+	}
 	return true;
 }
 
