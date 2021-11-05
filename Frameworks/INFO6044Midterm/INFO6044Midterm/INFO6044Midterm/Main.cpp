@@ -119,7 +119,7 @@ int main(void) {
 //					// 2 = directional light
 //    ::g_pTheLights->theLights[0].param1.x = 1.0f;    // Spot light
     ::g_pTheLights->theLights[0].param1.x = 2.0f;    // Directional light
-    ::g_pTheLights->theLights[0].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLights->theLights[0].direction = glm::vec4(0.0f, 0.f, 1.0f, 1.0f);
     ::g_pTheLights->theLights[0].diffuse = glm::vec4(0.9922f, 0.9843f, 0.8275f, 1.0f);
     ::g_pTheLights->theLights[0].param1.y = 15.0f;   // Inner
     ::g_pTheLights->theLights[0].param1.z = 30.0f;   // Outer
@@ -147,6 +147,9 @@ int main(void) {
     std::vector<std::string> vecModelsToLoad;
     vecModelsToLoad.push_back("Sphere_xyz_n_rgba.ply");
     vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba.ply");
+    vecModelsToLoad.push_back("ISO_Shphere_flat_4div_xyz_n_rgba.ply");
+    vecModelsToLoad.push_back("Low Poly Tank Model 3D model.ply");
+    vecModelsToLoad.push_back("mazeOuput.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -174,8 +177,21 @@ int main(void) {
     std::cout << "Total vertices loaded = " << totalVerticesLoaded << std::endl;
     std::cout << "Total triangles loaded = " << totalTrianglesLoaded << std::endl;
 
+    cMesh* mazeMesh = new cMesh();
+    mazeMesh->meshName = "mazeOuput.ply";
+    mazeMesh->positionXYZ = glm::vec3(0.f, 0.f, 20.f);
+    mazeMesh->orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
+    mazeMesh->scale = 1.f;
+    mazeMesh->bUseWholeObjectDiffuseColour = false;
+    ::g_vec_pMeshes.push_back(mazeMesh);
 
-    //TODO: Load lights and models.
+    cMesh* playerTankMesh = new cMesh();
+    playerTankMesh->meshName = "Low Poly Tank Model 3D model.ply";
+    playerTankMesh->positionXYZ = glm::vec3(1.f, 5.f, 20.f);
+    playerTankMesh->orientationXYZ = glm::vec3(-glm::pi<float>()/2, 0.f, 0.f);
+    playerTankMesh->scale = 0.25f;
+    playerTankMesh->bUseWholeObjectDiffuseColour = false;
+    ::g_vec_pMeshes.push_back(playerTankMesh);
 
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
     double previousTime = glfwGetTime();
@@ -214,7 +230,7 @@ int main(void) {
         // Copy the light information into the shader to draw the scene
         ::g_pTheLights->CopyLightInfoToShader();
 
-        ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[0].position;
+        //::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[0].position;
         // Place the "debug sphere" at the same location as the selected light (again)
         // HACK: Debug sphere is 5th item added
 //        ::g_vecMeshes[5].positionXYZ = gTheLights.theLights[0].position;
@@ -232,7 +248,7 @@ int main(void) {
         //    1'000'000.0f);   // Far plane (as small as possible)
 
         ::g_pFlyCamera->Update(deltaTime);
-
+        ::g_pFlyCamera->Update("Track At", glm::vec3(playerTankMesh->positionXYZ.x, playerTankMesh->positionXYZ.y, playerTankMesh->positionXYZ.z - 20));
         glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
         glm::vec3 cameraAt = ::g_pFlyCamera->getAtInWorldSpace();
         glm::vec3 cameraUp = ::g_pFlyCamera->getUpVector();
