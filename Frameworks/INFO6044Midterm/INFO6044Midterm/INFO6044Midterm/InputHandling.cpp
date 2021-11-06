@@ -71,6 +71,23 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
             fire.vec_iData.push_back(::g_pPlayerTank->GetId());
             ::g_pCombatMediator->RecieveMessage(fire);
         }
+        if (glfwGetKey(pWindow, GLFW_KEY_2) == GLFW_PRESS ||
+            glfwGetKey(pWindow, GLFW_KEY_KP_2) == GLFW_PRESS)	// "fire bullet"
+        {
+            sMessage fire;
+            fire.command = "FIRE LASER";
+            fire.vec_iData.push_back(::g_pPlayerTank->GetId());
+            ::g_pCombatMediator->RecieveMessage(fire);
+        }
+        if (glfwGetKey(pWindow, GLFW_KEY_9) == GLFW_PRESS ||
+            glfwGetKey(pWindow, GLFW_KEY_KP_9) == GLFW_PRESS)	// "fire bullet"
+        {
+            sMessage simDamage;
+            simDamage.command = "TAKE DAMAGE";
+            simDamage.vec_fData.push_back(2.f);
+            simDamage.vec_iData.push_back(::g_pPlayerTank->GetId());
+            ::g_pCombatMediator->RecieveMessage(simDamage);
+        }
         if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS )	// "up"
         {
             ::g_pFlyCamera->MoveForward_Z(-cameraMoveSpeed);

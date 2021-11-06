@@ -158,6 +158,7 @@
     <ClCompile Include="cBullet.cpp" />
     <ClCompile Include="cCombatMediator.cpp" />
     <ClCompile Include="cGFLWKeyboardModifiers.cpp" />
+    <ClCompile Include="cLaser.cpp" />
     <ClCompile Include="cMazeManager.cpp" />
     <ClCompile Include="cMesh.cpp" />
     <ClCompile Include="cPlayerTank.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="..\common\include\Graphics\sVertex_types.h" />
     <ClInclude Include="cAITank.h" />
     <ClInclude Include="cBullet.h" />
+    <ClInclude Include="cLaser.h" />
     <ClInclude Include="cMazeManager.h" />
     <ClInclude Include="cMesh.h" />
     <ClInclude Include="cCombatMediator.h" />

@@ -3,5 +3,7 @@
 enum class TankState {
 	WAITING,
 	BLOCKED,
-	MOVING
+	MOVING,
+	DEAD,
+	CHARGING
 };

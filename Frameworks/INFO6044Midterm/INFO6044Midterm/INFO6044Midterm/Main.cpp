@@ -252,8 +252,7 @@ int main(void) {
         ::g_pFlyCamera->Update(deltaTime);
 
         //Clamp camera depth. You can zoom out, but not in further than default.
-        // TODO: Cheating a bit since the player is always the first index in our vector of messages. Consider swapping this out with a pointer to the player tank instead.
-        cameraEyeNewDepth = ::g_pFlyCamera->eye.z < ::g_vec_pMeshes[1]->positionXYZ.z - 20 ? ::g_pFlyCamera->eye.z : ::g_vec_pMeshes[1]->positionXYZ.z - 20;
+        cameraEyeNewDepth = ::g_pFlyCamera->eye.z < ::g_pPlayerTank->GetPosition().z - 20 ? ::g_pFlyCamera->eye.z : ::g_pPlayerTank->GetPosition().z - 20;
         ::g_pFlyCamera->Update("Track At", glm::vec3(::g_vec_pMeshes[1]->positionXYZ.x, ::g_vec_pMeshes[1]->positionXYZ.y, cameraEyeNewDepth));
         glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
         glm::vec3 cameraAt = ::g_pFlyCamera->getAtInWorldSpace();

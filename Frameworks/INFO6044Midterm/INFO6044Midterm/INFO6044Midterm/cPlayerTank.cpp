@@ -6,20 +6,49 @@
 
 cPlayerTank::cPlayerTank(cMesh* _model) {
 	model = _model;
+	startingColour = model->wholeObjectDiffuseRGBA;
 }
 
 bool cPlayerTank::RecieveMessage(sMessage theMessage) {
 
 	if (theMessage.command == "FIRE BULLET") {
-		if (!activeBullet) {
-			activeBullet = new cBullet(GetId(), model->positionXYZ, heading);
-			activeBullet->SetReciever(p_Mediator);
+		if (state != TankState::DEAD && !coolDownActive) {
+			if (!activeBullet) {
+				activeBullet = new cBullet(GetId(), model->positionXYZ, heading);
+				activeBullet->SetReciever(p_Mediator);
+			}
+		}
+	}
+	else if (theMessage.command == "FIRE LASER") {
+		if (state != TankState::DEAD) {
+			state = TankState::CHARGING;
+		}
+	}
+	else if (theMessage.command == "LASER EXPIRY") {
+		for (int x = 0; x < activeLasers.size(); x++) {
+			if (activeLasers[x]->GetId() == theMessage.vec_iData[0]) {
+				laserCleanup.push_back(activeLasers[x]);
+				activeLasers.erase(activeLasers.begin() + x);
+				break;
+			}
 		}
 	}
 	else if (theMessage.command == "DESTROY BULLET") {
 		if (activeBullet) {
 			delete activeBullet;
 			activeBullet = 0;
+			coolDownActive = true;
+		}
+	}
+	else if (theMessage.command == "TAKE DAMAGE") {
+		if (state != TankState::DEAD) {
+			health -= theMessage.vec_fData[0];
+			float ratio = health / startingHealth;
+			model->wholeObjectDiffuseRGBA = glm::vec4(startingColour.r * ratio, startingColour.g * ratio, startingColour.b * ratio, startingColour.a * ratio);
+			if (health <= 0.f) {
+				std::cout << "PLAYER TANK HAS BEEN ELIMINATED." << std::endl;
+				state = TankState::DEAD;
+			}
 		}
 	}
 	return true;
@@ -53,7 +82,83 @@ void cPlayerTank::TimeStep(float deltaTime) {
 	if (activeBullet) {
 		activeBullet->TimeStep(deltaTime);
 	}
+	for (cLaser* laser : activeLasers) {
+		if (laser != 0) {
+			laser->TimeStep(deltaTime);
+		}
+	}
+	if (state == TankState::CHARGING) {
+		currentLaserChargeTime += deltaTime;
+		if (currentLaserChargeTime >= maxLaserChargeTime) {
+			currentLaserChargeTime = 0.f;
+			state = TankState::WAITING;
+			FireLaser();
+		}
+	}
+	if (laserCleanup.size() > 0) {
+		//slowly remove inactive lasers.
+		delete laserCleanup[0];
+		laserCleanup[0] = 0;
+		laserCleanup.erase(laserCleanup.begin());
+	}
+	if (coolDownActive) {
+		currentCoolDown += deltaTime;
+		if (currentCoolDown >= coolDown) {
+			coolDownActive = false;
+			currentCoolDown = 0.f;
+		}
+	}
 }	
+
+void cPlayerTank::FireLaser() {
+	sMessage outgoingMessage;
+	sMessage responseMessage;
+	outgoingMessage.command = "DISTANCE TO WALL";
+	outgoingMessage.vec_v4Data.push_back(glm::vec4(model->positionXYZ.x, model->positionXYZ.y, model->positionXYZ.z, 1.f));
+	outgoingMessage.vec_v4Data.push_back(glm::vec4(heading.x, heading.y, heading.z, 1.f));
+	p_Mediator->RecieveMessage(outgoingMessage, responseMessage);
+	if (responseMessage.command == "FIRE AWAY") {
+		int dist = responseMessage.vec_iData[0];
+		glm::vec3 laserPos;
+		if (heading.x > 0.f) {
+			// Fire Left
+			for (int x = 1; x <= dist; x++) {
+				laserPos = glm::vec3(model->positionXYZ.x + (float)x, model->positionXYZ.y, model->positionXYZ.z);
+				cLaser* newLaser = new cLaser(GetId(), laserPos, startingColour);
+				newLaser->SetReciever(p_Mediator);
+				activeLasers.push_back(newLaser);
+			}
+		}
+		else if (heading.x < 0.f) {
+			// Fire Right
+			for (int x = 1; x <= dist; x++) {
+				laserPos = glm::vec3(model->positionXYZ.x - (float)x, model->positionXYZ.y, model->positionXYZ.z);
+				cLaser* newLaser = new cLaser(GetId(), laserPos, startingColour);
+				newLaser->SetReciever(p_Mediator);
+				activeLasers.push_back(newLaser);
+			}
+		}
+		else if (heading.y > 0.f) {
+			// Fire Up
+			for (int y = 1; y <= dist; y++) {
+				laserPos = glm::vec3(model->positionXYZ.x, model->positionXYZ.y+(float)y, model->positionXYZ.z);
+				cLaser* newLaser = new cLaser(GetId(), laserPos, startingColour);
+				newLaser->SetReciever(p_Mediator);
+				activeLasers.push_back(newLaser);
+			}
+		}
+		else if (heading.y < 0.f) {
+			// Fire Down
+			for (int y = 1; y <= dist; y++) {
+				laserPos = glm::vec3(model->positionXYZ.x, model->positionXYZ.y - (float)y, model->positionXYZ.z);
+				cLaser* newLaser = new cLaser(GetId(), laserPos, startingColour);
+				newLaser->SetReciever(p_Mediator);
+				activeLasers.push_back(newLaser);
+			}
+		}
+	}
+}
+
 bool cPlayerTank::CheckValidMove(glm::vec3 newPos, glm::vec3 heading) {
 	if (p_Mediator) {
 		sMessage outgoingMessage;
@@ -63,7 +168,17 @@ bool cPlayerTank::CheckValidMove(glm::vec3 newPos, glm::vec3 heading) {
 		outgoingMessage.vec_v4Data.push_back(glm::vec4(heading.x, heading.y, heading.z, 1.f));
 		p_Mediator->RecieveMessage(outgoingMessage, responseMessage);
 		if (responseMessage.command == "MOVE") {
-			return true;
+			outgoingMessage.command = "VALIDATE TANK COLLISION";
+			outgoingMessage.vec_iData.push_back(model->getUniqueID());
+			outgoingMessage.vec_v4Data.push_back(glm::vec4(newPos.x, newPos.y, newPos.z, 1.f));
+			outgoingMessage.vec_v4Data.push_back(glm::vec4(heading.x, heading.y, heading.z, 1.f));
+			p_Mediator->RecieveMessage(outgoingMessage, responseMessage);
+			if (responseMessage.command == "CLEAR") {
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 		else {
 			return false;
@@ -75,6 +190,9 @@ bool cPlayerTank::CheckValidMove(glm::vec3 newPos, glm::vec3 heading) {
 	}
 }
 void cPlayerTank::MoveLeftRight_X(float deltaTime, float amount) {
+	if (state == TankState::DEAD || state == TankState::CHARGING) {
+		return;
+	}
 	state = TankState::MOVING;
 	glm::vec3 potential = glm::vec3(model->positionXYZ.x + (deltaTime * amount * speed), model->positionXYZ.y, model->positionXYZ.z);
 	if (amount > 0) {
@@ -96,6 +214,9 @@ void cPlayerTank::MoveLeftRight_X(float deltaTime, float amount) {
 	}
 }
 void cPlayerTank::MoveUpDown_Y(float deltaTime, float amount) {
+	if (state == TankState::DEAD || state == TankState::CHARGING) {
+		return;
+	}
 	glm::vec3 potential = glm::vec3(model->positionXYZ.x, model->positionXYZ.y + (deltaTime * amount * speed), model->positionXYZ.z);
 	if (amount > 0) {
 		heading = glm::vec3(0.f, 1.f, 0.f);
@@ -131,6 +252,9 @@ void cPlayerTank::SnapToGrid(glm::vec3 position) {
 }
 
 void cPlayerTank::StopMoving() {
+	if (state == TankState::DEAD || state == TankState::CHARGING) {
+		return;
+	}
 	//Moving left
 	if (heading.x > 0 && model->positionXYZ.x > (float)(int)model->positionXYZ.x) {
 		//move to next square.

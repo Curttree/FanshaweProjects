@@ -3,6 +3,7 @@
 #include "cMesh.h"
 #include "iMediator.h"
 #include "cBullet.h"
+#include "cLaser.h"
 
 class cAITank : public iTank {
 public:
@@ -28,10 +29,26 @@ protected:
 	glm::vec3 heading = glm::vec3(0.f,1.f,0.f);
 	int direction = 0;
 	TankState state = TankState::WAITING;
-	int health = 100;
+
+	float health = 100.f;
+	float startingHealth = 100.f;
+	glm::vec4 startingColour = glm::vec4(0.f);
+
 	float speed = 5;
 	float maxWaitTime = 1.f;
 	float waitTime = 0.f;
+	float coolDown = 1.f;
+	float currentCoolDown = 0.f;
+	bool coolDownActive = false;
+
+	float maxLaserChargeTime = 1.f;
+	float currentLaserChargeTime = 0.f;
+	virtual void FireSomething();
+	virtual void FireLaser();
+	std::vector<cLaser*> activeLasers;
+	std::vector<cLaser*> laserCleanup;
+
+
 	iMediator* p_Mediator = 0;
 	cBullet* activeBullet = 0;
 };

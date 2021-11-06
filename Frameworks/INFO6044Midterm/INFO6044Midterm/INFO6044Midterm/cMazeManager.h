@@ -8,6 +8,7 @@ class cMazeManager {
 public:
 	bool LoadMazeFromFile(std::string fileName);
 	bool ValidatePosition(glm::vec3 position, glm::vec3 heading);
+	int DistanceToWall(glm::vec3 position, glm::vec3 heading);
 private:
 	std::vector<std::string> maze;
 };

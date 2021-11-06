@@ -30,6 +30,23 @@ bool cCombatMediator::RecieveMessage(sMessage theMessage) {
 		// Forward message so we can track its origin through the mediator.
 		::g_pPlayerTank->RecieveMessage(theMessage);
 	}
+	else if (theMessage.command == "FIRE LASER" && theMessage.vec_iData[0] == ::g_pPlayerTank->GetId()) {
+		// Forward message so we can track its origin through the mediator.
+		::g_pPlayerTank->RecieveMessage(theMessage);
+	}
+	else if (theMessage.command == "TAKE DAMAGE" && theMessage.vec_iData[0] == ::g_pPlayerTank->GetId()) {
+		// Forward message so we can track its origin through the mediator.
+		::g_pPlayerTank->RecieveMessage(theMessage);
+	}
+	else if (theMessage.command == "LASER EXPIRY") {
+		for (iTank* tank : tanks) {
+			if (tank->GetId() == theMessage.vec_iData[1]) {
+				// Forward to the tank to deal with cleanup.
+				tank->RecieveMessage(theMessage);
+				break;
+			}
+		}
+	}
 	return true;
 }
 
@@ -48,6 +65,45 @@ bool cCombatMediator::RecieveMessage(sMessage theMessage, sMessage& theResponse)
 			theResponse.command = "MOVE";
 		}
 	}
+	else if (theMessage.command == "VALIDATE TANK COLLISION") {
+		for (iTank* tank : tanks) {
+			if (tank->GetId() == theMessage.vec_iData[0]) {
+				//A valid ID was passed
+				ValidateTankCollision(tank, theMessage.vec_v4Data[0], theMessage.vec_v4Data[1], theResponse);
+				break;
+			}
+		}
+	}
+	else if (theMessage.command == "VALIDATE BULLET HIT") {
+		for (iTank* tank : tanks) {
+			if (tank->GetId() == theMessage.vec_iData[0]) {
+				//A valid ID was passed
+				ValidateTankCollision(tank, theMessage.vec_v4Data[0], glm::vec4(0.f), theResponse);
+				if (theResponse.command == "CRASH" && theResponse.vec_iData.size() > 0) {
+					for (int x = 0; x < theResponse.vec_iData.size(); x++) {
+						for (iTank* potentialHitTank : tanks) {
+							if (potentialHitTank->GetId() == theResponse.vec_iData[x]) {
+								//Found the hit tank
+								sMessage bulletMessage;
+								bulletMessage.command = "TAKE DAMAGE";
+								bulletMessage.vec_fData.push_back(theMessage.vec_fData[0]);
+								bulletMessage.vec_iData.push_back(tank->GetId());
+								potentialHitTank->RecieveMessage(bulletMessage);
+							}
+						}
+					}
+					// This is not scalable but I am running short on time.
+					if (theMessage.vec_iData.size() <= 1) {
+						CleanupBullet(theMessage.vec_iData[0]);
+					}
+					else {
+						CleanupLaser(theMessage.vec_iData[1], theMessage.vec_iData[0]);
+					}
+				}
+				break;
+			}
+		}
+	}
 	else if (theMessage.command == "CHECK SIGHT") {
 		for (iTank* tank : tanks) {
 			if (tank->GetId() == theMessage.vec_iData[0]) {
@@ -56,8 +112,46 @@ bool cCombatMediator::RecieveMessage(sMessage theMessage, sMessage& theResponse)
 			}
 		}
 	}
+	else if (theMessage.command == "DISTANCE TO WALL") {
+		int result = mazeManager->DistanceToWall(theMessage.vec_v4Data[0], theMessage.vec_v4Data[1]);
+		if (result > 0) {
+			theResponse.command = "FIRE AWAY";
+			theResponse.vec_iData.push_back(result);
+		}
+		else {
+			theResponse.command = "TOO CLOSE";
+		}
+	}
 
 	return true;
+}
+
+void cCombatMediator::ValidateTankCollision(iTank* initiator, glm::vec3 position, glm::vec3 heading, sMessage& response) {
+	response.command = "CLEAR";
+	int initatorID = initiator->GetId();
+	int otherID = 0;
+	// SNAP POSITION TO GRID	
+	int coordX = (int)position.x;
+	int coordY = (int)position.y;
+	// if moving left
+	if (heading.x > 0) {
+		coordX++;
+	}
+	// if moving up
+	if (heading.y > 0) {
+		coordY++;
+	}
+	for (iTank* tank : tanks) {
+		otherID = tank->GetId();
+		if (otherID != initatorID) {
+			glm::vec3 otherPosition = tank->GetPosition();
+			if (otherPosition.x < coordX + 0.5f && otherPosition.x > coordX - 0.5f && otherPosition.y < coordY + 0.5f && otherPosition.y > coordY - 0.5f) {
+				// In approximate area of collision
+				response.command = "CRASH";
+				response.vec_iData.push_back(tank->GetId());
+			}
+		}
+	}
 }
 
 void cCombatMediator::ValidateBulletPosition(int ownerID, glm::vec3 position) {
@@ -78,6 +172,19 @@ void cCombatMediator::CleanupBullet(int ownerID) {
 			sMessage bulletMessage;
 			bulletMessage.command = "DESTROY BULLET";
 			tank->RecieveMessage(bulletMessage);
+			break;
+		}
+	}
+}
+
+void cCombatMediator::CleanupLaser(int laserID, int ownerID) {
+	// Know there is a more scalable way to do this, but I am pressed for time and number of tanks is small.
+	for (iTank* tank : tanks) {
+		if (tank->GetId() == ownerID) {
+			sMessage expiryMessage;
+			expiryMessage.command = "LASER EXPIRY";
+			expiryMessage.vec_iData.push_back(laserID);
+			tank->RecieveMessage(expiryMessage);
 			break;
 		}
 	}
@@ -141,7 +248,8 @@ void cCombatMediator::InitializeTanks() {
 	playerTankMesh->positionXYZ = glm::vec3(x1,y2, 20.f);
 	playerTankMesh->orientationXYZ = glm::vec3(-glm::pi<float>() / 2, 0.f, 0.f);
 	playerTankMesh->scale = 0.25f;
-	playerTankMesh->bUseWholeObjectDiffuseColour = false;
+	playerTankMesh->bUseWholeObjectDiffuseColour = true;
+	playerTankMesh->wholeObjectDiffuseRGBA = glm::vec4(1.f, 1.f, 1.f, 1.f);
 	::g_vec_pMeshes.push_back(playerTankMesh);
 	g_pPlayerTank = new cPlayerTank(playerTankMesh);
 	g_pPlayerTank->SetReciever(this);
@@ -149,7 +257,7 @@ void cCombatMediator::InitializeTanks() {
 
 	cMesh* blueTankMesh = new cMesh();
 	blueTankMesh->meshName = "Low Poly Tank Model 3D model.ply";
-	blueTankMesh->positionXYZ = glm::vec3(x2, y1, 20.f);
+	blueTankMesh->positionXYZ = glm::vec3(x1, y2 +3.f, 20.f);
 	blueTankMesh->orientationXYZ = glm::vec3(-glm::pi<float>() / 2, 0.f, 0.f);
 	blueTankMesh->scale = 0.25f;
 	blueTankMesh->bUseWholeObjectDiffuseColour = true;
@@ -161,7 +269,7 @@ void cCombatMediator::InitializeTanks() {
 
 	cMesh* redTankMesh = new cMesh();
 	redTankMesh->meshName = "Low Poly Tank Model 3D model.ply";
-	redTankMesh->positionXYZ = glm::vec3(x1, y1, 20.f);
+	redTankMesh->positionXYZ = glm::vec3(x1+ 3.f, y2, 20.f);
 	redTankMesh->orientationXYZ = glm::vec3(-glm::pi<float>() / 2, 0.f, 0.f);
 	redTankMesh->scale = 0.25f;
 	redTankMesh->bUseWholeObjectDiffuseColour = true;

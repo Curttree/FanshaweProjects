@@ -2,12 +2,12 @@
 #include "iTank.h"
 #include "cMesh.h"
 #include "cBullet.h"
+#include "cLaser.h"
 #include "iMediator.h"
 
 class cPlayerTank : public iTank {
 public:
 	cPlayerTank(cMesh* _model);
-	//cMesh* GetModel();
 	//From iTank
 	virtual void TimeStep(float deltaTime);
 	virtual bool CheckValidMove(glm::vec3 newPos, glm::vec3 heading);
@@ -27,9 +27,24 @@ protected:
 	cMesh* model = 0;
 	glm::vec3 heading = glm::vec3(0.f, 1.f, 0.f);
 	TankState state = TankState::WAITING;
-	int health = 100;
-	float speed = 10; 
+
+	float health = 100.f;
+	float startingHealth = 100.f;
+	glm::vec4 startingColour = glm::vec4(0.f);
+
+	float coolDown = 0.5f;
+	float currentCoolDown = 0.f;
+
+	float maxLaserChargeTime = 1.f;
+	float currentLaserChargeTime = 0.f;
+	virtual void FireLaser();
+
+	bool coolDownActive = false;
 	cBullet* activeBullet = 0;
+	std::vector<cLaser*> activeLasers;
+	std::vector<cLaser*> laserCleanup;
+
+	float speed = 10; 
 private:
 	iMediator* p_Mediator = 0;
 };

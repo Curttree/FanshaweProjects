@@ -117,6 +117,9 @@
     <ClCompile Include="cBullet.cpp">
       <Filter>Projectiles</Filter>
     </ClCompile>
+    <ClCompile Include="cLaser.cpp">
+      <Filter>Projectiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -177,6 +180,9 @@
       <Filter>Tanks</Filter>
     </ClInclude>
     <ClInclude Include="cBullet.h">
+      <Filter>Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="cLaser.h">
       <Filter>Projectiles</Filter>
     </ClInclude>
   </ItemGroup>
