@@ -182,6 +182,7 @@
     <ClInclude Include="cGravityGenerator.h" />
     <ClInclude Include="cMathHelper.h" />
     <ClInclude Include="cParticle.h" />
+    <ClInclude Include="cParticleContact.h" />
     <ClInclude Include="cParticleForceRegistry.h" />
     <ClInclude Include="cParticleWorld.h" />
     <ClInclude Include="cProjectileFactory.h" />

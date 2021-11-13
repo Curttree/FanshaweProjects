@@ -3,12 +3,11 @@
 
 #include "cParticle.h"
 #include "cParticleForceRegistry.h"
+#include "cParticleContact.h"
+#include "iParticleContactGenerator.h"
+#include "cParticleContactResolver.h"
 
-class cParticleWorld
-{
-private:
-	std::vector<cParticle*> particles;
-	cParticleForceRegistry* forceRegistry;
+class cParticleWorld {
 public:
 	cParticleWorld();
 	virtual ~cParticleWorld();
@@ -18,7 +17,20 @@ public:
 
 	void Update(float deltaTime);
 
-	void IntegrateParticles(float deltaTime);
+	void IntegrateParticles(float deltaTime); 
+
+	size_t GenerateContacts();
 
 	cParticleForceRegistry* GetForceRegistry() const;
+
+private:
+	std::vector<cParticle*> particles;
+	cParticleForceRegistry* forceRegistry;
+	cParticleContact* contacts;
+	size_t maxContacts;
+	std::vector<iParticleContactGenerator*> contactGenerators;
+	cParticleContactResolver contactResolver;
+	// The world should calculate the number of iterations
+	// to give the contact resolver each frame.
+	bool shouldCalculateIterations;
 };

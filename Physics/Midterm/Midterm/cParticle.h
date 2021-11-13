@@ -19,6 +19,7 @@ public:
 	void SetAcceleration(const glm::vec3 newAcceleration);
 
 	float GetMass();
+	float GetInverseMass();
 	void SetMass(float newMass);
 
 	glm::vec3 GetAppliedForce();
@@ -27,7 +28,11 @@ public:
 	float GetDamping();
 	void SetDamping(float newDamping);
 
+	// Returns the new net applied force.
 	glm::vec3 ApplyForce(const glm::vec3 force);
+
+	// Returns the new velocity
+	glm::vec3 ApplyImpulse(const glm::vec3 impulse);
 
 	void Integrate(float deltaTime);
 private:

@@ -14,6 +14,8 @@ uniform vec4 wholeObjectDiffuseColour;	// Whole object diffuse colour
 uniform bool bUseWholeObjectDiffuseColour;	// If true, the whole object colour is used (instead of vertex colour)
 uniform vec4 wholeObjectSpecularColour;	// Colour of the specular highlight (optional)
 
+// Alpha transparency value
+uniform float wholeObjectAlphaTransparency;
 
 // This is used for wireframe or whole object colour. 
 // If bUseDebugColour is TRUE, then the fragment colour is "objectDebugColour".
@@ -60,12 +62,29 @@ uniform sLight theLights[NUMBEROFLIGHTS];  	// 80 uniforms
 
 vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal, 
                             vec3 vertexWorldPos, vec4 vertexSpecular );
+							
+uniform sampler2D texture_00;		// GL_TEXTURE_2D
+uniform sampler2D texture_01;		// GL_TEXTURE_2D
+uniform sampler2D texture_02;		// GL_TEXTURE_2D
+uniform sampler2D texture_03;		// GL_TEXTURE_2D
+uniform sampler2D texture_04;		// GL_TEXTURE_2D
+uniform sampler2D texture_05;		// GL_TEXTURE_2D
+uniform sampler2D texture_06;		// GL_TEXTURE_2D
+uniform sampler2D texture_07;		// GL_TEXTURE_2D
 
+uniform vec4 textureRatios0to3;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
+uniform vec4 textureRatios4to7;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
+
+// Skybox or reflection or light probe
+uniform samplerCube skyBox;			// GL_TEXTURE_CUBE_MAP
 
 void main()
 {
 	// This is the pixel colour on the screen.
 	// Just ONE pixel, though.
+	
+	// HACK: See if the UV coordinates are actually being passed in
+	pixelColour = vec4(0.0f, 0.0f, 0.0, 1.0f); 
 	
 	// Copy model vertex colours?
 	vec4 vertexDiffuseColour = fVertexColour;
@@ -90,7 +109,16 @@ void main()
 		// Early exit from shader
 		return;
 	}
-	
+
+	// Makes this "black" but not quite...
+	vertexDiffuseColour.rgb *= 0.0001f;
+
+	vertexDiffuseColour.rgb += 	
+			(texture( texture_00, fUVx2.xy ).rgb * textureRatios0to3.x)  + 
+		    (texture( texture_01, fUVx2.xy ).rgb * textureRatios0to3.y)  + 
+			(texture( texture_02, fUVx2.xy ).rgb * textureRatios0to3.z)  + 
+			(texture( texture_03, fUVx2.xy ).rgb * textureRatios0to3.w);
+			// + etc... the other 4 texture units
 	
 	vec4 outColour = calcualteLightContrib( vertexDiffuseColour.rgb,		
 	                                        fNormal.xyz, 		// Normal at the vertex (in world coords)
@@ -98,7 +126,7 @@ void main()
 											wholeObjectSpecularColour.rgba );
 											
 	pixelColour = outColour;
-	
+	pixelColour.a = wholeObjectAlphaTransparency;
 
 };
 

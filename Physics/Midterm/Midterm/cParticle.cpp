@@ -48,9 +48,19 @@ float cParticle::GetMass() {
 	return mass;
 }
 
+float cParticle::GetInverseMass() {
+	if (mass <= 0.f) {
+		// Mass should never be negative, but just in case, treat as if static.
+		return 0.f;
+	}
+	return 1.f / mass;
+}
+
 void cParticle::SetMass(float newMass) {
-	// Not sure if this would be useful for particles, but keeping it here in case this class gets expanded
-	// More complex objects may change mass due to external factors (ex. character puts on heavier armour).
+	if (newMass < 0.f) {
+		// Cannot have inverse mass. Set lower limit to 0.f (static object).
+		newMass = 0.f;
+	}
 	mass = newMass;
 }
 #pragma endregion
@@ -79,6 +89,12 @@ glm::vec3 cParticle::ApplyForce(const glm::vec3 force)
 {
 	netAppliedForce += force;
 	return netAppliedForce;
+}
+
+glm::vec3 cParticle::ApplyImpulse(const glm::vec3 impulse)
+{
+	velocity += force * GetInverseMass();
+	return velocity;
 }
 
 void cParticle::Integrate(float deltaTime)

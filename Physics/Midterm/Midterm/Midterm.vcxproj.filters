@@ -140,5 +140,8 @@
     <ClInclude Include="cGravityGenerator.h">
       <Filter>Physics\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="cParticleContact.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
