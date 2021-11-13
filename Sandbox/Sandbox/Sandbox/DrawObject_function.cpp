@@ -7,11 +7,79 @@
 
 #include "Graphics/GLCommon.h"       // Gives us glad.h
 #include "Graphics/cVAOManager.h"
+#include "globals.h"
 
 
 void GLFW_window_size_callback(GLFWwindow* window, int width, int height)
 {
     // TODO: GLFW_window_size_callback()
+
+    return;
+}
+
+// HACK: We shouldn't do the getUniformLocation every frame.
+//  These don't change, so we should store them outside    
+void SetUpTextures(GLuint shaderProgram)
+{
+    //*****************************************************************************************
+    {
+        // uniform sampler2D texture_00;
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Fauci.bmp");
+
+        GLuint textureUnit = 0;			// Texture unit go from 0 to 79
+        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint texture_00_LocID = glGetUniformLocation(shaderProgram, "texture_00");
+        glUniform1i(texture_00_LocID, textureUnit);
+    }
+    //*****************************************************************************************
+
+    //*****************************************************************************************
+    {
+        // uniform sampler2D texture_01;
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Pebbleswithquarzite.bmp");
+
+        GLuint textureUnit = 1;			// Texture unit go from 0 to 79
+        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint texture_01_LocID = glGetUniformLocation(shaderProgram, "texture_01");
+        glUniform1i(texture_01_LocID, textureUnit);
+    }
+    //*****************************************************************************************
+
+    //*****************************************************************************************
+    {
+        // uniform sampler2D texture_01;
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Lisse_mobile_shipyard-mal1.bmp");
+
+        GLuint textureUnit = 2;			// Texture unit go from 0 to 79
+        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint texture_02_LocID = glGetUniformLocation(shaderProgram, "texture_02");
+        glUniform1i(texture_02_LocID, textureUnit);
+    }
+    //*****************************************************************************************    
+
+    //*****************************************************************************************
+    {
+        // uniform sampler2D texture_01;
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Broc_tree_house.bmp");
+
+        GLuint textureUnit = 3;			// Texture unit go from 0 to 79
+        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint texture_03_LocID = glGetUniformLocation(shaderProgram, "texture_03");
+        glUniform1i(texture_03_LocID, textureUnit);
+    }
+    //*****************************************************************************************    
 
     return;
 }
@@ -23,6 +91,19 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
                 GLuint program,
                 cVAOManager* pVAOManager)
 {
+    // Set up textures for this object
+    SetUpTextures(pCurrentMesh, program);
+
+    // Alpha transparency
+    glEnable(GL_BLEND);
+    // Basic "alpha transparency"
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // Get the uniform (should be outside of the draw call)
+    GLint wholeObjectAlphaTransparency_LocID = glGetUniformLocation(program, "wholeObjectAlphaTransparency");
+    // Set this value here
+    glUniform1f(wholeObjectAlphaTransparency_LocID, pCurrentMesh->alphaTransparency);
+
     // *****************************************************
     // Translate or "move" the object somewhere
     glm::mat4 matTranslate = glm::translate( glm::mat4(1.0f),

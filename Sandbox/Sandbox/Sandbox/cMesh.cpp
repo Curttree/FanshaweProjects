@@ -26,6 +26,8 @@ cMesh::cMesh()
 	// Specular highlight POWER (or shininess). Starts at 1.0 and goes to ? (like 100, 1000, 10000 is OK)
 	this->wholeObjectShininess_SpecPower = 1.0f;	// 1.0 to ??
 
+	// Default to 1.0f (all solid)
+	this->alphaTransparency = 1.0f;
 
 	// Assign a unique ID
 	this->m_UniqueID = cMesh::m_NextID;

@@ -8,9 +8,11 @@ cFlyCamera* g_pFlyCamera = NULL;
 cVAOManager* g_pVAOManager = NULL;
 cShaderManager* g_pShaderManager = NULL;
 
-cLightManager* g_pTheLights = NULL;
+cLightManager* g_pTheLights = NULL; 
 
-std::vector< cMesh* > g_vec_pMeshes;
+cBasicTextureManager* g_pTextureManager = NULL;
+
+std::vector< cMesh* > g_vec_pMeshes; 
 
 cMesh* g_pDebugSphere = NULL;
 bool g_bShowDebugShere = true;

@@ -7,6 +7,7 @@
 #include "Graphics/cVAOManager.h"
 #include "Graphics/cShaderManager.h"
 #include "Graphics/cLightManager.h"
+#include "TextureMapping/cBasicTextureManager.h"
 #include "cMesh.h"
 #include <vector>
 
@@ -39,11 +40,11 @@ extern cFlyCamera* g_pFlyCamera; // = NULL;
 
 extern cVAOManager* g_pVAOManager;
 extern cShaderManager* g_pShaderManager;
+extern cBasicTextureManager* g_pTextureManager;
 
 extern cLightManager* g_pTheLights;
 // This got moved into the light manager class
 //extern cLightHelper* g_pTheLightHelper;
-
 
 extern cMesh* g_pDebugSphere;	// = NULL;
 extern bool g_bShowDebugShere;	// = true;

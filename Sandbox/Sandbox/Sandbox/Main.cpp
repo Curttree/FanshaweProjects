@@ -174,8 +174,22 @@ int main(void) {
     std::cout << "Total vertices loaded = " << totalVerticesLoaded << std::endl;
     std::cout << "Total triangles loaded = " << totalTrianglesLoaded << std::endl;
 
+    // Load the textures
+    ::g_pTextureManager->SetBasePath("assets/textures");
 
-    //TODO: Load lights and models.
+    if (::g_pTextureManager->Create2DTextureFromBMPFile("Fauci.bmp", true))
+        //if (::g_pTextureManager->Create2DTextureFromBMPFile("Pebbleswithquarzite.bmp", true))
+    {
+        std::cout << "Loaded the texture" << std::endl;
+    }
+    else
+    {
+        std::cout << "DIDN'T load the texture" << std::endl;
+    }
+
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Pebbleswithquarzite.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Lisse_mobile_shipyard-mal1.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Broc_tree_house.bmp", true);
 
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
     double previousTime = glfwGetTime();
@@ -296,7 +310,7 @@ void DrawDebugObjects(
     GLint matModelInverseTranspose_Location,
     GLuint program,
     cVAOManager* pVAOManager)
-{
+{    
 
     {   // Draw a sphere where the camera is looking.
         // Take the at - eye --> vector 

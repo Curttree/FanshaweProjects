@@ -11,5 +11,7 @@ bool g_ShutDown(GLFWwindow* pWindow)
 
 	delete ::g_pFlyCamera;
 
+	delete ::g_pTextureManager;
+
 	return true;
 }

@@ -11,5 +11,7 @@ bool g_StartUp(GLFWwindow* pWindow)
 
 	::g_pVAOManager = new cVAOManager();
 
+	::g_pTextureManager = new cBasicTextureManager();
+
 	return true;
 }

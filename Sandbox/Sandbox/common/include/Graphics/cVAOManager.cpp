@@ -190,6 +190,7 @@ bool LoadPLYModelFromFile(std::string fileName, sModelDrawInfo& drawInfo)
         float x, y, z;      // , c, i;
         float nx, ny, nz;
         float red, green, blue, alpha;  // (Note the file is in HTML style, so 0 to 255, but the shader wants 0.0 to 1.0)
+        float u, v;
     };
     struct sTriangle
     {
@@ -260,7 +261,10 @@ bool LoadPLYModelFromFile(std::string fileName, sModelDrawInfo& drawInfo)
         theFile >> tempVertex.red;
         theFile >> tempVertex.green;
         theFile >> tempVertex.blue;
-        theFile >> tempVertex.alpha;
+        theFile >> tempVertex.alpha;       
+        
+        theFile >> tempVertex.u;
+        theFile >> tempVertex.v;
 
         vecVertexArray.push_back(tempVertex);
     }
@@ -311,6 +315,11 @@ bool LoadPLYModelFromFile(std::string fileName, sModelDrawInfo& drawInfo)
         drawInfo.pVertices[index].ny = vecVertexArray[index].ny;
         drawInfo.pVertices[index].nz = vecVertexArray[index].nz;
         drawInfo.pVertices[index].nw = 1.0f;
+
+        drawInfo.pVertices[index].u0 = vecVertexArray[index].u;
+        drawInfo.pVertices[index].v0 = vecVertexArray[index].v;
+        drawInfo.pVertices[index].u1 = 0.0f;
+        drawInfo.pVertices[index].v1 = 0.0f;
        }
 
     // Copy the triangle ("index") values to the index (element) array
