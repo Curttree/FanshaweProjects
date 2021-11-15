@@ -11,13 +11,7 @@
 #include <fstream>
 #include <string>
 #include "C24BitBMPpixel.h"
-//#include <gl\glext.h>		// OpenGL Extensions (for cube mapping)
-//#include <GL\glew.h>
-//#include <gl\freeglut.h>
-//#include <glad/glad.h>
-//#include <GLFW/glfw3.h>
-//#include "globalOpenGLStuff.h"	
-#include "../GLCommon.h"
+#include "../../common/include/Graphics/GLCommon.h"
 
 
 typedef unsigned char uchar;

@@ -29,6 +29,13 @@ cMesh::cMesh()
 	// Default to 1.0f (all solid)
 	this->alphaTransparency = 1.0f;
 
+	// Clear all the textures
+	for (unsigned int index = 0; index != cMesh::MAX_TEXTURES; index++)
+	{
+		this->textureNames[index] = "";
+		this->textureRatios[index] = 0.0f;
+	}
+
 	// Assign a unique ID
 	this->m_UniqueID = cMesh::m_NextID;
 	cMesh::m_NextID++;
