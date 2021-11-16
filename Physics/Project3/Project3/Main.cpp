@@ -32,6 +32,7 @@ cVAOManager     gVAOManager;
 cShaderManager  gShaderManager;
 
 cModel g_groundModel;
+cModel g_wallModels[5];
 cModel g_cannonModel;
 
 cWorldSpace* worldSpace = cWorldSpace::Instance();
@@ -233,10 +234,48 @@ void updateProjPositions(std::vector<cParticleObject*> particles) {
 
 void initGround() {
     g_groundModel.modelName = "assets/ground.ply";
-    g_groundModel.scale = 1.f;
+    g_groundModel.scale = 2.f;
     g_groundModel.positionXYZ = glm::vec3(0.f, 0.f, 0.f);
     g_groundModel.bOverriveVertexColourHACK = true;
     g_groundModel.bIsWireframe = false;
+}
+
+void initWalls() {
+    g_wallModels[0].modelName = "assets/ground.ply";
+    g_wallModels[0].scale = 2.f;
+    g_wallModels[0].positionXYZ = glm::vec3(10.f, 10.f, 90.f);
+    g_wallModels[0].orientationXYZ = glm::vec3(glm::pi<float>() / 2, -glm::pi<float>() / 2, 0.f);
+    g_wallModels[0].bOverriveVertexColourHACK = true;
+    g_wallModels[0].bIsWireframe = false;
+
+    g_wallModels[1].modelName = "assets/ground.ply";
+    g_wallModels[1].scale = 2.f;
+    g_wallModels[1].positionXYZ = glm::vec3(-10.f, 10.f, 90.f);
+    g_wallModels[1].orientationXYZ = glm::vec3(glm::pi<float>() / 2, glm::pi<float>() / 2, 0.f);
+    g_wallModels[1].bOverriveVertexColourHACK = true;
+    g_wallModels[1].bIsWireframe = false;
+
+    g_wallModels[2].modelName = "assets/ground.ply";
+    g_wallModels[2].scale = 2.f;
+    g_wallModels[2].positionXYZ = glm::vec3(0.f, 20.f, 90.f);
+    g_wallModels[4].orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
+    g_wallModels[2].bOverriveVertexColourHACK = true;
+    g_wallModels[2].bIsWireframe = false;
+
+    g_wallModels[3].modelName = "assets/ground.ply";
+    g_wallModels[3].scale = 2.f;
+    g_wallModels[3].positionXYZ = glm::vec3(0.f, 0.f, 90.f);
+    g_wallModels[4].orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
+    g_wallModels[3].bOverriveVertexColourHACK = true;
+    g_wallModels[3].bIsWireframe = false;
+
+    //Back wall
+    g_wallModels[4].modelName = "assets/ground.ply";
+    g_wallModels[4].scale = 2.f;
+    g_wallModels[4].positionXYZ = glm::vec3(0.f, 10.f, 100.f);
+    g_wallModels[4].orientationXYZ = glm::vec3(glm::pi<float>()/2, 0.f, 0.f);
+    g_wallModels[4].bOverriveVertexColourHACK = true;
+    g_wallModels[4].bIsWireframe = false;
 }
 
 void initCannon() {
@@ -310,6 +349,7 @@ int main(void)
 
     initGround();
     initCannon();
+    initWalls();
     float timeElapsed = 0;
 
     while (!glfwWindowShouldClose(window))
@@ -343,28 +383,32 @@ int main(void)
             deltaTime = 0.03f;
         }
 
-        // TODO: Handle projectile timestep.
-        for (int x = 0; x < projectileObjs.size(); x++)
-        {
-            bool shouldDestroy=false;
-            shouldDestroy |= projectileObjs[x]->isAtDistanceLimit();
-            shouldDestroy |= projectileObjs[x]->isAtTimeLimit();
-            shouldDestroy |= !projectileObjs[x]->isAboveGround();
-            if (shouldDestroy) {
-                worldSpace->_world->RemoveParticle(projectileObjs[x]->particle);
-                delete projectileObjs[x];
-                projectileObjs[x] = 0;
-                projectileObjs.erase(projectileObjs.begin() + x);
-                // Decrement x. Size of vector shrunk, so index has decreased by 1.
-                x--;
-            }
-        }
+        // This is being temporarily commented out for project 3. Particles should never be destroyed per project requirements
+        //for (int x = 0; x < projectileObjs.size(); x++)
+        //{
+            // 
+            //bool shouldDestroy=false;
+            //shouldDestroy |= projectileObjs[x]->isAtDistanceLimit();
+            //shouldDestroy |= projectileObjs[x]->isAtTimeLimit();
+            //shouldDestroy |= !projectileObjs[x]->isAboveGround();
+            //if (shouldDestroy) {
+            //    worldSpace->_world->RemoveParticle(projectileObjs[x]->particle);
+            //    delete projectileObjs[x];
+            //    projectileObjs[x] = 0;
+            //    projectileObjs.erase(projectileObjs.begin() + x);
+            //    // Decrement x. Size of vector shrunk, so index has decreased by 1.
+            //    x--;
+            //}
+        //}
 
         for (unsigned int index = 0; index != projectileObjs.size(); index++)
         {
             renderModel(*projectileObjs[index]->model);
         }
 
+        for (cModel wall : g_wallModels) {
+            renderModel(wall);
+        }
         renderModel(g_groundModel);
         renderModel(g_cannonModel);
         // Scene is drawn
