@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{023fad01-9a2e-4356-9c98-5a0d67bf564e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\ShaderManager">
+      <UniqueIdentifier>{eb440f52-eda1-4cd0-a2bf-a9e44bc6719c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Models">
+      <UniqueIdentifier>{967227ee-b23d-414a-9c53-231f0754735b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Models\VAOManager">
+      <UniqueIdentifier>{c819e8bb-2abe-4d67-8f4f-8f335cf7077d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Headers">
+      <UniqueIdentifier>{7ea67e77-0a25-4bdb-a0a0-c34dc2fe24ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cannon">
+      <UniqueIdentifier>{8db9f75a-eafd-4e6b-bdb1-d2c1c636eea6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cannon\Headers">
+      <UniqueIdentifier>{e51eef2b-7dcf-44af-881a-9a07a5e2a5bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{d0cd19de-a45a-4fda-9ff7-8f3622880781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Headers">
+      <UniqueIdentifier>{592204d6-85e5-4521-9ffc-ca54b57ae106}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\cShader.cpp">
+      <Filter>Graphics\ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\cShaderManager.cpp">
+      <Filter>Graphics\ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\cVAOManager.cpp">
+      <Filter>Graphics\Models\VAOManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\cModel.cpp">
+      <Filter>Graphics\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\configManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cWorldSpace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cMathHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cProjectileFactory.cpp">
+      <Filter>Cannon</Filter>
+    </ClCompile>
+    <ClCompile Include="cParticleObject.cpp">
+      <Filter>Cannon</Filter>
+    </ClCompile>
+    <ClCompile Include="cParticle.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="cParticleWorld.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="cParticleForceRegistry.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="cGravityGenerator.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\graphics\cShaderManager.h">
+      <Filter>Graphics\ShaderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\cVAOManager.h">
+      <Filter>Graphics\Models\VAOManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\cModel.h">
+      <Filter>Graphics\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\configManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\extern_includes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\sVertex_types.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="cWorldSpace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cMathHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cProjectileFactory.h">
+      <Filter>Cannon\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="sCannonDef.h">
+      <Filter>Cannon\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="sParticleTemplate.h">
+      <Filter>Cannon\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cParticleObject.h">
+      <Filter>Cannon\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cParticle.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cParticleWorld.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cParticleForceRegistry.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iForceGenerator.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cGravityGenerator.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cParticleContact.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
