@@ -87,6 +87,15 @@
     <ClCompile Include="cGravityGenerator.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
+    <ClCompile Include="cParticleContactResolver.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="cPlaneParticleContactGenerator.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="cParticleContact.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\cShaderManager.h">
@@ -141,6 +150,15 @@
       <Filter>Physics\Headers</Filter>
     </ClInclude>
     <ClInclude Include="cParticleContact.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cParticleContactResolver.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="iParticleContactGenerator.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cPlaneParticleContactGenerator.h">
       <Filter>Physics\Headers</Filter>
     </ClInclude>
   </ItemGroup>

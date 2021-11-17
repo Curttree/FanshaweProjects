@@ -15,14 +15,14 @@ public:
 
 
 	glm::vec3 contactNormal;
-	float penetrationDepth;
+	float penetrationDepth = 0.f;
 
 	// The amount that mParticle0 is moved by during interpenetration resolution;
 	// Do not set this when creating the contact.
-	glm::vec3 movement0;
+	glm::vec3 movement0 = glm::vec3(0.f);
 	// The amount that mParticle1 is moved by during interpenetration resolution.
 	// Do not set this when creating the contact.
-	glm::vec3 movement1;
+	glm::vec3 movement1 = glm::vec3(0.f);
 
 	// Resolve this contact, for both velocity and interpenetration.
 	void Resolve(float deltaTime);
@@ -35,7 +35,7 @@ public:
 
 	float GetRestitutionCoefficient();
 	void SetRestitutionCoefficient(float newRestitution);
-private:
 	// The ratio of the final to initial relative speed between two objects after they collide. Ranges from 0 to 1 (1 being a perfectly elastic collision)
-	float restitutionCoefficient;
+	float restitutionCoefficient = 0.f;
+private:
 };

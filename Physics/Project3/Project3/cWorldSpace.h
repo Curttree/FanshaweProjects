@@ -4,6 +4,7 @@
 #include "cMathHelper.h"
 #include "cParticleWorld.h"
 #include "cGravityGenerator.h"
+#include "cPlaneParticleContactGenerator.h"
 
 class cWorldSpace {
 	public:

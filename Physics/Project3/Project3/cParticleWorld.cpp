@@ -1,14 +1,22 @@
 #include "cParticleWorld.h"
 #include <iostream>
 
-cParticleWorld::cParticleWorld() {
+cParticleWorld::cParticleWorld(size_t _maxContacts, size_t _iterations) : contactResolver(_iterations) {
+
+	shouldCalculateIterations = (_iterations == 0);
 	forceRegistry = new cParticleForceRegistry();
+	contacts = new cParticleContact[_maxContacts];
+	maxContacts = _maxContacts;
 }
 
 cParticleWorld::~cParticleWorld() {
 	if (forceRegistry) {
 		delete forceRegistry;
 		forceRegistry = NULL;
+	}
+	if (contacts) {
+		delete contacts;
+		contacts = NULL;
 	}
 }
 
@@ -22,13 +30,16 @@ bool cParticleWorld::AddParticle(cParticle* particle) {
 }
 
 bool cParticleWorld::RemoveParticle(cParticle* particle) {
-	if (!particle || std::find(particles.begin(), particles.end(), particle) != particles.end()) {
+	if (!particle) {
 		return false;
 	}
-
 	forceRegistry->DeregisterParticle(particle);
 
-	particles.erase(std::find(particles.begin(), particles.end(), particle));
+	std::vector<cParticle*>::iterator it = std::find(particles.begin(), particles.end(), particle);
+	if (it == particles.end()) {
+		return false;
+	}
+	particles.erase(it);
 	return true;
 }
 
@@ -40,17 +51,17 @@ void cParticleWorld::Update(float deltaTime) {
 	IntegrateParticles(deltaTime);
 
 	// 3) Generate contacts
-	//size_t numContactsGenerated = GenerateContacts();
+	size_t numContactsGenerated = GenerateContacts();
 
-	//// 4) Resolve contacts
-	//if (numContactsGenerated > 0)
-	//{
-	//	if (shouldCalculateIterations)
-	//	{
-	//		contactResolver.SetIterations(numContactsGenerated * 2);
-	//	}
-	//	contactResolver.ResolveContacts(contacts, numContactsGenerated, deltaTime);
-	//}
+	// 4) Resolve contacts
+	if (numContactsGenerated > 0)
+	{
+		if (shouldCalculateIterations)
+		{
+			contactResolver.SetIterations(numContactsGenerated * 2);
+		}
+		contactResolver.ResolveContacts(contacts, numContactsGenerated, deltaTime);
+	}
 }
 
 size_t cParticleWorld::GenerateContacts() {
@@ -83,4 +94,31 @@ void cParticleWorld::IntegrateParticles(float deltaTime)
 cParticleForceRegistry* cParticleWorld::GetForceRegistry() const
 {
 	return forceRegistry;
+}
+
+bool cParticleWorld::AddContactContactGenerator(iParticleContactGenerator* generator)
+{
+	// Check if null or already in list.
+	if (!generator || std::find(contactGenerators.begin(), contactGenerators.end(), generator) != contactGenerators.end())
+	{
+		return false;
+	}
+
+	contactGenerators.push_back(generator);
+	return true;
+}
+bool cParticleWorld::RemoveContactContactGenerator(iParticleContactGenerator* generator)
+{
+	if (!generator)
+	{
+		return false;
+	}
+	// Check if generator exists, and if so, get its location
+	std::vector<iParticleContactGenerator*>::iterator itGenerator = std::find(contactGenerators.begin(), contactGenerators.end(), generator);
+	if (itGenerator == contactGenerators.end())
+	{
+		return false; // nothing was removed.
+	}
+	contactGenerators.erase(itGenerator);
+	return true; // found it. removed it.
 }

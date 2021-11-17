@@ -243,28 +243,28 @@ void initGround() {
 void initWalls() {
     g_wallModels[0].modelName = "assets/ground.ply";
     g_wallModels[0].scale = 2.f;
-    g_wallModels[0].positionXYZ = glm::vec3(10.f, 10.f, 90.f);
+    g_wallModels[0].positionXYZ = glm::vec3(10.f, 10.f, 30.f);
     g_wallModels[0].orientationXYZ = glm::vec3(glm::pi<float>() / 2, -glm::pi<float>() / 2, 0.f);
     g_wallModels[0].bOverriveVertexColourHACK = true;
     g_wallModels[0].bIsWireframe = false;
 
     g_wallModels[1].modelName = "assets/ground.ply";
     g_wallModels[1].scale = 2.f;
-    g_wallModels[1].positionXYZ = glm::vec3(-10.f, 10.f, 90.f);
+    g_wallModels[1].positionXYZ = glm::vec3(-10.f, 10.f, 30.f);
     g_wallModels[1].orientationXYZ = glm::vec3(glm::pi<float>() / 2, glm::pi<float>() / 2, 0.f);
     g_wallModels[1].bOverriveVertexColourHACK = true;
     g_wallModels[1].bIsWireframe = false;
 
     g_wallModels[2].modelName = "assets/ground.ply";
     g_wallModels[2].scale = 2.f;
-    g_wallModels[2].positionXYZ = glm::vec3(0.f, 20.f, 90.f);
+    g_wallModels[2].positionXYZ = glm::vec3(0.f, 20.f, 30.f);
     g_wallModels[4].orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
     g_wallModels[2].bOverriveVertexColourHACK = true;
     g_wallModels[2].bIsWireframe = false;
 
     g_wallModels[3].modelName = "assets/ground.ply";
     g_wallModels[3].scale = 2.f;
-    g_wallModels[3].positionXYZ = glm::vec3(0.f, 0.f, 90.f);
+    g_wallModels[3].positionXYZ = glm::vec3(0.f, 0.f, 30.f);
     g_wallModels[4].orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
     g_wallModels[3].bOverriveVertexColourHACK = true;
     g_wallModels[3].bIsWireframe = false;
@@ -272,7 +272,7 @@ void initWalls() {
     //Back wall
     g_wallModels[4].modelName = "assets/ground.ply";
     g_wallModels[4].scale = 2.f;
-    g_wallModels[4].positionXYZ = glm::vec3(0.f, 10.f, 100.f);
+    g_wallModels[4].positionXYZ = glm::vec3(0.f, 10.f, 50.f);
     g_wallModels[4].orientationXYZ = glm::vec3(glm::pi<float>()/2, 0.f, 0.f);
     g_wallModels[4].bOverriveVertexColourHACK = true;
     g_wallModels[4].bIsWireframe = false;
@@ -303,7 +303,7 @@ int main(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    window = glfwCreateWindow(1200, 640, "INFO-6019 - Midterm (Curtis Tremblay-1049697)", NULL, NULL);
+    window = glfwCreateWindow(1200, 640, "INFO-6019 - Project 3 (Curtis Tremblay-1049697)", NULL, NULL);
 
     if (!window)
     {
@@ -374,32 +374,47 @@ int main(void)
         // Screen is cleared and we are ready to draw the scene...
         // *******************************************************
 
-        updateProjPositions(projectileObjs);
         worldSpace->_world->Update(deltaTime);
+        updateProjPositions(projectileObjs);
 
         // Safety, mostly for first frame
         if (deltaTime == 0.f)
         {
             deltaTime = 0.03f;
+        }        
+        
+        for (int x = 0; x < projectileObjs.size(); x++)
+        {
+            //Destroy particles that are no longer visible in our simulation.
+            bool shouldDestroy = projectileObjs[x]->particle->GetPosition().z < -10.f;
+            if (shouldDestroy) {
+                worldSpace->_world->RemoveParticle(projectileObjs[x]->particle);
+                delete projectileObjs[x];
+                projectileObjs[x] = 0;
+                projectileObjs.erase(projectileObjs.begin() + x);
+                // Decrement x. Size of vector shrunk, so index has decreased by 1.
+                x--;
+            }
         }
 
-        // This is being temporarily commented out for project 3. Particles should never be destroyed per project requirements
-        //for (int x = 0; x < projectileObjs.size(); x++)
-        //{
-            // 
-            //bool shouldDestroy=false;
-            //shouldDestroy |= projectileObjs[x]->isAtDistanceLimit();
-            //shouldDestroy |= projectileObjs[x]->isAtTimeLimit();
-            //shouldDestroy |= !projectileObjs[x]->isAboveGround();
-            //if (shouldDestroy) {
-            //    worldSpace->_world->RemoveParticle(projectileObjs[x]->particle);
-            //    delete projectileObjs[x];
-            //    projectileObjs[x] = 0;
-            //    projectileObjs.erase(projectileObjs.begin() + x);
-            //    // Decrement x. Size of vector shrunk, so index has decreased by 1.
-            //    x--;
-            //}
-        //}
+        glm::mat4 p;
+        glm::mat4 v;
+
+        p = glm::perspective(0.6f,
+            ratio,
+            0.1f,
+            1000.0f);
+
+        v = glm::mat4(1.0f);
+
+        glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
+
+        v = glm::lookAt(cameraEye,     // "eye"
+            cameraTarget,  // "at"
+            upVector);
+        glUseProgram(program);
+        glUniformMatrix4fv(matView_Location, 1, GL_FALSE, glm::value_ptr(v));
+        glUniformMatrix4fv(matProjection_Location, 1, GL_FALSE, glm::value_ptr(p));
 
         for (unsigned int index = 0; index != projectileObjs.size(); index++)
         {
@@ -423,30 +438,13 @@ int main(void)
 
 void renderModel(cModel model) {
     glm::mat4 matModel;    // used to be "m"; Sometimes it's called "world"
-    glm::mat4 p;
-    glm::mat4 v;
     glm::mat4 mvp;
 
     matModel = model.buildWorldMatrix();
 
-    p = glm::perspective(0.6f,
-        ratio,
-        0.1f,
-        1000.0f);
-
-    v = glm::mat4(1.0f);
-
-    glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
-
-    v = glm::lookAt(cameraEye,     // "eye"
-        cameraTarget,  // "at"
-        upVector);
-
     glUseProgram(program);
 
     glUniformMatrix4fv(matModel_Location, 1, GL_FALSE, glm::value_ptr(matModel));
-    glUniformMatrix4fv(matView_Location, 1, GL_FALSE, glm::value_ptr(v));
-    glUniformMatrix4fv(matProjection_Location, 1, GL_FALSE, glm::value_ptr(p));
 
     GLint bUseVertexColour_Location = glGetUniformLocation(program, "bUseVertexColour");
     GLint vertexColourOverride_Location = glGetUniformLocation(program, "vertexColourOverride");
