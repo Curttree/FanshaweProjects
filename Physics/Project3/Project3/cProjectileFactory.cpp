@@ -73,7 +73,7 @@ cParticleObject* cProjectileFactory::createParticle(int projNumber, glm::vec3 di
 		break;
 	case(RANDOM_SIZE_PROJ):
 		// Random uses bullet as its base but randomizes the radius.
-		bullet->radius = _mathHelper->getRandom(0.33f, 1.33f);
+		bullet->radius = _mathHelper->getRandom(0.4f, 1.4f);
 		result = new cParticleObject(bullet, model, direction, position);
 		break;
 	default:

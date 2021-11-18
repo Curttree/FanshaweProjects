@@ -1,4 +1,5 @@
 #include "cParticle.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 cParticle::cParticle() {
 
@@ -46,11 +47,12 @@ void cParticle::SetAcceleration(const glm::vec3 newAcceleration) {
 
 #pragma region Mass
 float cParticle::GetMass() {
-	return density * radius;
+	// Calculation for mass of sphere given radius and density.
+	return density * (4.f / 3.f * glm::pi<float>() * glm::pow(radius,3.f));
 }
 
 float cParticle::GetInverseMass() {
-	return 1.f / (density * radius);
+	return 1.f / GetMass();
 }
 
 #pragma endregion
