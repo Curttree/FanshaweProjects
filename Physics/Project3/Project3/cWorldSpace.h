@@ -5,6 +5,7 @@
 #include "cParticleWorld.h"
 #include "cGravityGenerator.h"
 #include "cPlaneParticleContactGenerator.h"
+#include "cParticleParticleContactGenerator.h"
 
 class cWorldSpace {
 	public:

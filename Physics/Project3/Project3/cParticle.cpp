@@ -8,9 +8,10 @@ cParticle::~cParticle() {
 
 }
 
-cParticle::cParticle(float _mass, glm::vec3& _position) {
+cParticle::cParticle(glm::vec3& _position, float _density, float _radius) {
 	position = _position;
-	mass = _mass;
+	density = _density;
+	radius = _radius;
 }
 
 #pragma region Position
@@ -45,23 +46,40 @@ void cParticle::SetAcceleration(const glm::vec3 newAcceleration) {
 
 #pragma region Mass
 float cParticle::GetMass() {
-	return mass;
+	return density * radius;
 }
 
 float cParticle::GetInverseMass() {
-	if (mass <= 0.f) {
-		// Mass should never be negative, but just in case, treat as if static.
-		return 0.f;
-	}
-	return 1.f / mass;
+	return 1.f / (density * radius);
 }
 
-void cParticle::SetMass(float newMass) {
-	if (newMass < 0.f) {
+#pragma endregion
+
+#pragma region Radius
+float cParticle::GetRadius() {
+	return radius;
+}
+
+void cParticle::SetRadius(float newRadius) {
+	if (newRadius < 0.f) {
 		// Cannot have inverse mass. Set lower limit to 0.f (static object).
-		newMass = 0.f;
+		newRadius = 0.f;
 	}
-	mass = newMass;
+	radius = newRadius;
+}
+#pragma endregion
+
+#pragma region Density
+float cParticle::GetDensity() {
+	return density;
+}
+
+void cParticle::SetDensity(float newDensity) {
+	if (newDensity < 0.f) {
+		// Cannot have inverse mass. Set lower limit to 0.f (static object).
+		newDensity = 0.f;
+	}
+	density = newDensity;
 }
 #pragma endregion
 
@@ -99,14 +117,14 @@ glm::vec3 cParticle::ApplyImpulse(const glm::vec3 impulse)
 
 void cParticle::Integrate(float deltaTime)
 {
-	if (mass <= 0.f)
+	if (GetMass() <= 0.f)
 	{
 		return; // mass is less than or equal 0. Consider to be static.
 	}
 
 	// Time step
 	position += velocity * deltaTime;	
-	velocity += (acceleration + netAppliedForce * 1.f / mass) * deltaTime;
+	velocity += (acceleration + netAppliedForce * GetInverseMass()) * deltaTime;
 
 	// apply damping
 	velocity *= glm::pow(damping, deltaTime);

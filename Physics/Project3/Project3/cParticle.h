@@ -6,7 +6,7 @@
 class cParticle {
 public:
 	cParticle();
-	cParticle(float _mass, glm::vec3& _position);
+	cParticle(glm::vec3& _position, float _density = 1.f, float _radius = 1.f);
 	virtual ~cParticle();
 
 	glm::vec3 GetPosition();
@@ -20,13 +20,18 @@ public:
 
 	float GetMass();
 	float GetInverseMass();
-	void SetMass(float newMass);
+
+	float GetDensity();
+	void SetDensity(float newDensity);
 
 	glm::vec3 GetAppliedForce();
 	void SetAppliedForce(const glm::vec3 newForce);
 
 	float GetDamping();
 	void SetDamping(float newDamping);
+
+	float GetRadius();
+	void SetRadius(float newRadius);
 
 	// Returns the new net applied force.
 	glm::vec3 ApplyForce(const glm::vec3 force);
@@ -39,7 +44,8 @@ private:
 	glm::vec3 position = glm::vec3(0.f);
 	glm::vec3 velocity = glm::vec3(0.f);
 	glm::vec3 acceleration = glm::vec3(0.f);
-	float mass = 1.f;
 	glm::vec3 netAppliedForce = glm::vec3(0.f);
 	float damping = 0.99f;
+	float radius = 1.f;
+	float density = 1.f; 
 };

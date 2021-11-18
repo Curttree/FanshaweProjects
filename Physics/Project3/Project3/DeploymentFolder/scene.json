@@ -23,9 +23,9 @@
   },
   "Projectiles": {
     "Bullet": {
-      "Size": 1,
+      "Radius": 0.5,
       "Damping": 0.75,
-      "Mass": 10,
+      "Density": 1,
       "MuzzleVelocity": 50,
       "TimeLimit": -1,
       "DistanceLimit": -1,
@@ -35,10 +35,10 @@
 	}
     },
     "Laser": {
-      "Size": 1,
+      "Radius": 0.3,
       "Damping": 1,
-      "Mass": 0.01,
-      "MuzzleVelocity": 100,
+      "Density": 1,
+      "MuzzleVelocity": 50,
       "TimeLimit": -1,
       "DistanceLimit": -1,
       "Colour" : {
@@ -46,9 +46,9 @@
 	}
     },
     "CannonBall": {
-      "Size": 2,
+      "Radius": 0.75,
       "Damping": 0.5,
-      "Mass": 100,
+      "Density": 1,
       "MuzzleVelocity": 25,
       "TimeLimit": -1,
       "DistanceLimit": -1,
@@ -57,8 +57,8 @@
 	}
     },
     "EnergyBall": {
-      "Size": 5,
-      "Mass": 100,
+      "Radius": 1.25,
+      "Density": 10,
       "MuzzleVelocity": 25,
       "TimeLimit": -1,
       "DistanceLimit": -1,

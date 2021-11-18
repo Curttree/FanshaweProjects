@@ -4,7 +4,9 @@
 void cParticleContact::Resolve(float deltaTime)
 {
 	ResolveVelocity(deltaTime);
-	ResolvePosition(deltaTime);
+	// Note: We are only resolving velocity and not position, as resolving position seems to apply our collision more times than we hoped for resulting in clipping/other strange behaviour.
+	// Keeping the method available if I find a case where it is required/ collisions do not seem to be resolving correctly.
+	//ResolvePosition(deltaTime);
 }
 
 float cParticleContact::GetRestitutionCoefficient()
@@ -42,7 +44,7 @@ void cParticleContact::ResolveVelocity(float deltaTime)
 
 	if (separatingVelocity > 0.0f)
 	{
-		// Already separating. No need to resolve.
+		// Already separating or stationary. No need to resolve.
 		return;
 	}
 

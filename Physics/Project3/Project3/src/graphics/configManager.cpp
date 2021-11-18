@@ -75,14 +75,14 @@ void configManager::initProjectiles() {
 
 void configManager::projectileParser(const char* name, int type) {
     sParticleTemplate* candidate = new sParticleTemplate();
-    if (_sceneDescription["Projectiles"][name].HasMember("Size")) {
-        candidate->size = _sceneDescription["Projectiles"][name]["Size"].GetFloat();
+    if (_sceneDescription["Projectiles"][name].HasMember("Radius")) {
+        candidate->radius = _sceneDescription["Projectiles"][name]["Radius"].GetFloat();
     }
     if (_sceneDescription["Projectiles"][name].HasMember("Damping")) {
         candidate->damping = _sceneDescription["Projectiles"][name]["Damping"].GetFloat();
     }
-    if (_sceneDescription["Projectiles"][name].HasMember("Mass")) {
-        candidate->mass = _sceneDescription["Projectiles"][name]["Mass"].GetFloat();
+    if (_sceneDescription["Projectiles"][name].HasMember("Density")) {
+        candidate->density = _sceneDescription["Projectiles"][name]["Density"].GetFloat();
     }
     if (_sceneDescription["Projectiles"][name].HasMember("MuzzleVelocity")) {
         candidate->muzzleVelocity = _sceneDescription["Projectiles"][name]["MuzzleVelocity"].GetFloat();

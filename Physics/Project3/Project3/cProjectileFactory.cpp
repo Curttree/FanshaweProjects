@@ -1,5 +1,7 @@
 #include "cProjectileFactory.h"
 
+cMathHelper* _mathHelper = cMathHelper::Instance();
+
 cProjectileFactory* cProjectileFactory::_instance = 0;
 cProjectileFactory::cProjectileFactory() {
 
@@ -51,7 +53,7 @@ cParticleObject* cProjectileFactory::createParticle(int projNumber, glm::vec3 di
 
 	//Define shared attributes.
 	cModel* model = new cModel();
-	model->modelName = "assets/ball.ply";
+	model->modelName = "assets/Sphere_xyz_n.ply";
 	model->bOverriveVertexColourHACK = true;
 	model->bIsWireframe = false;
 	model->bDontLightObject = false;
@@ -68,6 +70,11 @@ cParticleObject* cProjectileFactory::createParticle(int projNumber, glm::vec3 di
 		break;
 	case(ENERGY_PROJ):
 		result = new cParticleObject(energyBall, model, direction, position);
+		break;
+	case(RANDOM_SIZE_PROJ):
+		// Random uses bullet as its base but randomizes the radius.
+		bullet->radius = _mathHelper->getRandom(0.33f, 1.33f);
+		result = new cParticleObject(bullet, model, direction, position);
 		break;
 	default:
 		break;

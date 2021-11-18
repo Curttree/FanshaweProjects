@@ -10,6 +10,8 @@ cPlaneParticleContactGenerator ceilingGenerator(glm::vec3(0.f, -1.f, 0.f), -20.f
 cPlaneParticleContactGenerator wallGenerator(glm::vec3(1.f, 0.f, 0.f), -10.f);
 cPlaneParticleContactGenerator wall2Generator(glm::vec3(-1.f, 0.f, 0.f), -10.f);
 cPlaneParticleContactGenerator backWallGenerator(glm::vec3(0.f, 0.f, -1.f), -50.f);
+// Particle on Particle collisions
+cParticleParticleContactGenerator particleCollisionGenerator;
 
 
 cWorldSpace* cWorldSpace::_instance = 0;
@@ -22,12 +24,13 @@ cWorldSpace* cWorldSpace::Instance() {
 
 		//Initialize physics
 		_instance->_gravityGenerator = new cGravityGenerator(glm::vec3(0.0f, -9.81f, 0.0f));
-		_instance->_world = new cParticleWorld(1000);
+		_instance->_world = new cParticleWorld(500);
 		_instance->_world->AddContactContactGenerator(&groundGenerator);
 		_instance->_world->AddContactContactGenerator(&ceilingGenerator);
 		_instance->_world->AddContactContactGenerator(&wallGenerator);
 		_instance->_world->AddContactContactGenerator(&wall2Generator);
 		_instance->_world->AddContactContactGenerator(&backWallGenerator);
+		_instance->_world->AddContactContactGenerator(&particleCollisionGenerator);
 	}
 
 	return _instance;

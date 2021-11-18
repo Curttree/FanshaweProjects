@@ -191,6 +191,12 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         _position = worldSpace->getPositionInWorldSpace(g_cannonModel.orientationXYZ, cannonStartingPosition);
         InitProjectile(4, _direction, _position);
     }
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+    {
+        _direction = worldSpace->getPositionInWorldSpace(g_cannonModel.orientationXYZ, cannonStartingDirection);
+        _position = worldSpace->getPositionInWorldSpace(g_cannonModel.orientationXYZ, cannonStartingPosition);
+        InitProjectile(5, _direction, _position);
+    }
     if (key == GLFW_KEY_C && action == GLFW_PRESS)
     {
         captureCameraPosition();
@@ -351,13 +357,14 @@ int main(void)
     initCannon();
     initWalls();
     float timeElapsed = 0;
+    float max_deltaTime = 0.05f;    // Cap delta time in case the user leaves the window and comes back.
 
     while (!glfwWindowShouldClose(window))
     {
         CannonMotion();
         //        mat4x4 m, p, mvp;
         float currentTime = static_cast<float>(glfwGetTime());
-        float deltaTime = currentTime - previousTime;
+        float deltaTime = currentTime - previousTime <= max_deltaTime ? currentTime - previousTime : max_deltaTime;
         previousTime = currentTime;
 
         glfwGetFramebufferSize(window, &width, &height);
@@ -374,8 +381,8 @@ int main(void)
         // Screen is cleared and we are ready to draw the scene...
         // *******************************************************
 
-        worldSpace->_world->Update(deltaTime);
         updateProjPositions(projectileObjs);
+        worldSpace->_world->Update(deltaTime);
 
         // Safety, mostly for first frame
         if (deltaTime == 0.f)

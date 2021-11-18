@@ -9,14 +9,14 @@ cParticleObject::cParticleObject(cParticle* _particle, cModel* _model) {
 }
 
 cParticleObject::cParticleObject(sParticleTemplate* _particleTemp, cModel* _model, glm::vec3 direction, glm::vec3 position) {
-	particle = new cParticle(_particleTemp->mass,position);
+	particle = new cParticle(position,_particleTemp->density, _particleTemp->radius);
 	particle->SetVelocity(_particleTemp->muzzleVelocity * direction);
 	particle->SetDamping(_particleTemp->damping);
 	if (_particleTemp->accelerate) {
 		particle->SetAcceleration(direction * 2.f);		// Playing up acceleration so it is more obvious.
 	}
 	model = _model;
-	model->scale = _particleTemp->size;
+	model->scale = _particleTemp->radius * 2;
 	model->bOverriveVertexColourHACK = true;
 	model->vertexColourOverrideHACK = _particleTemp->colour;
 	distanceLimit = _particleTemp->distanceLimit;

@@ -6,6 +6,7 @@
 #define LASER_PROJ 2
 #define CANNON_PROJ 3
 #define ENERGY_PROJ 4
+#define RANDOM_SIZE_PROJ 5
 
 class cProjectileFactory {
 	public:

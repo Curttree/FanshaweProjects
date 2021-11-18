@@ -96,6 +96,9 @@
     <ClCompile Include="cParticleContact.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
+    <ClCompile Include="cParticleParticleContactGenerator.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\cShaderManager.h">
@@ -159,6 +162,9 @@
       <Filter>Physics\Headers</Filter>
     </ClInclude>
     <ClInclude Include="cPlaneParticleContactGenerator.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cParticleParticleContactGenerator.h">
       <Filter>Physics\Headers</Filter>
     </ClInclude>
   </ItemGroup>
