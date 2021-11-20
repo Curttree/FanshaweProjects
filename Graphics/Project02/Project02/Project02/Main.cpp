@@ -54,6 +54,8 @@ void Shutdown(GLFWwindow* pWindow){
 }
 
 int main(void) {
+    //Consider separating regions into separate methods as 'main' grows.
+    #pragma region Intialization
     // Initialize the window.
     GLFWwindow* pWindow;
     GLuint program = 0;     // 0 means "no shader program"
@@ -109,6 +111,9 @@ int main(void) {
     GLint matView_Location = glGetUniformLocation(program, "matView");
     GLint matProjection_Location = glGetUniformLocation(program, "matProjection");
     GLint matModelInverseTranspose_Location = glGetUniformLocation(program, "matModelInverseTranspose");
+    #pragma endregion
+
+    #pragma region Lights
 
     ::g_pTheLights->theLights[0].position = glm::vec4(-5000.0f, 10000.0f, 0.0f, 1.0f);
     ::g_pTheLights->theLights[0].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -130,9 +135,12 @@ int main(void) {
     // Get the uniform locations of the light shader values
     ::g_pTheLights->SetUpUniformLocations(program);
 
+    #pragma endregion
+
+    #pragma region Debug
     // Set up the debug sphere object
     ::g_pDebugSphere = new cMesh();
-    ::g_pDebugSphere->meshName = "Sphere_xyz_n_rgba.ply";
+    ::g_pDebugSphere->meshName = "Sphere_xyz_n_rgba_uv.ply";
     ::g_pDebugSphere->bIsWireframe = true;
     ::g_pDebugSphere->bUseObjectDebugColour = true;
     ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -141,12 +149,14 @@ int main(void) {
     ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[0].position;
     // Give this a friendly name
     ::g_pDebugSphere->friendlyName = "Debug Sphere";
-    // Then I could make a small function that searches for that name
+    #pragma endregion
 
+    #pragma region Models
     ::g_pVAOManager->setFilePath("assets/models/");
     std::vector<std::string> vecModelsToLoad;
-    vecModelsToLoad.push_back("Sphere_xyz_n_rgba.ply");
-    vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba.ply");
+    vecModelsToLoad.push_back("Sphere_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("Isosphere_Smooth_Normals.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -167,13 +177,14 @@ int main(void) {
             totalTrianglesLoaded += theModel.numberOfTriangles;
             totalVerticesLoaded += theModel.numberOfVertices;
         }
-    }//for (std::vector<std::string>::iterator itModel
-
+    }
 
     std::cout << "Done loading models." << std::endl;
     std::cout << "Total vertices loaded = " << totalVerticesLoaded << std::endl;
     std::cout << "Total triangles loaded = " << totalTrianglesLoaded << std::endl;
+    #pragma endregion
 
+    #pragma region Textures
     // Load the textures
     ::g_pTextureManager->SetBasePath("assets/textures");
 
@@ -191,9 +202,39 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("Lisse_mobile_shipyard-mal1.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Broc_tree_house.bmp", true);
 
+    // Add a skybox texture
+    std::string errorTextString;
+    ::g_pTextureManager->SetBasePath("assets/textures/cubemaps");
+    if (!::g_pTextureManager->CreateCubeTextureFromBMPFiles("WinterRiver",
+        "winterRiver_posX.bmp",    /* posX_fileName */
+        "winterRiver_negX.bmp",     /*negX_fileName */
+        "winterRiver_posY.bmp",       /*posY_fileName*/
+        "winterRiver_negY.bmp",     /*negY_fileName*/
+        "winterRiver_posZ.bmp",    /*posZ_fileName*/
+        "winterRiver_negZ.bmp",      /*negZ_fileName*/
+        true, errorTextString))
+    {
+        std::cout << "Didn't load because: " << errorTextString << std::endl;
+    }
+    else
+    {
+        std::cout << "Loaded the sunny day cube texture OK" << std::endl;
+    }
+    #pragma endregion
+
+#pragma region Objects
+    cMesh* pSkybox = new cMesh();
+
+        // Mimics a skybox
+    pSkybox->meshName = "Isosphere_Smooth_Normals.ply";
+    pSkybox->scale = 5'000'000.0f;
+
+    pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
+
+    ::g_vec_pMeshes.push_back(pSkybox);
+#pragma endregion
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
     double previousTime = glfwGetTime();
-
 
     while (!glfwWindowShouldClose(pWindow)) {
         float ratio;
@@ -229,9 +270,6 @@ int main(void) {
         ::g_pTheLights->CopyLightInfoToShader();
 
         ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[0].position;
-        // Place the "debug sphere" at the same location as the selected light (again)
-        // HACK: Debug sphere is 5th item added
-//        ::g_vecMeshes[5].positionXYZ = gTheLights.theLights[0].position;
 
         matProjection = glm::perspective(
             ::g_pFlyCamera->FOV,
@@ -239,28 +277,22 @@ int main(void) {
             ::g_pFlyCamera->nearPlane,      // Near plane (as large as possible)
             ::g_pFlyCamera->farPlane);      // Far plane (as small as possible)
 
-        //matProjection = glm::perspective(
-        //    0.6f,       // in degrees
-        //    ratio,
-        //    10.0f,       // Near plane (as large as possible)
-        //    1'000'000.0f);   // Far plane (as small as possible)
-
         ::g_pFlyCamera->Update(deltaTime);
 
         glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
         glm::vec3 cameraAt = ::g_pFlyCamera->getAtInWorldSpace();
         glm::vec3 cameraUp = ::g_pFlyCamera->getUpVector();
 
+        // Move the "skybox object" with the camera
+        pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
 
         matView = glm::mat4(1.0f);
         matView = glm::lookAt(cameraEye,   // "eye"
             cameraAt,    // "at"
             cameraUp);
 
-
         glUniformMatrix4fv(matView_Location, 1, GL_FALSE, glm::value_ptr(matView));
         glUniformMatrix4fv(matProjection_Location, 1, GL_FALSE, glm::value_ptr(matProjection));
-
 
         // **********************************************************************
         // Draw the "scene" of all objects.
@@ -286,9 +318,7 @@ int main(void) {
         // Scene is drawn
         // **********************************************************************   
 
-
         DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
-
 
         // "Present" what we've drawn.
         glfwSwapBuffers(pWindow);        // Show what we've drawn
@@ -299,7 +329,6 @@ int main(void) {
         // Handle OUR keyboard, mouse stuff
         handleAsyncKeyboard(pWindow, deltaTime);
         handleAsyncMouse(pWindow, deltaTime);
-
     }
 
     Shutdown(pWindow);
@@ -365,19 +394,9 @@ void DrawDebugObjects(
         std::string oldDebugSphereModel = ::g_pDebugSphere->meshName;
 
         const float LOW_RES_SPHERE_DISTANCE = 50.0f;
-        const std::string LOW_RES_SPHERE_MODEL = "ISO_Shphere_flat_3div_xyz_n_rgba.ply";
-        const std::string HIGH_RES_SPHERE_MODEL = "ISO_Shphere_flat_4div_xyz_n_rgba.ply";
+        const std::string LOW_RES_SPHERE_MODEL = "ISO_Sphere_flat_3div_xyz_n_rgba_uv.ply";
+        const std::string HIGH_RES_SPHERE_MODEL = "ISO_Sphere_flat_4div_xyz_n_rgba_uv.ply";
 
-        //float calcApproxDistFromAtten( 
-        //      float targetLightLevel, 
-        //      float accuracy, 
-        //      float infiniteDistance, 
-        //      float constAttenuation, 
-        //      float linearAttenuation,  
-        //      float quadraticAttenuation, 
-        //	    unsigned int maxIterations = DEFAULTMAXITERATIONS /*= 50*/ );
-
-                // How far away is 95% brightness?
         float distTo95Percent = ::g_pTheLights->lightHelper.calcApproxDistFromAtten(0.95f,    /* the target light level I want*/
             0.01f,    /*accuracy - how close to 0.25f*/
             10000.0f, /*infinity away*/
@@ -454,7 +473,6 @@ void DrawDebugObjects(
             matModelInverseTranspose_Location,
             program,
             ::g_pVAOManager);
-
 
         ::g_pDebugSphere->meshName = oldDebugSphereModel;
 

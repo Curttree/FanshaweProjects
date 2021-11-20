@@ -10,8 +10,8 @@
 
 #include "globals.h"
 
-float SPOTLIGHT_INNER = 10.f;
-float SPOTLIGHT_OUTER = 30.f;
+float SPOTLIGHT_INNER = 30.f;
+float SPOTLIGHT_OUTER = 50.f;
 
 // Function signature for DrawObject()
 void DrawObject(
@@ -129,7 +129,7 @@ int main(void) {
     ::g_pTheLights->theLights[0].param1.x = 1.0f;    // spot light
     ::g_pTheLights->theLights[0].param1.y = 10.0f;
     ::g_pTheLights->theLights[0].param1.z = 20.0f;
-    ::g_pTheLights->TurnOffLight(0);
+    ::g_pTheLights->TurnOnLight(0);
 
     ::g_pTheLights->theLights[1].position = glm::vec4(0.f, 25.f, 75.f, 1.f);
     ::g_pTheLights->theLights[1].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
@@ -139,7 +139,7 @@ int main(void) {
     ::g_pTheLights->theLights[1].param1.x = 1.0f;    // spot light
     ::g_pTheLights->theLights[1].param1.y = 10.0f;
     ::g_pTheLights->theLights[1].param1.z = 20.0f;
-    ::g_pTheLights->TurnOffLight(1);
+    ::g_pTheLights->TurnOnLight(1);
 
     ::g_pTheLights->theLights[2].position = glm::vec4(0.f, 24.f, 125.f, 1.f);
     ::g_pTheLights->theLights[2].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
@@ -149,7 +149,7 @@ int main(void) {
     ::g_pTheLights->theLights[2].param1.x = 1.0f;    // spot light
     ::g_pTheLights->theLights[2].param1.y = 10.0f;
     ::g_pTheLights->theLights[2].param1.z = 20.0f;
-    ::g_pTheLights->TurnOffLight(2);
+    ::g_pTheLights->TurnOnLight(2);
 
     ::g_pTheLights->theLights[3].position = glm::vec4(0.f, 24.f, 175.f, 1.f);
     ::g_pTheLights->theLights[3].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
@@ -159,7 +159,7 @@ int main(void) {
     ::g_pTheLights->theLights[3].param1.x = 1.0f;    // spot light
     ::g_pTheLights->theLights[3].param1.y = 10.0f;
     ::g_pTheLights->theLights[3].param1.z = 20.0f;
-    ::g_pTheLights->TurnOffLight(3);
+    ::g_pTheLights->TurnOnLight(3);
 
     ::g_pTheLights->theLights[4].position = glm::vec4(10.f, 365.f, 500.f, 1.f);
     ::g_pTheLights->theLights[4].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
@@ -169,7 +169,7 @@ int main(void) {
     ::g_pTheLights->theLights[4].param1.x = 0.0f;    // point light
     ::g_pTheLights->theLights[4].param1.y = 1.0f;
     ::g_pTheLights->theLights[4].param1.z = 100.0f;
-    ::g_pTheLights->TurnOffLight(4);
+    ::g_pTheLights->TurnOnLight(4);
 
     // HARD SPOT LIGHT
     ::g_pTheLights->theLights[5].position = glm::vec4(0.f, 200.f, 600.f, 1.f);

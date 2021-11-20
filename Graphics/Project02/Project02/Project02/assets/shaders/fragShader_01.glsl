@@ -72,8 +72,15 @@ uniform sampler2D texture_05;		// GL_TEXTURE_2D
 uniform sampler2D texture_06;		// GL_TEXTURE_2D
 uniform sampler2D texture_07;		// GL_TEXTURE_2D
 
-uniform vec4 textureRatios0to3;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
-uniform vec4 textureRatios4to7;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
+uniform vec4 texture2D_Ratios0to3;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
+uniform vec4 texture2D_Ratios4to7;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
+
+// Cube maps for skybox, etc.
+uniform samplerCube cubeMap_00;			// Tropical day time
+uniform samplerCube cubeMap_01;			// Tropical night time
+uniform samplerCube cubeMap_02;
+uniform samplerCube cubeMap_03;
+uniform vec4 cubeMap_Ratios0to3;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
 
 // Skybox or reflection or light probe
 uniform samplerCube skyBox;			// GL_TEXTURE_CUBE_MAP
@@ -85,6 +92,13 @@ void main()
 	
 	// HACK: See if the UV coordinates are actually being passed in
 	pixelColour = vec4(0.0f, 0.0f, 0.0, 1.0f); 
+	
+	// HACK:
+	vec4 cubeColourSample;
+	cubeColourSample.rgb = texture( cubeMap_00, fNormal.xyz ).rgb;
+
+	pixelColour.rgb = cubeColourSample.rgb;
+	return;
 	
 	// Copy model vertex colours?
 	vec4 vertexDiffuseColour = fVertexColour;
@@ -114,10 +128,10 @@ void main()
 	vertexDiffuseColour.rgb *= 0.0001f;
 
 	vertexDiffuseColour.rgb += 	
-			(texture( texture_00, fUVx2.xy ).rgb * textureRatios0to3.x)  + 
-		    (texture( texture_01, fUVx2.xy ).rgb * textureRatios0to3.y)  + 
-			(texture( texture_02, fUVx2.xy ).rgb * textureRatios0to3.z)  + 
-			(texture( texture_03, fUVx2.xy ).rgb * textureRatios0to3.w);
+			(texture( texture_00, fUVx2.xy ).rgb * texture2D_Ratios0to3.x)  + 
+		    (texture( texture_01, fUVx2.xy ).rgb * texture2D_Ratios0to3.y)  + 
+			(texture( texture_02, fUVx2.xy ).rgb * texture2D_Ratios0to3.z)  + 
+			(texture( texture_03, fUVx2.xy ).rgb * texture2D_Ratios0to3.w);
 			// + etc... the other 4 texture units
 	
 	vec4 outColour = calcualteLightContrib( vertexDiffuseColour.rgb,		

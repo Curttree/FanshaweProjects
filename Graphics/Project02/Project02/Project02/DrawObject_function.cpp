@@ -19,12 +19,15 @@ void GLFW_window_size_callback(GLFWwindow* window, int width, int height)
 
 // HACK: We shouldn't do the getUniformLocation every frame.
 //  These don't change, so we should store them outside    
-void SetUpTextures(GLuint shaderProgram)
+void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
 {
+
     //*****************************************************************************************
+    if (pCurrentMesh->textureRatios[0] >= 0.0f)
     {
         // uniform sampler2D texture_00;
-        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Fauci.bmp");
+//        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Fauci.bmp");
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[0]);
 
         GLuint textureUnit = 0;			// Texture unit go from 0 to 79
         glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
@@ -37,9 +40,11 @@ void SetUpTextures(GLuint shaderProgram)
     //*****************************************************************************************
 
     //*****************************************************************************************
+    if (pCurrentMesh->textureRatios[1] >= 0.0f)
     {
         // uniform sampler2D texture_01;
-        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Pebbleswithquarzite.bmp");
+        //GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Pebbleswithquarzite.bmp");
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[1]);
 
         GLuint textureUnit = 1;			// Texture unit go from 0 to 79
         glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
@@ -52,9 +57,11 @@ void SetUpTextures(GLuint shaderProgram)
     //*****************************************************************************************
 
     //*****************************************************************************************
+    if (pCurrentMesh->textureRatios[2] >= 0.0f)
     {
         // uniform sampler2D texture_01;
-        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Lisse_mobile_shipyard-mal1.bmp");
+//        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Lisse_mobile_shipyard-mal1.bmp");
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[2]);
 
         GLuint textureUnit = 2;			// Texture unit go from 0 to 79
         glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
@@ -67,9 +74,10 @@ void SetUpTextures(GLuint shaderProgram)
     //*****************************************************************************************    
 
     //*****************************************************************************************
-    {
+    if (pCurrentMesh->textureRatios[3] >= 0.0f) {
         // uniform sampler2D texture_01;
-        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Broc_tree_house.bmp");
+//        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Broc_tree_house.bmp");
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
 
         GLuint textureUnit = 3;			// Texture unit go from 0 to 79
         glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
@@ -80,6 +88,35 @@ void SetUpTextures(GLuint shaderProgram)
         glUniform1i(texture_03_LocID, textureUnit);
     }
     //*****************************************************************************************    
+
+    // Set all the texture ratios in the shader
+    GLint textureRatios0to3_LocID = glGetUniformLocation(shaderProgram, "texture2D_Ratios0to3");
+    // Set them
+    glUniform4f(textureRatios0to3_LocID,
+        pCurrentMesh->textureRatios[0],
+        pCurrentMesh->textureRatios[1],
+        pCurrentMesh->textureRatios[2],
+        pCurrentMesh->textureRatios[3]);
+
+    {
+        //GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("WinterRiver");
+
+        // Be careful that you don't mix up the 2D and the cube assignments for the texture units
+        //
+        // Here, I'll say that the cube maps start at texture unit 40
+        //
+        GLuint textureUnit = 40;			// Texture unit go from 0 to 79
+        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+
+        // ***NOTE*** Binding to a CUBE MAP not a 2D Texture
+        glBindTexture(GL_TEXTURE_CUBE_MAP, TextureNumber);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint cubeMap_00_LocID = glGetUniformLocation(shaderProgram, "cubeMap_00");
+        glUniform1i(cubeMap_00_LocID, textureUnit);
+
+    }
 
     return;
 }

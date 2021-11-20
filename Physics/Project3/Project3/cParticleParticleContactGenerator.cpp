@@ -22,7 +22,7 @@ size_t cParticleParticleContactGenerator::AddContact(cParticleContact* contact, 
 	for (int x = 0; x < particles.size() - 1; x++) {
 		for (int y = x + 1; y < particles.size(); y++) {
 			combinedRadius = particles[x]->GetRadius() + particles[y]->GetRadius();
-			contactVector = glm::abs(particles[x]->GetPosition() - particles[y]->GetPosition());
+			contactVector = particles[x]->GetPosition() - particles[y]->GetPosition();
 			// Check if the positions of each particle are less than the combined radius of the two particles.
 			if (glm::length(contactVector) <= combinedRadius) {
 				// This contact will simulate particle x colliding with particle y

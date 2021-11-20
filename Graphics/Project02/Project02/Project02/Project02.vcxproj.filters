@@ -34,6 +34,9 @@
     <Filter Include="Input">
       <UniqueIdentifier>{bfd51c49-9dea-4d7e-a05f-3074cd08fe12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\TextureManager">
+      <UniqueIdentifier>{483ead0b-85e7-4bac-9985-22844b3580b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -90,6 +93,18 @@
     <ClCompile Include="DrawObject_function.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TextureMapping\C24BitBMPpixel.cpp">
+      <Filter>Graphics\TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureMapping\cBasicTextureManager.cpp">
+      <Filter>Graphics\TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureMapping\CTextureFromBMP.cpp">
+      <Filter>Graphics\TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureMapping\lodepng.cpp">
+      <Filter>Graphics\TextureManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -124,6 +139,18 @@
     </ClInclude>
     <ClInclude Include="cMesh.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureMapping\C24BitBMPpixel.h">
+      <Filter>Graphics\TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureMapping\cBasicTextureManager.h">
+      <Filter>Graphics\TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureMapping\CTextureFromBMP.h">
+      <Filter>Graphics\TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureMapping\lodepng.h">
+      <Filter>Graphics\TextureManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

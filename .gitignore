@@ -355,3 +355,6 @@ MigrationBackup/
 
 # Zip files
 *.zip
+
+# Executable
+*.exe
