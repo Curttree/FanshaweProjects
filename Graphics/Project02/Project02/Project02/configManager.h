@@ -22,10 +22,13 @@
 class configManager {
 public:
 	rapidjson::Document _actors;
+	rapidjson::Document _objects;
 	rapidjson::Document _sceneDescription;
 	glm::vec3 _cameraStartingPosition;
 	glm::vec3 _bodyPosition;
+	glm::vec3 _rinkPosition = glm::vec3(0.f);
 	std::vector<cMesh*> _audience;
+	std::vector<cMesh*> _rink;
 	cMesh* _body;
 	std::vector<sModelDrawInfo> _modelDrawInfo;
 	configManager(); 
@@ -38,6 +41,6 @@ private:
 	rapidjson::Document readJSONFile(std::string fileName);
 	void initCamera();
 	void initBody();
-	void initAudience();
-	cMesh* initMesh(std::string actorName, bool isAlive = true);
+	void initRink();
+	cMesh* initMesh(std::string meshName);
 };

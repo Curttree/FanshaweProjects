@@ -2,11 +2,11 @@
 
 configManager::configManager() {
     _actors = readJSONFile("actors.json");
+    _objects = readJSONFile("objects.json");
     _sceneDescription = readJSONFile("scene.json");
     if (!_actors.HasParseError() && !_sceneDescription.HasParseError()) {
         initCamera();
-        initBody();
-        initAudience();
+        initRink();
     }
 }
 
@@ -51,7 +51,7 @@ void configManager::initBody() {
         _bodyPosition = glm::vec3(0.f, 0.f, 0.f);
     }
     if (_sceneDescription.HasMember("DeadBody") && _sceneDescription["DeadBody"].HasMember("Actor")) {
-        _body = initMesh(_sceneDescription["DeadBody"]["Actor"].GetString(),false);
+        _body = initMesh(_sceneDescription["DeadBody"]["Actor"].GetString());
     }
     if (_sceneDescription.HasMember("DeadBody") && _sceneDescription["DeadBody"].HasMember("Radius")) {
         _radius = _sceneDescription["DeadBody"]["Radius"].GetFloat();
@@ -61,26 +61,11 @@ void configManager::initBody() {
     }
 }
 
-cMesh* configManager::initMesh(std::string actorName, bool isAlive) {
+cMesh* configManager::initMesh(std::string meshName) {
     cMesh* result = new cMesh();
-    if (_actors.HasMember(actorName.c_str())) {
-        if (isAlive) {
-            result->meshName = _actors[actorName.c_str()]["AliveModel"].GetString();
-        }
-        else {
-            result->meshName = _actors[actorName.c_str()]["DeadModel"].GetString();
-            result->positionXYZ = _bodyPosition;
-            // Rotate body so it is laying down on it's back.
-            result->orientationXYZ.z = 1.571f;
-            result->orientationXYZ.y = 1.571f;
-        }
-        if (_actors[actorName.c_str()].HasMember("Scale")) {
-            result->scale = _actors[actorName.c_str()]["Scale"].GetFloat();
-        }
+    if (_objects.HasMember(meshName.c_str())) {
+        result->meshName = _objects[meshName.c_str()]["Model"].GetString();
     }
-    // By default, all mesh objects will have their colors set by the program, and will be filled.
-    result->bUseWholeObjectDiffuseColour = true;
-    result->bIsWireframe = false;
 
     // Check to see if we already have the model flagged to be loaded.
     if (std::find(_modelsToLoad.begin(), _modelsToLoad.end(), result->meshName) == _modelsToLoad.end())
@@ -91,21 +76,23 @@ cMesh* configManager::initMesh(std::string actorName, bool isAlive) {
     return result;
 }
 
-void configManager::initAudience() {
-    if (_sceneDescription.HasMember("Audience")) {
-        rapidjson::GenericArray<false,rapidjson::Value> list = _sceneDescription["Audience"].GetArray();
-        std::string answer;
-        const float pi = 3.14159265358979323846f;       // Approx value of pi for calculation (can replace with value from math library if require additional precision).
-        float test;
-        cMesh* actor = new cMesh();
-        for (rapidjson::SizeType current = 0; current < list.Size(); current++)
-        {
-            actor = initMesh(_sceneDescription["Audience"][current].GetString());
-            // Determine relative position to the body using mathematical formula for equidistant points on a circle.
-            actor->positionXYZ.x = _bodyPosition.x - _bodyHeight/2 + _radius * cos(2 * pi * current /list.Size());     // Since center of gravity for the model is seemingly located at the foot of the model, offset x to try to centralize the body.
-            actor->positionXYZ.z = _bodyPosition.z + _radius * sin(2 * pi * current / list.Size());
-            actor->orientationXYZ.y = (1.5 * pi) - (float)(current) / list.Size() * (2.f * pi);    // Rotate around y axis so they are roughly facing the center of the circle. 1st actor required a rotation of 1.5 pi, others should be rotated accordingly based on their placement.
-            _audience.push_back(actor);
+void configManager::initRink() {
+    if (_sceneDescription.HasMember("Rink")) {
+        if (_sceneDescription["Rink"].HasMember("Position")) {
+            float x, y, z;
+            x = _sceneDescription["Rink"]["Position"]["x"].GetFloat();
+            y = _sceneDescription["Rink"]["Position"]["y"].GetFloat();
+            z = _sceneDescription["Rink"]["Position"]["z"].GetFloat();
+            _rinkPosition = glm::vec3(x, y, z);
+        }
+        if (_sceneDescription["Rink"].HasMember("Components")) {
+            rapidjson::GenericArray<false, rapidjson::Value> list = _sceneDescription["Rink"]["Components"].GetArray();
+            cMesh* component = new cMesh();
+            for (rapidjson::SizeType current = 0; current < list.Size(); current++) {
+                component = initMesh(_sceneDescription["Rink"]["Components"][current].GetString());
+                component->positionXYZ = _rinkPosition; 
+                _rink.push_back(component);
+            }
         }
     }
 }

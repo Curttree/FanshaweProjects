@@ -14,16 +14,20 @@
 		"z": 0.0
 	  }
   },
-  "Audience": [
-    "Warrior",
-    "Archer",
-    "Mage",
-    "Mage",
-    "Warrior",
-    "Archer",
-    "Minion",
-    "Warrior",
-    "Mage",
-    "Minion"
+  "Rink":{
+  "Position": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "Components": [
+    "Boards",
+    "Concrete",
+    "Glass",
+    "GoalPosts",
+    "Ice",
+    "Netting",
+    "Railings"
   ]
+  }	
 }

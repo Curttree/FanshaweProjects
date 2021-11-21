@@ -228,8 +228,7 @@ int main(void) {
 
     ::g_pConfigManager->loadAudienceIntoVAO(program, *::g_pVAOManager);
 
-    ::g_vec_pMeshes = ::g_pConfigManager->_audience;
-    ::g_vec_pMeshes.push_back(::g_pConfigManager->_body);
+    ::g_vec_pMeshes = ::g_pConfigManager->_rink;
 
     cMesh* pSkybox = new cMesh();
 
@@ -313,7 +312,6 @@ int main(void) {
             cMesh* pCurrentMesh = ::g_vec_pMeshes[index];
 
             matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
-            //mat4x4_identity(m);
 
             DrawObject(pCurrentMesh,
                 matModel,
