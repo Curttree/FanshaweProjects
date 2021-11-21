@@ -37,6 +37,9 @@
     <Filter Include="Graphics\TextureManager">
       <UniqueIdentifier>{483ead0b-85e7-4bac-9985-22844b3580b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Configuration">
+      <UniqueIdentifier>{32723387-8e8f-4685-b6f2-5c5a95d9037d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -105,6 +108,9 @@
     <ClCompile Include="TextureMapping\lodepng.cpp">
       <Filter>Graphics\TextureManager</Filter>
     </ClCompile>
+    <ClCompile Include="configManager.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -151,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="TextureMapping\lodepng.h">
       <Filter>Graphics\TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="configManager.h">
+      <Filter>Configuration</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

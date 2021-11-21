@@ -10,6 +10,7 @@
 #include "TextureMapping/cBasicTextureManager.h"
 #include "cMesh.h"
 #include <vector>
+#include "configManager.h"
 
 
 // These are all things that are "project global", 
@@ -37,6 +38,7 @@ extern cFlyCamera* g_pFlyCamera; // = NULL;
 // ************************************************
 
 
+extern configManager* g_pConfigManager;
 
 extern cVAOManager* g_pVAOManager;
 extern cShaderManager* g_pShaderManager;

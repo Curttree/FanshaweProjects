@@ -13,5 +13,7 @@ bool g_ShutDown(GLFWwindow* pWindow)
 
 	delete ::g_pTextureManager;
 
+	delete ::g_pConfigManager;
+
 	return true;
 }

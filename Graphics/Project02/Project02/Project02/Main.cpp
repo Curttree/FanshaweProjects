@@ -99,6 +99,7 @@ int main(void) {
 
     ::g_StartUp(pWindow);
 
+    ::g_pFlyCamera->setEye(::g_pConfigManager->_cameraStartingPosition);
 
     cShaderManager::cShader vertShader;
     cShaderManager::cShader fragShader;
@@ -223,15 +224,23 @@ int main(void) {
     #pragma endregion
 
 #pragma region Objects
+    //TODO: Remove temp loading of objects, replace with actual loading functions
+
+    ::g_pConfigManager->loadAudienceIntoVAO(program, *::g_pVAOManager);
+
+    ::g_vec_pMeshes = ::g_pConfigManager->_audience;
+    ::g_vec_pMeshes.push_back(::g_pConfigManager->_body);
+
     cMesh* pSkybox = new cMesh();
 
-        // Mimics a skybox
+    // Mimics a skybox
     pSkybox->meshName = "Isosphere_Smooth_Normals.ply";
     pSkybox->scale = 5'000'000.0f;
 
     pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
 
     ::g_vec_pMeshes.push_back(pSkybox);
+
 #pragma endregion
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
     double previousTime = glfwGetTime();

@@ -2,15 +2,11 @@
 
 cFlyCamera* g_pFlyCamera = NULL;
 
-//glm::vec3 g_cameraEye = glm::vec3(0.0f, 0.0f, +4.0f);
-//glm::vec3 g_cameraAt = glm::vec3(0.0f, 0.0f, 0.0f);
-
 cVAOManager* g_pVAOManager = NULL;
 cShaderManager* g_pShaderManager = NULL;
-
 cLightManager* g_pTheLights = NULL; 
-
 cBasicTextureManager* g_pTextureManager = NULL;
+configManager* g_pConfigManager = NULL;
 
 std::vector< cMesh* > g_vec_pMeshes; 
 

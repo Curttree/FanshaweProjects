@@ -1,0 +1,29 @@
+{
+  "Camera": {
+    "x": -6.0,
+    "y": 6.0,
+    "z": -10.0
+  },
+  "DeadBody": {
+	  "Actor":"Minion",
+	  "Height": 1.5,
+	  "Radius": 4.0,
+	  "Position": {
+		"x": 0.0,
+		"y": 0.25,
+		"z": 0.0
+	  }
+  },
+  "Audience": [
+    "Warrior",
+    "Archer",
+    "Mage",
+    "Mage",
+    "Warrior",
+    "Archer",
+    "Minion",
+    "Warrior",
+    "Mage",
+    "Minion"
+  ]
+}
