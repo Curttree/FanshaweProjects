@@ -214,9 +214,9 @@ int main(void) {
         "winterRiver_posX.bmp",    /* posX_fileName */
         "winterRiver_negX.bmp",     /*negX_fileName */
         "winterRiver_posY.bmp",       /*posY_fileName*/
-        "winterRiver_negY.bmp",     /*negY_fileName*/
-        "winterRiver_posZ.bmp",    /*posZ_fileName*/
-        "winterRiver_negZ.bmp",      /*negZ_fileName*/
+        "winterRiver2_negY.bmp",     /*negY_fileName*/
+        "winterRiver2_posZ.bmp",    /*posZ_fileName*/
+        "winterRiver2_negZ.bmp",      /*negZ_fileName*/
         true, errorTextString))
     {
         std::cout << "Didn't load because: " << errorTextString << std::endl;

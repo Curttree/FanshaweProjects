@@ -134,6 +134,12 @@ void configManager::initProps() {
                     z = _sceneDescription["Props"][current]["Position"]["z"].GetFloat();
                     component->positionXYZ = glm::vec3(x, y, z);
             }
+            if (_sceneDescription["Props"][current].HasMember("Orientation")) {
+                x = glm::radians(_sceneDescription["Props"][current]["Orientation"]["x"].GetFloat());
+                y = glm::radians(_sceneDescription["Props"][current]["Orientation"]["y"].GetFloat());
+                z = glm::radians(_sceneDescription["Props"][current]["Orientation"]["z"].GetFloat());
+                component->orientationXYZ = glm::vec3(x, y, z);
+            }
             //TODO: Right now we push the props to the rink vector. Decide if I want to track a separate prop vector.
             _rink.push_back(component);
         }
