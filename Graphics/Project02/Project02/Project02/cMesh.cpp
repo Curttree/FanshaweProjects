@@ -33,6 +33,8 @@ cMesh::cMesh()
 	this->m_UniqueID = cMesh::m_NextID;
 	cMesh::m_NextID++;
 
+	this->textureNames[0] = "ice.bmp";
+	this->textureRatios[0] = 1.0f;
 }
 
 

@@ -125,8 +125,8 @@ int main(void) {
 //					// 2 = directional light
 //    ::g_pTheLights->theLights[0].param1.x = 1.0f;    // Spot light
     ::g_pTheLights->theLights[0].param1.x = 2.0f;    // Directional light
-    ::g_pTheLights->theLights[0].direction = glm::vec4(0.f, -1.f, 0.f, 1.0f);
-    ::g_pTheLights->theLights[0].diffuse = glm::vec4(0.9922f, 0.9843f, 0.8275f, 1.0f);
+    ::g_pTheLights->theLights[0].direction = glm::normalize(glm::vec4(1.f, -0.5f, -.1f, 1.0f));
+    ::g_pTheLights->theLights[0].diffuse = glm::vec4(0.82745f, 0.8235f, 0.8156f, 1.0f);
     ::g_pTheLights->theLights[0].param1.y = 15.0f;   // Inner
     ::g_pTheLights->theLights[0].param1.z = 30.0f;   // Outer
     ::g_pTheLights->theLights[0].atten.y = 0.000001f;
@@ -193,19 +193,9 @@ int main(void) {
     // Load the textures
     ::g_pTextureManager->SetBasePath("assets/textures");
 
-    if (::g_pTextureManager->Create2DTextureFromBMPFile("Fauci.bmp", true))
-        //if (::g_pTextureManager->Create2DTextureFromBMPFile("Pebbleswithquarzite.bmp", true))
-    {
-        std::cout << "Loaded the texture" << std::endl;
+    for (std::string texture : ::g_pConfigManager->_texturesToLoad) {
+        ::g_pTextureManager->Create2DTextureFromBMPFile(texture, true);
     }
-    else
-    {
-        std::cout << "DIDN'T load the texture" << std::endl;
-    }
-
-    ::g_pTextureManager->Create2DTextureFromBMPFile("Pebbleswithquarzite.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("Lisse_mobile_shipyard-mal1.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("Broc_tree_house.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;
@@ -230,7 +220,7 @@ int main(void) {
 #pragma region Objects
     //TODO: Remove temp loading of objects, replace with actual loading functions
 
-    ::g_pConfigManager->loadAudienceIntoVAO(program, *::g_pVAOManager);
+    ::g_pConfigManager->loadModelsIntoVAO(program, *::g_pVAOManager);
 
     ::g_vec_pMeshes = ::g_pConfigManager->_rink;
 
@@ -241,8 +231,6 @@ int main(void) {
     pSkybox->scale = 5'000'000.0f;
 
     pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
-
-    ::g_vec_pMeshes.push_back(pSkybox);
 
 #pragma endregion
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
@@ -297,9 +285,6 @@ int main(void) {
         glm::vec3 cameraAt = ::g_pFlyCamera->getAtInWorldSpace();
         glm::vec3 cameraUp = ::g_pFlyCamera->getUpVector();
 
-        // Move the "skybox object" with the camera
-        pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
-
         matView = glm::mat4(1.0f);
         matView = glm::lookAt(cameraEye,   // "eye"
             cameraAt,    // "at"
@@ -334,6 +319,20 @@ int main(void) {
         #if defined _DEBUG
         DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
         #endif
+
+        // After drawing the other objects, draw the skybox to limit overdraw.
+
+        GLint bIsSkyBox_LocID = glGetUniformLocation(program, "bIsSkyBox");
+        glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_TRUE);
+
+        // Move the "skybox object" with the camera
+        pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
+        DrawObject(
+            pSkybox, glm::mat4(1.0f),
+            matModel_Location, matModelInverseTranspose_Location,
+            program, ::g_pVAOManager);
+
+        glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_FALSE);
 
         // "Present" what we've drawn.
         glfwSwapBuffers(pWindow);        // Show what we've drawn

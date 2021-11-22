@@ -40,29 +40,6 @@ void configManager::initCamera() {
     }
 }
 
-void configManager::initBody() {
-    if (_sceneDescription.HasMember("DeadBody") && _sceneDescription["DeadBody"].HasMember("Position")) {
-        float x, y, z;
-        x = _sceneDescription["DeadBody"]["Position"]["x"].GetFloat();
-        y = _sceneDescription["DeadBody"]["Position"]["y"].GetFloat();
-        z = _sceneDescription["DeadBody"]["Position"]["z"].GetFloat();
-        _bodyPosition = glm::vec3(x, y, z);
-    }
-    else {
-        // Fall back to default start position if no camera info has been provided.
-        _bodyPosition = glm::vec3(0.f, 0.f, 0.f);
-    }
-    if (_sceneDescription.HasMember("DeadBody") && _sceneDescription["DeadBody"].HasMember("Actor")) {
-        _body = initMesh(_sceneDescription["DeadBody"]["Actor"].GetString());
-    }
-    if (_sceneDescription.HasMember("DeadBody") && _sceneDescription["DeadBody"].HasMember("Radius")) {
-        _radius = _sceneDescription["DeadBody"]["Radius"].GetFloat();
-    }
-    if (_sceneDescription.HasMember("DeadBody") && _sceneDescription["DeadBody"].HasMember("Height")) {
-        _bodyHeight = _sceneDescription["DeadBody"]["Height"].GetFloat();
-    }
-}
-
 cMesh* configManager::initMesh(std::string meshName, int source) {
     cMesh* result = new cMesh();
     if (source == PROP) {
@@ -73,6 +50,9 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
             }
             if (_objects[meshName.c_str()].HasMember("Scale")) {
                 result->scale = _objects[meshName.c_str()]["Scale"].GetFloat();
+            }
+            if (_objects[meshName.c_str()].HasMember("Texture0")) {
+                result->textureNames[0] = _objects[meshName.c_str()]["Texture0"].GetString();
             }
         }
     }
@@ -85,6 +65,9 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
             if (_actors[meshName.c_str()].HasMember("Scale")) {
                 result->scale = _actors[meshName.c_str()]["Scale"].GetFloat();
             }
+            if (_actors[meshName.c_str()].HasMember("Texture0")) {
+                result->textureNames[0] = _actors[meshName.c_str()]["Texture0"].GetString();
+            }
         }
     }
 
@@ -92,6 +75,12 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
     if (result->meshName != "" && std::find(_modelsToLoad.begin(), _modelsToLoad.end(), result->meshName) == _modelsToLoad.end())
     {
         _modelsToLoad.push_back(result->meshName);
+    }
+
+    for (std::string name : result->textureNames) {
+        if (name != "" && std::find(_texturesToLoad.begin(), _texturesToLoad.end(), name) == _texturesToLoad.end()) {
+            _texturesToLoad.push_back(name);
+        }
     }
 
     return result;
@@ -167,7 +156,7 @@ void configManager::initActors() {
     }
 }
 
-void configManager::loadAudienceIntoVAO(GLuint program, cVAOManager& gVAOManager) {
+void configManager::loadModelsIntoVAO(GLuint program, cVAOManager& gVAOManager) {
     sModelDrawInfo currentModel;
 
     for (size_t x = 0; x < _modelsToLoad.size(); x++) {

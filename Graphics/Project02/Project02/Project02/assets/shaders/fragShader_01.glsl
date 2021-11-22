@@ -82,8 +82,14 @@ uniform samplerCube cubeMap_02;
 uniform samplerCube cubeMap_03;
 uniform vec4 cubeMap_Ratios0to3;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
 
-// Skybox or reflection or light probe
-uniform samplerCube skyBox;			// GL_TEXTURE_CUBE_MAP
+// if true, then we only sample from the cubeMaps (skyboxes)
+uniform bool bIsSkyBox;
+
+// If this is true, then we will sample the "discardTexture" to 
+//	perform a discard on that pixel
+// (we could also do a change in the transparency, or something)
+uniform sampler2D discardTexture;		
+uniform bool bDiscardTransparencyWindowsOn;
 
 void main()
 {
@@ -93,12 +99,49 @@ void main()
 	// HACK: See if the UV coordinates are actually being passed in
 	pixelColour = vec4(0.0f, 0.0f, 0.0, 1.0f); 
 	
-	// HACK:
-	vec4 cubeColourSample;
-	cubeColourSample.rgb = texture( cubeMap_00, fNormal.xyz ).rgb;
+	if ( bIsSkyBox )
+	{
+		// For some reason if the cube map isn't actaully set to 
+		//	a texture unit, it returns black when combined with other cubemaps
+		//		pixelColour.rgb = 
+		//			( texture( cubeMap_00, fNormal.xyz ).rgb * cubeMap_Ratios0to3.x ) + 
+		//			( texture( cubeMap_01, fNormal.xyz ).rgb * cubeMap_Ratios0to3.y ) +
+		//			( texture( cubeMap_02, fNormal.xyz ).rgb * cubeMap_Ratios0to3.z ) + 
+		//			( texture( cubeMap_03, fNormal.xyz ).rgb * cubeMap_Ratios0to3.w );	
+		//
+		//	So here's an alternative work around version:
+		//
+		pixelColour.rgba = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
-	pixelColour.rgb = cubeColourSample.rgb;
-	return;
+		if ( cubeMap_Ratios0to3.x > 0.0f )
+		{
+			pixelColour.rgb += texture( cubeMap_00, fNormal.xyz ).rgb * cubeMap_Ratios0to3.x;
+		}
+
+		return;	
+	}//if ( bIsSkyBox )
+
+
+	// Perform a discard transparency action for the "windows"
+	if (bDiscardTransparencyWindowsOn)
+	{
+		pixelColour.r += 1.0f;
+		return;
+
+		// Note I'm only sampling from red because I just want 
+		//	to see if it's "black-ish" coloured...
+		vec3 vec3DisSample = texture( discardTexture, fUVx2.xy ).rgb;
+		// Take average of this RGB sample
+		float discardSample = (vec3DisSample.r + vec3DisSample.g + vec3DisSample.b)/3.0f;
+		//
+		if (discardSample < 0.1f )
+		{	// "black enough"
+
+			// DON'T even draw the pixel here
+			// The fragment shader simply stops here
+			discard;
+		}
+	}// if (bDiscardTransWindowsOn)
 	
 	// Copy model vertex colours?
 	vec4 vertexDiffuseColour = fVertexColour;
@@ -182,7 +225,7 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 			float dotProduct = dot( -theLights[index].direction.xyz,  
 									   normalize(norm.xyz) );	// -1 to 1
 
-			dotProduct = max( 0.0f, dotProduct );		// 0 to 1
+			dotProduct = max( 0.33f, dotProduct );		// Set lower limit as 33% so shadows are softer.
 		
 			lightContrib *= dotProduct;		
 			

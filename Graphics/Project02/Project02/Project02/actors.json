@@ -1,5 +1,6 @@
 {"Dummy":{
   "Model":"RedPlayer.ply",
-  "Scale":2
+  "Scale":2,
+  "Texture0":"RedFill.bmp"
   }
 }

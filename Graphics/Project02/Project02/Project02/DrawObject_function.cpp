@@ -116,6 +116,23 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         GLint cubeMap_00_LocID = glGetUniformLocation(shaderProgram, "cubeMap_00");
         glUniform1i(cubeMap_00_LocID, textureUnit);
 
+    } 
+
+    {   // Set up the blend values for the skyboxes
+        GLint cubeMap_Ratios0to3_LocID = glGetUniformLocation(shaderProgram, "cubeMap_Ratios0to3");
+
+        float howMuch_cubeMap_00 = 1.0f;
+        float howMuch_cubeMap_01 = 0.0f;
+        float howMuch_cubeMap_02 = 0.0f;
+        float howMuch_cubeMap_03 = 0.0f;
+
+        // Blend the maps (we are currently only using the first one).
+        glUniform4f(
+            cubeMap_Ratios0to3_LocID,
+            howMuch_cubeMap_00,       
+            howMuch_cubeMap_01,       
+            howMuch_cubeMap_02,
+            howMuch_cubeMap_03);
     }
 
     return;

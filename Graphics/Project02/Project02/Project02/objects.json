@@ -1,43 +1,52 @@
 {
   "Boards":{
   "Model":"boards.ply",
-  "Scale":10.0
+  "Scale":10.0,
+  "Texture0":"glass.bmp"
   },
   "Concrete":{
   "Model":"concrete.ply",
-  "Scale":10.0
+  "Scale":10.0,
+  "Texture0":"concrete.bmp"
   },
   "Glass":{
   "Model":"glass.ply",
   "Scale":10.0,
-  "AlphaTransparency":0.3
+  "AlphaTransparency":0.1,
+  "Texture0":"glass.bmp"
   },
   "GoalPosts":{
   "Model":"goalposts.ply",
-  "Scale":10.0
+  "Scale":10.0,
+  "Texture0":"BrightColouredUVMap.bmp"
   },
   "Ice":{
   "Model":"just_ice.ply",
-  "Scale":10.0
+  "Scale":10.0,
+  "Texture0":"ice.bmp"
   },
   "Netting":{
   "Model":"netting.ply",
-  "Scale":10.0
+  "Scale":10.0,
+  "Texture0":"nyloncord.bmp"
   },
   "Railings":{
   "Model":"railings.ply",
-  "Scale":10.0
+  "Scale":10.0,
+  "Texture0":"metal.bmp"
   },
   "StadiumLight":{
   "Model":"floodLights.ply",
-  "Scale":5.0}
-  ,
+  "Scale":5.0,
+  "Texture0":"metal.bmp"
+  },
   "Bottle":{
   "Model":"bottle.ply",
   "Scale":0.25
   },
   "Puck":{
   "Model":"puck_normalized.ply",
-  "Scale":2.5
+  "Scale":2.5,
+  "Texture0":"puck.bmp"
   }
 }

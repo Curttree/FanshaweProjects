@@ -27,14 +27,12 @@ public:
 	rapidjson::Document _objects;
 	rapidjson::Document _sceneDescription;
 	glm::vec3 _cameraStartingPosition;
-	glm::vec3 _bodyPosition;
 	glm::vec3 _rinkPosition = glm::vec3(0.f);
-	std::vector<cMesh*> _audience;
 	std::vector<cMesh*> _rink;
-	cMesh* _body;
+	std::vector<std::string> _texturesToLoad;
 	std::vector<sModelDrawInfo> _modelDrawInfo;
 	configManager(); 
-	void loadAudienceIntoVAO(GLuint program, cVAOManager& gVAOManager);
+	void loadModelsIntoVAO(GLuint program, cVAOManager& gVAOManager);
 
 private:
 	float _radius;

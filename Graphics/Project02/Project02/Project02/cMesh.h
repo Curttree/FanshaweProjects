@@ -13,13 +13,6 @@ public:
 	cMesh();
 	std::string meshName;		// The 3D Mesh model we are drawing
 
-	//Drawme()
-	//MoveMe()
-	//Update_GAMEPLAY()
-	//	FindTarget()
-	//	ShootGun()
-	//	TakeDamage()
-
 	// Use these values to search for this specific instance of the object
 	// We would set these ourselves...
 	std::string friendlyName;
@@ -39,7 +32,6 @@ public:
 	bool bIsWireframe;				
 	// Turns of the depth buffer check when drawn
 	bool bDisableDepthBufferCheck;	
-
 
 	// These are for colouring the ENTIRE object as one colour.
 	// Later, these will be replaced:
