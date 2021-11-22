@@ -18,6 +18,8 @@
 #include "cMesh.h"
 #include "Graphics/cVAOManager.h"
 
+#define PROP 0
+#define ACTOR 1
 
 class configManager {
 public:
@@ -41,6 +43,8 @@ private:
 	rapidjson::Document readJSONFile(std::string fileName);
 	void initCamera();
 	void initBody();
+	void initActors();
 	void initRink();
-	cMesh* initMesh(std::string meshName);
+	void initProps();
+	cMesh* initMesh(std::string meshName,int source = PROP);
 };

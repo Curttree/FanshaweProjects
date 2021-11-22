@@ -1,21 +1,5 @@
-{"Archer":{
-  "AliveModel":"character_skeleton_minion_broken.ply",
-  "DeadModel":"character_skeleton_minion_broken.ply",
-  "Scale":0.95
-  },
-  "Mage":{
-  "AliveModel":"character_skeleton_minion_broken.ply",
-  "DeadModel":"character_skeleton_minion_broken.ply",
-  "Scale":0.90
-  },
-  "Minion":{
-  "AliveModel":"character_skeleton_minion_broken.ply",
-  "DeadModel":"character_skeleton_minion_broken.ply",
-  "Scale":1.0
-  },
-  "Warrior":{
-  "AliveModel":"character_skeleton_minion_broken.ply",
-  "DeadModel":"character_skeleton_minion_broken.ply",
-  "Scale":1.1
+{"Dummy":{
+  "Model":"RedPlayer.ply",
+  "Scale":2
   }
 }

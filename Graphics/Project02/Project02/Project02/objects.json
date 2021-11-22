@@ -1,34 +1,43 @@
 {
   "Boards":{
   "Model":"boards.ply",
-  "Scale":1.0
+  "Scale":10.0
   },
   "Concrete":{
   "Model":"concrete.ply",
-  "Scale":1.0
+  "Scale":10.0
   },
   "Glass":{
   "Model":"glass.ply",
-  "Scale":1.0
+  "Scale":10.0,
+  "AlphaTransparency":0.3
   },
   "GoalPosts":{
   "Model":"goalposts.ply",
-  "Scale":1.0
+  "Scale":10.0
   },
   "Ice":{
   "Model":"just_ice.ply",
-  "Scale":1.0
+  "Scale":10.0
   },
   "Netting":{
   "Model":"netting.ply",
-  "Scale":1.0
+  "Scale":10.0
   },
   "Railings":{
   "Model":"railings.ply",
-  "Scale":1.0
+  "Scale":10.0
   },
-  "Warrior":{
-  "Model":"character_skeleton_minion_broken.ply",
-  "Scale":1.1
+  "StadiumLight":{
+  "Model":"floodLights.ply",
+  "Scale":5.0}
+  ,
+  "Bottle":{
+  "Model":"bottle.ply",
+  "Scale":0.25
+  },
+  "Puck":{
+  "Model":"puck_normalized.ply",
+  "Scale":2.5
   }
 }

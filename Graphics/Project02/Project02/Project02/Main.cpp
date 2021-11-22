@@ -125,7 +125,7 @@ int main(void) {
 //					// 2 = directional light
 //    ::g_pTheLights->theLights[0].param1.x = 1.0f;    // Spot light
     ::g_pTheLights->theLights[0].param1.x = 2.0f;    // Directional light
-    ::g_pTheLights->theLights[0].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
+    ::g_pTheLights->theLights[0].direction = glm::vec4(0.f, -1.f, 0.f, 1.0f);
     ::g_pTheLights->theLights[0].diffuse = glm::vec4(0.9922f, 0.9843f, 0.8275f, 1.0f);
     ::g_pTheLights->theLights[0].param1.y = 15.0f;   // Inner
     ::g_pTheLights->theLights[0].param1.z = 30.0f;   // Outer
@@ -139,6 +139,9 @@ int main(void) {
     #pragma endregion
 
     #pragma region Debug
+
+
+    #if defined _DEBUG
     // Set up the debug sphere object
     ::g_pDebugSphere = new cMesh();
     ::g_pDebugSphere->meshName = "Sphere_xyz_n_rgba_uv.ply";
@@ -150,6 +153,7 @@ int main(void) {
     ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[0].position;
     // Give this a friendly name
     ::g_pDebugSphere->friendlyName = "Debug Sphere";
+    #endif
     #pragma endregion
 
     #pragma region Models
@@ -277,7 +281,9 @@ int main(void) {
         // Copy the light information into the shader to draw the scene
         ::g_pTheLights->CopyLightInfoToShader();
 
+        #if defined _DEBUG
         ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[0].position;
+        #endif
 
         matProjection = glm::perspective(
             ::g_pFlyCamera->FOV,
@@ -325,7 +331,9 @@ int main(void) {
         // Scene is drawn
         // **********************************************************************   
 
+        #if defined _DEBUG
         DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
+        #endif
 
         // "Present" what we've drawn.
         glfwSwapBuffers(pWindow);        // Show what we've drawn
