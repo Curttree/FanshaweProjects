@@ -8,7 +8,8 @@ cLightManager* g_pTheLights = NULL;
 cBasicTextureManager* g_pTextureManager = NULL;
 configManager* g_pConfigManager = NULL;
 
-std::vector< cMesh* > g_vec_pMeshes; 
+std::vector< cMesh* > g_vec_pMeshes;
+std::vector< cMesh* > g_vec_pMeshesTransparency;
 
 cMesh* g_pDebugSphere = NULL;
 bool g_bShowDebugShere = true;

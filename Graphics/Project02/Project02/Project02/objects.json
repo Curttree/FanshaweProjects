@@ -12,8 +12,9 @@
   "Glass":{
   "Model":"glass.ply",
   "Scale":10.0,
-  "AlphaTransparency":0.1,
-  "Texture0":"glass.bmp"
+  "AlphaTransparency":0.15,
+  "Texture0":"glass.bmp",
+  "SpecPower":100
   },
   "GoalPosts":{
   "Model":"goalposts.ply",
@@ -23,7 +24,11 @@
   "Ice":{
   "Model":"just_ice.ply",
   "Scale":10.0,
-  "Texture0":"ice.bmp"
+  "Texture0":"ice.bmp",
+  "Texture0Ratio":0.6,
+  "Texture1":"ice_surface.bmp",
+  "Texture1Ratio":0.4,
+  "SpecPower":100
   },
   "Netting":{
   "Model":"netting.ply",
@@ -42,11 +47,24 @@
   },
   "Bottle":{
   "Model":"bottle.ply",
-  "Scale":0.25
+  "Scale":0.25,
+  "AlphaTransparency":0.5,
+  "Texture0":"glass.bmp"
   },
   "Puck":{
   "Model":"puck_normalized.ply",
   "Scale":2.5,
   "Texture0":"puck.bmp"
+  },
+  "CameraCorpus":{
+  "Model":"camera_corpus.ply",
+  "Scale":2.5,
+  "Texture0":"glass.bmp"
+  },
+  "CameraWindow":{
+  "Model":"camera_window.ply",
+  "Scale":2.5,
+  "AlphaTransparency":0.35,
+  "Texture0":"glass.bmp"
   }
 }

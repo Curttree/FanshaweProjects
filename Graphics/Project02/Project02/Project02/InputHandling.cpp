@@ -52,6 +52,24 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
             ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
         }
 
+        if (glfwGetKey(pWindow, GLFW_KEY_1) == GLFW_PRESS)	// "down"
+        {
+            ::g_pTheLights->TurnOnLight(8);
+        }
+        else if (::g_pTheLights->theLights[8].param2.x == 1.0f && glfwGetKey(pWindow, GLFW_KEY_1) == GLFW_RELEASE)	// If light is on and key is released, turn off.
+        {
+            ::g_pTheLights->TurnOffLight(8);
+        }
+
+        if (glfwGetKey(pWindow, GLFW_KEY_2) == GLFW_PRESS)	// "down"
+        {
+            ::g_pTheLights->TurnOnLight(7);
+        }
+        else if (::g_pTheLights->theLights[7].param2.x == 1.0f && glfwGetKey(pWindow, GLFW_KEY_2) == GLFW_RELEASE)	// If light is on and key is released, turn off.
+        {
+            ::g_pTheLights->TurnOffLight(7);
+        }
+
         std::stringstream strTitle;
         // std::cout << 
         glm::vec3 cameraEye = ::g_pFlyCamera->getEye();

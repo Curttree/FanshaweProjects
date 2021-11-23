@@ -9,6 +9,7 @@
 #include <extern/glm/gtc/type_ptr.hpp> // glm::value_ptr
 
 #include "globals.h"
+#include <algorithm>
 
 // Function signature for DrawObject()
 void DrawObject(
@@ -117,21 +118,84 @@ int main(void) {
     #pragma region Lights
 
     ::g_pTheLights->theLights[0].position = glm::vec4(-5000.0f, 10000.0f, 0.0f, 1.0f);
-    ::g_pTheLights->theLights[0].diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    //... and so on...
-//    	vec4 param1;	// x = lightType, y = inner angle, z = outer angle, w = TBD
-//	                // 0 = pointlight
-//					// 1 = spot light
-//					// 2 = directional light
-//    ::g_pTheLights->theLights[0].param1.x = 1.0f;    // Spot light
-    ::g_pTheLights->theLights[0].param1.x = 2.0f;    // Directional light
-    ::g_pTheLights->theLights[0].direction = glm::normalize(glm::vec4(1.f, -0.5f, -.1f, 1.0f));
-    ::g_pTheLights->theLights[0].diffuse = glm::vec4(0.82745f, 0.8235f, 0.8156f, 1.0f);
-    ::g_pTheLights->theLights[0].param1.y = 15.0f;   // Inner
-    ::g_pTheLights->theLights[0].param1.z = 30.0f;   // Outer
-    ::g_pTheLights->theLights[0].atten.y = 0.000001f;
-    ::g_pTheLights->theLights[0].atten.z = 0.00000001f;
-    ::g_pTheLights->TurnOnLight(0);  // Or this!
+    ::g_pTheLights->theLights[0].param1.x = 2.f;    // Directional light
+    ::g_pTheLights->theLights[0].direction = glm::normalize(glm::vec4(1.f, -1.f, 0.2f, 1.0f));
+    ::g_pTheLights->theLights[0].diffuse = glm::vec4(0.82745f, 0.8235f, 0.8156f, 1.f);
+    ::g_pTheLights->TurnOnLight(0);
+
+    ::g_pTheLights->theLights[1].position = glm::vec4(-100.f, 120.f, -200.f, 1.f);
+    ::g_pTheLights->theLights[1].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[1].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[1].direction = glm::vec4(0.25f, -1.0f, 0.25f, 1.0f);
+    ::g_pTheLights->theLights[1].atten = glm::vec4(0.00003f, 0.0002f, 0.00002f, 100.f);
+    ::g_pTheLights->theLights[1].param1.x = 1.f;    // spot light
+    ::g_pTheLights->theLights[1].param1.y = 5.f;
+    ::g_pTheLights->theLights[1].param1.z = 25.f;
+    ::g_pTheLights->TurnOnLight(1);
+
+    ::g_pTheLights->theLights[2].position = glm::vec4(100.f, 120.f, -200.f, 1.f);
+    ::g_pTheLights->theLights[2].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[2].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[2].direction = glm::vec4(-0.25f, -1.0f, 0.25f, 1.0f);
+    ::g_pTheLights->theLights[2].atten = glm::vec4(0.00003f, 0.0002f, 0.00002f, 100.f);
+    ::g_pTheLights->theLights[2].param1.x = 1.f;    // spot light
+    ::g_pTheLights->theLights[2].param1.y = 5.f;
+    ::g_pTheLights->theLights[2].param1.z = 25.f;
+    ::g_pTheLights->TurnOnLight(2);
+
+    ::g_pTheLights->theLights[3].position = glm::vec4(-100.f, 120.f, 200.f, 1.f);
+    ::g_pTheLights->theLights[3].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[3].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[3].direction = glm::vec4(0.25f, -1.0f, -0.25f, 1.0f);
+    ::g_pTheLights->theLights[3].atten = glm::vec4(0.00003f, 0.0002f, 0.00002f, 100.f);
+    ::g_pTheLights->theLights[3].param1.x = 1.f;    // spot light
+    ::g_pTheLights->theLights[3].param1.y = 5.f;
+    ::g_pTheLights->theLights[3].param1.z = 25.f;
+    ::g_pTheLights->TurnOnLight(3);
+
+    ::g_pTheLights->theLights[4].position = glm::vec4(100.f, 120.f, 200.f, 1.f);
+    ::g_pTheLights->theLights[4].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[4].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[4].direction = glm::vec4(-0.25f, -1.0f, -0.25f, 1.0f);
+    ::g_pTheLights->theLights[4].atten = glm::vec4(0.00003f, 0.0002f, 0.00002f, 100.f);
+    ::g_pTheLights->theLights[4].param1.x = 1.f;    // spot light
+    ::g_pTheLights->theLights[4].param1.y = 5.f;
+    ::g_pTheLights->theLights[4].param1.z = 25.f;
+    ::g_pTheLights->TurnOnLight(4);
+
+    ::g_pTheLights->theLights[5].position = glm::vec4(-100.f, 120.f, 0.f, 1.f);
+    ::g_pTheLights->theLights[5].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[5].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[5].direction = glm::vec4(0.25f, -1.0f, 0.f, 1.0f);
+    ::g_pTheLights->theLights[5].atten = glm::vec4(0.00003f, 0.0002f, 0.00002f, 100.f);
+    ::g_pTheLights->theLights[5].param1.x = 1.f;    // spot light
+    ::g_pTheLights->theLights[5].param1.y = 5.f;
+    ::g_pTheLights->theLights[5].param1.z = 25.f;
+    ::g_pTheLights->TurnOnLight(5);
+
+    ::g_pTheLights->theLights[6].position = glm::vec4(100.f, 120.f, 0.f, 1.f);
+    ::g_pTheLights->theLights[6].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[6].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
+    ::g_pTheLights->theLights[6].direction = glm::vec4(-0.25f, -1.0f, 0.f, 1.0f);
+    ::g_pTheLights->theLights[6].atten = glm::vec4(0.00003f, 0.0002f, 0.00002f, 100.f);
+    ::g_pTheLights->theLights[6].param1.x = 1.f;    // spot light
+    ::g_pTheLights->theLights[6].param1.y = 5.f;
+    ::g_pTheLights->theLights[6].param1.z = 25.f;
+    ::g_pTheLights->TurnOnLight(6);
+
+    ::g_pTheLights->theLights[7].position = glm::vec4(0.f, 12.f, -255.f, 1.f);
+    ::g_pTheLights->theLights[7].diffuse = glm::vec4(1.f, 0.f, 0.f, 1.f);
+    ::g_pTheLights->theLights[7].specular = glm::vec4(1.f, 0.f, 0.f, 1.f);
+    ::g_pTheLights->theLights[7].atten = glm::vec4(0.003f, 0.0001f, 0.00027f, 20.f);
+    ::g_pTheLights->theLights[7].param1.x = 0.f;    // point light
+    ::g_pTheLights->TurnOffLight(7);
+
+    ::g_pTheLights->theLights[8].position = glm::vec4(0.f, 12.f, 255.f, 1.f);
+    ::g_pTheLights->theLights[8].diffuse = glm::vec4(1.f, 0.f, 0.f, 1.f);
+    ::g_pTheLights->theLights[8].specular = glm::vec4(1.f, 0.f, 0.f, 1.f);
+    ::g_pTheLights->theLights[8].atten = glm::vec4(0.003f, 0.0001f, 0.00027f, 20.f);
+    ::g_pTheLights->theLights[8].param1.x = 0.f;    // point light
+    ::g_pTheLights->TurnOffLight(8);
 
     // Get the uniform locations of the light shader values
     ::g_pTheLights->SetUpUniformLocations(program);
@@ -218,12 +282,25 @@ int main(void) {
     #pragma endregion
 
 #pragma region Objects
-    //TODO: Remove temp loading of objects, replace with actual loading functions
-
     ::g_pConfigManager->loadModelsIntoVAO(program, *::g_pVAOManager);
 
     ::g_vec_pMeshes = ::g_pConfigManager->_rink;
 
+    // TODO: If this has a large performance impact as scene grows, refactor.
+    // Move objects with transparency to their own vector.
+    for (cMesh* mesh : ::g_vec_pMeshes) {
+        if (mesh->alphaTransparency < 1.f) {
+            ::g_vec_pMeshesTransparency.push_back(mesh);
+        }
+    }
+    // Now that we have all of our transparent objects, remove from the original vector.
+    std::vector<cMesh*>::iterator location;
+    for (cMesh* mesh : ::g_vec_pMeshesTransparency) {
+        location = std::find(g_vec_pMeshes.begin(), g_vec_pMeshes.end(), mesh);
+        if (location != g_vec_pMeshes.end()) {
+            ::g_vec_pMeshes.erase(location);
+        }
+    }
     cMesh* pSkybox = new cMesh();
 
     // Mimics a skybox
@@ -235,6 +312,7 @@ int main(void) {
 #pragma endregion
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
     double previousTime = glfwGetTime();
+    std::vector<cMesh*> sortedTransparentObjects;
 
     while (!glfwWindowShouldClose(pWindow)) {
         float ratio;
@@ -297,6 +375,9 @@ int main(void) {
         // Draw the "scene" of all objects.
         // i.e. go through the vector and draw each one...
         // **********************************************************************
+        // Disable GL_Blend while we draw non-transparent objects
+        glDisable(GL_BLEND);
+
         for (unsigned int index = 0; index != ::g_vec_pMeshes.size(); index++)
         {
             // So the code is a little easier...
@@ -317,7 +398,9 @@ int main(void) {
         // **********************************************************************   
 
         #if defined _DEBUG
+
         DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
+
         #endif
 
         // After drawing the other objects, draw the skybox to limit overdraw.
@@ -333,6 +416,32 @@ int main(void) {
             program, ::g_pVAOManager);
 
         glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_FALSE);
+
+        // Now that non-transparent objects are drawn, sort and draw transparent objects.
+        glEnable(GL_BLEND);
+
+        // Utilize lambda function as explained in Frameworks to assist with sorting (only if there is more than one transparent object.
+        if (::g_vec_pMeshesTransparency.size() >= 2) {
+            std::sort(::g_vec_pMeshesTransparency.begin(), ::g_vec_pMeshesTransparency.end(), [](const cMesh* a, const cMesh* b) -> bool
+            {
+                return glm::distance(a->positionXYZ, ::g_pFlyCamera->getAtInWorldSpace()) > glm::distance(b->positionXYZ, ::g_pFlyCamera->getAtInWorldSpace());
+            });
+        }
+
+        for (unsigned int index = 0; index != ::g_vec_pMeshesTransparency.size(); index++)
+        {
+            // So the code is a little easier...
+            cMesh* pCurrentMesh = ::g_vec_pMeshesTransparency[index];
+
+            matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
+
+            DrawObject(pCurrentMesh,
+                matModel,
+                matModel_Location,
+                matModelInverseTranspose_Location,
+                program,
+                ::g_pVAOManager);
+        }
 
         // "Present" what we've drawn.
         glfwSwapBuffers(pWindow);        // Show what we've drawn

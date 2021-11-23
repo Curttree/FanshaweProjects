@@ -51,8 +51,28 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
             if (_objects[meshName.c_str()].HasMember("Scale")) {
                 result->scale = _objects[meshName.c_str()]["Scale"].GetFloat();
             }
+            if (_objects[meshName.c_str()].HasMember("SpecPower")) {
+                result->wholeObjectShininess_SpecPower = _objects[meshName.c_str()]["SpecPower"].GetFloat();
+            }
             if (_objects[meshName.c_str()].HasMember("Texture0")) {
+                result->textureRatios[0] = 1.0f;
                 result->textureNames[0] = _objects[meshName.c_str()]["Texture0"].GetString();
+                if (_objects[meshName.c_str()].HasMember("Texture0Ratio")) {
+                    result->textureRatios[0] = _objects[meshName.c_str()]["Texture0Ratio"].GetFloat();
+                }
+                else{
+                    result->textureRatios[0] = 1.0f;
+                }
+            }
+            //TODO: Have option of how to handle multiple textures.
+            if (_objects[meshName.c_str()].HasMember("Texture1")) {
+                result->textureNames[1] = _objects[meshName.c_str()]["Texture1"].GetString();
+                if (_objects[meshName.c_str()].HasMember("Texture1Ratio")) {
+                    result->textureRatios[1] = _objects[meshName.c_str()]["Texture1Ratio"].GetFloat();
+                }
+                else {
+                    result->textureRatios[1] = 1.0f;
+                }
             }
         }
     }
@@ -66,6 +86,7 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
                 result->scale = _actors[meshName.c_str()]["Scale"].GetFloat();
             }
             if (_actors[meshName.c_str()].HasMember("Texture0")) {
+                result->textureRatios[0] = 1.0f;
                 result->textureNames[0] = _actors[meshName.c_str()]["Texture0"].GetString();
             }
         }

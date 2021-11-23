@@ -225,7 +225,7 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 			float dotProduct = dot( -theLights[index].direction.xyz,  
 									   normalize(norm.xyz) );	// -1 to 1
 
-			dotProduct = max( 0.33f, dotProduct );		// Set lower limit as 33% so shadows are softer.
+			dotProduct = max( 0.25f, dotProduct );		// Set lower limit as 25% so shadows are softer.
 		
 			lightContrib *= dotProduct;		
 			
@@ -235,7 +235,7 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 			// NOTE: There isn't any attenuation, like with sunlight.
 			// (This is part of the reason directional lights are fast to calculate)
 			
-			return finalObjectColour;		
+			continue;		
 		}
 		
 		// Assume it's a point light 
@@ -264,8 +264,6 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 		// To simplify, we are NOT using the light specular value, just the object’s.
 		float objectSpecularPower = vertexSpecular.w; 
 		
-//		lightSpecularContrib = pow( max(0.0f, dot( eyeVector, reflectVector) ), objectSpecularPower )
-//			                   * vertexSpecular.rgb;	//* theLights[lightIndex].Specular.rgb
 		lightSpecularContrib = pow( max(0.0f, dot( eyeVector, reflectVector) ), objectSpecularPower )
 			                   * theLights[index].specular.rgb;
 							   
@@ -283,8 +281,6 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 		// But is it a spot light
 		if ( intLightType == SPOT_LIGHT_TYPE )		// = 1
 		{	
-		
-
 			// Yes, it's a spotlight
 			// Calcualate light vector (light to vertex, in world)
 			vec3 vertexToLight = vertexWorldPos.xyz - theLights[index].position.xyz;
