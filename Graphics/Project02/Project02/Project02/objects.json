@@ -2,19 +2,20 @@
   "Boards":{
   "Model":"boards.ply",
   "Scale":10.0,
-  "Texture0":"glass.bmp"
+  "Texture0":"glass.bmp",
+  "SpecPower":10
   },
   "Concrete":{
   "Model":"concrete.ply",
   "Scale":10.0,
-  "Texture0":"concrete.bmp"
+  "Texture0":"concrete.bmp",
+  "SpecPower":1000
   },
   "Glass":{
   "Model":"glass.ply",
   "Scale":10.0,
   "AlphaTransparency":0.15,
-  "Texture0":"glass.bmp",
-  "SpecPower":100
+  "Texture0":"glass.bmp"
   },
   "GlassQ1":{
   "Model":"glassq1.ply",
@@ -56,7 +57,7 @@
   "Texture0Ratio":0.6,
   "Texture1":"ice_surface.bmp",
   "Texture1Ratio":0.4,
-  "SpecPower":100
+  "SpecPower":2
   },
   "Netting":{
   "Model":"netting.ply",
@@ -82,7 +83,8 @@
   "Puck":{
   "Model":"puck_normalized.ply",
   "Scale":2.5,
-  "Texture0":"puck.bmp"
+  "Texture0":"puck.bmp",
+  "SpecPower":100
   },
   "CameraCorpus":{
   "Model":"camera_corpus.ply",
