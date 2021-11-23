@@ -101,6 +101,8 @@ int main(void) {
     ::g_StartUp(pWindow);
 
     ::g_pFlyCamera->setEye(::g_pConfigManager->_cameraStartingPosition);
+    // Eventually figure out how to adjust orientation of camera so it doesn't 'jump' on first movement.
+    //::g_pFlyCamera->setAt(::g_pConfigManager->_cameraStartingOrientation);
 
     cShaderManager::cShader vertShader;
     cShaderManager::cShader fragShader;

@@ -28,11 +28,20 @@ rapidjson::Document configManager::readJSONFile(std::string fileName) {
 void configManager::initCamera() {
     // Determine camera's starting position.
     if (_sceneDescription.HasMember("Camera")) {
-        float x, y, z;
-        x = _sceneDescription["Camera"]["x"].GetFloat();
-        y = _sceneDescription["Camera"]["y"].GetFloat();
-        z = _sceneDescription["Camera"]["z"].GetFloat();
-        _cameraStartingPosition = glm::vec3(x, y, z);
+        if (_sceneDescription["Camera"].HasMember("Position")) {
+            float x, y, z;
+            x = _sceneDescription["Camera"]["Position"]["x"].GetFloat();
+            y = _sceneDescription["Camera"]["Position"]["y"].GetFloat();
+            z = _sceneDescription["Camera"]["Position"]["z"].GetFloat();
+            _cameraStartingPosition = glm::vec3(x, y, z);
+        }
+        //if (_sceneDescription["Camera"].HasMember("Orientation")) {
+        //    float x, y, z;
+        //    x = _sceneDescription["Camera"]["Orientation"]["x"].GetFloat();
+        //    y = _sceneDescription["Camera"]["Orientation"]["y"].GetFloat();
+        //    z = _sceneDescription["Camera"]["Orientation"]["z"].GetFloat();
+        //    _cameraStartingOrientation = glm::vec3(x, y, z);
+        //}
     }
     else {
         // Fall back to default start position if no camera info has been provided.
@@ -125,6 +134,47 @@ void configManager::initRink() {
                 component->positionXYZ = _rinkPosition; 
                 _rink.push_back(component);
             }
+        }
+    }
+    if (_sceneDescription.HasMember("GoalLights")) {
+        glm::vec3 _homePosition = glm::vec3(0.f);
+        glm::vec3 _awayPosition = glm::vec3(0.f);
+        cMesh* component = new cMesh();
+        if (_sceneDescription["GoalLights"].HasMember("HomePosition")) {
+            float x, y, z;
+            x = _sceneDescription["GoalLights"]["HomePosition"]["x"].GetFloat();
+            y = _sceneDescription["GoalLights"]["HomePosition"]["y"].GetFloat();
+            z = _sceneDescription["GoalLights"]["HomePosition"]["z"].GetFloat();
+            _homePosition = glm::vec3(x, y, z);
+        }
+        if (_sceneDescription["GoalLights"].HasMember("AwayPosition")) {
+            float x, y, z;
+            x = _sceneDescription["GoalLights"]["AwayPosition"]["x"].GetFloat();
+            y = _sceneDescription["GoalLights"]["AwayPosition"]["y"].GetFloat();
+            z = _sceneDescription["GoalLights"]["AwayPosition"]["z"].GetFloat();
+            _awayPosition = glm::vec3(x, y, z);
+        }
+        if (_sceneDescription["GoalLights"].HasMember("BaseModel")) {
+            component = initMesh(_sceneDescription["GoalLights"]["BaseModel"].GetString());
+            component->positionXYZ = _homePosition;
+            _rink.push_back(component);
+            component = initMesh(_sceneDescription["GoalLights"]["BaseModel"].GetString());
+            component->positionXYZ = _awayPosition;
+            _rink.push_back(component);
+        }
+        if (_sceneDescription["GoalLights"].HasMember("BulbModel")) {
+            component = initMesh(_sceneDescription["GoalLights"]["BulbModel"].GetString());
+            component->positionXYZ = _homePosition;
+            if (_sceneDescription["GoalLights"].HasMember("BulbOffset")) {
+                component->positionXYZ.y += _sceneDescription["GoalLights"]["BulbOffset"].GetFloat();
+            }
+            _rink.push_back(component);
+            component = initMesh(_sceneDescription["GoalLights"]["BulbModel"].GetString());
+            component->positionXYZ = _awayPosition;
+            if (_sceneDescription["GoalLights"].HasMember("BulbOffset")) {
+                component->positionXYZ.y += _sceneDescription["GoalLights"]["BulbOffset"].GetFloat();
+            }
+            _rink.push_back(component);
         }
     }
 }

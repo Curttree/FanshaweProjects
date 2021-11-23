@@ -27,6 +27,7 @@ public:
 	rapidjson::Document _objects;
 	rapidjson::Document _sceneDescription;
 	glm::vec3 _cameraStartingPosition;
+	glm::vec3 _cameraStartingOrientation;
 	glm::vec3 _rinkPosition = glm::vec3(0.f);
 	std::vector<cMesh*> _rink;
 	std::vector<std::string> _texturesToLoad;
@@ -40,7 +41,6 @@ private:
 	std::vector<std::string> _modelsToLoad;
 	rapidjson::Document readJSONFile(std::string fileName);
 	void initCamera();
-	void initBody();
 	void initActors();
 	void initRink();
 	void initProps();

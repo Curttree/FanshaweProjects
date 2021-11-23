@@ -1,35 +1,40 @@
 {
   "Camera": {
-    "x": 125.0,
-    "y": 180.0,
-    "z": -400.0
-  },
-  "DeadBody": {
-	  "Actor":"Minion",
-	  "Height": 1.5,
-	  "Radius": 4.0,
-	  "Position": {
-		"x": 0.0,
-		"y": 0.25,
-		"z": 0.0
-	  }
-  },
-  "Rink":{
-  "Position": {
+	  "Position":{
     "x": 0.0,
-    "y": 0.0,
-    "z": 0.0
-  },
-  "Components": [
-    "Boards",
-    "Concrete",
-    "Glass",
-    "GoalPosts",
-    "Ice",
-    "Netting",
-    "Railings"
-  ]
-  },
+    "y": 50.0,
+  "z": -380.0}},
+"Rink":{
+	"Position": {
+	"x": 0.0,
+	"y": 0.0,
+	"z": 0.0
+	},
+	"Components": [
+	"Boards",
+	"Concrete",
+	"Glass",
+	"GoalPosts",
+	"Ice",
+	"Netting",
+	"Railings"
+	]
+},
+"GoalLights":{
+	"HomePosition": {
+	"x": 0.0,
+	"y": 12.0,
+	"z": 255.0
+	},
+	"AwayPosition": {
+	"x": 0.0,
+	"y": 12.0,
+	"z": -255.0
+	},
+	"BaseModel": "CameraCorpus",
+	"BulbModel": "CameraWindow",
+	"BulbOffset": 0.5
+},
 "Actors":[{
 "Name":"Dummy", "Position":{
 		"x": 10.0,

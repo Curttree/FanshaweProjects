@@ -16,6 +16,34 @@
   "Texture0":"glass.bmp",
   "SpecPower":100
   },
+  "GlassQ1":{
+  "Model":"glassq1.ply",
+  "Scale":10.0,
+  "AlphaTransparency":0.15,
+  "Texture0":"glass.bmp",
+  "SpecPower":100
+  },
+  "GlassQ2":{
+  "Model":"glassq2.ply",
+  "Scale":10.0,
+  "AlphaTransparency":0.15,
+  "Texture0":"glass.bmp",
+  "SpecPower":100
+  },
+  "GlassQ3":{
+  "Model":"glassq3.ply",
+  "Scale":10.0,
+  "AlphaTransparency":0.15,
+  "Texture0":"glass.bmp",
+  "SpecPower":100
+  },
+  "GlassQ4":{
+  "Model":"glassq4.ply",
+  "Scale":10.0,
+  "AlphaTransparency":0.15,
+  "Texture0":"glass.bmp",
+  "SpecPower":100
+  },
   "GoalPosts":{
   "Model":"goalposts.ply",
   "Scale":10.0,

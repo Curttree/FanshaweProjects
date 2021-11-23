@@ -589,8 +589,7 @@ double cFlyCamera::getMinimumDeltaTimeStep(void)
 // This is used by the update to tokenize or parse the command string
 void cFlyCamera::m_tokenizeString(std::string theString, std::vector<std::string>& vecTokens)
 {
-	std::stringstream ssString;
-	ssString.str() = theString;
+	std::stringstream ssString(theString);
 
 	// This is just like cin or ifstream:
 	//	We 'stream' (operator>>) each word (separated by white space) into
