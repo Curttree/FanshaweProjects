@@ -40,6 +40,18 @@
     <Filter Include="Configuration">
       <UniqueIdentifier>{32723387-8e8f-4685-b6f2-5c5a95d9037d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{3696aaf5-fde1-46c1-9fb5-880de4f85a67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Headers">
+      <UniqueIdentifier>{cab662ad-5305-49a4-b43d-7df379cec3cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Particles">
+      <UniqueIdentifier>{4cce9e6b-3117-4bb2-91c9-553ec7559fba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\Particles\Headers">
+      <UniqueIdentifier>{343ce7ff-0ac5-4ff8-a949-c4b579908b32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -111,6 +123,36 @@
     <ClCompile Include="configManager.cpp">
       <Filter>Configuration</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cGravityGenerator.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cMathHelper.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cWorldSpace.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cParticle.cpp">
+      <Filter>Physics\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cParticleContact.cpp">
+      <Filter>Physics\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cParticleContactResolver.cpp">
+      <Filter>Physics\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cParticleForceRegistry.cpp">
+      <Filter>Physics\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cParticleParticleContactGenerator.cpp">
+      <Filter>Physics\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cParticleWorld.cpp">
+      <Filter>Physics\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cPlaneParticleContactGenerator.cpp">
+      <Filter>Physics\Particles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -160,6 +202,48 @@
     </ClInclude>
     <ClInclude Include="configManager.h">
       <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cGravityGenerator.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cMathHelper.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cWorldSpace.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\extern_includes.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\iForceGenerator.h">
+      <Filter>Physics\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cParticle.h">
+      <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cParticleContact.h">
+      <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cParticleContactResolver.h">
+      <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cParticleForceRegistry.h">
+      <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cParticleParticleContactGenerator.h">
+      <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cPlaneParticleContactGenerator.h">
+      <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cParticleWorld.h">
+      <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\iParticleContactGenerator.h">
+      <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\sParticleTemplate.h">
+      <Filter>Physics\Particles\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
