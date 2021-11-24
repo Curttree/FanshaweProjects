@@ -9,7 +9,7 @@
 #include <sstream>
 #include <fstream>
 
-bool LoadPLYModelFromFile(std::string fileName, sModelDrawInfo& drawInfo);
+bool LoadPLYModelFromFile(std::string fileName, sModelDrawInfo& drawInfo, std::vector<sVertex>& vecVertexArray);
 
 sModelDrawInfo::sModelDrawInfo()
 {
@@ -38,9 +38,11 @@ sModelDrawInfo::sModelDrawInfo()
 
 
 bool cVAOManager::LoadModelIntoVAO(
-		std::string fileName, 
-		sModelDrawInfo &drawInfo,
-	    unsigned int shaderProgramID)
+    std::string fileName,
+    sModelDrawInfo& drawInfo,
+    unsigned int shaderProgramID,
+    std::vector<sVertex>& vertexInfo
+    )
 
 {
 	drawInfo.meshName = fileName;
@@ -49,7 +51,7 @@ bool cVAOManager::LoadModelIntoVAO(
     std::string fileNameWithPath = this->m_FilePath + fileName;
 
 
-    LoadPLYModelFromFile(fileNameWithPath, drawInfo);
+    LoadPLYModelFromFile(fileNameWithPath, drawInfo, vertexInfo);
 
 	// Ask OpenGL for a new buffer ID...
 	glGenVertexArrays( 1, &(drawInfo.VAO_ID) );
@@ -182,16 +184,8 @@ bool cVAOManager::FindDrawInfoByModelName(
 	return true;
 }
 
-bool LoadPLYModelFromFile(std::string fileName, sModelDrawInfo& drawInfo)
+bool LoadPLYModelFromFile(std::string fileName, sModelDrawInfo& drawInfo, std::vector<sVertex>& vecVertexArray)
 {
-    // These structures match the PLY file format
-    struct sVertex
-    {
-        float x, y, z;      // , c, i;
-        float nx, ny, nz;
-        float red, green, blue, alpha;  // (Note the file is in HTML style, so 0 to 255, but the shader wants 0.0 to 1.0)
-        float u, v;
-    };
     struct sTriangle
     {
         unsigned int vertIndex[3];
@@ -238,8 +232,6 @@ bool LoadPLYModelFromFile(std::string fileName, sModelDrawInfo& drawInfo)
             break;  // Exits the while loop
         }
     }
-
-    std::vector<sVertex> vecVertexArray;
 
     // Now we can read the vertices (in a for loop)
     for (unsigned int index = 0; index < drawInfo.numberOfVertices; index++)

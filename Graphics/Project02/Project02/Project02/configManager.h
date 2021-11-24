@@ -38,8 +38,9 @@ public:
 	glm::vec3 _positiveBounds;
 	glm::vec3 _negativeBounds;
 	configManager(); 
-	void loadModelsIntoVAO(GLuint program, cVAOManager& gVAOManager);
+	void loadModelsIntoVAO(GLuint program, cVAOManager& gVAOManager, bool storeVertexData = false);
 	void setupLights(cLightManager* lightManager, const int startIndex);
+	std::map<std::string, std::vector<sVertex>> _vertexData;
 
 private:
 	float _radius;

@@ -175,8 +175,9 @@ int main(void) {
     {
         sModelDrawInfo theModel;
         std::string modelName = *itModel;
+        std::vector<sVertex> vecVertexArray;
         std::cout << "Loading " << modelName << "...";
-        if (!::g_pVAOManager->LoadModelIntoVAO(modelName, theModel, program))
+        if (!::g_pVAOManager->LoadModelIntoVAO(modelName, theModel, program, vecVertexArray))
         {
             std::cout << "didn't work because: " << std::endl;
             std::cout << ::g_pVAOManager->getLastError(true) << std::endl;
@@ -224,7 +225,7 @@ int main(void) {
     #pragma endregion
 
 #pragma region Objects
-    ::g_pConfigManager->loadModelsIntoVAO(program, *::g_pVAOManager);
+    ::g_pConfigManager->loadModelsIntoVAO(program, *::g_pVAOManager, true);
 
     ::g_vec_pMeshes = ::g_pConfigManager->_rink;
 
@@ -362,11 +363,29 @@ int main(void) {
         // Now that non-transparent objects are drawn, sort and draw transparent objects.
         glEnable(GL_BLEND);
 
-        // Utilize lambda function as explained in Frameworks to assist with sorting (only if there is more than one transparent object.
+        // Utilize lambda function to assist with sorting (only if there is more than one transparent object.
         if (::g_vec_pMeshesTransparency.size() >= 2) {
             std::sort(::g_vec_pMeshesTransparency.begin(), ::g_vec_pMeshesTransparency.end(), [](const cMesh* a, const cMesh* b) -> bool
             {
-                return glm::distance(a->positionXYZ, ::g_pFlyCamera->getAtInWorldSpace()) > glm::distance(b->positionXYZ, ::g_pFlyCamera->getAtInWorldSpace());
+                // Find closest vertex for both objects. If this is identified as a performance bottleneck, optimize by only looking up/tracking exact vertex info if requested.
+                // Otherwise, just use position to get an approximation of where the object is located.
+                // This may also fail for more complex geometry, or cause other issues: https://www.khronos.org/opengl/wiki/Transparency_Sorting
+                float minDistanceA = -1;     // Default to -1 so any valid distance will replace this.
+                float minDistanceB = -1;     // Default to -1 so any valid distance will replace this.
+                float candidate = 0;
+                for (const sVertex& vertex : ::g_pConfigManager->_vertexData[a->meshName]) {
+                    candidate = glm::distance((a->positionXYZ + glm::vec3(vertex.x, vertex.y, vertex.z)), ::g_pFlyCamera->getEye());
+                    if (candidate < minDistanceA || minDistanceA < 0) {
+                        minDistanceA = candidate;
+                    }
+                }
+                for (const sVertex& vertex : ::g_pConfigManager->_vertexData[b->meshName]) {
+                    candidate = glm::distance((b->positionXYZ + glm::vec3(vertex.x, vertex.y, vertex.z)), ::g_pFlyCamera->getEye());
+                    if (candidate < minDistanceB || minDistanceB < 0) {
+                        minDistanceB = candidate;
+                    }
+                }
+                return minDistanceA > minDistanceB;
             });
         }
 

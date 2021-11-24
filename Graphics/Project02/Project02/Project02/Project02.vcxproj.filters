@@ -254,6 +254,9 @@
     <ClInclude Include="cEntity.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\sVertex.h">
+      <Filter>Graphics\Models\VAOManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\fragShader_01.glsl">

@@ -244,11 +244,12 @@ void configManager::initActors() {
     }
 }
 
-void configManager::loadModelsIntoVAO(GLuint program, cVAOManager& gVAOManager) {
+void configManager::loadModelsIntoVAO(GLuint program, cVAOManager& gVAOManager, bool storeVertexData) {
     sModelDrawInfo currentModel;
 
     for (size_t x = 0; x < _modelsToLoad.size(); x++) {
-        if (gVAOManager.LoadModelIntoVAO(_modelsToLoad[x], currentModel, program))
+        std::vector<sVertex> vecVertexArray;
+        if (gVAOManager.LoadModelIntoVAO(_modelsToLoad[x], currentModel, program, vecVertexArray))
         {
             std::cout << "Loaded the model: " << currentModel.meshName << std::endl;
             std::cout << currentModel.numberOfVertices << " vertices loaded" << std::endl;
@@ -256,6 +257,9 @@ void configManager::loadModelsIntoVAO(GLuint program, cVAOManager& gVAOManager) 
             //  Add Model Draw Info to vector. We don't do much with it for now (the important thing is that it has been loaded into our VAOManager),
             //  but it could be useful in the future.
             _modelDrawInfo.push_back(currentModel);
+            if (storeVertexData && _vertexData.count(currentModel.meshName) <= 0) {
+                _vertexData.insert(std::make_pair(currentModel.meshName, vecVertexArray));
+            }
         }
         else
         {

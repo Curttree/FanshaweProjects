@@ -190,6 +190,7 @@
     <ClInclude Include="..\common\include\Graphics\cShaderManager.h" />
     <ClInclude Include="..\common\include\Graphics\cVAOManager.h" />
     <ClInclude Include="..\common\include\Graphics\GLCommon.h" />
+    <ClInclude Include="..\common\include\Graphics\sVertex.h" />
     <ClInclude Include="..\common\include\Graphics\sVertex_types.h" />
     <ClInclude Include="..\common\include\Physics\cGravityGenerator.h" />
     <ClInclude Include="..\common\include\Physics\cMathHelper.h" />
