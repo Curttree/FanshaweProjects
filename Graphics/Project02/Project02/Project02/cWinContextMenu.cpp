@@ -37,15 +37,15 @@ void cWinContextMenu::showMenu(GLFWwindow* window, int x, int y)
     // Like different programs can have the same messages, and different 
     //  windows within that application can also have the same messages.
     // This is because the messages are sent to 
-    const UINT_PTR ID_CLOSE = WM_USER + 1;
-    const UINT_PTR ID_PLAY_MARYLN_MANSON = WM_USER + 2;
-    const UINT_PTR ID_USE_THE_FORCE_LUKE = WM_USER + 3;
+    const UINT_PTR ID_POSITION1 = WM_USER + 1;
+    const UINT_PTR ID_POSITION2 = WM_USER + 2;
+    const UINT_PTR ID_CLOSE = WM_USER + 3;
 
 
     HMENU hPopupMenu = CreatePopupMenu();
     InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_CLOSE, (LPCWSTR)L"Exit");
-    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_PLAY_MARYLN_MANSON, (LPCWSTR)L"Play");
-    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_USE_THE_FORCE_LUKE, (LPCWSTR)L"Use the force, Luke!");
+    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_POSITION2, (LPCWSTR)L"Camera Position - Questions 2,3,4");
+    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_POSITION1, (LPCWSTR)L"Camera Position - Question 1");
 
     HWND hWnd = glfwGetWin32Window(window);
 
@@ -60,16 +60,24 @@ void cWinContextMenu::showMenu(GLFWwindow* window, int x, int y)
     BOOL choice = TrackPopupMenu(hPopupMenu, TPM_TOPALIGN | TPM_LEFTALIGN | TPM_RETURNCMD, x, y, 0, hWnd, NULL);
 
     // Returns 0 if no choice made
-   
+
     // Now process the choice we made with the mouse click
-    switch ( choice )
+    switch (choice)
     {
     case ID_CLOSE:
         std::cout << "Picked \"Exit\" (ID_CLOSE)" << std::endl;
 
         break;
-    case ID_PLAY_MARYLN_MANSON:
-        std::cout << "Picked \"Play\" (ID_PLAY_MARYLN_MANSON)" << std::endl;
+    case ID_POSITION1:
+        std::cout << "Picked \"Camera Position 1\" (ID_CLOSE)" << std::endl;
+
+        ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
+        ::g_pFlyCamera->setEye(glm::vec3(0.f, 0.f, 0.f));
+        break;
+    case ID_POSITION2:
+        std::cout << "Picked \"Camera Position 2\" (ID_CLOSE)" << std::endl;
+        ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
+        ::g_pFlyCamera->setEye(glm::vec3(0.f, 0.f, 240.f));
         break;
     case 0:
         std::cout << "Didn't make a choice (hit <esc>?)" << std::endl;

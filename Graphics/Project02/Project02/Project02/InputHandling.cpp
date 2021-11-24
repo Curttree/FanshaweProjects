@@ -261,12 +261,15 @@ void GLFW_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 void GLFW_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
 
-#ifdef YO_NERDS_WE_USING_WINDOWS_CONTEXT_MENUS_IN_THIS_THANG
+#if defined _DEBUG
+#ifdef Windows_Context_Menu_Usage_Custom
+
     // Right button is pop-up
-    if ( button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS )
+    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
     {
         ShowWindowsContextMenu(window, button, action, mods);
     }
+#endif
 #endif
 
     return;

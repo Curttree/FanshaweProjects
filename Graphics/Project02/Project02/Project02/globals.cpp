@@ -14,6 +14,8 @@ std::vector< cMesh* > g_vec_pMeshesTransparency;
 cMesh* g_pDebugSphere = NULL;
 bool g_bShowDebugShere = true;
 
+bool g_bShowCollisionObjects = false;
+
 
 unsigned int g_selectedObject = 0;
 unsigned int g_selectedLight = 0;

@@ -51,6 +51,8 @@ extern cLightManager* g_pTheLights;
 extern cMesh* g_pDebugSphere;	// = NULL;
 extern bool g_bShowDebugShere;	// = true;
 
+extern bool g_bShowCollisionObjects;	// = true;
+
 
 extern unsigned int g_selectedObject;	// = 0;
 extern unsigned int g_selectedLight;	// = 0;
