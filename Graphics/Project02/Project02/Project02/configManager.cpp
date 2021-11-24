@@ -6,6 +6,7 @@ configManager::configManager() {
     _sceneDescription = readJSONFile("scene.json");
     if (!_actors.HasParseError() && !_sceneDescription.HasParseError()) {
         initCamera();
+        initPhysics();
         initRink();
         initProps();
         initActors();
@@ -48,6 +49,24 @@ void configManager::initCamera() {
         _cameraStartingPosition = glm::vec3(0.f, 0.f, -4.f);
     }
 }
+
+void configManager::initPhysics() {
+    // Determine camera's starting position.
+    if (_sceneDescription.HasMember("Physics")) {
+        // ASSUMPTION: If Physics is present all boundaries have been defined. 
+        // If this is not always the case, this should be updated.
+        float x, y, z;
+        x = _sceneDescription["Physics"]["PositiveXBoundary"].GetFloat();
+        y = _sceneDescription["Physics"]["PositiveYBoundary"].GetFloat();
+        z = _sceneDescription["Physics"]["PositiveZBoundary"].GetFloat();
+        _positiveBounds = glm::vec3(x, y, z);
+        x = _sceneDescription["Physics"]["NegativeXBoundary"].GetFloat();
+        y = _sceneDescription["Physics"]["NegativeYBoundary"].GetFloat();
+        z = _sceneDescription["Physics"]["NegativeZBoundary"].GetFloat();
+        _negativeBounds = glm::vec3(x, y, z);
+    }
+}
+
 
 cMesh* configManager::initMesh(std::string meshName, int source) {
     cMesh* result = new cMesh();
@@ -137,40 +156,38 @@ void configManager::initRink() {
         }
     }
     if (_sceneDescription.HasMember("GoalLights")) {
-        glm::vec3 _homePosition = glm::vec3(0.f);
-        glm::vec3 _awayPosition = glm::vec3(0.f);
         cMesh* component = new cMesh();
         if (_sceneDescription["GoalLights"].HasMember("HomePosition")) {
             float x, y, z;
             x = _sceneDescription["GoalLights"]["HomePosition"]["x"].GetFloat();
             y = _sceneDescription["GoalLights"]["HomePosition"]["y"].GetFloat();
             z = _sceneDescription["GoalLights"]["HomePosition"]["z"].GetFloat();
-            _homePosition = glm::vec3(x, y, z);
+            _homeGoalLightPosition = glm::vec3(x, y, z);
         }
         if (_sceneDescription["GoalLights"].HasMember("AwayPosition")) {
             float x, y, z;
             x = _sceneDescription["GoalLights"]["AwayPosition"]["x"].GetFloat();
             y = _sceneDescription["GoalLights"]["AwayPosition"]["y"].GetFloat();
             z = _sceneDescription["GoalLights"]["AwayPosition"]["z"].GetFloat();
-            _awayPosition = glm::vec3(x, y, z);
+            _awayGoalLightPosition = glm::vec3(x, y, z);
         }
         if (_sceneDescription["GoalLights"].HasMember("BaseModel")) {
             component = initMesh(_sceneDescription["GoalLights"]["BaseModel"].GetString());
-            component->positionXYZ = _homePosition;
+            component->positionXYZ = _homeGoalLightPosition;
             _rink.push_back(component);
             component = initMesh(_sceneDescription["GoalLights"]["BaseModel"].GetString());
-            component->positionXYZ = _awayPosition;
+            component->positionXYZ = _awayGoalLightPosition;
             _rink.push_back(component);
         }
         if (_sceneDescription["GoalLights"].HasMember("BulbModel")) {
             component = initMesh(_sceneDescription["GoalLights"]["BulbModel"].GetString());
-            component->positionXYZ = _homePosition;
+            component->positionXYZ = _homeGoalLightPosition;
             if (_sceneDescription["GoalLights"].HasMember("BulbOffset")) {
                 component->positionXYZ.y += _sceneDescription["GoalLights"]["BulbOffset"].GetFloat();
             }
             _rink.push_back(component);
             component = initMesh(_sceneDescription["GoalLights"]["BulbModel"].GetString());
-            component->positionXYZ = _awayPosition;
+            component->positionXYZ = _awayGoalLightPosition;
             if (_sceneDescription["GoalLights"].HasMember("BulbOffset")) {
                 component->positionXYZ.y += _sceneDescription["GoalLights"]["BulbOffset"].GetFloat();
             }
@@ -243,6 +260,60 @@ void configManager::loadModelsIntoVAO(GLuint program, cVAOManager& gVAOManager) 
         else
         {
             std::cout << "Error: Didn't load the model OK" << std::endl;
+        }
+    }
+}
+
+void configManager::setupLights(cLightManager* lightManager, const int startIndex) {
+    // Note this method can override lights that were previously declared. If the scope of this method grows,
+    // I may wish to move the responsibility of this method into the light manager to streamline where/how lights are added.
+    int theLightsIndex = startIndex;
+    if (_sceneDescription.HasMember("Lights")) {
+        rapidjson::GenericArray<false, rapidjson::Value> lightList = _sceneDescription["Lights"].GetArray();
+        for (rapidjson::SizeType current = 0; current < lightList.Size(); current++) {
+            theLightsIndex = current + startIndex;
+            if (theLightsIndex >= lightManager->NUMBER_OF_LIGHTS) {
+                std::cout << "Some lights have been skipped (not enough space declared)." << std::endl;
+                return;
+            }
+            if (_sceneDescription["Lights"][current].HasMember("Type")) {
+                lightManager->theLights[theLightsIndex].param1.x = _sceneDescription["Lights"][current]["Type"].GetFloat();
+            }
+            if (_sceneDescription["Lights"][current].HasMember("Position")) {
+                lightManager->theLights[theLightsIndex].position.x = _sceneDescription["Lights"][current]["Position"]["x"].GetFloat();
+                lightManager->theLights[theLightsIndex].position.y = _sceneDescription["Lights"][current]["Position"]["y"].GetFloat();
+                lightManager->theLights[theLightsIndex].position.z = _sceneDescription["Lights"][current]["Position"]["z"].GetFloat();
+            }
+            if (_sceneDescription["Lights"][current].HasMember("Direction")) {
+                lightManager->theLights[theLightsIndex].direction.x = _sceneDescription["Lights"][current]["Direction"]["x"].GetFloat();
+                lightManager->theLights[theLightsIndex].direction.y = _sceneDescription["Lights"][current]["Direction"]["y"].GetFloat();
+                lightManager->theLights[theLightsIndex].direction.z = _sceneDescription["Lights"][current]["Direction"]["z"].GetFloat();
+            }
+            if (_sceneDescription["Lights"][current].HasMember("Attenuation")) {
+                lightManager->theLights[theLightsIndex].atten.x = _sceneDescription["Lights"][current]["Attenuation"]["Constant"].GetFloat();
+                lightManager->theLights[theLightsIndex].atten.y = _sceneDescription["Lights"][current]["Attenuation"]["Linear"].GetFloat();
+                lightManager->theLights[theLightsIndex].atten.z = _sceneDescription["Lights"][current]["Attenuation"]["Quadratic"].GetFloat();
+                lightManager->theLights[theLightsIndex].atten.w = _sceneDescription["Lights"][current]["Attenuation"]["DistanceCutOff"].GetFloat();
+            }
+            if (_sceneDescription["Lights"][current].HasMember("Diffuse")) {
+                lightManager->theLights[theLightsIndex].diffuse.r = _sceneDescription["Lights"][current]["Diffuse"]["r"].GetFloat();
+                lightManager->theLights[theLightsIndex].diffuse.g = _sceneDescription["Lights"][current]["Diffuse"]["g"].GetFloat();
+                lightManager->theLights[theLightsIndex].diffuse.b = _sceneDescription["Lights"][current]["Diffuse"]["b"].GetFloat();
+                lightManager->theLights[theLightsIndex].diffuse.a = _sceneDescription["Lights"][current]["Diffuse"]["a"].GetFloat();
+            }
+            if (_sceneDescription["Lights"][current].HasMember("Specular")) {
+                lightManager->theLights[theLightsIndex].specular.r = _sceneDescription["Lights"][current]["Specular"]["r"].GetFloat();
+                lightManager->theLights[theLightsIndex].specular.g = _sceneDescription["Lights"][current]["Specular"]["g"].GetFloat();
+                lightManager->theLights[theLightsIndex].specular.b = _sceneDescription["Lights"][current]["Specular"]["b"].GetFloat();
+                lightManager->theLights[theLightsIndex].specular.a = _sceneDescription["Lights"][current]["Specular"]["a"].GetFloat();
+            }
+            if (_sceneDescription["Lights"][current].HasMember("InnerAngle")) {
+                lightManager->theLights[theLightsIndex].param1.y = _sceneDescription["Lights"][current]["InnerAngle"].GetFloat();
+            }
+            if (_sceneDescription["Lights"][current].HasMember("OuterAngle")) {
+                lightManager->theLights[theLightsIndex].param1.z = _sceneDescription["Lights"][current]["OuterAngle"].GetFloat();
+            }
+            lightManager->TurnOnLight(theLightsIndex);
         }
     }
 }

@@ -4,6 +4,226 @@
     "x": 0.0,
     "y": 50.0,
   "z": -380.0}},
+  "Physics":{
+	  "PositiveXBoundary":70,
+	  "NegativeXBoundary":-70,
+	  "PositiveYBoundary":100,
+	  "NegativeYBoundary":0,
+	  "PositiveZBoundary":250,
+	  "NegativeZBoundary":-250
+  },
+  "Lights":[
+	  {"Type":2,
+		"Position":{
+			"x": -10000.0,
+			"y": 5000.0,
+			"z": 0.0
+		},
+		"Direction":{
+			"x": 0.5735,
+			"y": -0.5735,
+			"z": 0.1147
+		},
+		"Diffuse":{
+			"r": 0.82745,
+			"g":  0.8235,
+			"b": 0.8156,
+			"a": 1
+		}
+	  },
+	  {"Type":1,
+		"Position":{
+			"x": -100.0,
+			"y": 120.0,
+			"z": -200.0
+		},
+		"Direction":{
+			"x": 0.25,
+			"y": -1.0,
+			"z": 0.25
+		},
+		"Attenuation":{
+			"Constant": 0.00003,
+			"Linear": 0.0002,
+			"Quadratic": 0.00002,
+			"DistanceCutOff": 100
+		},
+		"Diffuse":{
+			"r": 1,
+			"g":  1,
+			"b": 0.8,
+			"a": 1
+		},
+		"Specular":{
+			"r": 1,
+			"g":  1,
+			"b": 0.8,
+			"a": 1
+		},
+		"InnerAngle":5,
+		"OuterAngle":25
+	  },
+	  {"Type":1,
+		"Position":{
+			"x": 100.0,
+			"y": 120.0,
+			"z": -200.0
+		},
+		"Direction":{
+			"x": -0.25,
+			"y": -1.0,
+			"z": 0.25
+		},
+		"Attenuation":{
+			"Constant": 0.00003,
+			"Linear": 0.0002,
+			"Quadratic": 0.00002,
+			"DistanceCutOff": 100
+		},
+		"Diffuse":{
+			"r": 1,
+			"g":  1,
+			"b": 0.8,
+			"a": 1
+		},
+		"Specular":{
+			"r": 1,
+			"g":  1,
+			"b": 0.8,
+			"a": 1
+		},
+		"InnerAngle":5,
+		"OuterAngle":25
+	  },
+	  {"Type":1,
+		"Position":{
+			"x": -100.0,
+			"y": 120.0,
+			"z": 200.0
+		},
+		"Direction":{
+			"x": 0.25,
+			"y": -1.0,
+			"z": -0.25
+		},
+		"Attenuation":{
+			"Constant": 0.00003,
+			"Linear": 0.0002,
+			"Quadratic": 0.00002,
+			"DistanceCutOff": 100
+		},
+		"Diffuse":{
+			"r": 1,
+			"g":  1,
+			"b": 0.8,
+			"a": 1
+		},
+		"Specular":{
+			"r": 1,
+			"g":  1,
+			"b": 0.8,
+			"a": 1
+		},
+		"InnerAngle":5,
+		"OuterAngle":25
+	  },
+	  {"Type":1,
+		"Position":{
+			"x": 100.0,
+			"y": 120.0,
+			"z": 200.0
+		},
+		"Direction":{
+			"x": -0.25,
+			"y": -1.0,
+			"z": -0.25
+		},
+		"Attenuation":{
+			"Constant": 0.00003,
+			"Linear": 0.0002,
+			"Quadratic": 0.00002,
+			"DistanceCutOff": 100
+		},
+		"Diffuse":{
+			"r": 1,
+			"g":  1,
+			"b": 0.8,
+			"a": 1
+		},
+		"Specular":{
+			"r": 1,
+			"g":  1,
+			"b": 0.8,
+			"a": 1
+		},
+		"InnerAngle":5,
+		"OuterAngle":25
+	  },
+	  {"Type":1,
+		"Position":{
+			"x": -100.0,
+			"y": 120.0,
+			"z": 0.0
+		},
+		"Direction":{
+			"x": 0.25,
+			"y": -1.0,
+			"z": 0
+		},
+		"Attenuation":{
+			"Constant": 0.00003,
+			"Linear": 0.0002,
+			"Quadratic": 0.00002,
+			"DistanceCutOff": 100
+		},
+		"Diffuse":{
+			"r": 1,
+			"g":  1,
+			"b": 0.8,
+			"a": 1
+		},
+		"Specular":{
+			"r": 1,
+			"g":  1,
+			"b": 0.8,
+			"a": 1
+		},
+		"InnerAngle":5,
+		"OuterAngle":25
+	  },
+	  {"Type":1,
+		"Position":{
+			"x": 100.0,
+			"y": 120.0,
+			"z": 0
+		},
+		"Direction":{
+			"x": -0.25,
+			"y": -1.0,
+			"z": 0
+		},
+		"Attenuation":{
+			"Constant": 0.00003,
+			"Linear": 0.0002,
+			"Quadratic": 0.00002,
+			"DistanceCutOff": 100
+		},
+		"Diffuse":{
+			"r": 1,
+			"g":  1,
+			"b": 0.8,
+			"a": 1
+		},
+		"Specular":{
+			"r": 1,
+			"g":  1,
+			"b": 0.8,
+			"a": 1
+		},
+		"InnerAngle":5,
+		"OuterAngle":25
+	  }
+  ],
 "Rink":{
 	"Position": {
 	"x": 0.0,
@@ -32,7 +252,7 @@
 	"z": -255.0
 	},
 	"BaseModel": "CameraCorpus",
-	"BulbModel": "CameraWindow",
+	"BulbModel": "BulbWindow",
 	"BulbOffset": 0.5
 },
 "Actors":[{

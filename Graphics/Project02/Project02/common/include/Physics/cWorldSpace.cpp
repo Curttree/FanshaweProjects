@@ -1,15 +1,10 @@
 #include "cWorldSpace.h"
+#include <iostream>
 
 cWorldSpace::cWorldSpace()
 {
 }
 
-// Planes
-cPlaneParticleContactGenerator groundGenerator(glm::vec3(0.f, 1.f, 0.f), 0.f);
-cPlaneParticleContactGenerator ceilingGenerator(glm::vec3(0.f, -1.f, 0.f), -20.f);
-cPlaneParticleContactGenerator wallGenerator(glm::vec3(1.f, 0.f, 0.f), -10.f);
-cPlaneParticleContactGenerator wall2Generator(glm::vec3(-1.f, 0.f, 0.f), -10.f);
-cPlaneParticleContactGenerator backWallGenerator(glm::vec3(0.f, 0.f, -1.f), -50.f);
 // Particle on Particle collisions
 cParticleParticleContactGenerator particleCollisionGenerator;
 
@@ -25,11 +20,6 @@ cWorldSpace* cWorldSpace::Instance() {
 		//Initialize physics
 		_instance->_gravityGenerator = new cGravityGenerator(glm::vec3(0.0f, -9.81f, 0.0f));
 		_instance->_world = new cParticleWorld(500);
-		_instance->_world->AddContactContactGenerator(&groundGenerator);
-		_instance->_world->AddContactContactGenerator(&ceilingGenerator);
-		_instance->_world->AddContactContactGenerator(&wallGenerator);
-		_instance->_world->AddContactContactGenerator(&wall2Generator);
-		_instance->_world->AddContactContactGenerator(&backWallGenerator);
 		_instance->_world->AddContactContactGenerator(&particleCollisionGenerator);
 	}
 
@@ -93,4 +83,22 @@ glm::vec3 cWorldSpace::getPositionInWorldSpace(const glm::vec3 orientationXYZ, c
 	result *= rotateX;
 
 	return result * glm::vec4(startPositionXYZ.x, startPositionXYZ.y, startPositionXYZ.z, 1.f);
+}
+
+void cWorldSpace::SetWorldBounds(glm::vec3 positiveBounds, glm::vec3 negativeBounds) {
+	// Planes
+	cPlaneParticleContactGenerator* groundGenerator = new cPlaneParticleContactGenerator(glm::vec3(0.f, 1.f, 0.f), negativeBounds.y);
+	cPlaneParticleContactGenerator* ceilingGenerator = new cPlaneParticleContactGenerator(glm::vec3(0.f, -1.f, 0.f), -positiveBounds.y);
+	cPlaneParticleContactGenerator* wallGenerator = new cPlaneParticleContactGenerator(glm::vec3(1.f, 0.f, 0.f), negativeBounds.x);
+	cPlaneParticleContactGenerator* wall2Generator = new cPlaneParticleContactGenerator(glm::vec3(-1.f, 0.f, 0.f), -positiveBounds.x);
+	cPlaneParticleContactGenerator* backWallGenerator = new cPlaneParticleContactGenerator(glm::vec3(0.f, 0.f, -1.f), -positiveBounds.z);
+	cPlaneParticleContactGenerator* frontWallGenerator = new cPlaneParticleContactGenerator(glm::vec3(0.f, 0.f, 1.f), negativeBounds.z);
+	_instance->_world->AddContactContactGenerator(groundGenerator);
+	_instance->_world->AddContactContactGenerator(ceilingGenerator);
+	_instance->_world->AddContactContactGenerator(wallGenerator);
+	_instance->_world->AddContactContactGenerator(wall2Generator);
+	_instance->_world->AddContactContactGenerator(backWallGenerator);
+	_instance->_world->AddContactContactGenerator(frontWallGenerator);
+	std::cout << "World bounds set" << std::endl;
+
 }

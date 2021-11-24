@@ -15,6 +15,7 @@ class cWorldSpace {
 		static glm::mat3 axes;
 		static glm::vec3 getRandomVector3(float magnitude, bool overrideAlpha = false, float alpha = 0);
 		static glm::vec3 getPositionInWorldSpace(const glm::vec3 orientationXYZ, const glm::vec3 startPositionXYZ);
+		static void SetWorldBounds(glm::vec3 positiveBounds, glm::vec3 negativeBounds);
 	private:
 		cWorldSpace();
 

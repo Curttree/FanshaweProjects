@@ -10,6 +10,9 @@
 
 #include "globals.h"
 #include <algorithm>
+#include <Physics/cWorldSpace.h>
+
+cWorldSpace* worldSpace = cWorldSpace::Instance();
 
 // Function signature for DrawObject()
 void DrawObject(
@@ -71,7 +74,7 @@ int main(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    pWindow = glfwCreateWindow(1200, 640, "Curtis Tremblay - Game Development Sandbox", NULL, NULL);
+    pWindow = glfwCreateWindow(1200, 640, "Curtis Tremblay - INFO-6028 Project 2", NULL, NULL);
 
     if (!pWindow)
     {
@@ -104,6 +107,8 @@ int main(void) {
     // Eventually figure out how to adjust orientation of camera so it doesn't 'jump' on first movement.
     //::g_pFlyCamera->setAt(::g_pConfigManager->_cameraStartingOrientation);
 
+    worldSpace->Instance()->SetWorldBounds(::g_pConfigManager->_positiveBounds, ::g_pConfigManager->_negativeBounds);
+
     cShaderManager::cShader vertShader;
     cShaderManager::cShader fragShader;
     InitShaders(program, vertShader, fragShader);
@@ -118,86 +123,21 @@ int main(void) {
     #pragma endregion
 
     #pragma region Lights
+    ::g_pTheLights->theLights[0].position = glm::vec4(::g_pConfigManager->_homeGoalLightPosition, 1.f);
+    ::g_pTheLights->theLights[0].diffuse = glm::vec4(1.f, 0.f, 0.f, 1.f);
+    ::g_pTheLights->theLights[0].specular = glm::vec4(1.f, 0.f, 0.f, 1.f);
+    ::g_pTheLights->theLights[0].atten = glm::vec4(0.003f, 0.0001f, 0.00027f, 20.f);
+    ::g_pTheLights->theLights[0].param1.x = 0.f;    // point light
+    ::g_pTheLights->TurnOffLight(0);
 
-    ::g_pTheLights->theLights[0].position = glm::vec4(-5000.0f, 10000.0f, 0.0f, 1.0f);
-    ::g_pTheLights->theLights[0].param1.x = 2.f;    // Directional light
-    ::g_pTheLights->theLights[0].direction = glm::normalize(glm::vec4(1.f, -1.f, 0.2f, 1.0f));
-    ::g_pTheLights->theLights[0].diffuse = glm::vec4(0.82745f, 0.8235f, 0.8156f, 1.f);
-    ::g_pTheLights->TurnOnLight(0);
+    ::g_pTheLights->theLights[1].position = glm::vec4(::g_pConfigManager->_awayGoalLightPosition, 1.f);
+    ::g_pTheLights->theLights[1].diffuse = glm::vec4(1.f, 0.f, 0.f, 1.f);
+    ::g_pTheLights->theLights[1].specular = glm::vec4(1.f, 0.f, 0.f, 1.f);
+    ::g_pTheLights->theLights[1].atten = glm::vec4(0.003f, 0.0001f, 0.00027f, 20.f);
+    ::g_pTheLights->theLights[1].param1.x = 0.f;    // point light
+    ::g_pTheLights->TurnOffLight(1);
 
-    ::g_pTheLights->theLights[1].position = glm::vec4(-100.f, 120.f, -200.f, 1.f);
-    ::g_pTheLights->theLights[1].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
-    ::g_pTheLights->theLights[1].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
-    ::g_pTheLights->theLights[1].direction = glm::vec4(0.25f, -1.0f, 0.25f, 1.0f);
-    ::g_pTheLights->theLights[1].atten = glm::vec4(0.00003f, 0.0002f, 0.00002f, 100.f);
-    ::g_pTheLights->theLights[1].param1.x = 1.f;    // spot light
-    ::g_pTheLights->theLights[1].param1.y = 5.f;
-    ::g_pTheLights->theLights[1].param1.z = 25.f;
-    ::g_pTheLights->TurnOnLight(1);
-
-    ::g_pTheLights->theLights[2].position = glm::vec4(100.f, 120.f, -200.f, 1.f);
-    ::g_pTheLights->theLights[2].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
-    ::g_pTheLights->theLights[2].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
-    ::g_pTheLights->theLights[2].direction = glm::vec4(-0.25f, -1.0f, 0.25f, 1.0f);
-    ::g_pTheLights->theLights[2].atten = glm::vec4(0.00003f, 0.0002f, 0.00002f, 100.f);
-    ::g_pTheLights->theLights[2].param1.x = 1.f;    // spot light
-    ::g_pTheLights->theLights[2].param1.y = 5.f;
-    ::g_pTheLights->theLights[2].param1.z = 25.f;
-    ::g_pTheLights->TurnOnLight(2);
-
-    ::g_pTheLights->theLights[3].position = glm::vec4(-100.f, 120.f, 200.f, 1.f);
-    ::g_pTheLights->theLights[3].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
-    ::g_pTheLights->theLights[3].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
-    ::g_pTheLights->theLights[3].direction = glm::vec4(0.25f, -1.0f, -0.25f, 1.0f);
-    ::g_pTheLights->theLights[3].atten = glm::vec4(0.00003f, 0.0002f, 0.00002f, 100.f);
-    ::g_pTheLights->theLights[3].param1.x = 1.f;    // spot light
-    ::g_pTheLights->theLights[3].param1.y = 5.f;
-    ::g_pTheLights->theLights[3].param1.z = 25.f;
-    ::g_pTheLights->TurnOnLight(3);
-
-    ::g_pTheLights->theLights[4].position = glm::vec4(100.f, 120.f, 200.f, 1.f);
-    ::g_pTheLights->theLights[4].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
-    ::g_pTheLights->theLights[4].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
-    ::g_pTheLights->theLights[4].direction = glm::vec4(-0.25f, -1.0f, -0.25f, 1.0f);
-    ::g_pTheLights->theLights[4].atten = glm::vec4(0.00003f, 0.0002f, 0.00002f, 100.f);
-    ::g_pTheLights->theLights[4].param1.x = 1.f;    // spot light
-    ::g_pTheLights->theLights[4].param1.y = 5.f;
-    ::g_pTheLights->theLights[4].param1.z = 25.f;
-    ::g_pTheLights->TurnOnLight(4);
-
-    ::g_pTheLights->theLights[5].position = glm::vec4(-100.f, 120.f, 0.f, 1.f);
-    ::g_pTheLights->theLights[5].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
-    ::g_pTheLights->theLights[5].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
-    ::g_pTheLights->theLights[5].direction = glm::vec4(0.25f, -1.0f, 0.f, 1.0f);
-    ::g_pTheLights->theLights[5].atten = glm::vec4(0.00003f, 0.0002f, 0.00002f, 100.f);
-    ::g_pTheLights->theLights[5].param1.x = 1.f;    // spot light
-    ::g_pTheLights->theLights[5].param1.y = 5.f;
-    ::g_pTheLights->theLights[5].param1.z = 25.f;
-    ::g_pTheLights->TurnOnLight(5);
-
-    ::g_pTheLights->theLights[6].position = glm::vec4(100.f, 120.f, 0.f, 1.f);
-    ::g_pTheLights->theLights[6].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
-    ::g_pTheLights->theLights[6].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
-    ::g_pTheLights->theLights[6].direction = glm::vec4(-0.25f, -1.0f, 0.f, 1.0f);
-    ::g_pTheLights->theLights[6].atten = glm::vec4(0.00003f, 0.0002f, 0.00002f, 100.f);
-    ::g_pTheLights->theLights[6].param1.x = 1.f;    // spot light
-    ::g_pTheLights->theLights[6].param1.y = 5.f;
-    ::g_pTheLights->theLights[6].param1.z = 25.f;
-    ::g_pTheLights->TurnOnLight(6);
-
-    ::g_pTheLights->theLights[7].position = glm::vec4(0.f, 12.f, -255.f, 1.f);
-    ::g_pTheLights->theLights[7].diffuse = glm::vec4(1.f, 0.f, 0.f, 1.f);
-    ::g_pTheLights->theLights[7].specular = glm::vec4(1.f, 0.f, 0.f, 1.f);
-    ::g_pTheLights->theLights[7].atten = glm::vec4(0.003f, 0.0001f, 0.00027f, 20.f);
-    ::g_pTheLights->theLights[7].param1.x = 0.f;    // point light
-    ::g_pTheLights->TurnOffLight(7);
-
-    ::g_pTheLights->theLights[8].position = glm::vec4(0.f, 12.f, 255.f, 1.f);
-    ::g_pTheLights->theLights[8].diffuse = glm::vec4(1.f, 0.f, 0.f, 1.f);
-    ::g_pTheLights->theLights[8].specular = glm::vec4(1.f, 0.f, 0.f, 1.f);
-    ::g_pTheLights->theLights[8].atten = glm::vec4(0.003f, 0.0001f, 0.00027f, 20.f);
-    ::g_pTheLights->theLights[8].param1.x = 0.f;    // point light
-    ::g_pTheLights->TurnOffLight(8);
+    ::g_pConfigManager->setupLights(::g_pTheLights, 2);
 
     // Get the uniform locations of the light shader values
     ::g_pTheLights->SetUpUniformLocations(program);

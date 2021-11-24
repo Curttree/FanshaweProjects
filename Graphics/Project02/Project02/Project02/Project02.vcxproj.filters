@@ -52,6 +52,9 @@
     <Filter Include="Physics\Particles\Headers">
       <UniqueIdentifier>{343ce7ff-0ac5-4ff8-a949-c4b579908b32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{ea568a30-a9b6-4529-a6b5-fd01d240a4b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -153,6 +156,9 @@
     <ClCompile Include="..\common\include\Physics\cPlaneParticleContactGenerator.cpp">
       <Filter>Physics\Particles</Filter>
     </ClCompile>
+    <ClCompile Include="cEntity.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -244,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="..\common\include\Physics\sParticleTemplate.h">
       <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cEntity.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

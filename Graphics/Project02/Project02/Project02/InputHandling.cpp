@@ -54,20 +54,20 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
 
         if (glfwGetKey(pWindow, GLFW_KEY_1) == GLFW_PRESS)	// "down"
         {
-            ::g_pTheLights->TurnOnLight(8);
+            ::g_pTheLights->TurnOnLight(0);
         }
-        else if (::g_pTheLights->theLights[8].param2.x == 1.0f && glfwGetKey(pWindow, GLFW_KEY_1) == GLFW_RELEASE)	// If light is on and key is released, turn off.
+        else if (::g_pTheLights->theLights[0].param2.x == 1.0f && glfwGetKey(pWindow, GLFW_KEY_1) == GLFW_RELEASE)	// If light is on and key is released, turn off.
         {
-            ::g_pTheLights->TurnOffLight(8);
+            ::g_pTheLights->TurnOffLight(0);
         }
 
         if (glfwGetKey(pWindow, GLFW_KEY_2) == GLFW_PRESS)	// "down"
         {
-            ::g_pTheLights->TurnOnLight(7);
+            ::g_pTheLights->TurnOnLight(1);
         }
-        else if (::g_pTheLights->theLights[7].param2.x == 1.0f && glfwGetKey(pWindow, GLFW_KEY_2) == GLFW_RELEASE)	// If light is on and key is released, turn off.
+        else if (::g_pTheLights->theLights[1].param2.x == 1.0f && glfwGetKey(pWindow, GLFW_KEY_2) == GLFW_RELEASE)	// If light is on and key is released, turn off.
         {
-            ::g_pTheLights->TurnOffLight(7);
+            ::g_pTheLights->TurnOffLight(1);
         }
 
         std::stringstream strTitle;

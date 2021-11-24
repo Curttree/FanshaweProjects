@@ -17,6 +17,7 @@
 
 #include "cMesh.h"
 #include "Graphics/cVAOManager.h"
+#include <Graphics/cLightManager.h>
 
 #define PROP 0
 #define ACTOR 1
@@ -29,11 +30,16 @@ public:
 	glm::vec3 _cameraStartingPosition;
 	glm::vec3 _cameraStartingOrientation;
 	glm::vec3 _rinkPosition = glm::vec3(0.f);
+	glm::vec3 _homeGoalLightPosition = glm::vec3(0.f);
+	glm::vec3 _awayGoalLightPosition = glm::vec3(0.f);
 	std::vector<cMesh*> _rink;
 	std::vector<std::string> _texturesToLoad;
 	std::vector<sModelDrawInfo> _modelDrawInfo;
+	glm::vec3 _positiveBounds;
+	glm::vec3 _negativeBounds;
 	configManager(); 
 	void loadModelsIntoVAO(GLuint program, cVAOManager& gVAOManager);
+	void setupLights(cLightManager* lightManager, const int startIndex);
 
 private:
 	float _radius;
@@ -44,5 +50,6 @@ private:
 	void initActors();
 	void initRink();
 	void initProps();
+	void initPhysics();
 	cMesh* initMesh(std::string meshName,int source = PROP);
 };

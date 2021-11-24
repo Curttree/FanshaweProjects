@@ -91,10 +91,10 @@
   "Scale":2.5,
   "Texture0":"glass.bmp"
   },
-  "CameraWindow":{
+  "BulbWindow":{
   "Model":"camera_window.ply",
   "Scale":2.5,
-  "AlphaTransparency":0.35,
+  "AlphaTransparency":0.75,
   "Texture0":"glass.bmp"
   }
 }
