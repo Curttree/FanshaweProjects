@@ -7,7 +7,7 @@
   "Physics":{
 	  "PositiveXBoundary":125,
 	  "NegativeXBoundary":-125,
-	  "PositiveYBoundary":250,
+	  "PositiveYBoundary":20,
 	  "NegativeYBoundary":5,
 	  "PositiveZBoundary":215,
 	  "NegativeZBoundary":-215
@@ -256,10 +256,90 @@
 	"BulbOffset": 0.5
 },
 "Actors":[{
-"Name":"Dummy", "Position":{
-		"x": 10.0,
+"Name":"Dummy",
+"Type":"AIPlayer",
+"Position":{
+		"x": 0.0,
 		"y": 5.0,
 		"z": -20.0
+	  }
+},{
+"Name":"Dummy",
+"Type":"AIPlayer",
+"Position":{
+		"x": 40.0,
+		"y": 5.0,
+		"z": -20.0
+	  }
+},{
+"Name":"Dummy",
+"Type":"AIPlayer",
+"Position":{
+		"x": -40.0,
+		"y": 5.0,
+		"z": -20.0
+	  }
+},{
+"Name":"Dummy",
+"Type":"AIPlayer",
+"Position":{
+		"x": 20.0,
+		"y": 5.0,
+		"z": -50.0
+	  }
+},{
+"Name":"Dummy",
+"Type":"AIPlayer",
+"Position":{
+		"x": -20.0,
+		"y": 5.0,
+		"z": -50.0
+	  }
+},{
+"Name":"Dummy2",
+"Type":"AIPlayer",
+"Position":{
+		"x": 0.0,
+		"y": 5.0,
+		"z": 20.0
+	  }
+},{
+"Name":"Dummy2",
+"Type":"AIPlayer",
+"Position":{
+		"x": 40.0,
+		"y": 5.0,
+		"z": 20.0
+	  }
+},{
+"Name":"Dummy2",
+"Type":"AIPlayer",
+"Position":{
+		"x": -40.0,
+		"y": 5.0,
+		"z": 20.0
+	  }
+},{
+"Name":"Dummy2",
+"Type":"AIPlayer",
+"Position":{
+		"x": 20.0,
+		"y": 5.0,
+		"z": 50.0
+	  }
+},{
+"Name":"Dummy2",
+"Type":"AIPlayer",
+"Position":{
+		"x": -20.0,
+		"y": 5.0,
+		"z": 50.0
+	  }
+},{
+"Name":"Puck", "Position":{
+		"x": 0.0,
+		"y": 5,
+		"z": 0.0
 	  }
 }
 ]	,
@@ -322,12 +402,6 @@
 	  }, "Orientation":{
 		"x": 0.0,
 		"y": -90.0,
-		"z": 0.0
-	  }
-},{
-"Name":"Puck", "Position":{
-		"x": 0.0,
-		"y": 5,
 		"z": 0.0
 	  }
 },{

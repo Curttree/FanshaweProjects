@@ -21,7 +21,8 @@ size_t cPlaneParticleContactGenerator::AddContact(cParticleContact* contact, siz
 			contact->particle0 = particles[x];
 			contact->particle1 = 0;
 			contact->penetrationDepth = -particleDistance;
-			contact->restitutionCoefficient = 0.688f;	// Calculated for hard plastic ball. Sourced from: https://hypertextbook.com/facts/2006/restitution.shtml
+			// Since human players are currently handling their own restitution coefficient, hardcode for puck. Eventually this should be set per particle/surface.
+			contact->restitutionCoefficient = 0.45f;	// Approximation of results from: http://www.dissertations.wsu.edu/Thesis/Spring2008/R_Anderson_042308.pdf
 			contact++;
 			createdContacts++;
 		}

@@ -366,7 +366,7 @@ int main(void) {
 
         //::g_pFlyCamera->Update(deltaTime);
 
-        for (cEntity* actor : ::g_vec_pActors) {
+        for (iEntity* actor : ::g_vec_pActors) {
             actor->Update(deltaTime);
         }
         worldSpace->_world->Update(deltaTime);
@@ -432,7 +432,7 @@ int main(void) {
             for (unsigned int index = 0; index != ::g_vec_pActors.size(); index++)
             {
                 // So the code is a little easier...
-                cMesh* pCurrentMesh = ::g_vec_pActors[index]->debugMesh;
+                cMesh* pCurrentMesh = ::g_vec_pActors[index]->GetDebugMesh();
 
                 matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
 

@@ -11,7 +11,7 @@
 #include "cMesh.h"
 #include <vector>
 #include "configManager.h"
-#include "cEntity.h"
+#include "iEntity.h"
 
 
 // These are all things that are "project global", 
@@ -56,7 +56,7 @@ extern std::vector<cMesh*> g_vec_pBoundaries;
 extern unsigned int g_selectedObject;	// = 0;
 extern unsigned int g_selectedLight;	// = 0;
 
-extern std::vector<cEntity*> g_vec_pActors;
+extern std::vector<iEntity*> g_vec_pActors;
 
 // This will be printed in the title bar
 extern std::string g_TitleText;	// = "";

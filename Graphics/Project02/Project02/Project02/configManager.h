@@ -38,7 +38,7 @@ public:
 	std::vector<sModelDrawInfo> _modelDrawInfo;
 	glm::vec3 _positiveBounds;
 	glm::vec3 _negativeBounds; 
-	std::vector<cEntity*> actorEntities;
+	std::vector<iEntity*> actorEntities;
 	configManager(); 
 	void loadModelsIntoVAO(GLuint program, cVAOManager& gVAOManager, bool storeVertexData = false);
 	void setupLights(cLightManager* lightManager, const int startIndex);

@@ -1,5 +1,7 @@
 #include "configManager.h"
 #include "cEntity.h"
+#include "iEntity.h"
+#include "cAIPlayer.h"
 
 configManager::configManager() {
     _actors = readJSONFile("actors.json");
@@ -106,6 +108,11 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
                 result->textureNames[8] = _objects[meshName.c_str()]["DiscardTexture"].GetString();
                 result->bUseDiscardTransparency = true;
                 result->textureRatios[8] = 1.0f;
+            }
+            if (_objects[meshName.c_str()].HasMember("MaskTexture0")) {
+                result->textureRatios[4] = 1.0f;
+                result->textureNames[4] = _objects[meshName.c_str()]["MaskTexture0"].GetString();
+                result->textureNames[6] = _objects[meshName.c_str()]["MaskTextureFill0"].GetString();
             }
         }
     }
@@ -258,10 +265,16 @@ void configManager::initActors() {
             }
             //TODO: Right now we push the props to the rink vector. Decide if I want to track a separate actor vector.
             _rink.push_back(component);
+            if (_sceneDescription["Actors"][current].HasMember("Type")) {
+                // TODO: Make debug scale configurable (if it makes sense as the project evolves).
+                iEntity* entity = new cAIPlayer(component, 10.f, 150.f);
+                actorEntities.push_back(entity);
+            }
+            else {
+                iEntity* entity = new cEntity(component, 5.f, 10.f);
+                actorEntities.push_back(entity);
+            }
         }
-
-        cEntity* entity = new cEntity(component);
-        actorEntities.push_back(entity);
     }
 }
 

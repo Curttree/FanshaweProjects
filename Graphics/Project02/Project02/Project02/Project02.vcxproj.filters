@@ -159,6 +159,9 @@
     <ClCompile Include="cEntity.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="cAIPlayer.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -256,6 +259,12 @@
     </ClInclude>
     <ClInclude Include="..\common\include\Graphics\sVertex.h">
       <Filter>Graphics\Models\VAOManager</Filter>
+    </ClInclude>
+    <ClInclude Include="cAIPlayer.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="iEntity.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
