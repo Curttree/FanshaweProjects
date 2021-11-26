@@ -17,34 +17,6 @@
   "AlphaTransparency":0.15,
   "Texture0":"glass.bmp"
   },
-  "GlassQ1":{
-  "Model":"glassq1.ply",
-  "Scale":10.0,
-  "AlphaTransparency":0.15,
-  "Texture0":"glass.bmp",
-  "SpecPower":100
-  },
-  "GlassQ2":{
-  "Model":"glassq2.ply",
-  "Scale":10.0,
-  "AlphaTransparency":0.15,
-  "Texture0":"glass.bmp",
-  "SpecPower":100
-  },
-  "GlassQ3":{
-  "Model":"glassq3.ply",
-  "Scale":10.0,
-  "AlphaTransparency":0.15,
-  "Texture0":"glass.bmp",
-  "SpecPower":100
-  },
-  "GlassQ4":{
-  "Model":"glassq4.ply",
-  "Scale":10.0,
-  "AlphaTransparency":0.15,
-  "Texture0":"glass.bmp",
-  "SpecPower":100
-  },
   "GoalPosts":{
   "Model":"goalposts.ply",
   "Scale":10.0,
@@ -96,5 +68,17 @@
   "Scale":2.5,
   "AlphaTransparency":0.75,
   "Texture0":"glass.bmp"
+  },
+  "BannerAd":{
+  "Model":"bannerAd.ply",
+  "Scale":0.25,
+  "DiscardTexture":"fanshawe.bmp",
+  "SpecPower":1
+  },
+  "BannerAd2":{
+  "Model":"bannerAd.ply",
+  "Scale":0.5,
+  "DiscardTexture":"curttremblay.bmp",
+  "SpecPower":1
   }
 }

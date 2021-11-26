@@ -167,7 +167,7 @@ int main(void) {
     std::vector<std::string> vecModelsToLoad;
     vecModelsToLoad.push_back("Sphere_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba_uv.ply");
-    vecModelsToLoad.push_back("Isosphere_Smooth_Normals.ply");
+    vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -210,8 +210,8 @@ int main(void) {
     if (!::g_pTextureManager->CreateCubeTextureFromBMPFiles("WinterRiver",
         "winterRiver_posX.bmp",    /* posX_fileName */
         "winterRiver_negX.bmp",     /*negX_fileName */
-        "winterRiver_posY.bmp",       /*posY_fileName*/
         "winterRiver2_negY.bmp",     /*negY_fileName*/
+        "winterRiver_posY.bmp",       /*posY_fileName*/
         "winterRiver2_posZ.bmp",    /*posZ_fileName*/
         "winterRiver2_negZ.bmp",      /*negZ_fileName*/
         true, errorTextString))
@@ -220,7 +220,7 @@ int main(void) {
     }
     else
     {
-        std::cout << "Loaded the sunny day cube texture OK" << std::endl;
+        std::cout << "Loaded the skybox cube texture OK" << std::endl;
     }
     #pragma endregion
 
@@ -247,7 +247,7 @@ int main(void) {
     cMesh* pSkybox = new cMesh();
 
     // Mimics a skybox
-    pSkybox->meshName = "Isosphere_Smooth_Normals.ply";
+    pSkybox->meshName = "Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply";
     pSkybox->scale = 5'000'000.0f;
 
     pSkybox->positionXYZ = ::g_pFlyCamera->getEye();

@@ -92,7 +92,6 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
                     result->textureRatios[0] = 1.0f;
                 }
             }
-            //TODO: Have option of how to handle multiple textures.
             if (_objects[meshName.c_str()].HasMember("Texture1")) {
                 result->textureNames[1] = _objects[meshName.c_str()]["Texture1"].GetString();
                 if (_objects[meshName.c_str()].HasMember("Texture1Ratio")) {
@@ -101,6 +100,11 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
                 else {
                     result->textureRatios[1] = 1.0f;
                 }
+            }
+            if (_objects[meshName.c_str()].HasMember("DiscardTexture")) {
+                result->textureNames[8] = _objects[meshName.c_str()]["DiscardTexture"].GetString();
+                result->bUseDiscardTransparency = true;
+                result->textureRatios[8] = 1.0f;
             }
         }
     }
@@ -113,9 +117,22 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
             if (_actors[meshName.c_str()].HasMember("Scale")) {
                 result->scale = _actors[meshName.c_str()]["Scale"].GetFloat();
             }
+            if (_actors[meshName.c_str()].HasMember("SpecPower")) {
+                result->wholeObjectShininess_SpecPower = _actors[meshName.c_str()]["SpecPower"].GetFloat();
+            }
             if (_actors[meshName.c_str()].HasMember("Texture0")) {
                 result->textureRatios[0] = 1.0f;
                 result->textureNames[0] = _actors[meshName.c_str()]["Texture0"].GetString();
+            }
+            if (_actors[meshName.c_str()].HasMember("MaskTexture0")) {
+                result->textureRatios[4] = 1.0f;
+                result->textureNames[4] = _actors[meshName.c_str()]["MaskTexture0"].GetString();
+                result->textureNames[6] = _actors[meshName.c_str()]["MaskTextureFill0"].GetString();
+            }
+            if (_actors[meshName.c_str()].HasMember("MaskTexture1")) {
+                result->textureRatios[5] = 1.0f;
+                result->textureNames[5] = _actors[meshName.c_str()]["MaskTexture1"].GetString();
+                result->textureNames[7] = _actors[meshName.c_str()]["MaskTextureFill1"].GetString();
             }
         }
     }

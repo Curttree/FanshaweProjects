@@ -46,11 +46,13 @@ public:
 	// Alpha Transparency (0.0 to 1.0f)
 	float alphaTransparency;
 
-	static const unsigned int MAX_TEXTURES = 8;
+	static const unsigned int MAX_TEXTURES = 9;
 	std::string textureNames[MAX_TEXTURES];
 	float textureRatios[MAX_TEXTURES];
 
 	unsigned int getUniqueID(void);
+
+	bool bUseDiscardTransparency;
 
 	// All the "child" mesh objects
 	std::vector< cMesh* > vec_pChildMeshes;

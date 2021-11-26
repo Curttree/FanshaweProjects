@@ -88,6 +88,85 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         glUniform1i(texture_03_LocID, textureUnit);
     }
     //*****************************************************************************************    
+    //*****************************************************************************************
+    if (pCurrentMesh->textureRatios[3] >= 0.0f) {
+        // uniform sampler2D texture_01;
+//        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Broc_tree_house.bmp");
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
+
+        GLuint textureUnit = 3;			// Texture unit go from 0 to 79
+        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint texture_03_LocID = glGetUniformLocation(shaderProgram, "texture_03");
+        glUniform1i(texture_03_LocID, textureUnit);
+    }
+    //*****************************************************************************************    
+    //*****************************************************************************************
+    if (pCurrentMesh->textureRatios[3] >= 0.0f) {
+        // uniform sampler2D texture_01;
+//        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Broc_tree_house.bmp");
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
+
+        GLuint textureUnit = 3;			// Texture unit go from 0 to 79
+        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint texture_03_LocID = glGetUniformLocation(shaderProgram, "texture_03");
+        glUniform1i(texture_03_LocID, textureUnit);
+    }
+    //*****************************************************************************************  
+    //*****************************************************************************************
+    if (pCurrentMesh->textureRatios[4] >= 0.0f) {
+        // uniform sampler2D maskTexture_00;
+//        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Broc_tree_house.bmp");
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[4]);
+
+        GLuint textureUnit = 10;			// Texture unit go from 0 to 79. 10-20 are being used for masks.
+        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint maskTexture_00_LocID = glGetUniformLocation(shaderProgram, "maskTexture_00");
+        glUniform1i(maskTexture_00_LocID, textureUnit);
+
+        GLuint TextureNumber2 = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[6]);
+
+        GLuint textureUnit2 = 20;			// Texture unit go from 0 to 79. 20-30 are being used for textures to be used with masks.
+        glActiveTexture(textureUnit2 + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, TextureNumber2);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint maskTextureTop_00_LocID = glGetUniformLocation(shaderProgram, "maskTextureTop_00");
+        glUniform1i(maskTextureTop_00_LocID, textureUnit2);
+    }
+    //*****************************************************************************************    
+    //*****************************************************************************************
+    if (pCurrentMesh->textureRatios[5] >= 0.0f) {
+        // uniform sampler2D maskTexture_01;
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[5]);
+
+        GLuint textureUnit = 11;			// Texture unit go from 0 to 79. 10-19 are being used for masks.
+        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint maskTexture_01_LocID = glGetUniformLocation(shaderProgram, "maskTexture_01");
+        glUniform1i(maskTexture_01_LocID, textureUnit);
+
+        GLuint TextureNumber2 = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[7]);
+
+        GLuint textureUnit2 = 21;			// Texture unit go from 0 to 79. 20-39 are being used for textures to be used with masks.
+        glActiveTexture(textureUnit2 + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, TextureNumber2);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint maskTextureTop_01_LocID = glGetUniformLocation(shaderProgram, "maskTextureTop_01");
+        glUniform1i(maskTextureTop_01_LocID, textureUnit2);
+    }
+    //*****************************************************************************************      
 
     // Set all the texture ratios in the shader
     GLint textureRatios0to3_LocID = glGetUniformLocation(shaderProgram, "texture2D_Ratios0to3");
@@ -97,6 +176,36 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         pCurrentMesh->textureRatios[1],
         pCurrentMesh->textureRatios[2],
         pCurrentMesh->textureRatios[3]);
+
+    // Set all the texture ratios in the shader
+    GLint mask_Ratios0to1_LocID = glGetUniformLocation(shaderProgram, "mask_Ratios0to1");
+    // Set them. Only use two for now, but utilizing vec4 in case we wish to expand.
+    glUniform4f(mask_Ratios0to1_LocID,
+        pCurrentMesh->textureRatios[4],
+        pCurrentMesh->textureRatios[5],
+        0,
+        0);
+
+    {
+        GLint bDiscardTransparencyWindowsOn_LodID = glGetUniformLocation(shaderProgram, "bDiscardTransparencyWindowsOn");
+        // Turn discard transparency off
+        glUniform1f(bDiscardTransparencyWindowsOn_LodID, (GLfloat)GL_FALSE);
+
+        if (pCurrentMesh->bUseDiscardTransparency)
+        {
+            //                GLuint discardTextureNumber = ::g_pTextureManager->getTextureIDFromName("Lisse_mobile_shipyard-mal1.bmp");
+            GLuint discardTextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[8]);
+            // Picking texture unit 30 since it's not in use.
+            GLuint discardTextureUnit = 30;			// Texture unit go from 0 to 79
+            glActiveTexture(discardTextureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+            glBindTexture(GL_TEXTURE_2D, discardTextureNumber);
+            GLint discardTexture_LocID = glGetUniformLocation(shaderProgram, "discardTexture");
+            glUniform1i(discardTexture_LocID, discardTextureUnit);
+
+            // Turn discard function on
+            glUniform1f(bDiscardTransparencyWindowsOn_LodID, (GLfloat)GL_TRUE);
+        }
+    }
 
     {
         //GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
@@ -133,7 +242,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
             howMuch_cubeMap_01,       
             howMuch_cubeMap_02,
             howMuch_cubeMap_03);
-    }
+    } 
 
     return;
 }

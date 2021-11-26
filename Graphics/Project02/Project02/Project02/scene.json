@@ -354,6 +354,40 @@
 		"y": 13.75,
 		"z": -110.0
 	  }
+},{
+"Name":"BannerAd", "Position":{
+		"x": -125.245,
+		"y": 7.7,
+		"z": -40
+	  }
+},{
+"Name":"BannerAd2", "Position":{
+		"x": -125.245,
+		"y": 7.7,
+		"z": 40
+	  }
+},{
+"Name":"BannerAd", 
+"Position":{
+		"x": 125.245,
+		"y": 7.7,
+		"z": 40
+	  }, 
+"Orientation":{
+		"x": 0.0,
+		"y": 180.0,
+		"z": 0.0
+	  }
+},{
+"Name":"BannerAd2", "Position":{
+		"x": 125.245,
+		"y": 7.7,
+		"z": -40}, 
+"Orientation":{
+		"x": 0.0,
+		"y": 180.0,
+		"z": 0.0
+	  }
 }
 ]	
 }

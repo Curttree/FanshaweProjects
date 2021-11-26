@@ -1,6 +1,11 @@
 {"Dummy":{
-  "Model":"RedPlayer.ply",
-  "Scale":2,
-  "Texture0":"RedFill.bmp"
+  "Model":"HockeyPlayer.ply",
+  "Scale":0.2,
+  "SpecPower":200,
+  "Texture0":"Player_SharedColors.bmp",
+  "MaskTexture0":"Player_JerseyMask.bmp",
+  "MaskTextureFill0":"Red.bmp",
+  "MaskTexture1":"Player_SkinMask.bmp",
+  "MaskTextureFill1":"skintone04.bmp"
   }
 }
