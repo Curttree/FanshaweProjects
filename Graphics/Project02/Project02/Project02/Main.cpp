@@ -159,7 +159,68 @@ int main(void) {
     ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[0].position;
     // Give this a friendly name
     ::g_pDebugSphere->friendlyName = "Debug Sphere";
+
+    //Setup physics boundary visualizers
+    ::g_vec_pBoundaries.push_back(new cMesh());
+    ::g_vec_pBoundaries[0]->meshName = "tile.ply";
+    ::g_vec_pBoundaries[0]->bIsWireframe = true;
+    ::g_vec_pBoundaries[0]->bUseObjectDebugColour = true;
+    ::g_vec_pBoundaries[0]->objectDebugColourRGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+    ::g_vec_pBoundaries[0]->bDontLight = true;
+    ::g_vec_pBoundaries[0]->scale = 20.0f;
+    ::g_vec_pBoundaries[0]->positionXYZ = glm::vec3(::g_pConfigManager->_positiveBounds.x, 0.f, 0.f);
+    ::g_vec_pBoundaries[0]->orientationXYZ = glm::vec3(0.f, 0.f, glm::pi<float>() / 2.f);
+
+    ::g_vec_pBoundaries.push_back(new cMesh());
+    ::g_vec_pBoundaries[1]->meshName = "tile.ply";
+    ::g_vec_pBoundaries[1]->bIsWireframe = true;
+    ::g_vec_pBoundaries[1]->bUseObjectDebugColour = true;
+    ::g_vec_pBoundaries[1]->objectDebugColourRGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+    ::g_vec_pBoundaries[1]->bDontLight = true;
+    ::g_vec_pBoundaries[1]->scale = 20.0f;
+    ::g_vec_pBoundaries[1]->positionXYZ = glm::vec3(::g_pConfigManager->_negativeBounds.x, 0.f, 0.f);
+    ::g_vec_pBoundaries[1]->orientationXYZ = glm::vec3(0.f, 0.f, glm::pi<float>() / 2.f);
+
+    ::g_vec_pBoundaries.push_back(new cMesh());
+    ::g_vec_pBoundaries[2]->meshName = "tile.ply";
+    ::g_vec_pBoundaries[2]->bIsWireframe = true;
+    ::g_vec_pBoundaries[2]->bUseObjectDebugColour = true;
+    ::g_vec_pBoundaries[2]->objectDebugColourRGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+    ::g_vec_pBoundaries[2]->bDontLight = true;
+    ::g_vec_pBoundaries[2]->scale = 20.0f;
+    ::g_vec_pBoundaries[2]->positionXYZ = glm::vec3(0.f, 0.f, ::g_pConfigManager->_positiveBounds.z);
+    ::g_vec_pBoundaries[2]->orientationXYZ = glm::vec3(glm::pi<float>() / 2.f, 0.f, 0.f);
+
+    ::g_vec_pBoundaries.push_back(new cMesh());
+    ::g_vec_pBoundaries[3]->meshName = "tile.ply";
+    ::g_vec_pBoundaries[3]->bIsWireframe = true;
+    ::g_vec_pBoundaries[3]->bUseObjectDebugColour = true;
+    ::g_vec_pBoundaries[3]->objectDebugColourRGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+    ::g_vec_pBoundaries[3]->bDontLight = true;
+    ::g_vec_pBoundaries[3]->scale = 20.0f;
+    ::g_vec_pBoundaries[3]->positionXYZ = glm::vec3(0.f, 0.f, ::g_pConfigManager->_negativeBounds.z);
+    ::g_vec_pBoundaries[3]->orientationXYZ = glm::vec3(glm::pi<float>() / 2.f, 0.f, 0.f);
+
+    ::g_vec_pBoundaries.push_back(new cMesh());
+    ::g_vec_pBoundaries[4]->meshName = "tile.ply";
+    ::g_vec_pBoundaries[4]->bIsWireframe = true;
+    ::g_vec_pBoundaries[4]->bUseObjectDebugColour = true;
+    ::g_vec_pBoundaries[4]->objectDebugColourRGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+    ::g_vec_pBoundaries[4]->bDontLight = true;
+    ::g_vec_pBoundaries[4]->scale = 20.0f;
+    ::g_vec_pBoundaries[4]->positionXYZ = glm::vec3(0.f, ::g_pConfigManager->_positiveBounds.y, 0.f);
+
+    ::g_vec_pBoundaries.push_back(new cMesh());
+    ::g_vec_pBoundaries[5]->meshName = "tile.ply";
+    ::g_vec_pBoundaries[5]->bIsWireframe = true;
+    ::g_vec_pBoundaries[5]->bUseObjectDebugColour = true;
+    ::g_vec_pBoundaries[5]->objectDebugColourRGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+    ::g_vec_pBoundaries[5]->bDontLight = true;
+    ::g_vec_pBoundaries[5]->scale = 20.0f;
+    ::g_vec_pBoundaries[5]->positionXYZ = glm::vec3(0.f, ::g_pConfigManager->_negativeBounds.y, 0.f);
+
     #endif
+
     #pragma endregion
 
     #pragma region Models
@@ -168,6 +229,7 @@ int main(void) {
     vecModelsToLoad.push_back("Sphere_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
+    vecModelsToLoad.push_back("tile.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -344,7 +406,25 @@ int main(void) {
 
         DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
 
+        if(::g_bShowCollisionObjects)
+        for (unsigned int index = 0; index != ::g_vec_pBoundaries.size(); index++)
+        {
+            // So the code is a little easier...
+            cMesh* pCurrentMesh = ::g_vec_pBoundaries[index];
+
+            matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
+
+            DrawObject(pCurrentMesh,
+                matModel,
+                matModel_Location,
+                matModelInverseTranspose_Location,
+                program,
+                ::g_pVAOManager);
+        }
         #endif
+
+
+
 
         // After drawing the other objects, draw the skybox to limit overdraw.
 

@@ -5,12 +5,12 @@
     "y": 50.0,
   "z": -380.0}},
   "Physics":{
-	  "PositiveXBoundary":70,
-	  "NegativeXBoundary":-70,
-	  "PositiveYBoundary":100,
+	  "PositiveXBoundary":125,
+	  "NegativeXBoundary":-125,
+	  "PositiveYBoundary":250,
 	  "NegativeYBoundary":0,
-	  "PositiveZBoundary":250,
-	  "NegativeZBoundary":-250
+	  "PositiveZBoundary":215,
+	  "NegativeZBoundary":-215
   },
   "Lights":[
 	  {"Type":2,

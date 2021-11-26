@@ -51,7 +51,7 @@ void configManager::initCamera() {
 }
 
 void configManager::initPhysics() {
-    // Determine camera's starting position.
+    // Determine boundaries.
     if (_sceneDescription.HasMember("Physics")) {
         // ASSUMPTION: If Physics is present all boundaries have been defined. 
         // If this is not always the case, this should be updated.
