@@ -463,7 +463,7 @@ bool cFlyCamera::Update(std::string command, glm::vec3 data)
 		// data = location of the target
 		if (vecTokens[0] == "Track" && vecTokens[0] == "At")
 		{
-
+			this->setEye(data);
 		}
 		break;
 	}
