@@ -11,6 +11,7 @@
 #include "cMesh.h"
 #include <vector>
 #include "configManager.h"
+#include "cEntity.h"
 
 
 // These are all things that are "project global", 
@@ -45,8 +46,6 @@ extern cShaderManager* g_pShaderManager;
 extern cBasicTextureManager* g_pTextureManager;
 
 extern cLightManager* g_pTheLights;
-// This got moved into the light manager class
-//extern cLightHelper* g_pTheLightHelper;
 
 extern cMesh* g_pDebugSphere;	// = NULL;
 extern bool g_bShowDebugShere;	// = true;
@@ -57,6 +56,7 @@ extern std::vector<cMesh*> g_vec_pBoundaries;
 extern unsigned int g_selectedObject;	// = 0;
 extern unsigned int g_selectedLight;	// = 0;
 
+extern std::vector<cEntity*> g_vec_pActors;
 
 // This will be printed in the title bar
 extern std::string g_TitleText;	// = "";

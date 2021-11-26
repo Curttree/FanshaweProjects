@@ -8,7 +8,7 @@
 	  "PositiveXBoundary":125,
 	  "NegativeXBoundary":-125,
 	  "PositiveYBoundary":250,
-	  "NegativeYBoundary":0,
+	  "NegativeYBoundary":5,
 	  "PositiveZBoundary":215,
 	  "NegativeZBoundary":-215
   },

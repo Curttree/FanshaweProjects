@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "cMesh.h"
+#include "cEntity.h"
 #include "Graphics/cVAOManager.h"
 #include <Graphics/cLightManager.h>
 
@@ -36,7 +37,8 @@ public:
 	std::vector<std::string> _texturesToLoad;
 	std::vector<sModelDrawInfo> _modelDrawInfo;
 	glm::vec3 _positiveBounds;
-	glm::vec3 _negativeBounds;
+	glm::vec3 _negativeBounds; 
+	std::vector<cEntity*> actorEntities;
 	configManager(); 
 	void loadModelsIntoVAO(GLuint program, cVAOManager& gVAOManager, bool storeVertexData = false);
 	void setupLights(cLightManager* lightManager, const int startIndex);

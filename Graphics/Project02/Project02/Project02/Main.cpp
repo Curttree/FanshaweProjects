@@ -314,8 +314,10 @@ int main(void) {
 
     pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
 
+    ::g_vec_pActors = ::g_pConfigManager->actorEntities;
+
 #pragma endregion
-    const double MAX_DELTA_TIME = 0.1;  // 100 ms
+    const double MAX_DELTA_TIME = 0.05;  // 50 ms
     double previousTime = glfwGetTime();
     std::vector<cMesh*> sortedTransparentObjects;
 
@@ -327,7 +329,7 @@ int main(void) {
         glm::mat4 matView;              // used to be "v";
 
         double currentTime = glfwGetTime();
-        double deltaTime = previousTime - currentTime;
+        double deltaTime = currentTime - previousTime;
         deltaTime = (deltaTime > MAX_DELTA_TIME ? MAX_DELTA_TIME : deltaTime);
         previousTime = currentTime;
 
@@ -362,7 +364,12 @@ int main(void) {
             ::g_pFlyCamera->nearPlane,      // Near plane (as large as possible)
             ::g_pFlyCamera->farPlane);      // Far plane (as small as possible)
 
-        ::g_pFlyCamera->Update(deltaTime);
+        //::g_pFlyCamera->Update(deltaTime);
+
+        for (cEntity* actor : ::g_vec_pActors) {
+            actor->Update(deltaTime);
+        }
+        worldSpace->_world->Update(deltaTime);
 
         glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
         glm::vec3 cameraAt = ::g_pFlyCamera->getAtInWorldSpace();
@@ -406,25 +413,38 @@ int main(void) {
 
         DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
 
-        if(::g_bShowCollisionObjects)
-        for (unsigned int index = 0; index != ::g_vec_pBoundaries.size(); index++)
-        {
-            // So the code is a little easier...
-            cMesh* pCurrentMesh = ::g_vec_pBoundaries[index];
+        if (::g_bShowCollisionObjects) {
+            for (unsigned int index = 0; index != ::g_vec_pBoundaries.size(); index++)
+            {
+                // So the code is a little easier...
+                cMesh* pCurrentMesh = ::g_vec_pBoundaries[index];
 
-            matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
+                matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
 
-            DrawObject(pCurrentMesh,
-                matModel,
-                matModel_Location,
-                matModelInverseTranspose_Location,
-                program,
-                ::g_pVAOManager);
+                DrawObject(pCurrentMesh,
+                    matModel,
+                    matModel_Location,
+                    matModelInverseTranspose_Location,
+                    program,
+                    ::g_pVAOManager);
+            }
+
+            for (unsigned int index = 0; index != ::g_vec_pActors.size(); index++)
+            {
+                // So the code is a little easier...
+                cMesh* pCurrentMesh = ::g_vec_pActors[index]->debugMesh;
+
+                matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
+
+                DrawObject(pCurrentMesh,
+                    matModel,
+                    matModel_Location,
+                    matModelInverseTranspose_Location,
+                    program,
+                    ::g_pVAOManager);
+            }
         }
         #endif
-
-
-
 
         // After drawing the other objects, draw the skybox to limit overdraw.
 

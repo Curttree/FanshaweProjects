@@ -1,4 +1,5 @@
 #include "configManager.h"
+#include "cEntity.h"
 
 configManager::configManager() {
     _actors = readJSONFile("actors.json");
@@ -258,6 +259,9 @@ void configManager::initActors() {
             //TODO: Right now we push the props to the rink vector. Decide if I want to track a separate actor vector.
             _rink.push_back(component);
         }
+
+        cEntity* entity = new cEntity(component);
+        actorEntities.push_back(entity);
     }
 }
 

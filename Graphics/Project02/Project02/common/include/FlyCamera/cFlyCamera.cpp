@@ -499,7 +499,7 @@ glm::vec3 cFlyCamera::getData(std::string command)
 void cFlyCamera::MoveForward_Z(float amount, double deltaTime)
 {
 	// Clamp timestep
-	deltaTime = (deltaTime > this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
+	deltaTime = (deltaTime < this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
 
 	amount = amount * (float)deltaTime;
 
@@ -511,7 +511,7 @@ void cFlyCamera::MoveForward_Z(float amount, double deltaTime)
 void cFlyCamera::MoveLeftRight_X(float amount, double deltaTime)
 {
 	// Clamp timestep
-	deltaTime = (deltaTime > this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
+	deltaTime = (deltaTime < this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
 
 	amount = amount * (float)deltaTime;
 
@@ -523,7 +523,7 @@ void cFlyCamera::MoveLeftRight_X(float amount, double deltaTime)
 void cFlyCamera::MoveUpDown_Y(float amount, double deltaTime)
 {
 	// Clamp timestep
-	deltaTime = (deltaTime > this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
+	deltaTime = (deltaTime < this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
 
 	amount = amount * (float)deltaTime;
 
@@ -535,11 +535,11 @@ void cFlyCamera::MoveUpDown_Y(float amount, double deltaTime)
 void cFlyCamera::Pitch_UpDown(float angleDegrees, double deltaTime)		// around X
 {
 	// Clamp timestep
-	deltaTime = (deltaTime > this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
+	deltaTime = (deltaTime < this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
 
 	angleDegrees = angleDegrees * (float)deltaTime;
 
-	this->Pitch_UpDown(angleDegrees);
+	this->Pitch_UpDown(-angleDegrees);
 
 	return;
 }
@@ -547,11 +547,11 @@ void cFlyCamera::Pitch_UpDown(float angleDegrees, double deltaTime)		// around X
 void cFlyCamera::Yaw_LeftRight(float angleDegrees, double deltaTime)	// around y
 {
 	// Clamp timestep
-	deltaTime = (deltaTime > this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
+	deltaTime = (deltaTime < this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
 
 	angleDegrees = angleDegrees * (float)deltaTime;
 
-	this->Yaw_LeftRight(angleDegrees);
+	this->Yaw_LeftRight(-angleDegrees);
 
 	return;
 }
@@ -559,11 +559,11 @@ void cFlyCamera::Yaw_LeftRight(float angleDegrees, double deltaTime)	// around y
 void cFlyCamera::Roll_CW_CCW(float angleDegrees, double deltaTime)		// around z
 {
 	// Clamp timestep
-	deltaTime = (deltaTime > this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
+	deltaTime = (deltaTime < this->m_MinimumDeltaTimeStep ? this->m_MinimumDeltaTimeStep : deltaTime);
 
 	angleDegrees = angleDegrees * (float)deltaTime;
 
-	this->Roll_CW_CCW(angleDegrees);
+	this->Roll_CW_CCW(-angleDegrees);
 
 	return;
 }

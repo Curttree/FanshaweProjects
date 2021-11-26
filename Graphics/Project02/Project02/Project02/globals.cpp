@@ -15,7 +15,8 @@ cMesh* g_pDebugSphere = NULL;
 bool g_bShowDebugShere = true;
 
 bool g_bShowCollisionObjects = false;
-std::vector< cMesh* > g_vec_pBoundaries;
+std::vector< cMesh* > g_vec_pBoundaries; 
+std::vector<cEntity*> g_vec_pActors;
 
 
 unsigned int g_selectedObject = 0;
