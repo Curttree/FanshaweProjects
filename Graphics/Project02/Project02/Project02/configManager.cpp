@@ -135,12 +135,14 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
             if (_actors[meshName.c_str()].HasMember("MaskTexture0")) {
                 result->textureRatios[4] = 1.0f;
                 result->textureNames[4] = _actors[meshName.c_str()]["MaskTexture0"].GetString();
-                result->textureNames[6] = _actors[meshName.c_str()]["MaskTextureFill0"].GetString();
+                rapidjson::GenericArray<false, rapidjson::Value> options = _actors[meshName.c_str()]["MaskTextureFill0_Options"].GetArray();
+                result->textureNames[6] = options[mathHelper->getRandom(0, options.Size())].GetString();
             }
             if (_actors[meshName.c_str()].HasMember("MaskTexture1")) {
                 result->textureRatios[5] = 1.0f;
                 result->textureNames[5] = _actors[meshName.c_str()]["MaskTexture1"].GetString();
-                result->textureNames[7] = _actors[meshName.c_str()]["MaskTextureFill1"].GetString();
+                rapidjson::GenericArray<false, rapidjson::Value> options = _actors[meshName.c_str()]["MaskTextureFill1_Options"].GetArray();
+                result->textureNames[7] = options[mathHelper->getRandom(0, options.Size())].GetString();
             }
         }
     }

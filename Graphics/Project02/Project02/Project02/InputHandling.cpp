@@ -78,7 +78,9 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
             << cameraEye.y << ", "
             << cameraEye.z; //<< std::endl;
 
+        #if defined _DEBUG
         ::g_TitleText = strTitle.str();
+        #endif
 
     }//if ( cGFLWKeyboardModifiers::areAllModsUp(pWindow) )
 
@@ -107,6 +109,7 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
     // If JUST the ALT is down, move the "selected" light
     if ( cGFLWKeyboardModifiers::isModifierDown(pWindow, false, true, false) )
     {
+        #if defined _DEBUG
         if ( glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS ) { ::g_pTheLights->theLights[::g_selectedLight].position.x -= lightMovementSpeed; } // Go left
         if ( glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_PRESS ) { ::g_pTheLights->theLights[::g_selectedLight].position.x += lightMovementSpeed; } // Go right
         if ( glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS ) { ::g_pTheLights->theLights[::g_selectedLight].position.z += lightMovementSpeed; }// Go forward 
@@ -179,7 +182,7 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
             << (::g_pTheLights->theLights[::g_selectedLight].param2.x > 0.0f ? " is on" : " is off");
         //<< std::endl;
         ::g_TitleText = strTitle.str();
-
+    #endif
 
     }//if ( cGFLWKeyboardModifiers::...
 

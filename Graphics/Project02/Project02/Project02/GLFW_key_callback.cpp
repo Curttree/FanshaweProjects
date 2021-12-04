@@ -133,6 +133,7 @@
 //           ::g_pTheLights->theLights[::g_selectedLight].atten.z *= 1.01f; // +1% more
 //       }
 
+        #if defined _DEBUG
         if ( key == GLFW_KEY_PAGE_UP )
         {
             ::g_bShowDebugShere = true;
@@ -189,7 +190,7 @@
         ::g_TitleText = strTitle.str();
 
  
-
+    #endif
     }//if ( bShiftDown && ( ! bControlDown ) && ( ! bAltDown ) )
 
     return;

@@ -176,10 +176,10 @@ int main(void) {
     ::g_pTheLights->theLights[5].diffuse = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
     ::g_pTheLights->theLights[5].specular = glm::vec4(1.f, 1.f, 0.8f, 1.0f);
     ::g_pTheLights->theLights[5].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
-    ::g_pTheLights->theLights[5].atten = glm::vec4(0.001f, 0.003f, 0.0001f, 100.f);
+    ::g_pTheLights->theLights[5].atten = glm::vec4(0.01f, 0.001f, 0.0001f, 50.f);
     ::g_pTheLights->theLights[5].param1.x = 1.0f;    // spot light
-    ::g_pTheLights->theLights[5].param1.y = SPOTLIGHT_INNER;
-    ::g_pTheLights->theLights[5].param1.z = SPOTLIGHT_INNER;
+    ::g_pTheLights->theLights[5].param1.y = 15;
+    ::g_pTheLights->theLights[5].param1.z = 20;
     ::g_pTheLights->TurnOnLight(5);
     
     // SOFT SPOT LIGHTS

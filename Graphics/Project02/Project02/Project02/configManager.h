@@ -55,4 +55,5 @@ private:
 	void initProps();
 	void initPhysics();
 	cMesh* initMesh(std::string meshName,int source = PROP);
+	cMathHelper* mathHelper = cMathHelper::Instance();
 };

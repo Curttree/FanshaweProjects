@@ -89,36 +89,6 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
     }
     //*****************************************************************************************    
     //*****************************************************************************************
-    if (pCurrentMesh->textureRatios[3] >= 0.0f) {
-        // uniform sampler2D texture_01;
-//        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Broc_tree_house.bmp");
-        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
-
-        GLuint textureUnit = 3;			// Texture unit go from 0 to 79
-        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
-        glBindTexture(GL_TEXTURE_2D, TextureNumber);
-
-        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
-        GLint texture_03_LocID = glGetUniformLocation(shaderProgram, "texture_03");
-        glUniform1i(texture_03_LocID, textureUnit);
-    }
-    //*****************************************************************************************    
-    //*****************************************************************************************
-    if (pCurrentMesh->textureRatios[3] >= 0.0f) {
-        // uniform sampler2D texture_01;
-//        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Broc_tree_house.bmp");
-        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
-
-        GLuint textureUnit = 3;			// Texture unit go from 0 to 79
-        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
-        glBindTexture(GL_TEXTURE_2D, TextureNumber);
-
-        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
-        GLint texture_03_LocID = glGetUniformLocation(shaderProgram, "texture_03");
-        glUniform1i(texture_03_LocID, textureUnit);
-    }
-    //*****************************************************************************************  
-    //*****************************************************************************************
     if (pCurrentMesh->textureRatios[4] >= 0.0f) {
         // uniform sampler2D maskTexture_00;
 //        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Broc_tree_house.bmp");

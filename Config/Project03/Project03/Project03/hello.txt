@@ -1,0 +1,5 @@
+Hello,
+It's me.
+This is a letter to output in the console.
+
+Thank you for your time.
