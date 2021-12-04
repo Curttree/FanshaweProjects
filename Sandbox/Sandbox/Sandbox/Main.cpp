@@ -132,7 +132,7 @@ int main(void) {
 
     // Set up the debug sphere object
     ::g_pDebugSphere = new cMesh();
-    ::g_pDebugSphere->meshName = "Sphere_xyz_n_rgba.ply";
+    ::g_pDebugSphere->meshName = "Sphere_xyz_n_rgba_uv.ply";
     ::g_pDebugSphere->bIsWireframe = true;
     ::g_pDebugSphere->bUseObjectDebugColour = true;
     ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -145,8 +145,8 @@ int main(void) {
 
     ::g_pVAOManager->setFilePath("assets/models/");
     std::vector<std::string> vecModelsToLoad;
-    vecModelsToLoad.push_back("Sphere_xyz_n_rgba.ply");
-    vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba.ply");
+    vecModelsToLoad.push_back("Sphere_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba_uv.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -177,19 +177,7 @@ int main(void) {
     // Load the textures
     ::g_pTextureManager->SetBasePath("assets/textures");
 
-    if (::g_pTextureManager->Create2DTextureFromBMPFile("Fauci.bmp", true))
-        //if (::g_pTextureManager->Create2DTextureFromBMPFile("Pebbleswithquarzite.bmp", true))
-    {
-        std::cout << "Loaded the texture" << std::endl;
-    }
-    else
-    {
-        std::cout << "DIDN'T load the texture" << std::endl;
-    }
-
-    ::g_pTextureManager->Create2DTextureFromBMPFile("Pebbleswithquarzite.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("Lisse_mobile_shipyard-mal1.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("Broc_tree_house.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("BrightColouredUVMap.bmp", true);
 
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
     double previousTime = glfwGetTime();
@@ -365,8 +353,8 @@ void DrawDebugObjects(
         std::string oldDebugSphereModel = ::g_pDebugSphere->meshName;
 
         const float LOW_RES_SPHERE_DISTANCE = 50.0f;
-        const std::string LOW_RES_SPHERE_MODEL = "ISO_Shphere_flat_3div_xyz_n_rgba.ply";
-        const std::string HIGH_RES_SPHERE_MODEL = "ISO_Shphere_flat_4div_xyz_n_rgba.ply";
+        const std::string LOW_RES_SPHERE_MODEL = "ISO_Shphere_flat_3div_xyz_n_rgba_uv.ply";
+        const std::string HIGH_RES_SPHERE_MODEL = "ISO_Shphere_flat_4div_xyz_n_rgba_uv.ply";
 
         //float calcApproxDistFromAtten( 
         //      float targetLightLevel, 
