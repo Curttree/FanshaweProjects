@@ -21,6 +21,7 @@ void GLFW_window_size_callback(GLFWwindow* window, int width, int height)
 //  These don't change, so we should store them outside    
 void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
 {
+
     //*****************************************************************************************
     if (pCurrentMesh->textureRatios[0] >= 0.0f)
     {
@@ -73,7 +74,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
     //*****************************************************************************************    
 
     //*****************************************************************************************
-    if (pCurrentMesh->textureRatios[2] >= 0.0f) {
+    if (pCurrentMesh->textureRatios[3] >= 0.0f) {
         // uniform sampler2D texture_01;
 //        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Broc_tree_house.bmp");
         GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
@@ -87,9 +88,58 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         glUniform1i(texture_03_LocID, textureUnit);
     }
     //*****************************************************************************************    
+    //*****************************************************************************************
+    if (pCurrentMesh->textureRatios[4] >= 0.0f) {
+        // uniform sampler2D maskTexture_00;
+//        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Broc_tree_house.bmp");
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[4]);
+
+        GLuint textureUnit = 10;			// Texture unit go from 0 to 79. 10-20 are being used for masks.
+        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint maskTexture_00_LocID = glGetUniformLocation(shaderProgram, "maskTexture_00");
+        glUniform1i(maskTexture_00_LocID, textureUnit);
+
+        GLuint TextureNumber2 = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[6]);
+
+        GLuint textureUnit2 = 20;			// Texture unit go from 0 to 79. 20-30 are being used for textures to be used with masks.
+        glActiveTexture(textureUnit2 + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, TextureNumber2);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint maskTextureTop_00_LocID = glGetUniformLocation(shaderProgram, "maskTextureTop_00");
+        glUniform1i(maskTextureTop_00_LocID, textureUnit2);
+    }
+    //*****************************************************************************************    
+    //*****************************************************************************************
+    if (pCurrentMesh->textureRatios[5] >= 0.0f) {
+        // uniform sampler2D maskTexture_01;
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[5]);
+
+        GLuint textureUnit = 11;			// Texture unit go from 0 to 79. 10-19 are being used for masks.
+        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint maskTexture_01_LocID = glGetUniformLocation(shaderProgram, "maskTexture_01");
+        glUniform1i(maskTexture_01_LocID, textureUnit);
+
+        GLuint TextureNumber2 = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[7]);
+
+        GLuint textureUnit2 = 21;			// Texture unit go from 0 to 79. 20-39 are being used for textures to be used with masks.
+        glActiveTexture(textureUnit2 + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, TextureNumber2);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint maskTextureTop_01_LocID = glGetUniformLocation(shaderProgram, "maskTextureTop_01");
+        glUniform1i(maskTextureTop_01_LocID, textureUnit2);
+    }
+    //*****************************************************************************************      
 
     // Set all the texture ratios in the shader
-    GLint textureRatios0to3_LocID = glGetUniformLocation(shaderProgram, "textureRatios0to3");
+    GLint textureRatios0to3_LocID = glGetUniformLocation(shaderProgram, "texture2D_Ratios0to3");
     // Set them
     glUniform4f(textureRatios0to3_LocID,
         pCurrentMesh->textureRatios[0],
@@ -97,14 +147,82 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         pCurrentMesh->textureRatios[2],
         pCurrentMesh->textureRatios[3]);
 
+    // Set all the texture ratios in the shader
+    GLint mask_Ratios0to1_LocID = glGetUniformLocation(shaderProgram, "mask_Ratios0to1");
+    // Set them. Only use two for now, but utilizing vec4 in case we wish to expand.
+    glUniform4f(mask_Ratios0to1_LocID,
+        pCurrentMesh->textureRatios[4],
+        pCurrentMesh->textureRatios[5],
+        0,
+        0);
+
+    {
+        GLint bDiscardTransparencyWindowsOn_LodID = glGetUniformLocation(shaderProgram, "bDiscardTransparencyWindowsOn");
+        // Turn discard transparency off
+        glUniform1f(bDiscardTransparencyWindowsOn_LodID, (GLfloat)GL_FALSE);
+
+        if (pCurrentMesh->bUseDiscardTransparency)
+        {
+            //                GLuint discardTextureNumber = ::g_pTextureManager->getTextureIDFromName("Lisse_mobile_shipyard-mal1.bmp");
+            GLuint discardTextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[8]);
+            // Picking texture unit 30 since it's not in use.
+            GLuint discardTextureUnit = 30;			// Texture unit go from 0 to 79
+            glActiveTexture(discardTextureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+            glBindTexture(GL_TEXTURE_2D, discardTextureNumber);
+            GLint discardTexture_LocID = glGetUniformLocation(shaderProgram, "discardTexture");
+            glUniform1i(discardTexture_LocID, discardTextureUnit);
+
+            // Turn discard function on
+            glUniform1f(bDiscardTransparencyWindowsOn_LodID, (GLfloat)GL_TRUE);
+        }
+    }
+
+    {
+        //GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Skybox");
+
+        // Be careful that you don't mix up the 2D and the cube assignments for the texture units
+        //
+        // Here, I'll say that the cube maps start at texture unit 40
+        //
+        GLuint textureUnit = 40;			// Texture unit go from 0 to 79
+        glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+
+        // ***NOTE*** Binding to a CUBE MAP not a 2D Texture
+        glBindTexture(GL_TEXTURE_CUBE_MAP, TextureNumber);
+
+        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
+        GLint cubeMap_00_LocID = glGetUniformLocation(shaderProgram, "cubeMap_00");
+        glUniform1i(cubeMap_00_LocID, textureUnit);
+
+    }
+
+    {   // Set up the blend values for the skyboxes
+        GLint cubeMap_Ratios0to3_LocID = glGetUniformLocation(shaderProgram, "cubeMap_Ratios0to3");
+
+        float howMuch_cubeMap_00 = 1.0f;
+        float howMuch_cubeMap_01 = 0.0f;
+        float howMuch_cubeMap_02 = 0.0f;
+        float howMuch_cubeMap_03 = 0.0f;
+
+        // Blend the maps (we are currently only using the first one).
+        glUniform4f(
+            cubeMap_Ratios0to3_LocID,
+            howMuch_cubeMap_00,
+            howMuch_cubeMap_01,
+            howMuch_cubeMap_02,
+            howMuch_cubeMap_03);
+    }
+
     return;
 }
 
+
 void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
-                GLint matModel_Location,
-                GLint matModelInverseTranspose_Location,
-                GLuint program,
-                cVAOManager* pVAOManager)
+    GLint matModel_Location,
+    GLint matModelInverseTranspose_Location,
+    GLuint program,
+    cVAOManager* pVAOManager)
 {
     // Set up textures for this object
     SetUpTextures(pCurrentMesh, program);
@@ -121,47 +239,47 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
 
     // *****************************************************
     // Translate or "move" the object somewhere
-    glm::mat4 matTranslate = glm::translate( glm::mat4(1.0f),
-                                                pCurrentMesh->positionXYZ );
+    glm::mat4 matTranslate = glm::translate(glm::mat4(1.0f),
+        pCurrentMesh->positionXYZ);
     //matModel = matModel * matTranslate;
     // *****************************************************
 
 
     // *****************************************************
     // Rotation around the Z axis
-    glm::mat4 rotateZ = glm::rotate( glm::mat4(1.0f),
-                                        pCurrentMesh->orientationXYZ.z,//(float)glfwGetTime(),
-                                        glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::mat4 rotateZ = glm::rotate(glm::mat4(1.0f),
+        pCurrentMesh->orientationXYZ.z,//(float)glfwGetTime(),
+        glm::vec3(0.0f, 0.0f, 1.0f));
     //matModel = matModel * rotateZ;
     // *****************************************************
 
     // *****************************************************
     // Rotation around the Y axis
     glm::mat4 rotateY = glm::rotate(glm::mat4(1.0f),
-                                    pCurrentMesh->orientationXYZ.y,
-                                    glm::vec3(0.0f, 1.0f, 0.0f));
+        pCurrentMesh->orientationXYZ.y,
+        glm::vec3(0.0f, 1.0f, 0.0f));
     //matModel = matModel * rotateY;
     // *****************************************************
-            
+
     // *****************************************************
     // Rotation around the X axis
     glm::mat4 rotateX = glm::rotate(glm::mat4(1.0f),
-                                    pCurrentMesh->orientationXYZ.x,
-                                    glm::vec3(1.0f, 0.0f, 0.0f));
+        pCurrentMesh->orientationXYZ.x,
+        glm::vec3(1.0f, 0.0f, 0.0f));
     //matModel = matModel * rotateX;
     // *****************************************************
 
-            
+
     // *****************************************************
     // Scale the model
     glm::mat4 matScale = glm::scale(glm::mat4(1.0f),
-                                    glm::vec3(pCurrentMesh->scale,  // Scale in X
-                                                pCurrentMesh->scale,  // Scale in Y
-                                                pCurrentMesh->scale));// Scale in Z
-    //matModel = matModel * matScale;
-    // *****************************************************
+        glm::vec3(pCurrentMesh->scale,  // Scale in X
+            pCurrentMesh->scale,  // Scale in Y
+            pCurrentMesh->scale));// Scale in Z
+//matModel = matModel * matScale;
+// *****************************************************
 
-    // *****************************************************
+// *****************************************************
     matModel = matModel * matTranslate;
     matModel = matModel * rotateZ;
     matModel = matModel * rotateY;
@@ -202,22 +320,22 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
     if (pCurrentMesh->bUseWholeObjectDiffuseColour)
     {
         glUniform1f(bUseWholeObjectDiffuseColour_Location, (float)GL_TRUE);
-        glUniform4f(wholeObjectDiffuseColour_Location, 
-                    pCurrentMesh->wholeObjectDiffuseRGBA.r,
-                    pCurrentMesh->wholeObjectDiffuseRGBA.g,
-                    pCurrentMesh->wholeObjectDiffuseRGBA.b,
-                    pCurrentMesh->wholeObjectDiffuseRGBA.a);
+        glUniform4f(wholeObjectDiffuseColour_Location,
+            pCurrentMesh->wholeObjectDiffuseRGBA.r,
+            pCurrentMesh->wholeObjectDiffuseRGBA.g,
+            pCurrentMesh->wholeObjectDiffuseRGBA.b,
+            pCurrentMesh->wholeObjectDiffuseRGBA.a);
     }
     else
     {
         glUniform1f(bUseWholeObjectDiffuseColour_Location, (float)GL_FALSE);
     }
 
-    glUniform4f(wholeObjectSpecularColour_Location, 
-                pCurrentMesh->wholeObjectSpecularRGB.r,
-                pCurrentMesh->wholeObjectSpecularRGB.g,
-                pCurrentMesh->wholeObjectSpecularRGB.b,
-                pCurrentMesh->wholeObjectShininess_SpecPower);
+    glUniform4f(wholeObjectSpecularColour_Location,
+        pCurrentMesh->wholeObjectSpecularRGB.r,
+        pCurrentMesh->wholeObjectSpecularRGB.g,
+        pCurrentMesh->wholeObjectSpecularRGB.b,
+        pCurrentMesh->wholeObjectShininess_SpecPower);
 
 
     // See if mesh is wanting the vertex colour override (HACK) to be used?
@@ -226,10 +344,10 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
         // Override the colour...
         glUniform1f(bUseDebugColour_Location, (float)GL_TRUE);
         glUniform4f(objectDebugColour_Location,
-                    pCurrentMesh->objectDebugColourRGBA.r, 
-                    pCurrentMesh->objectDebugColourRGBA.g,
-                    pCurrentMesh->objectDebugColourRGBA.b,
-                    pCurrentMesh->objectDebugColourRGBA.a);
+            pCurrentMesh->objectDebugColourRGBA.r,
+            pCurrentMesh->objectDebugColourRGBA.g,
+            pCurrentMesh->objectDebugColourRGBA.b,
+            pCurrentMesh->objectDebugColourRGBA.a);
     }
     else
     {
@@ -263,15 +381,17 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
     }
 
     sModelDrawInfo modelInfo;
+    //        if (gVAOManager.FindDrawInfoByModelName("bun_zipper_res2 (justXYZ).ply", modelInfo))
+    //        if (gVAOManager.FindDrawInfoByModelName("Assembled_ISS.ply", modelInfo))
 
-    if ( pVAOManager->FindDrawInfoByModelName( pCurrentMesh->meshName, modelInfo) )
+    if (pVAOManager->FindDrawInfoByModelName(pCurrentMesh->meshName, modelInfo))
     {
         glBindVertexArray(modelInfo.VAO_ID);
 
         glDrawElements(GL_TRIANGLES,
-                        modelInfo.numberOfIndices, 
-                        GL_UNSIGNED_INT, 
-                        (void*)0);
+            modelInfo.numberOfIndices,
+            GL_UNSIGNED_INT,
+            (void*)0);
 
         glBindVertexArray(0);
     }

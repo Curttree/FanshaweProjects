@@ -67,16 +67,33 @@ uniform sampler2D texture_00;		// GL_TEXTURE_2D
 uniform sampler2D texture_01;		// GL_TEXTURE_2D
 uniform sampler2D texture_02;		// GL_TEXTURE_2D
 uniform sampler2D texture_03;		// GL_TEXTURE_2D
-uniform sampler2D texture_04;		// GL_TEXTURE_2D
-uniform sampler2D texture_05;		// GL_TEXTURE_2D
-uniform sampler2D texture_06;		// GL_TEXTURE_2D
-uniform sampler2D texture_07;		// GL_TEXTURE_2D
 
-uniform vec4 textureRatios0to3;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
-uniform vec4 textureRatios4to7;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
+uniform vec4 texture2D_Ratios0to3;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
 
-// Skybox or reflection or light probe
-uniform samplerCube skyBox;			// GL_TEXTURE_CUBE_MAP
+// Cube maps for skybox, etc.
+uniform samplerCube cubeMap_00;			// Tropical day time
+uniform samplerCube cubeMap_01;			// Tropical night time
+uniform samplerCube cubeMap_02;
+uniform samplerCube cubeMap_03;
+uniform vec4 cubeMap_Ratios0to3;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
+
+// Mask textures
+uniform sampler2D maskTexture_00;		// GL_TEXTURE_2D
+uniform sampler2D maskTexture_01;		// GL_TEXTURE_2D
+// Textures to use with masks
+uniform sampler2D maskTextureTop_00;		// GL_TEXTURE_2D
+uniform sampler2D maskTextureTop_01;		// GL_TEXTURE_2D
+uniform vec4 mask_Ratios0to1;
+
+
+// if true, then we only sample from the cubeMaps (skyboxes)
+uniform bool bIsSkyBox;
+
+// If this is true, then we will sample the "discardTexture" to 
+//	perform a discard on that pixel
+// (we could also do a change in the transparency, or something)
+uniform sampler2D discardTexture;		
+uniform bool bDiscardTransparencyWindowsOn;
 
 void main()
 {
@@ -85,6 +102,50 @@ void main()
 	
 	// HACK: See if the UV coordinates are actually being passed in
 	pixelColour = vec4(0.0f, 0.0f, 0.0, 1.0f); 
+	
+	// Perform a discard transparency action for the "windows"
+	if (bDiscardTransparencyWindowsOn)
+	{
+		// Eventually I may want to make this configurable.
+		vec3 discardColour = vec3(0.f,1.f,0.f);
+		vec3 vec3DisSample = texture( discardTexture, fUVx2.xy ).rgb;
+		// Take average of this RGB sample
+		//
+		if (abs(discardColour.r - vec3DisSample.r) < 0.75f &&  abs(discardColour.g - vec3DisSample.g) < 0.75f && abs(discardColour.b - vec3DisSample.b) < 0.75f)
+		{	// "close enough"
+		
+			// DON'T even draw the pixel here
+			// The fragment shader simply stops here
+			discard;
+		}
+		else{
+		// Force color to be black as I was noticing some bleedover of the discard colour..
+		//pixelColour = vec4(vec3DisSample.x,vec3DisSample.y,vec3DisSample.z,1.f);
+		}
+		return;
+	}// if (bDiscardTransWindowsOn)
+	
+	if ( bIsSkyBox )
+	{
+		// For some reason if the cube map isn't actaully set to 
+		//	a texture unit, it returns black when combined with other cubemaps
+		//		pixelColour.rgb = 
+		//			( texture( cubeMap_00, fNormal.xyz ).rgb * cubeMap_Ratios0to3.x ) + 
+		//			( texture( cubeMap_01, fNormal.xyz ).rgb * cubeMap_Ratios0to3.y ) +
+		//			( texture( cubeMap_02, fNormal.xyz ).rgb * cubeMap_Ratios0to3.z ) + 
+		//			( texture( cubeMap_03, fNormal.xyz ).rgb * cubeMap_Ratios0to3.w );	
+		//
+		//	So here's an alternative work around version:
+		//
+		pixelColour.rgba = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+		if ( cubeMap_Ratios0to3.x > 0.0f )
+		{
+			pixelColour.rgb += texture( cubeMap_00, fNormal.xyz ).rgb * cubeMap_Ratios0to3.x;
+		}
+
+		return;	
+	}//if ( bIsSkyBox )
 	
 	// Copy model vertex colours?
 	vec4 vertexDiffuseColour = fVertexColour;
@@ -114,11 +175,17 @@ void main()
 	vertexDiffuseColour.rgb *= 0.0001f;
 
 	vertexDiffuseColour.rgb += 	
-			(texture( texture_00, fUVx2.xy ).rgb * textureRatios0to3.x)  + 
-		    (texture( texture_01, fUVx2.xy ).rgb * textureRatios0to3.y)  + 
-			(texture( texture_02, fUVx2.xy ).rgb * textureRatios0to3.z)  + 
-			(texture( texture_03, fUVx2.xy ).rgb * textureRatios0to3.w);
+			(texture( texture_00, fUVx2.xy ).rgb * texture2D_Ratios0to3.x)  + 
+		    (texture( texture_01, fUVx2.xy ).rgb * texture2D_Ratios0to3.y)  + 
+			(texture( texture_02, fUVx2.xy ).rgb * texture2D_Ratios0to3.z)  + 
+			(texture( texture_03, fUVx2.xy ).rgb * texture2D_Ratios0to3.w);
 			// + etc... the other 4 texture units
+			
+	
+	vertexDiffuseColour.rgb += 	
+			(texture( maskTexture_00, fUVx2.xy ).rgb * texture( maskTextureTop_00, fUVx2.xy ).rgb * mask_Ratios0to1.x)  + 
+		    (texture( maskTexture_01, fUVx2.xy ).rgb * texture( maskTextureTop_01, fUVx2.xy ).rgb * mask_Ratios0to1.y);
+			// 		
 	
 	vec4 outColour = calcualteLightContrib( vertexDiffuseColour.rgb,		
 	                                        fNormal.xyz, 		// Normal at the vertex (in world coords)
@@ -168,7 +235,7 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 			float dotProduct = dot( -theLights[index].direction.xyz,  
 									   normalize(norm.xyz) );	// -1 to 1
 
-			dotProduct = max( 0.0f, dotProduct );		// 0 to 1
+			dotProduct = max( 0.25f, dotProduct );		// Set lower limit as 25% so shadows are softer.
 		
 			lightContrib *= dotProduct;		
 			
@@ -178,7 +245,7 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 			// NOTE: There isn't any attenuation, like with sunlight.
 			// (This is part of the reason directional lights are fast to calculate)
 			
-			return finalObjectColour;		
+			continue;		
 		}
 		
 		// Assume it's a point light 
@@ -207,8 +274,6 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 		// To simplify, we are NOT using the light specular value, just the object’s.
 		float objectSpecularPower = vertexSpecular.w; 
 		
-//		lightSpecularContrib = pow( max(0.0f, dot( eyeVector, reflectVector) ), objectSpecularPower )
-//			                   * vertexSpecular.rgb;	//* theLights[lightIndex].Specular.rgb
 		lightSpecularContrib = pow( max(0.0f, dot( eyeVector, reflectVector) ), objectSpecularPower )
 			                   * theLights[index].specular.rgb;
 							   
@@ -226,8 +291,6 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 		// But is it a spot light
 		if ( intLightType == SPOT_LIGHT_TYPE )		// = 1
 		{	
-		
-
 			// Yes, it's a spotlight
 			// Calcualate light vector (light to vertex, in world)
 			vec3 vertexToLight = vertexWorldPos.xyz - theLights[index].position.xyz;

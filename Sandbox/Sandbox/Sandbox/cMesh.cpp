@@ -22,24 +22,18 @@ cMesh::cMesh()
 	this->wholeObjectDiffuseRGBA = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);	// The "colour" of the object
 	//
 	// Specular HIGHLIGHT colour (usually the same as the light, or white)
-	this->wholeObjectSpecularRGB = glm::vec3(1.0f, 1.0f, 1.0f);			
+	this->wholeObjectSpecularRGB = glm::vec3(1.0f, 1.0f, 1.0f);
 	// Specular highlight POWER (or shininess). Starts at 1.0 and goes to ? (like 100, 1000, 10000 is OK)
 	this->wholeObjectShininess_SpecPower = 1.0f;	// 1.0 to ??
 
 	// Default to 1.0f (all solid)
 	this->alphaTransparency = 1.0f;
 
-	// Clear all the textures
-	for (unsigned int index = 0; index != cMesh::MAX_TEXTURES; index++)
-	{
-		this->textureNames[index] = "";
-		this->textureRatios[index] = 0.0f;
-	}
+	this->bUseDiscardTransparency = false;
 
 	// Assign a unique ID
 	this->m_UniqueID = cMesh::m_NextID;
 	cMesh::m_NextID++;
-
 }
 
 
