@@ -191,7 +191,7 @@ int main(void) {
         glm::mat4 matView;              // used to be "v";
 
         double currentTime = glfwGetTime();
-        double deltaTime = previousTime - currentTime;
+        double deltaTime = currentTime - previousTime;
         deltaTime = (deltaTime > MAX_DELTA_TIME ? MAX_DELTA_TIME : deltaTime);
         previousTime = currentTime;
 

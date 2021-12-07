@@ -17,6 +17,7 @@ int main()
 	std::cout << "-----------------------" << std::endl;
 	std::cout << "<Press any key to exit>" << std::endl;
 
+	// Check for any key being hit.
 	bool shouldExit = false;
 	while (!shouldExit) {
 		if (_kbhit()) {
