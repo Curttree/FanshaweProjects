@@ -219,6 +219,6 @@
     <Copy sourceFiles="@(DeploymentCopyAssetFiles)" DestinationFolder="$(DeploymentPath)\assets" />
     <Copy sourceFiles="@(DeploymentCopyShaderFiles)" DestinationFolder="$(DeploymentPath)\assets\shaders" />
     <Message Text="Creating Zip folder." />
-    <Exec Command="$(ProjectDir)7z.exe a -ssw &quot;$(ProjectDir)$(DeploymentFolderName).zip&quot; &quot;$(DeploymentPath)&quot;" />
+    <Exec Command="&quot;$(ProjectDir)7z.exe&quot; a -ssw &quot;$(ProjectDir)$(DeploymentFolderName).zip&quot; &quot;$(DeploymentPath)&quot;" />
   </Target>
 </Project>

@@ -5,7 +5,6 @@
 #include "cParticleForceRegistry.h"
 #include "cParticleContact.h"
 #include "iParticleContactGenerator.h"
-#include "cParticleContactResolver.h"
 
 class cParticleWorld {
 public:
@@ -29,7 +28,6 @@ private:
 	cParticleContact* contacts;
 	size_t maxContacts;
 	std::vector<iParticleContactGenerator*> contactGenerators;
-	cParticleContactResolver contactResolver;
 	// The world should calculate the number of iterations
 	// to give the contact resolver each frame.
 	bool shouldCalculateIterations;

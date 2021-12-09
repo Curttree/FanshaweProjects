@@ -93,7 +93,7 @@ glm::vec3 cParticle::ApplyForce(const glm::vec3 force)
 
 glm::vec3 cParticle::ApplyImpulse(const glm::vec3 impulse)
 {
-	velocity += force * GetInverseMass();
+	/*velocity += force * GetInverseMass();*/
 	return velocity;
 }
 
