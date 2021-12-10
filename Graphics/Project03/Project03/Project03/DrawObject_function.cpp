@@ -172,6 +172,9 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
             GLint discardTexture_LocID = glGetUniformLocation(shaderProgram, "discardTexture");
             glUniform1i(discardTexture_LocID, discardTextureUnit);
 
+            GLint discardColour_LocID = glGetUniformLocation(shaderProgram, "discardColour");
+            glUniform3f(discardColour_LocID, pCurrentMesh->discardColour.r, pCurrentMesh->discardColour.g, pCurrentMesh->discardColour.b);
+
             // Turn discard function on
             glUniform1f(bDiscardTransparencyWindowsOn_LodID, (GLfloat)GL_TRUE);
         }

@@ -91,7 +91,8 @@ uniform bool bIsSkyBox;
 // If this is true, then we will sample the "discardTexture" to 
 //	perform a discard on that pixel
 // (we could also do a change in the transparency, or something)
-uniform sampler2D discardTexture;		
+uniform sampler2D discardTexture;
+uniform vec3 discardColour;		
 uniform bool bDiscardTransparencyWindowsOn;
 
 // Specular map values. Decide whether you want to use a map, or whole object spec value (default)
@@ -110,7 +111,6 @@ void main()
 	if (bDiscardTransparencyWindowsOn)
 	{
 		// Eventually I may want to make this configurable.
-		vec3 discardColour = vec3(0.f,1.f,0.f);
 		vec3 vec3DisSample = texture( discardTexture, fUVx2.xy ).rgb;
 		// Take average of this RGB sample
 		//
@@ -122,8 +122,7 @@ void main()
 			discard;
 		}
 		else{
-		// Force color to be black as I was noticing some bleedover of the discard colour..
-		//pixelColour = vec4(vec3DisSample.x,vec3DisSample.y,vec3DisSample.z,1.f);
+		pixelColour = vec4(vec3DisSample.x,vec3DisSample.y,vec3DisSample.z,wholeObjectAlphaTransparency);
 		}
 		return;
 	}// if (bDiscardTransWindowsOn)

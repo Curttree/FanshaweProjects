@@ -114,6 +114,11 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
                 result->textureNames[4] = _objects[meshName.c_str()]["MaskTexture0"].GetString();
                 result->textureNames[6] = _objects[meshName.c_str()]["MaskTextureFill0"].GetString();
             }
+            if (_objects[meshName.c_str()].HasMember("DiscardColour")) {
+                result->discardColour.r = _objects[meshName.c_str()]["DiscardColour"]["r"].GetFloat();
+                result->discardColour.g = _objects[meshName.c_str()]["DiscardColour"]["g"].GetFloat();
+                result->discardColour.b = _objects[meshName.c_str()]["DiscardColour"]["b"].GetFloat();
+            }
         }
     }
     else if (source == ACTOR) {

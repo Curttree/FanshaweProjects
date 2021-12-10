@@ -69,12 +69,29 @@
   "Model":"bannerAd.ply",
   "Scale":0.25,
   "DiscardTexture":"fanshawe.bmp",
+  "DiscardColour":{"r":1,"g":1,"b":1},
   "SpecPower":1
   },
   "BannerAd2":{
   "Model":"bannerAd.ply",
   "Scale":0.5,
   "DiscardTexture":"curttremblay.bmp",
+  "DiscardColour":{"r":1,"g":1,"b":1},
   "SpecPower":1
+  },
+  "LightArrayImposter":{
+  "Model":"Quad_1_sided_aligned_on_XY_plane.ply",
+  "Scale":24,
+  "DiscardTexture":"lightArray.bmp",
+  "DiscardColour":{"r":0,"g":0,"b":0},
+  "SpecPower":0
+  },
+  "LightBeamImposter":{
+  "Model":"Quad_x3_2_sided_axial_imposter_base_on_XY_axis.ply",
+  "Scale":20,
+  "AlphaTransparency":0.12,
+  "DiscardTexture":"lightBeam.bmp",
+  "DiscardColour":{"r":0,"g":0,"b":0},
+  "SpecPower":0
   }
 }
