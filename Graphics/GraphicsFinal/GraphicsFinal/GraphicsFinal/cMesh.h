@@ -61,6 +61,16 @@ public:
 	// All the "child" mesh objects
 	std::vector< cMesh* > vec_pChildMeshes;
 
+	// This is used for any scene graph. 
+	// When saving these to a file, you can save the 16 values of the matrix,
+	//	or some other way, like storing translation, rotation, scale, etc.
+	glm::mat4 matModelBaseOffset;
+
+	// This is the final world matrix that was set at the last draw call
+	// This is useful for finding where articulated (scene graph) models 
+	//	ended up being 
+	glm::mat4 matLastDrawCallWorldMatrix;
+
 private:
 	unsigned int m_UniqueID;
 	static unsigned int m_NextID;

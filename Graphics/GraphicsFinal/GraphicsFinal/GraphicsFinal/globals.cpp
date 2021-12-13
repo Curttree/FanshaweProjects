@@ -8,6 +8,8 @@ cLightManager* g_pTheLights = NULL;
 cBasicTextureManager* g_pTextureManager = NULL;
 configManager* g_pConfigManager = NULL;
 
+cDungeonMaster* g_pDungeonMaster = NULL;
+
 std::vector< cMesh* > g_vec_pMeshes;
 std::vector< cMesh* > g_vec_pMeshesTransparency;
 

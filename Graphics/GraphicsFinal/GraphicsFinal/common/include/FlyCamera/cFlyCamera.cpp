@@ -18,7 +18,7 @@ cFlyCamera::cFlyCamera()
 	this->m_upIsYVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
 
-	this->movementSpeed = 5.0f;
+	this->movementSpeed = 100.0f;
 
 
 	// Set initial orientation (all zero on Euler axes)

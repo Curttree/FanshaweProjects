@@ -307,6 +307,7 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
     matModel = matModel * rotateX;
     matModel = matModel * matScale;     // <-- mathematically, this is 1st
 
+    pCurrentMesh->matLastDrawCallWorldMatrix = matModel;
     // Now the matModel ("Model" or "World") matrix
     //  represents ALL the transformations we want, in ONE matrix.
 

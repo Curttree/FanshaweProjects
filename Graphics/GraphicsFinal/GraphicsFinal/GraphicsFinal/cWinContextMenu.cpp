@@ -37,7 +37,7 @@ void cWinContextMenu::showMenu(GLFWwindow* window, int x, int y)
     // Like different programs can have the same messages, and different 
     //  windows within that application can also have the same messages.
     // This is because the messages are sent to 
-    const UINT_PTR ID_POSITION1 = WM_USER + 1;
+    const UINT_PTR ID_WIREFRAME = WM_USER + 1;
     const UINT_PTR ID_POSITION2 = WM_USER + 2;
     const UINT_PTR ID_POSITION3 = WM_USER + 3;
     const UINT_PTR ID_TOGGLECOLLISION = WM_USER + 4;
@@ -46,10 +46,7 @@ void cWinContextMenu::showMenu(GLFWwindow* window, int x, int y)
 
     HMENU hPopupMenu = CreatePopupMenu();
     InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_CLOSE, (LPCWSTR)L"Exit");
-    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_TOGGLECOLLISION, (LPCWSTR)L"Toggle Hit Boxes");
-    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_POSITION3, (LPCWSTR)L"Camera Position - Transparency Ex. 2");
-    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_POSITION2, (LPCWSTR)L"Camera Position - Transparency Ex. 1");
-    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_POSITION1, (LPCWSTR)L"Camera Position - Starting Position");
+    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_WIREFRAME, (LPCWSTR)L"Toggle Wireframe");
 
     HWND hWnd = glfwGetWin32Window(window);
 
@@ -72,25 +69,12 @@ void cWinContextMenu::showMenu(GLFWwindow* window, int x, int y)
         std::cout << "Picked \"Exit\" (ID_CLOSE)" << std::endl;
 
         break;
-    case ID_POSITION1:
-        std::cout << "Picked \"Camera Position 1\" (ID_POSITION1)" << std::endl;
+    case ID_WIREFRAME:
+        std::cout << "Picked \"Toggle Wireframe\" (ID_POSITION1)" << std::endl;
 
-        ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
-        ::g_pFlyCamera->setEye(::g_pConfigManager->_cameraStartingPosition);
-        break;
-    case ID_POSITION2:
-        std::cout << "Picked \"Camera Position 2\" (ID_POSITION2)" << std::endl;
-        ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
-        ::g_pFlyCamera->setEye(glm::vec3(0.f, 11.f, -265.f));
-        break;
-    case ID_POSITION3:
-        std::cout << "Picked \"Camera Position 3\" (ID_POSITION3)" << std::endl;
-        ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
-        ::g_pFlyCamera->setEye(glm::vec3(-159.f, 16.5f, 115.f));
-        break;
-    case ID_TOGGLECOLLISION:
-        std::cout << "Picked \"Toggle Collision Visibility\" (ID_TOGGLECOLLISION)" << std::endl;
-        ::g_bShowCollisionObjects = !::g_bShowCollisionObjects;
+        for (cMesh* mesh : g_vec_pMeshes) {
+            mesh->bIsWireframe = !mesh->bIsWireframe;
+        }
         break;
     case 0:
         std::cout << "Didn't make a choice (hit <esc>?)" << std::endl;

@@ -15,5 +15,7 @@ bool g_StartUp(GLFWwindow* pWindow)
 
 	::g_pConfigManager = new configManager();
 
+	::g_pDungeonMaster = new cDungeonMaster();
+
 	return true;
 }

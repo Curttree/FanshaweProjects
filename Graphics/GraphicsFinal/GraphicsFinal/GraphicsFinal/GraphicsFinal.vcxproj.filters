@@ -55,6 +55,12 @@
     <Filter Include="Objects">
       <UniqueIdentifier>{ea568a30-a9b6-4529-a6b5-fd01d240a4b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dungeon">
+      <UniqueIdentifier>{6b371039-1b2f-4205-8c5b-c5ffa6e29647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dungeon\Header Files">
+      <UniqueIdentifier>{c86ca8c4-c10a-4f42-94c4-37f5fd8794be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -162,6 +168,15 @@
     <ClCompile Include="cAIPlayer.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="cDungeonReader.cpp">
+      <Filter>Dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="cDungeonMaster.cpp">
+      <Filter>Dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="cDungeonFactory.cpp">
+      <Filter>Dungeon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -265,6 +280,15 @@
     </ClInclude>
     <ClInclude Include="iEntity.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="cDungeonReader.h">
+      <Filter>Dungeon\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cDungeonMaster.h">
+      <Filter>Dungeon\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cDungeonFactory.h">
+      <Filter>Dungeon\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

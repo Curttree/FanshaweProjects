@@ -50,6 +50,12 @@
     }
 
 
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)	// "Space"
+    {
+        for (cMesh* mesh : g_vec_pMeshes) {
+            mesh->bIsWireframe = !mesh->bIsWireframe;
+        }
+    }
 
 //   // If JUST the shift is down, move the "selected" object
 //   if ( bShiftDown && (!bControlDown) && (!bAltDown) )

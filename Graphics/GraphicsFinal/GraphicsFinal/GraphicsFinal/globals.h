@@ -13,6 +13,7 @@
 #include <map>
 #include "configManager.h"
 #include "iEntity.h"
+#include "cDungeonMaster.h"
 
 
 // These are all things that are "project global", 
@@ -47,6 +48,8 @@ extern cShaderManager* g_pShaderManager;
 extern cBasicTextureManager* g_pTextureManager;
 
 extern cLightManager* g_pTheLights;
+
+extern cDungeonMaster* g_pDungeonMaster;
 
 extern cMesh* g_pDebugSphere;	// = NULL;
 extern bool g_bShowDebugShere;	// = true;

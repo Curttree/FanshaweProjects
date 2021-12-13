@@ -165,6 +165,9 @@
     <ClCompile Include="..\common\include\Physics\cPlaneParticleContactGenerator.cpp" />
     <ClCompile Include="..\common\include\Physics\cWorldSpace.cpp" />
     <ClCompile Include="cAIPlayer.cpp" />
+    <ClCompile Include="cDungeonFactory.cpp" />
+    <ClCompile Include="cDungeonMaster.cpp" />
+    <ClCompile Include="cDungeonReader.cpp" />
     <ClCompile Include="cEntity.cpp" />
     <ClCompile Include="cGFLWKeyboardModifiers.cpp" />
     <ClCompile Include="cMesh.cpp" />
@@ -208,6 +211,9 @@
     <ClInclude Include="..\common\include\Physics\iParticleContactGenerator.h" />
     <ClInclude Include="..\common\include\Physics\sParticleTemplate.h" />
     <ClInclude Include="cAIPlayer.h" />
+    <ClInclude Include="cDungeonFactory.h" />
+    <ClInclude Include="cDungeonMaster.h" />
+    <ClInclude Include="cDungeonReader.h" />
     <ClInclude Include="cEntity.h" />
     <ClInclude Include="cMesh.h" />
     <ClInclude Include="configManager.h" />
