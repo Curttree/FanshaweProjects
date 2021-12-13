@@ -170,6 +170,10 @@ int main(void) {
     vecModelsToLoad.push_back("tile.ply");
     vecModelsToLoad.push_back("Floors/SM_Env_Dwarf_Floor_03.ply");
     vecModelsToLoad.push_back("Walls/SM_Env_Dwarf_Wall_01.ply");
+    vecModelsToLoad.push_back("Doors/SM_Env_Dwarf_Wall_DoorFrame_Single_01.ply");
+    vecModelsToLoad.push_back("Doors/SM_Env_Dwarf_Wall_DoorFrame_Single_01_Door.ply");
+    vecModelsToLoad.push_back("Doors/SM_Env_Dwarf_Wall_DoorFrame_Slider_01.ply");
+    vecModelsToLoad.push_back("Doors/SM_Env_Dwarf_Wall_DoorFrame_Slider_01_Door.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;

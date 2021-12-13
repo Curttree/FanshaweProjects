@@ -2,7 +2,10 @@
 
 #define DUNGEON_FLOOR 1
 #define DUNGEON_WALL 2
-#define DUNGEON_DOOR 2
+#define DUNGEON_DOOR_FRAME 3
+#define DUNGEON_PORTCULLIS_FRAME 4
+#define DUNGEON_DOOR 5
+#define DUNGEON_PORTCULLIS 6
 
 
 cDungeonFactory* cDungeonFactory::_instance = 0;
@@ -36,6 +39,42 @@ cMesh* cDungeonFactory::createDungeonPiece(int type, glm::vec3 position, glm::ve
 		obj->textureRatios[0] = 1.f;
 		obj->orientationXYZ = orientation;
 		obj->friendlyName = "Wall";
+		obj->scale = 1.f;
+		break;
+	case(DUNGEON_DOOR_FRAME):
+		obj = new cMesh();
+		obj->meshName = "Doors/SM_Env_Dwarf_Wall_DoorFrame_Single_01.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "DoorFrame";
+		obj->scale = 1.f;
+		break;
+	case(DUNGEON_PORTCULLIS_FRAME):
+		obj = new cMesh();
+		obj->meshName = "Doors/SM_Env_Dwarf_Wall_DoorFrame_Slider_01.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "PortcullisFrame";
+		obj->scale = 1.f;
+		break;
+	case(DUNGEON_DOOR):
+		obj = new cMesh();
+		obj->meshName = "Doors/SM_Env_Dwarf_Wall_DoorFrame_Single_01_Door.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "DoorFrame";
+		obj->scale = 1.f;
+		break;
+	case(DUNGEON_PORTCULLIS):
+		obj = new cMesh();
+		obj->meshName = "Doors/SM_Env_Dwarf_Wall_DoorFrame_Slider_01_Door.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "PortcullisFrame";
 		obj->scale = 1.f;
 		break;
 

@@ -1,6 +1,6 @@
 --------------------------------------------------
----FFFFFFFFFFFFFFFFFFFFFFFFFFF---FFF---FFFFFFFPFFF
----FFF-----F-----------------F---F-F---FFFFFFF---F
+---FFFDFFFFFFFFFFFFFFFFFFFFFFF---FFF---FFFFFFFPFFF
+---FFF-----F-----------------D---F-F---FFFFFFF---F
 ---FFFFFFF-F-FFF-FFFFFFFFF-FFFFF-F-FFF-FFFFFFF---F
 -----------F-FFF-F-------F-FFFFF-F-FFF---F-------F
 -FFFFFFFFFFF-FFF-F-FFFFF-FFFFFFF-F-FFFFFFF-------F

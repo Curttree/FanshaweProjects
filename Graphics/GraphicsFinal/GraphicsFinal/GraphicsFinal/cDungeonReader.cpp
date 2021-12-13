@@ -15,7 +15,7 @@ bool cDungeonReader::ReadDungeonFromTSV(std::string fileName) {
 	std::string line;
 	std::size_t colonValue;
 	while (std::getline(inputFile, line)) {
-		dungeon.push_back(line);
+		dungeon.insert(dungeon.begin(), line);
 	}
 
 	return true;
@@ -43,6 +43,10 @@ int cDungeonReader::GetObjectAtLocation(int x_coordinate, int z_coordinate) {
 	else if (dungeon[x_coordinate][z_coordinate] == 'D') {
 		// Door.
 		return 3;
+	}
+	else if (dungeon[x_coordinate][z_coordinate] == 'P') {
+		// Portcullis.
+		return 4;
 	}
 
 	// Unknown character detected.
@@ -73,4 +77,16 @@ glm::vec4 cDungeonReader::DetermineWallOrientation(int x_coordinate, int z_coord
 	}
 
 	return result;
+}
+
+int cDungeonReader::DetermineDoorOrientation(int x_coordinate, int z_coordinate) {
+	if (dungeon[x_coordinate + 1][z_coordinate] == 'F' && dungeon[x_coordinate - 1][z_coordinate] == 'F') {
+		return 1;
+	}
+	else if (dungeon[x_coordinate ][z_coordinate+1] == 'F' && dungeon[x_coordinate][z_coordinate - 1] == 'F') {
+		return 2;
+	}
+
+	//Invalid door placement.
+	return -1;
 }

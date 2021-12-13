@@ -41,6 +41,10 @@ void cDungeonMaster::BuildDungeonFromTSV(std::string fileName) {
 				PlaceWalls(glm::vec3(x * 500.f - 250.f, 0, z * 500.f - 250.f), wallsToPlace);
 			}
 			cMesh* model = factory->createDungeonPiece(piece, glm::vec3(x*500.f, 0.f, z*500.f));
+			if (piece == 3 || piece == 4) {
+				//model->positionXYZ += glm::vec3(-250.f, 0.f, -250.f);
+				SetupDoors(model, x, z);
+			}
 			if (model) {
 				dungeonModels.push_back(model);
 			}
@@ -82,4 +86,67 @@ void cDungeonMaster::PlaceWalls(glm::vec3 position, glm::vec4 wallsToPlace) {
 			dungeonModels.push_back(model);
 		}
 	}
+}
+
+void cDungeonMaster::SetupDoors(cMesh* door, int x, int z) {
+	// ASSUMPTION: No doors on outside. If practical case, we may need to null check here.
+	// Also fills in area around the door.
+	cMesh* actualDoor;
+	int orientation = dungeonReader->DetermineDoorOrientation(x, z);
+	if (door->friendlyName == "PortcullisFrame") {
+		actualDoor = factory->createDungeonPiece(6, glm::vec3(x * 500.f, 0.f, z * 500.f));
+	}
+	else {
+		actualDoor = factory->createDungeonPiece(5, glm::vec3(x * 500.f, 0.f, z * 500.f));
+	}
+	switch (orientation) {
+	case 1:{
+		door->orientationXYZ = (glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
+		door->positionXYZ += (glm::vec3(-250.f, 0.f, 0.f));
+		actualDoor->orientationXYZ = (glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
+		if (door->friendlyName == "PortcullisFrame") {
+			actualDoor->positionXYZ += (glm::vec3(-250.f, 0.f, 0.f));
+		}
+		else {
+			actualDoor->positionXYZ += (glm::vec3(-250.f, 0.f, -160.f));
+		}
+		cMesh* wall1 = factory->createDungeonPiece(2, glm::vec3(x * 500.f - 250.f, 0.f, z * 500.f - 250.f));
+		wall1->orientationXYZ = (glm::vec3(0.f, glm::pi<float>(), 0.f));
+		wall1->positionXYZ += glm::vec3(-250.f, 0.f, -250.f);
+		dungeonModels.push_back(wall1);
+		cMesh* wall2 = factory->createDungeonPiece(2, glm::vec3(x * 500.f - 250.f, 0.f, z * 500.f - 250.f));
+		wall2->orientationXYZ = (glm::vec3(0.f,0.f, 0.f));
+		wall2->positionXYZ += glm::vec3(250.f, 0.f, 250.f);
+		dungeonModels.push_back(wall2);
+		cMesh* floor = factory->createDungeonPiece(1, glm::vec3(x * 500.f, 0.f, z * 500.f));
+		dungeonModels.push_back(floor);
+		break; }
+	case 2: {
+		door->positionXYZ += (glm::vec3(-500.f, 0.f, -250.f));
+
+		if (door->friendlyName == "PortcullisFrame") {
+			actualDoor->positionXYZ += (glm::vec3(-500.f, 0.f, -250.f));
+		}
+		else {
+			actualDoor->positionXYZ += (glm::vec3(-340.f, 0.f, -250.f));
+		}
+
+		cMesh* wall1 = factory->createDungeonPiece(2, glm::vec3(x * 500.f - 250.f, 0.f, z * 500.f - 250.f));
+		wall1->orientationXYZ = (glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
+		wall1->positionXYZ += glm::vec3(-250.f, 0.f, 250.f);
+		dungeonModels.push_back(wall1);
+		cMesh* wall2 = factory->createDungeonPiece(2, glm::vec3(x * 500.f - 250.f, 0.f, z * 500.f - 250.f));
+		wall2->orientationXYZ = (glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
+		wall2->positionXYZ += glm::vec3(250.f, 0.f, -250.f);
+		dungeonModels.push_back(wall2);
+		cMesh* floor = factory->createDungeonPiece(1, glm::vec3(x * 500.f, 0.f, z * 500.f));
+		dungeonModels.push_back(floor);
+		break;
+	}
+	default:
+		//Invalid placement. Leave as is.
+		break;
+	}
+
+	dungeonModels.push_back(actualDoor);
 }
