@@ -8,6 +8,23 @@
 #define DUNGEON_PORTCULLIS 6
 
 
+#define CRYSTAL_1 7
+#define CRYSTAL_2 8
+#define CRYSTAL_3 9
+#define CRYSTAL_4 10
+
+#define TREE_1 11
+#define TREE_2 12
+#define TREE_3 13
+
+#define PLANT_1 14
+#define PLANT_2 15
+#define PLANT_3 16
+#define PLANT_4 17
+#define PLANT_5 18
+#define PLANT_6 19
+
+
 cDungeonFactory* cDungeonFactory::_instance = 0;
 cDungeonFactory::cDungeonFactory() {
 
@@ -76,6 +93,131 @@ cMesh* cDungeonFactory::createDungeonPiece(int type, glm::vec3 position, glm::ve
 		obj->orientationXYZ = orientation;
 		obj->friendlyName = "PortcullisFrame";
 		obj->scale = 1.f;
+		break;
+	case(CRYSTAL_1):
+		obj = new cMesh();
+		obj->meshName = "Crystals/SM_Env_Crystals_Cluster_Large_01.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "Crystal";
+		obj->scale = 1.f;
+		obj->alphaTransparency = 0.86;
+		obj->wholeObjectShininess_SpecPower = 1.f;
+		break;
+	case(CRYSTAL_2):
+		obj = new cMesh();
+		obj->meshName = "Crystals/SM_Env_Crystals_Cluster_Large_02.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "Crystal";
+		obj->scale = 1.f;
+		obj->alphaTransparency = 0.7;
+		obj->wholeObjectShininess_SpecPower = 1.f;
+		break;
+	case(CRYSTAL_3):
+		obj = new cMesh();
+		obj->meshName = "Crystals/SM_Env_Crystals_Cluster_Large_03.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "Crystal";
+		obj->scale = 1.f;
+		obj->alphaTransparency = 0.9;
+		obj->wholeObjectShininess_SpecPower = 1.f;
+		break;
+	case(CRYSTAL_4):
+		obj = new cMesh();
+		obj->meshName = "Crystals/SM_Env_Crystals_Cluster_Large_04.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "Crystal";
+		obj->scale = 1.f;
+		obj->alphaTransparency = 0.8;
+		obj->wholeObjectShininess_SpecPower = 1.f;
+		break;
+	case(TREE_1):
+		obj = new cMesh();
+		obj->meshName = "Plants/SM_Generic_Tree_02.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "Tree1";
+		obj->scale = 2.f;
+		break;
+	case(TREE_2):
+		obj = new cMesh();
+		obj->meshName = "Plants/SM_Generic_Tree_04.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "Tree2";
+		obj->scale = 2.f;
+		break;
+	case(TREE_3):
+		obj = new cMesh();
+		obj->meshName = "Plants/SM_Env_Tree_Dead_01.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "Tree3";
+		obj->scale = 40.f;
+		break;
+	case(PLANT_1):
+		obj = new cMesh();
+		obj->meshName = "Plants/SM_Env_Plant_01.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "Plant";
+		obj->scale = 1.f;
+		break;
+	case(PLANT_2):
+		obj = new cMesh();
+		obj->meshName = "Plants/SM_Env_Plant_02.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "Plant";
+		obj->scale = 1.f;
+		break;
+	case(PLANT_3):
+		obj = new cMesh();
+		obj->meshName = "Plants/SM_Env_Plant_Spikey_01.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "Plant";
+		obj->scale = 1.f;
+		break;
+	case(PLANT_4):
+		obj = new cMesh();
+		obj->meshName = "Plants/SM_Env_Plants_01.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "Plant";
+		obj->scale = 100.f;
+		break;
+	case(PLANT_5):
+		obj = new cMesh();
+		obj->meshName = "Plants/SM_Env_Plants_02.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "Plant";
+		obj->scale = 100.f;
+		break;
+	case(PLANT_6):
+		obj = new cMesh();
+		obj->meshName = "Plants/SM_Env_Plants_03.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "Plant";
+		obj->scale = 100.f;
 		break;
 
 	default:

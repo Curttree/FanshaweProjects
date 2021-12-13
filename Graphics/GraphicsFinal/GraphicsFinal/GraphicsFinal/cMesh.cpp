@@ -24,7 +24,7 @@ cMesh::cMesh()
 	// Specular HIGHLIGHT colour (usually the same as the light, or white)
 	this->wholeObjectSpecularRGB = glm::vec3(1.0f, 1.0f, 1.0f);			
 	// Specular highlight POWER (or shininess). Starts at 1.0 and goes to ? (like 100, 1000, 10000 is OK)
-	this->wholeObjectShininess_SpecPower = 1.0f;	// 1.0 to ??
+	this->wholeObjectShininess_SpecPower = 100.0f;	// 1.0 to ??
 
 	// Default to 1.0f (all solid)
 	this->alphaTransparency = 1.0f; 

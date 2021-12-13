@@ -175,6 +175,21 @@ int main(void) {
     vecModelsToLoad.push_back("Doors/SM_Env_Dwarf_Wall_DoorFrame_Slider_01.ply");
     vecModelsToLoad.push_back("Doors/SM_Env_Dwarf_Wall_DoorFrame_Slider_01_Door.ply");
 
+    vecModelsToLoad.push_back("Crystals/SM_Env_Crystals_Cluster_Large_01.ply");
+    vecModelsToLoad.push_back("Crystals/SM_Env_Crystals_Cluster_Large_02.ply");
+    vecModelsToLoad.push_back("Crystals/SM_Env_Crystals_Cluster_Large_03.ply");
+    vecModelsToLoad.push_back("Crystals/SM_Env_Crystals_Cluster_Large_04.ply");
+
+    vecModelsToLoad.push_back("Plants/SM_Env_Plant_01.ply");
+    vecModelsToLoad.push_back("Plants/SM_Env_Plant_02.ply");
+    vecModelsToLoad.push_back("Plants/SM_Env_Plant_Spikey_01.ply");
+    vecModelsToLoad.push_back("Plants/SM_Env_Plants_01.ply");
+    vecModelsToLoad.push_back("Plants/SM_Env_Plants_02.ply");
+    vecModelsToLoad.push_back("Plants/SM_Env_Plants_03.ply");
+    vecModelsToLoad.push_back("Plants/SM_Env_Tree_Dead_01.ply");
+    vecModelsToLoad.push_back("Plants/SM_Generic_Tree_02.ply");
+    vecModelsToLoad.push_back("Plants/SM_Generic_Tree_04.ply");
+
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
     for (std::vector<std::string>::iterator itModel = vecModelsToLoad.begin(); itModel != vecModelsToLoad.end(); itModel++)
@@ -379,25 +394,7 @@ int main(void) {
         if (::g_vec_pMeshesTransparency.size() >= 2) {
             std::sort(::g_vec_pMeshesTransparency.begin(), ::g_vec_pMeshesTransparency.end(), [](const cMesh* a, const cMesh* b) -> bool
             {
-                // Find closest vertex for both objects. If this is identified as a performance bottleneck, optimize by only looking up/tracking exact vertex info if requested.
-                // Otherwise, just use position to get an approximation of where the object is located.
-                // This may also fail for more complex geometry, or cause other issues: https://www.khronos.org/opengl/wiki/Transparency_Sorting
-                float minDistanceA = -1;     // Default to -1 so any valid distance will replace this.
-                float minDistanceB = -1;     // Default to -1 so any valid distance will replace this.
-                float candidate = 0;
-                for (const sVertex& vertex : ::g_pConfigManager->_vertexData[a->meshName]) {
-                    candidate = glm::distance((a->positionXYZ + glm::vec3(vertex.x, vertex.y, vertex.z)), ::g_pFlyCamera->getEye());
-                    if (candidate < minDistanceA || minDistanceA < 0) {
-                        minDistanceA = candidate;
-                    }
-                }
-                for (const sVertex& vertex : ::g_pConfigManager->_vertexData[b->meshName]) {
-                    candidate = glm::distance((b->positionXYZ + glm::vec3(vertex.x, vertex.y, vertex.z)), ::g_pFlyCamera->getEye());
-                    if (candidate < minDistanceB || minDistanceB < 0) {
-                        minDistanceB = candidate;
-                    }
-                }
-                return minDistanceA > minDistanceB;
+                return glm::distance(a->positionXYZ, ::g_pFlyCamera->getEye()) > glm::distance(b->positionXYZ, ::g_pFlyCamera->getEye());
             });
         }
 

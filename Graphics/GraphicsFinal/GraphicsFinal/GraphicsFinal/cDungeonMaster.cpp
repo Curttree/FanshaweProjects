@@ -51,6 +51,9 @@ void cDungeonMaster::BuildDungeonFromTSV(std::string fileName) {
 		}
 	}
 
+	//Place decorations
+	PlaceCrystals();
+	PlacePlants();
 }
 
 void cDungeonMaster::PlaceWalls(glm::vec3 position, glm::vec4 wallsToPlace) {
@@ -149,4 +152,54 @@ void cDungeonMaster::SetupDoors(cMesh* door, int x, int z) {
 	}
 
 	dungeonModels.push_back(actualDoor);
+}
+
+void cDungeonMaster::PlaceCrystals() {
+	cMesh* crystal1 = factory->createDungeonPiece(7, glm::vec3(3000.f, 0.f, 1500.f));
+	cMesh* crystal2 = factory->createDungeonPiece(8, glm::vec3(3840.f, 0.f, 2300.f));
+	cMesh* crystal3 = factory->createDungeonPiece(9, glm::vec3(3150.f, 0.f, 2050.f));
+	cMesh* crystal4 = factory->createDungeonPiece(10, glm::vec3(2560.f, 0.f, 550.f));
+	cMesh* crystal5 = factory->createDungeonPiece(7, glm::vec3(4170.f, 0.f, 1050.f));
+
+	dungeonModels.push_back(crystal1);
+	dungeonModels.push_back(crystal2);
+	dungeonModels.push_back(crystal3);
+	dungeonModels.push_back(crystal4);
+	dungeonModels.push_back(crystal5);
+}
+
+void cDungeonMaster::PlacePlants() {
+
+	//Place trees to act as center of our cluster
+	cMesh* tree1 = factory->createDungeonPiece(11, glm::vec3(8250.f, 0.f, 2500.f));
+	cMesh* tree2 = factory->createDungeonPiece(12, glm::vec3(14250.f, 0.f, 5000.f));
+	cMesh* tree3 = factory->createDungeonPiece(13, glm::vec3(4750.f, 0.f, 8500.f));
+
+	//Place plants around the trees
+	cMesh* plant1 = factory->createDungeonPiece(14, glm::vec3(8350.f, 0.f, 2660.f));
+	cMesh* plant2 = factory->createDungeonPiece(15, glm::vec3(8150.f, 0.f, 2700.f));
+	cMesh* plant3 = factory->createDungeonPiece(17, glm::vec3(8000.f, 0.f, 2400.f));
+
+	cMesh* plant4 = factory->createDungeonPiece(18, glm::vec3(14150.f, 0.f, 5200.f));
+	cMesh* plant5 = factory->createDungeonPiece(15, glm::vec3(14100.f, 0.f, 4900.f));
+	cMesh* plant6 = factory->createDungeonPiece(14, glm::vec3(14350.f, 0.f, 5100.f));
+
+	cMesh* plant7 = factory->createDungeonPiece(16, glm::vec3(4650.f, 0.f, 8380.f));
+	cMesh* plant8 = factory->createDungeonPiece(18, glm::vec3(4550.f, 0.f, 8720.f));
+	cMesh* plant9 = factory->createDungeonPiece(19, glm::vec3(4850.f, 0.f, 8600.f));
+
+
+	dungeonModels.push_back(tree1);
+	dungeonModels.push_back(tree2);
+	dungeonModels.push_back(tree3);
+
+	dungeonModels.push_back(plant1);
+	dungeonModels.push_back(plant2);
+	dungeonModels.push_back(plant3);
+	dungeonModels.push_back(plant4);
+	dungeonModels.push_back(plant5);
+	dungeonModels.push_back(plant6);
+	dungeonModels.push_back(plant7);
+	dungeonModels.push_back(plant8);
+	dungeonModels.push_back(plant9);
 }
