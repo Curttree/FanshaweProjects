@@ -172,10 +172,31 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
             GLint discardTexture_LocID = glGetUniformLocation(shaderProgram, "discardTexture");
             glUniform1i(discardTexture_LocID, discardTextureUnit);
 
+            GLint discardColour_LocID = glGetUniformLocation(shaderProgram, "discardColour");
+            glUniform3f(discardColour_LocID, pCurrentMesh->discardColour.r, pCurrentMesh->discardColour.g, pCurrentMesh->discardColour.b);
+
             // Turn discard function on
             glUniform1f(bDiscardTransparencyWindowsOn_LodID, (GLfloat)GL_TRUE);
         }
     }
+
+    GLint bUseSpecularMap_Location = glGetUniformLocation(shaderProgram, "bUseSpecularMap");
+
+    if (pCurrentMesh->bUseSpecularMap)
+    {
+        glUniform1f(bUseSpecularMap_Location, (float)GL_TRUE);
+        GLuint specMapTextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->specularMapTexture);
+        // Picking texture unit 31 since it's not in use.
+        GLuint specMapTextureUnit = 71;			// Texture unit go from 0 to 79
+        glActiveTexture(specMapTextureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, specMapTextureNumber);
+        GLint specMapTexture_LocID = glGetUniformLocation(shaderProgram, "specularMapTexture");
+        glUniform1i(specMapTexture_LocID, specMapTextureUnit);
+    }
+    else{
+        glUniform1f(bUseSpecularMap_Location, (float)GL_FALSE);
+    }
+
 
     {
         //GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
@@ -183,9 +204,9 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
 
         // Be careful that you don't mix up the 2D and the cube assignments for the texture units
         //
-        // Here, I'll say that the cube maps start at texture unit 40
+        // Here, I'll say that the cube maps start at texture unit 50
         //
-        GLuint textureUnit = 40;			// Texture unit go from 0 to 79
+        GLuint textureUnit = 50;			// Texture unit go from 0 to 79
         glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
 
         // ***NOTE*** Binding to a CUBE MAP not a 2D Texture

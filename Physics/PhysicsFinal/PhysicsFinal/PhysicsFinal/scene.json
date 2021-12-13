@@ -2,16 +2,8 @@
   "Camera": {
 	  "Position":{
     "x": 0.0,
-    "y": 15.0,
-  "z": -40.0}},
-  "Physics":{
-	  "PositiveXBoundary":125,
-	  "NegativeXBoundary":-125,
-	  "PositiveYBoundary":20,
-	  "NegativeYBoundary":5,
-	  "PositiveZBoundary":215,
-	  "NegativeZBoundary":-215
-  },
+    "y": 50.0,
+  "z": -380.0}},
   "Lights":[
 	  {"Type":2,
 		"Position":{
@@ -374,6 +366,126 @@
 "Orientation":{
 		"x": 0.0,
 		"y": 180.0,
+		"z": 0.0
+	  }
+},{
+"Name":"LightArrayImposter", "Position":{
+		"x": -160,
+		"y": 132,
+		"z": -1}, 
+"Orientation":{
+		"x": 0.0,
+		"y": 90.0,
+		"z": -12.0
+	  }
+},{
+"Name":"LightArrayImposter", "Position":{
+		"x": 160,
+		"y": 132,
+		"z": 1}, 
+"Orientation":{
+		"x": 0.0,
+		"y": 90.0,
+		"z": 12.0
+	  }
+},{
+"Name":"LightArrayImposter", "Position":{
+		"x": 142,
+		"y": 132,
+		"z": 254}, 
+"Orientation":{
+		"x": -12.0,
+		"y": 45.0,
+		"z": 0.0
+	  }
+},{
+"Name":"LightArrayImposter", "Position":{
+		"x": -144,
+		"y": 132,
+		"z": 251}, 
+"Orientation":{
+		"x": -12.0,
+		"y": -45.0,
+		"z": 0.0
+	  }
+},{
+"Name":"LightArrayImposter", "Position":{
+		"x": -141,
+		"y": 132,
+		"z": -263}, 
+"Orientation":{
+		"x": 12.0,
+		"y": 45.0,
+		"z": 0.0
+	  }
+},{
+"Name":"LightArrayImposter", "Position":{
+		"x": 144,
+		"y": 132,
+		"z": -262}, 
+"Orientation":{
+		"x": 12.0,
+		"y": -45.0,
+		"z": 0.0
+	  }
+},{
+"Name":"LightBeamImposter", "Position":{
+		"x": -162,
+		"y": 132,
+		"z": -1}, 
+"Orientation":{
+		"x": 0.0,
+		"y": 90.0,
+		"z": -33.0
+	  }
+},{
+"Name":"LightBeamImposter", "Position":{
+		"x": 162,
+		"y": 132,
+		"z": -1}, 
+"Orientation":{
+		"x": 0.0,
+		"y": -90.0,
+		"z": 33.0
+	  }
+},{
+"Name":"LightBeamImposter", "Position":{
+		"x": 142,
+		"y": 132,
+		"z": 254}, 
+"Orientation":{
+		"x": 33.0,
+		"y": 225.0,
+		"z": 0.0
+	  }
+},{
+"Name":"LightBeamImposter", "Position":{
+		"x": -144,
+		"y": 132,
+		"z": 251}, 
+"Orientation":{
+		"x": 33.0,
+		"y": 135.0,
+		"z": 0.0
+	  }
+},{
+"Name":"LightBeamImposter", "Position":{
+		"x": -141,
+		"y": 132,
+		"z": -263}, 
+"Orientation":{
+		"x": 33.0,
+		"y": 45.0,
+		"z": 0.0
+	  }
+},{
+"Name":"LightBeamImposter", "Position":{
+		"x": 144,
+		"y": 132,
+		"z": -262}, 
+"Orientation":{
+		"x": 33.0,
+		"y": -45.0,
 		"z": 0.0
 	  }
 }

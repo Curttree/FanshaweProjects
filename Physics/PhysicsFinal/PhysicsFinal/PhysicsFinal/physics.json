@@ -1,0 +1,38 @@
+{  
+"WorldBoundaries":{
+	  "PositiveXBoundary":125,
+	  "NegativeXBoundary":-125,
+	  "PositiveYBoundary":200,
+	  "NegativeYBoundary":5,
+	  "PositiveZBoundary":250,
+	  "NegativeZBoundary":-250
+  },
+  "ShotPositions": [
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  ],
+  "ModelOffset": {
+    "x": 10,
+    "y": 0,
+    "z": -10
+  },
+  "CameraOffset": {
+    "x": 0,
+    "y": 10,
+    "z": -10
+  },
+  "ShotDefinition": {
+    "MaxVelocity": 25,
+    "Pitch": {
+      "MinDegrees": 0,
+      "MaxDegrees": 78
+    },
+    "Yaw": {
+      "MinDegrees": -45,
+      "MaxDegrees": 45
+    }
+  }
+}

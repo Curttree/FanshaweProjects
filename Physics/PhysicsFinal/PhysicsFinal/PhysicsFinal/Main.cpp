@@ -73,7 +73,7 @@ int main(void) {
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    ::g_TitleText = "Curtis Tremblay - INFO-6028 Project 2";
+    ::g_TitleText = "Curtis Tremblay - INFO-6028 Project 3";
     pWindow = glfwCreateWindow(1200, 640, ::g_TitleText.c_str(), NULL, NULL);
 
     if (!pWindow)

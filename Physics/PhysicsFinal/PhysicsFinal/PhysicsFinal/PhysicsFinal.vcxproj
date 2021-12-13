@@ -88,6 +88,12 @@
     <IncludePath>$(SolutionDir)common/assets;$(SolutionDir)common/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>$(SolutionDir)common/lib/Release_x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup>
+    <DeploymentFolderName>PhysicsFinal_DeploymentFolder</DeploymentFolderName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DeploymentPath>$(ProjectDir)$(DeploymentFolderName)</DeploymentPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -226,4 +232,30 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ItemGroup>
+    <DeploymentCopyFiles Include="$(ProjectDir)..\$(Platform)\$(Configuration)\$(TargetName)$(TargetExt)" />
+    <DeploymentCopyFiles Include="$(ProjectDir)\*.json" />
+    <DeploymentCopyFiles Include="$(ProjectDir)\*.nsi" />
+    <DeploymentCopyModelFiles Include="$(ProjectDir)assets\models\*" />
+    <DeploymentCopyTextureFiles Include="$(ProjectDir)assets\textures\*" />
+    <DeploymentCopyCubemapFiles Include="$(ProjectDir)assets\textures\cubemaps\*" />
+    <DeploymentCopyShaderFiles Include="$(ProjectDir)assets\shaders\*" />
+  </ItemGroup>
+  <Target Name="CreateDeployFolder">
+    <Message Text="Creating the deployment folder." />
+    <MakeDir Directories="$(DeploymentPath)" />
+    <MakeDir Directories="$(DeploymentPath)\assets\models" />
+    <MakeDir Directories="$(DeploymentPath)\assets\textures" />
+    <MakeDir Directories="$(DeploymentPath)\assets\shaders" />
+  </Target>
+  <Target Name="AfterBuild" DependsOnTargets="CreateDeployFolder" Condition="'$(Configuration)'=='Release'">
+    <Message Text="Copying files to deployment folder." />
+    <Copy sourceFiles="@(DeploymentCopyFiles)" DestinationFolder="$(DeploymentPath)" />
+    <Copy sourceFiles="@(DeploymentCopyModelFiles)" DestinationFolder="$(DeploymentPath)\assets\models" />
+    <Copy sourceFiles="@(DeploymentCopyTextureFiles)" DestinationFolder="$(DeploymentPath)\assets\textures" />
+    <Copy sourceFiles="@(DeploymentCopyCubemapFiles)" DestinationFolder="$(DeploymentPath)\assets\textures\cubemaps" />
+    <Copy sourceFiles="@(DeploymentCopyShaderFiles)" DestinationFolder="$(DeploymentPath)\assets\shaders" />
+    <Message Text="Creating Zip folder." />
+    <Exec Command="&quot;$(ProjectDir)7z.exe&quot; a -ssw &quot;$(ProjectDir)$(DeploymentFolderName).zip&quot; &quot;$(DeploymentPath)&quot;" />
+  </Target>
 </Project>

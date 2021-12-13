@@ -28,6 +28,7 @@ public:
 	rapidjson::Document _actors;
 	rapidjson::Document _objects;
 	rapidjson::Document _sceneDescription;
+	rapidjson::Document _physicsDescription;
 	glm::vec3 _cameraStartingPosition;
 	glm::vec3 _cameraStartingOrientation;
 	glm::vec3 _rinkPosition = glm::vec3(0.f);

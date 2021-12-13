@@ -1,10 +1,17 @@
-# INFO 6028 - Graphics - Project 2
+# INFO 6028 - Graphics - Project 3
 ## By: Curtis Tremblay (Student Number: 1049697)
 
 
 ### Build Instructions
 - In Visual Studio, build project in x64 with either Debug (if testing the "alternative" debug rendering) or Release configuration (both options should work).
 ## Running the Project / Notes
+
+- Enhancements to the scene are: 
+		- Specular map for the skaters to represent different material specular properties (helmet and skates are shiny, skin is slightly shiny, everything else is matte).
+		- Imposters to make the spotlights look like they are 'on'.
+
+==================================
+NOTES FROM PROJECT 2 (FOR REFERENCE)
 - Camera navigation should be close to the default fly camera (minor changes were made but it should be pretty similar functionally).
 - Goal lights (Point lights) can be turned on by pressing and holding the 1 or 2 key.
 	- In the final 'game' these would be triggered on a puck entering the net. For now they can be enabled at will.

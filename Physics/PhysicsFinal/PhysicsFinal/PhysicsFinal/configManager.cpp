@@ -7,6 +7,7 @@ configManager::configManager() {
     _actors = readJSONFile("actors.json");
     _objects = readJSONFile("objects.json");
     _sceneDescription = readJSONFile("scene.json");
+    _physicsDescription = readJSONFile("physics.json");
     if (!_actors.HasParseError() && !_sceneDescription.HasParseError()) {
         initCamera();
         initPhysics();
@@ -55,7 +56,7 @@ void configManager::initCamera() {
 
 void configManager::initPhysics() {
     // Determine boundaries.
-    if (_sceneDescription.HasMember("Physics")) {
+    if (_physicsDescription.HasMember("WorldBoundaries")) {
         // ASSUMPTION: If Physics is present all boundaries have been defined. 
         // If this is not always the case, this should be updated.
         float x, y, z;
@@ -114,6 +115,11 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
                 result->textureNames[4] = _objects[meshName.c_str()]["MaskTexture0"].GetString();
                 result->textureNames[6] = _objects[meshName.c_str()]["MaskTextureFill0"].GetString();
             }
+            if (_objects[meshName.c_str()].HasMember("DiscardColour")) {
+                result->discardColour.r = _objects[meshName.c_str()]["DiscardColour"]["r"].GetFloat();
+                result->discardColour.g = _objects[meshName.c_str()]["DiscardColour"]["g"].GetFloat();
+                result->discardColour.b = _objects[meshName.c_str()]["DiscardColour"]["b"].GetFloat();
+            }
         }
     }
     else if (source == ACTOR) {
@@ -144,6 +150,10 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
                 rapidjson::GenericArray<false, rapidjson::Value> options = _actors[meshName.c_str()]["MaskTextureFill1_Options"].GetArray();
                 result->textureNames[7] = options[mathHelper->getRandom(0, options.Size())].GetString();
             }
+            if (_actors[meshName.c_str()].HasMember("SpecularMapTexture")) {
+                result->bUseSpecularMap = true;
+                result->specularMapTexture = _actors[meshName.c_str()]["SpecularMapTexture"].GetString();
+            }
         }
     }
 
@@ -157,6 +167,10 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
         if (name != "" && std::find(_texturesToLoad.begin(), _texturesToLoad.end(), name) == _texturesToLoad.end()) {
             _texturesToLoad.push_back(name);
         }
+    }
+
+    if (result->specularMapTexture != "" && std::find(_texturesToLoad.begin(), _texturesToLoad.end(), result->specularMapTexture) == _texturesToLoad.end()) {
+        _texturesToLoad.push_back(result->specularMapTexture);
     }
 
     return result;
