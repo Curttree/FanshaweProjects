@@ -167,7 +167,9 @@ int main(void) {
     vecModelsToLoad.push_back("Invaders/SpaceInvader_I2_block_pose_2.ply");
     vecModelsToLoad.push_back("Invaders/SpaceInvader_I3_block_pose_1.ply");
     vecModelsToLoad.push_back("Invaders/SpaceInvader_I3_block_pose_2.ply");
+    vecModelsToLoad.push_back("Invaders/SpaceInvader_UFO_block.ply");
     vecModelsToLoad.push_back("Invaders/SpaceInvader_Base_block.ply"); 
+    vecModelsToLoad.push_back("Invaders/Invader_Single_Cube.ply");
 
 
     unsigned int totalVerticesLoaded = 0;

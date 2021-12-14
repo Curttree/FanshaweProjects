@@ -17,6 +17,9 @@ void cGameStateManager::AssembleAliens() {
 		spawnPosition.y += step;
 		spawnPosition.x = 750.f;
 	}
+
+	ufo = new cUfo();
+	::g_vec_pMeshes.push_back(ufo->mesh);
 }
 
 void cGameStateManager::Update(float deltaTime) {
@@ -28,6 +31,16 @@ void cGameStateManager::Update(float deltaTime) {
 	if (::g_pPlayer) {
 		::g_pPlayer->Update(deltaTime);
 	}
+
+	if (ufo) {
+		ufo->Update(deltaTime);
+	}
+
+	currentUfoCycleTime += deltaTime;
+	if (currentUfoCycleTime >= ufoSpawnTime) {
+		ufo->StartMoving();
+		currentUfoCycleTime = 0.f;
+	}
 }
 
 void cGameStateManager::InitializePlayer() {
@@ -35,6 +48,9 @@ void cGameStateManager::InitializePlayer() {
 	::g_pPlayer = new cPlayer();
 	::g_pPlayer->particle->SetPosition(glm::vec3(0.f, -1200.f, 0.f));
 	::g_vec_pMeshes.push_back(::g_pPlayer->mesh);
+	if (::g_pPlayer->bullet->mesh) {
+		::g_vec_pMeshes.push_back(::g_pPlayer->bullet->mesh);
+	}
 }
 
 bool cGameStateManager::RecieveMessage(sMessage theMessage) {

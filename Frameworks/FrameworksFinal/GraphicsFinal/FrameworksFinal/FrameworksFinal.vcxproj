@@ -166,6 +166,7 @@
     <ClCompile Include="..\common\include\Physics\cWorldSpace.cpp" />
     <ClCompile Include="cAIPlayer.cpp" />
     <ClCompile Include="cAlien.cpp" />
+    <ClCompile Include="cBullet.cpp" />
     <ClCompile Include="cEntity.cpp" />
     <ClCompile Include="cGameStateManager.cpp" />
     <ClCompile Include="cGFLWKeyboardModifiers.cpp" />
@@ -173,6 +174,7 @@
     <ClCompile Include="cMesh.cpp" />
     <ClCompile Include="configManager.cpp" />
     <ClCompile Include="cPlayer.cpp" />
+    <ClCompile Include="cUfo.cpp" />
     <ClCompile Include="cWinContextMenu.cpp" />
     <ClCompile Include="DrawObject_function.cpp" />
     <ClCompile Include="GLFW_error_callback.cpp" />
@@ -214,6 +216,7 @@
     <ClInclude Include="cAIPlayer.h" />
     <ClInclude Include="cAlien.h" />
     <ClInclude Include="cAlienFactory.h" />
+    <ClInclude Include="cBullet.h" />
     <ClInclude Include="cEntity.h" />
     <ClInclude Include="cGameStateManager.h" />
     <ClInclude Include="cInvaderMediator.h" />

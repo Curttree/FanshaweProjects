@@ -2,6 +2,7 @@
 #include <extern/glm/vec3.hpp>
 #include <extern/glm/common.hpp>
 #include <extern/glm/exponential.hpp>
+#include <string>
 
 class cParticle {
 public:
@@ -40,6 +41,8 @@ public:
 	glm::vec3 ApplyImpulse(const glm::vec3 impulse);
 
 	void Integrate(float deltaTime);
+
+	std::string type;
 private:
 	glm::vec3 position = glm::vec3(0.f);
 	glm::vec3 velocity = glm::vec3(0.f);

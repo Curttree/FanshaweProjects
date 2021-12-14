@@ -189,6 +189,12 @@
     <ClCompile Include="cPlayer.cpp">
       <Filter>Invaders\Player</Filter>
     </ClCompile>
+    <ClCompile Include="cBullet.cpp">
+      <Filter>Invaders\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="cUfo.cpp">
+      <Filter>Invaders\Aliens</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -316,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="iMessage.h">
       <Filter>Invaders</Filter>
+    </ClInclude>
+    <ClInclude Include="cBullet.h">
+      <Filter>Invaders\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

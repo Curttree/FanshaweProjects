@@ -52,9 +52,7 @@
 
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)	// "Space"
     {
-        for (cMesh* mesh : g_vec_pMeshes) {
-            mesh->bIsWireframe = !mesh->bIsWireframe;
-        }
+        ::g_pPlayer->Fire();
     }
     if ((key == GLFW_KEY_LEFT && action == GLFW_PRESS) && ::g_pPlayer)	// "down"
     {

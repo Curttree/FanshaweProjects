@@ -1,6 +1,7 @@
 #pragma once
 #include "iMessage.h"
 #include "cAlien.h"
+#include "cUfo.h"
 class cGameStateManager : public iMessage {
 public:
 	void AssembleAliens();
@@ -14,4 +15,8 @@ public:
 	virtual bool SetReciever(iMediator* pTheReciever);
 private:
 	std::vector<cAlien*> aliens;
+
+	cUfo* ufo;
+	float ufoSpawnTime = 15.f;
+	float currentUfoCycleTime = 0.f;
 };

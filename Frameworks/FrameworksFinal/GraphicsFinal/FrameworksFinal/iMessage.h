@@ -14,6 +14,7 @@ public:
 	std::vector< float > vec_fData;
 	std::vector< int > vec_iData;
 	std::vector< glm::vec4 > vec_v4Data;
+	std::vector< void* > vec_voidPData;
 };
 
 class iMessage
