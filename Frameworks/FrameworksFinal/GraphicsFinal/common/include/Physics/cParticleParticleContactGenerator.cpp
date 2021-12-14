@@ -1,6 +1,7 @@
 #include "cParticleParticleContactGenerator.h"
 #include <iostream>
 #include "../../../FrameworksFinal/iMessage.h"		//Poor folder structure here. Make iMessage common in the future.
+#include"../../../FrameworksFinal/globals.h"
 
 
 cParticleParticleContactGenerator::cParticleParticleContactGenerator() {
@@ -25,14 +26,14 @@ size_t cParticleParticleContactGenerator::AddContact(cParticleContact* contact, 
 			combinedRadius = particles[x]->GetRadius() + particles[y]->GetRadius();
 			contactVector = particles[x]->GetPosition() - particles[y]->GetPosition();
 			// Check if the positions of each particle are less than the combined radius of the two particles.
-			if (glm::length(contactVector) <= combinedRadius) {
+			if (glm::length(contactVector) <= combinedRadius && particles[x]->type != particles[y]->type) {
 				// We don't want to simulate actual contacts. Instead do something.
 				sMessage collisionMessage;
 				collisionMessage.command = "Hit";
-				collisionMessage.vec_voidPData.push_back(particles[x]);
-				collisionMessage.vec_voidPData.push_back(particles[y]);
+				collisionMessage.vec_voidPData.push_back(particles[x]->owner);
+				collisionMessage.vec_voidPData.push_back(particles[y]->owner);
 
-
+				::g_pInvaderMediator->RecieveMessage(collisionMessage);
 
 				// This contact will simulate particle x colliding with particle y
 			

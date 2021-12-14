@@ -215,7 +215,6 @@
     <ClInclude Include="..\common\include\Physics\sParticleTemplate.h" />
     <ClInclude Include="cAIPlayer.h" />
     <ClInclude Include="cAlien.h" />
-    <ClInclude Include="cAlienFactory.h" />
     <ClInclude Include="cBullet.h" />
     <ClInclude Include="cEntity.h" />
     <ClInclude Include="cGameStateManager.h" />

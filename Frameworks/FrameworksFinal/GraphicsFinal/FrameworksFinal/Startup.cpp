@@ -1,4 +1,5 @@
 #include "globals.h"
+#include "cInvaderMediator.h"
 
 bool g_StartUp(GLFWwindow* pWindow)
 {
@@ -16,6 +17,8 @@ bool g_StartUp(GLFWwindow* pWindow)
 	::g_pConfigManager = new configManager();
 
 	::g_pGameState = new cGameStateManager();
+
+	::g_pInvaderMediator = new cInvaderMediator();
 
 	return true;
 }

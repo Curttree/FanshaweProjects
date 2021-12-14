@@ -31,9 +31,10 @@ cAlien::cAlien(int type)  {
 
 	particleScale = 120.f;
 	glm::vec3 position = glm::vec3(mesh->positionXYZ.x, mesh->positionXYZ.y + particleScale, mesh->positionXYZ.z);
-	particle = new cParticle(position, 120.f, particleScale);
+	particle = new cParticle(position, 1.f, particleScale);
 	particle->SetDamping(0.9f);
 	particle->type = "Alien";
+	particle->owner = this;
 	worldSpace->_world->AddParticle(particle);
 	debugMesh = new cMesh();
 	debugMesh->meshName = "Sphere_xyz_n_rgba_uv.ply";
@@ -51,4 +52,34 @@ cAlien::cAlien(std::string _pose1, std::string _pose2) {
 
 cAlien::~cAlien() {
 
+}
+
+void cAlien::Update(float deltaTime) {
+	if (isDead) {
+		currentDeathTime += deltaTime;
+		if (currentDeathTime >= deathTimer) {
+			// We should properly dispose of the object, but for now, just hide them.
+			mesh->scale = 0.f;
+		}
+	}
+	else {
+		cEntity::Update(deltaTime);
+	}
+}
+
+
+
+bool cAlien::RecieveMessage(sMessage theMessage) {
+	if (theMessage.command == "Destroy") {
+		isDead = true;
+		mesh->meshName = "Invaders/SpaceInvader_Explosions.ply";
+		worldSpace->_world->RemoveParticle(particle);
+	}
+	return true;
+}
+bool cAlien::RecieveMessage(sMessage theMessage, sMessage& theResponse) {
+	return true;
+}
+bool cAlien::SetReciever(iMediator* pTheReciever) {
+	return true;
 }

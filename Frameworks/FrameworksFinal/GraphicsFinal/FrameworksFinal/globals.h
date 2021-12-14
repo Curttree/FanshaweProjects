@@ -15,6 +15,7 @@
 #include "iEntity.h"
 #include "cGameStateManager.h"
 #include "cPlayer.h"
+#include "cInvaderMediator.h"
 
 
 // These are all things that are "project global", 
@@ -65,7 +66,8 @@ extern std::vector<iEntity*> g_vec_pActors;
 extern std::string g_TitleText;	// = "";
 
 extern cGameStateManager* g_pGameState;
-extern cPlayer* g_pPlayer;
+extern cPlayer* g_pPlayer; 
+extern cInvaderMediator* g_pInvaderMediator;
 
 // List of objects to draw
 extern std::vector< cMesh* > g_vec_pMeshes;

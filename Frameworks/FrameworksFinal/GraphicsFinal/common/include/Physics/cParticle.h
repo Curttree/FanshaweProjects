@@ -4,6 +4,8 @@
 #include <extern/glm/exponential.hpp>
 #include <string>
 
+class cEntity;		//Forward declaration of cEntity.
+
 class cParticle {
 public:
 	cParticle();
@@ -43,6 +45,8 @@ public:
 	void Integrate(float deltaTime);
 
 	std::string type;
+	cEntity* owner;
+
 private:
 	glm::vec3 position = glm::vec3(0.f);
 	glm::vec3 velocity = glm::vec3(0.f);

@@ -9,8 +9,8 @@ cUfo::cUfo() {
 	mesh = new cMesh();
 	mesh->bDontLight = true;
 	mesh->bUseWholeObjectDiffuseColour = true;
-	mesh->wholeObjectSpecularRGB = glm::vec3(1.f, 1.f, 1.f);
-	mesh->wholeObjectDiffuseRGBA = glm::vec4(1.f, 1.f, 1.f, 1.f);
+	mesh->wholeObjectSpecularRGB = glm::vec3(1.f, 0.f, 0.f);
+	mesh->wholeObjectDiffuseRGBA = glm::vec4(1.f, 0.f, 0.f, 1.f);
 	mesh->friendlyName = "UFO";
 	mesh->scale = 1.f;
 	mesh->meshName = "Invaders/SpaceInvader_UFO_block.ply";
@@ -18,9 +18,10 @@ cUfo::cUfo() {
 
 	particleScale = 120.f;
 	glm::vec3 position = glm::vec3(mesh->positionXYZ.x, mesh->positionXYZ.y + particleScale, mesh->positionXYZ.z);
-	particle = new cParticle(position, 120.f, particleScale);
+	particle = new cParticle(position, 1.f, particleScale);
 	particle->SetDamping(0.9f);
 	particle->type = mesh->friendlyName;
+	particle->owner = this;
 	worldSpace->_world->AddParticle(particle);
 	debugMesh = new cMesh();
 	debugMesh->meshName = "Sphere_xyz_n_rgba_uv.ply";
@@ -50,4 +51,18 @@ void cUfo::StartMoving() {
 	}
 	particle->SetVelocity(direction * glm::vec3(500.f, 0.f, 0.f));
 	particle->SetPosition( glm::vec3(-1.f * direction * 1100.f, 1250.f, 0.f));
+}
+
+bool cUfo::RecieveMessage(sMessage theMessage) {
+	if (theMessage.command == "Destroy") {
+		mesh->meshName = "Invaders/SpaceInvader_Explosions.ply";
+		worldSpace->_world->RemoveParticle(particle);
+	}
+	return true;
+}
+bool cUfo::RecieveMessage(sMessage theMessage, sMessage& theResponse) {
+	return true;
+}
+bool cUfo::SetReciever(iMediator* pTheReciever) {
+	return true;
 }

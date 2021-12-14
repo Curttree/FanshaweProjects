@@ -9,10 +9,10 @@ configManager::configManager() {
     _sceneDescription = readJSONFile("scene.json");
     if (!_actors.HasParseError() && !_sceneDescription.HasParseError()) {
         initCamera();
-        initPhysics();
-        initRink();
-        initProps();
-        initActors();
+       // initPhysics();
+       // initRink();
+       // initProps();
+        //initActors();
     }
 }
 

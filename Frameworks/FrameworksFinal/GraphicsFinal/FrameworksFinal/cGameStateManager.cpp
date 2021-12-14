@@ -46,7 +46,7 @@ void cGameStateManager::Update(float deltaTime) {
 void cGameStateManager::InitializePlayer() {
 
 	::g_pPlayer = new cPlayer();
-	::g_pPlayer->particle->SetPosition(glm::vec3(0.f, -1200.f, 0.f));
+	::g_pPlayer->particle->SetPosition(glm::vec3(0.f, -1050.f, 0.f));
 	::g_vec_pMeshes.push_back(::g_pPlayer->mesh);
 	if (::g_pPlayer->bullet->mesh) {
 		::g_vec_pMeshes.push_back(::g_pPlayer->bullet->mesh);

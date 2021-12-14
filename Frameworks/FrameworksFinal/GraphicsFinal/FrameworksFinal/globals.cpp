@@ -8,6 +8,7 @@ cLightManager* g_pTheLights = NULL;
 cBasicTextureManager* g_pTextureManager = NULL;
 configManager* g_pConfigManager = NULL;
 cGameStateManager* g_pGameState = NULL;
+cInvaderMediator* g_pInvaderMediator = NULL;
 
 std::vector< cMesh* > g_vec_pMeshes;
 std::vector< cMesh* > g_vec_pMeshesTransparency;

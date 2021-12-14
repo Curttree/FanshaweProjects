@@ -17,5 +17,7 @@ bool g_ShutDown(GLFWwindow* pWindow)
 
 	delete ::g_pGameState;
 
+	delete ::g_pInvaderMediator;
+
 	return true;
 }

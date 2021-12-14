@@ -37,3 +37,13 @@ cMesh* cEntity::GetDebugMesh() {
 cEntity::cEntity() {
 
 }
+
+bool cEntity::RecieveMessage(sMessage theMessage) {
+	return true;
+}
+bool cEntity::RecieveMessage(sMessage theMessage, sMessage& theResponse) {
+	return true;
+}
+bool cEntity::SetReciever(iMediator* pTheReciever) {
+	return true;
+}

@@ -308,9 +308,6 @@
     <ClInclude Include="cAlien.h">
       <Filter>Invaders\Aliens\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cAlienFactory.h">
-      <Filter>Invaders\Aliens\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cUfo.h">
       <Filter>Invaders\Aliens\Header Files</Filter>
     </ClInclude>

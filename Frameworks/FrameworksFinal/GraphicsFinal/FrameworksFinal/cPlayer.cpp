@@ -14,11 +14,12 @@ cPlayer::cPlayer() {
 	mesh->scale = 1.f;
 	mesh->meshName = "Invaders/SpaceInvader_Base_block.ply";
 
-	particleScale = 1.f;
+	particleScale = 120.f;
 	glm::vec3 position = glm::vec3(mesh->positionXYZ.x, mesh->positionXYZ.y + particleScale, mesh->positionXYZ.z);
 	particle = new cParticle(position, 1.f, particleScale);
 	particle->SetDamping(0.9f);
 	particle->type = mesh->friendlyName;
+	particle->owner = this;
 	worldSpace->_world->AddParticle(particle);
 	debugMesh = new cMesh();
 	debugMesh->meshName = "Sphere_xyz_n_rgba_uv.ply";
@@ -47,15 +48,31 @@ void cPlayer::Update(float deltaTime)  {
 }
 
 void cPlayer::MoveLeft() {
+	movingLeft = true;
 	particle->SetVelocity(glm::vec3(300.f, 0.f, 0.f));
 }
 
 void cPlayer::MoveRight() {
+	movingRight = true;
 	particle->SetVelocity(glm::vec3(-300.f, 0.f, 0.f));
 }
 
-void cPlayer::Stop() {
-	particle->SetVelocity(glm::vec3(0.f, 0.f, 0.f));
+void cPlayer::Stop(int direction) {
+	if (direction == 0) {
+		movingLeft = false;
+		if (particle->GetVelocity().x > 0.f && movingRight) {
+			particle->SetVelocity(glm::vec3(-300.f, 0.f, 0.f));
+		}
+	}
+	if (direction == 1) {
+		movingRight = false;
+		if (particle->GetVelocity().x < 0.f && movingLeft) {
+			particle->SetVelocity(glm::vec3(300.f, 0.f, 0.f));
+		}
+	}
+	if (!movingLeft && !movingRight) {
+		particle->SetVelocity(glm::vec3(0.f, 0.f, 0.f));
+	}
 }
 
 void cPlayer::Fire() {

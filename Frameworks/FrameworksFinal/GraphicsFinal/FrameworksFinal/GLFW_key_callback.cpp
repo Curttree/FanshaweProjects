@@ -62,8 +62,11 @@
     {
         ::g_pPlayer->MoveRight();
     }
-    if ((key == GLFW_KEY_LEFT || key == GLFW_KEY_RIGHT) && action == GLFW_RELEASE && ::g_pPlayer) {
-        ::g_pPlayer->Stop();
+    if ((key == GLFW_KEY_LEFT) && action == GLFW_RELEASE && ::g_pPlayer) {
+        ::g_pPlayer->Stop(0);
+    }
+    if ((key == GLFW_KEY_RIGHT) && action == GLFW_RELEASE && ::g_pPlayer) {
+        ::g_pPlayer->Stop(1);
     }
 
 //   // If JUST the shift is down, move the "selected" object

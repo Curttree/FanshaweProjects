@@ -18,6 +18,7 @@ cBullet::cBullet(){
 	particle = new cParticle(position, 1.f, particleScale);
 	particle->SetDamping(0.9f);
 	particle->type = mesh->friendlyName;
+	particle->owner = this;
 	worldSpace->_world->AddParticle(particle);
 	debugMesh = new cMesh();
 	debugMesh->meshName = "Sphere_xyz_n_rgba_uv.ply";
@@ -36,4 +37,18 @@ void cBullet::Update(float deltaTime) {
 		particle->SetVelocity(glm::vec3(0.f));
 		particle->SetPosition(glm::vec3(0.f, 10000.f, 0.f));
 	}
+}
+
+bool cBullet::RecieveMessage(sMessage theMessage) {
+	if (theMessage.command == "Destroy") {
+		particle->SetVelocity(glm::vec3(0.f));
+		particle->SetPosition(glm::vec3(0.f, 10000.f, 0.f));
+	}
+	return true;
+}
+bool cBullet::RecieveMessage(sMessage theMessage, sMessage& theResponse) {
+	return true;
+}
+bool cBullet::SetReciever(iMediator* pTheReciever) {
+	return true;
 }
