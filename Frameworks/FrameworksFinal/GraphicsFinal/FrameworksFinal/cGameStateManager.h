@@ -5,6 +5,7 @@ class cGameStateManager : public iMessage {
 public:
 	void AssembleAliens();
 	void Update(float deltaTime);
+	void InitializePlayer();
 
 	// Via iMessage
 

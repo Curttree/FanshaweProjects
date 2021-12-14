@@ -172,6 +172,7 @@
     <ClCompile Include="cInvaderMediator.cpp" />
     <ClCompile Include="cMesh.cpp" />
     <ClCompile Include="configManager.cpp" />
+    <ClCompile Include="cPlayer.cpp" />
     <ClCompile Include="cWinContextMenu.cpp" />
     <ClCompile Include="DrawObject_function.cpp" />
     <ClCompile Include="GLFW_error_callback.cpp" />

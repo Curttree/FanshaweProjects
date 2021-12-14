@@ -24,6 +24,17 @@ void cGameStateManager::Update(float deltaTime) {
 	for (cAlien* alien : aliens) {
 		alien->Update(deltaTime);
 	}
+
+	if (::g_pPlayer) {
+		::g_pPlayer->Update(deltaTime);
+	}
+}
+
+void cGameStateManager::InitializePlayer() {
+
+	::g_pPlayer = new cPlayer();
+	::g_pPlayer->particle->SetPosition(glm::vec3(0.f, -1200.f, 0.f));
+	::g_vec_pMeshes.push_back(::g_pPlayer->mesh);
 }
 
 bool cGameStateManager::RecieveMessage(sMessage theMessage) {

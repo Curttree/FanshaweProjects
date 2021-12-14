@@ -24,6 +24,8 @@ unsigned int g_selectedLight = 0;
 
 std::map< std::string, GLint> g_uniformLocations;
 
+cPlayer* g_pPlayer = NULL;
+
 
 // This will be printed in the title bar
 std::string g_TitleText = "";

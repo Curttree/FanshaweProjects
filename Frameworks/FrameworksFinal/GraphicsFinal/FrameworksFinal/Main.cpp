@@ -167,6 +167,7 @@ int main(void) {
     vecModelsToLoad.push_back("Invaders/SpaceInvader_I2_block_pose_2.ply");
     vecModelsToLoad.push_back("Invaders/SpaceInvader_I3_block_pose_1.ply");
     vecModelsToLoad.push_back("Invaders/SpaceInvader_I3_block_pose_2.ply");
+    vecModelsToLoad.push_back("Invaders/SpaceInvader_Base_block.ply"); 
 
 
     unsigned int totalVerticesLoaded = 0;
@@ -250,6 +251,7 @@ int main(void) {
 
 #pragma endregion
     ::g_pGameState->AssembleAliens();
+    ::g_pGameState->InitializePlayer();
 #pragma region Invaders
 
 #pragma endregion

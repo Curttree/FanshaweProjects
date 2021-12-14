@@ -186,6 +186,9 @@
     <ClCompile Include="cGameStateManager.cpp">
       <Filter>Invaders</Filter>
     </ClCompile>
+    <ClCompile Include="cPlayer.cpp">
+      <Filter>Invaders\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">

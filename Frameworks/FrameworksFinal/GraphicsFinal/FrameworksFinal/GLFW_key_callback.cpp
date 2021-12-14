@@ -56,6 +56,17 @@
             mesh->bIsWireframe = !mesh->bIsWireframe;
         }
     }
+    if ((key == GLFW_KEY_LEFT && action == GLFW_PRESS) && ::g_pPlayer)	// "down"
+    {
+        ::g_pPlayer->MoveLeft();
+    }
+    else if ((key == GLFW_KEY_RIGHT && action == GLFW_PRESS) && ::g_pPlayer)	// "down"
+    {
+        ::g_pPlayer->MoveRight();
+    }
+    if ((key == GLFW_KEY_LEFT || key == GLFW_KEY_RIGHT) && action == GLFW_RELEASE && ::g_pPlayer) {
+        ::g_pPlayer->Stop();
+    }
 
 //   // If JUST the shift is down, move the "selected" object
 //   if ( bShiftDown && (!bControlDown) && (!bAltDown) )
