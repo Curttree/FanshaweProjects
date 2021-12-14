@@ -35,10 +35,24 @@ cUfo::cUfo() {
 
 
 void cUfo::Update(float deltaTime) {
-	cEntity::Update(deltaTime);
-	if (mesh->positionXYZ.y > UPPER_LIMIT) {
-		particle->SetVelocity(glm::vec3(0.f));
-		particle->SetPosition(glm::vec3(0.f, 10000.f, 0.f));
+	if (isDead) {
+		currentDeathTime += deltaTime;
+		if (currentDeathTime >= deathTimer) {
+			// Move back to original position and re-add particle to world.
+			mesh->meshName = "Invaders/SpaceInvader_UFO_block.ply";
+			currentDeathTime = 0.f;
+			worldSpace->_world->AddParticle(particle);
+			particle->SetVelocity(glm::vec3(0.f));
+			particle->SetPosition(glm::vec3(10000.f, 10000.f, 0.f));
+			isDead = false;
+		}
+	}
+	else {
+		cEntity::Update(deltaTime);
+		if (mesh->positionXYZ.y > UPPER_LIMIT && particle->GetVelocity().x > 0.f) {
+			particle->SetVelocity(glm::vec3(0.f));
+			particle->SetPosition(glm::vec3(10000.f, 10000.f, 0.f));
+		}
 	}
 }
 
@@ -49,7 +63,7 @@ void cUfo::StartMoving() {
 	else {
 		direction = -1;
 	}
-	particle->SetVelocity(direction * glm::vec3(500.f, 0.f, 0.f));
+	particle->SetVelocity(direction * glm::vec3(200.f, 0.f, 0.f));
 	particle->SetPosition( glm::vec3(-1.f * direction * 1100.f, 1250.f, 0.f));
 }
 
@@ -57,6 +71,7 @@ bool cUfo::RecieveMessage(sMessage theMessage) {
 	if (theMessage.command == "Destroy") {
 		mesh->meshName = "Invaders/SpaceInvader_Explosions.ply";
 		worldSpace->_world->RemoveParticle(particle);
+		isDead = true;
 	}
 	return true;
 }

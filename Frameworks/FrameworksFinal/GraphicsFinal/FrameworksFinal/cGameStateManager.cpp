@@ -53,6 +53,59 @@ void cGameStateManager::InitializePlayer() {
 	}
 }
 
+void cGameStateManager::BuildShields() {
+	float startingPoint = -600.f;
+	for (int x = 0; x < 3; x++) {
+		BuildAShield(x * 480.f + startingPoint);
+	}
+}
+
+void cGameStateManager::BuildAShield(float x_offset) {
+	float startHeight = -800.f;
+	for (int y = 0; y < 3; y++) {
+		for (int x = 0; x < 4; x++) {
+			cShieldPixel* shield = new cShieldPixel(glm::vec3(20.f * x + x_offset, startHeight + 10.f * y * 2, 0.f));
+			::g_vec_pMeshes.push_back(shield->mesh);
+		}
+		for (int x = 9; x < 13; x++) {
+			cShieldPixel* shield = new cShieldPixel(glm::vec3(20.f * x + x_offset, startHeight + 10.f * y * 2, 0.f));
+			::g_vec_pMeshes.push_back(shield->mesh);
+		}
+	}
+
+	for (int x = 0; x < 5; x++) {
+		cShieldPixel* shield = new cShieldPixel(glm::vec3(20.f * x + x_offset, startHeight + 60.f, 0.f));
+		::g_vec_pMeshes.push_back(shield->mesh);
+	}
+	for (int x = 8; x < 13; x++) {
+		cShieldPixel* shield = new cShieldPixel(glm::vec3(20.f * x + x_offset, startHeight + 60.f, 0.f));
+		::g_vec_pMeshes.push_back(shield->mesh);
+	}
+
+	for (int y = 4; y < 7; y++) {
+		for (int x = 0; x < 13; x++) {
+			cShieldPixel* shield = new cShieldPixel(glm::vec3(20.f * x + x_offset, startHeight + 10.f * y * 2, 0.f));
+			::g_vec_pMeshes.push_back(shield->mesh);
+		}
+	}
+
+	for (int x = 1; x < 12; x++) {
+		cShieldPixel* shield = new cShieldPixel(glm::vec3(20.f * x + x_offset, startHeight + 140.f, 0.f));
+		::g_vec_pMeshes.push_back(shield->mesh);
+	}
+
+	for (int x = 2; x < 11; x++) {
+		cShieldPixel* shield = new cShieldPixel(glm::vec3(20.f * x + x_offset, startHeight + 160.f, 0.f));
+		::g_vec_pMeshes.push_back(shield->mesh);
+	}
+
+	for (int x = 3; x < 10; x++) {
+		cShieldPixel* shield = new cShieldPixel(glm::vec3(20.f * x + x_offset, startHeight + 180.f, 0.f));
+		::g_vec_pMeshes.push_back(shield->mesh);
+	}
+}
+
+
 bool cGameStateManager::RecieveMessage(sMessage theMessage) {
 	return true;
 }

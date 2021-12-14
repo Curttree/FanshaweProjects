@@ -11,7 +11,7 @@ cBullet::cBullet(){
 	mesh->friendlyName = "Bullet";
 	mesh->scale = 1.f;
 	mesh->meshName = "Invaders/Invader_Single_Cube.ply";
-	mesh->positionXYZ = glm::vec3(0.f, 10000.f, 0.f);
+	mesh->positionXYZ = glm::vec3(0.f, 9000.f, 0.f);
 
 	particleScale = 1.f;
 	glm::vec3 position = glm::vec3(mesh->positionXYZ.x, mesh->positionXYZ.y + particleScale, mesh->positionXYZ.z);

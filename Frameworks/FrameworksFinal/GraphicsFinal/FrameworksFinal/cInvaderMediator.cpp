@@ -15,6 +15,22 @@ bool cInvaderMediator::RecieveMessage(sMessage theMessage) {
 			entityOne->RecieveMessage(destroy);
 			entityTwo->RecieveMessage(destroy);
 		}
+		if (entityTwo->mesh->friendlyName == "Bullet" && entityOne->mesh->friendlyName == "UFO" ||
+			entityOne->mesh->friendlyName == "Bullet" && entityTwo->mesh->friendlyName == "UFO") {
+			// Aliens are spawned before the bullet, so they will always be entityOne.
+			sMessage destroy;
+			destroy.command = "Destroy";
+			entityOne->RecieveMessage(destroy);
+			entityTwo->RecieveMessage(destroy);
+		}
+		if (entityTwo->mesh->friendlyName == "Bullet" && entityOne->mesh->friendlyName == "Shield" ||
+			entityOne->mesh->friendlyName == "Bullet" && entityTwo->mesh->friendlyName == "Shield") {
+			// Aliens are spawned before the bullet, so they will always be entityOne.
+			sMessage destroy;
+			destroy.command = "Destroy";
+			entityOne->RecieveMessage(destroy);
+			entityTwo->RecieveMessage(destroy);
+		}
 	}
 	return true;
 }

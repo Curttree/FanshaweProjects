@@ -2,11 +2,13 @@
 #include "iMessage.h"
 #include "cAlien.h"
 #include "cUfo.h"
+#include "cShieldPixel.h"
 class cGameStateManager : public iMessage {
 public:
 	void AssembleAliens();
+	void BuildShields();
 	void Update(float deltaTime);
-	void InitializePlayer();
+	void InitializePlayer(); 
 
 	// Via iMessage
 
@@ -15,8 +17,10 @@ public:
 	virtual bool SetReciever(iMediator* pTheReciever);
 private:
 	std::vector<cAlien*> aliens;
+	std::vector<cShieldPixel*> shields;
 
+	void BuildAShield(float x_offset);
 	cUfo* ufo;
-	float ufoSpawnTime = 15.f;
+	float ufoSpawnTime = 10.f;
 	float currentUfoCycleTime = 0.f;
 };

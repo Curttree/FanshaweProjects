@@ -26,7 +26,7 @@ size_t cParticleParticleContactGenerator::AddContact(cParticleContact* contact, 
 			combinedRadius = particles[x]->GetRadius() + particles[y]->GetRadius();
 			contactVector = particles[x]->GetPosition() - particles[y]->GetPosition();
 			// Check if the positions of each particle are less than the combined radius of the two particles.
-			if (glm::length(contactVector) <= combinedRadius && particles[x]->type != particles[y]->type) {
+			if (glm::length(contactVector) <= combinedRadius && (particles[x]->type != particles[y]->type)) {
 				// We don't want to simulate actual contacts. Instead do something.
 				sMessage collisionMessage;
 				collisionMessage.command = "Hit";

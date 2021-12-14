@@ -29,7 +29,7 @@ cAlien::cAlien(int type)  {
 	}
 	mesh->meshName = pose1;  
 
-	particleScale = 120.f;
+	particleScale = 100.f;
 	glm::vec3 position = glm::vec3(mesh->positionXYZ.x, mesh->positionXYZ.y + particleScale, mesh->positionXYZ.z);
 	particle = new cParticle(position, 1.f, particleScale);
 	particle->SetDamping(0.9f);
@@ -55,11 +55,12 @@ cAlien::~cAlien() {
 }
 
 void cAlien::Update(float deltaTime) {
-	if (isDead) {
+	if (isDead && mesh->scale > 0.f) {
 		currentDeathTime += deltaTime;
 		if (currentDeathTime >= deathTimer) {
 			// We should properly dispose of the object, but for now, just hide them.
 			mesh->scale = 0.f;
+			currentDeathTime = 0.f;
 		}
 	}
 	else {

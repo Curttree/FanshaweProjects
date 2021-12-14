@@ -254,6 +254,7 @@ int main(void) {
 
 #pragma endregion
     ::g_pGameState->AssembleAliens();
+    ::g_pGameState->BuildShields();
     ::g_pGameState->InitializePlayer();
 #pragma region Invaders
 
