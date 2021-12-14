@@ -47,6 +47,8 @@ void cWinContextMenu::showMenu(GLFWwindow* window, int x, int y)
     HMENU hPopupMenu = CreatePopupMenu();
     InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_CLOSE, (LPCWSTR)L"Exit");
     InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_WIREFRAME, (LPCWSTR)L"Toggle Wireframe");
+    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_POSITION2, (LPCWSTR)L"Move Near Down Stairs");
+    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_POSITION3, (LPCWSTR)L"Move Near Up Stairs");
 
     HWND hWnd = glfwGetWin32Window(window);
 
@@ -75,6 +77,16 @@ void cWinContextMenu::showMenu(GLFWwindow* window, int x, int y)
         for (cMesh* mesh : g_vec_pMeshes) {
             mesh->bIsWireframe = !mesh->bIsWireframe;
         }
+        break;
+    case ID_POSITION2:
+        std::cout << "Picked \"Move Near Down Stairs\" (ID_POSITION2)" << std::endl;
+        ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
+        ::g_pFlyCamera->setEye(glm::vec3(23600.f, 2000.f, 20600.f));
+        break;
+    case ID_POSITION3:
+        std::cout << "Picked \"Move Near Up Stairs\" (ID_POSITION2)" << std::endl;
+        ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
+        ::g_pFlyCamera->setEye(glm::vec3(5000.f, 2000.f, 10600.f));
         break;
     case 0:
         std::cout << "Didn't make a choice (hit <esc>?)" << std::endl;

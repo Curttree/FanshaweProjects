@@ -4,6 +4,7 @@
 
 #include <sstream>
 #include <string>
+#include <iostream>
 
 cLightManager::cLightManager()
 {
@@ -82,6 +83,25 @@ void cLightManager::SetPosition(unsigned int lightNumber, glm::vec3 newPosition)
 void cLightManager::MoveLightRelative(unsigned int lightNumber, glm::vec3 deltaPosition) {
 
 	//theLights[lightNumber].position += deltaPosition;
+}
+
+void cLightManager::DayTimeStep(float deltaTime) {
+	elapsedDayTime += deltaTime;
+	if (isDayTime && elapsedDayTime >= sunset + timeToAdjust) {
+		isDayTime = false;
+		elapsedDayTime = 0.f;
+	}
+	else if (isDayTime && elapsedDayTime >= sunset) {
+		theLights[0].diffuse.a -= (1.5f * (deltaTime) / (sunset + timeToAdjust));
+	}
+
+	if (!isDayTime && elapsedDayTime >= sunrise + timeToAdjust) {
+		isDayTime = true;
+		elapsedDayTime = 0.f;
+	}
+	else if (!isDayTime && elapsedDayTime >= sunrise) {
+		theLights[0].diffuse.a += (1.5f * (deltaTime) / (sunset + timeToAdjust));
+	}
 }
 
 

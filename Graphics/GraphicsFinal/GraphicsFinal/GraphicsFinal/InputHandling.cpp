@@ -60,9 +60,7 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
             << cameraEye.y << ", "
             << cameraEye.z; //<< std::endl;
 
-        #if defined _DEBUG
         ::g_TitleText = strTitle.str();
-        #endif
 
     }//if ( cGFLWKeyboardModifiers::areAllModsUp(pWindow) )
 

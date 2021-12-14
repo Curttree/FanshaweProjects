@@ -24,6 +24,9 @@
 #define PLANT_5 18
 #define PLANT_6 19
 
+#define TORCH 20
+#define STAIRS 21
+
 
 cDungeonFactory* cDungeonFactory::_instance = 0;
 cDungeonFactory::cDungeonFactory() {
@@ -103,7 +106,7 @@ cMesh* cDungeonFactory::createDungeonPiece(int type, glm::vec3 position, glm::ve
 		obj->friendlyName = "Crystal";
 		obj->scale = 1.f;
 		obj->alphaTransparency = 0.86;
-		obj->wholeObjectShininess_SpecPower = 1.f;
+		obj->wholeObjectShininess_SpecPower = 0.00001f;
 		break;
 	case(CRYSTAL_2):
 		obj = new cMesh();
@@ -114,7 +117,7 @@ cMesh* cDungeonFactory::createDungeonPiece(int type, glm::vec3 position, glm::ve
 		obj->friendlyName = "Crystal";
 		obj->scale = 1.f;
 		obj->alphaTransparency = 0.7;
-		obj->wholeObjectShininess_SpecPower = 1.f;
+		obj->wholeObjectShininess_SpecPower = 0.000001f;
 		break;
 	case(CRYSTAL_3):
 		obj = new cMesh();
@@ -125,7 +128,7 @@ cMesh* cDungeonFactory::createDungeonPiece(int type, glm::vec3 position, glm::ve
 		obj->friendlyName = "Crystal";
 		obj->scale = 1.f;
 		obj->alphaTransparency = 0.9;
-		obj->wholeObjectShininess_SpecPower = 1.f;
+		obj->wholeObjectShininess_SpecPower = 0.00001f;
 		break;
 	case(CRYSTAL_4):
 		obj = new cMesh();
@@ -136,7 +139,7 @@ cMesh* cDungeonFactory::createDungeonPiece(int type, glm::vec3 position, glm::ve
 		obj->friendlyName = "Crystal";
 		obj->scale = 1.f;
 		obj->alphaTransparency = 0.8;
-		obj->wholeObjectShininess_SpecPower = 1.f;
+		obj->wholeObjectShininess_SpecPower = 0.00001f;
 		break;
 	case(TREE_1):
 		obj = new cMesh();
@@ -219,6 +222,25 @@ cMesh* cDungeonFactory::createDungeonPiece(int type, glm::vec3 position, glm::ve
 		obj->friendlyName = "Plant";
 		obj->scale = 100.f;
 		break;
+	case(TORCH):
+		obj = new cMesh();
+		obj->meshName = "SM_Prop_Dwarf_Torch_05.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->positionXYZ.y = 400.f;
+		obj->friendlyName = "Torch";
+		obj->scale = 1.f;
+		break;
+	case(STAIRS):
+		obj = new cMesh();
+		obj->meshName = "SM_Env_Dwarf_Stairs_01.ply";
+		obj->textureNames[0] = "Dungeons_2_Texture_01_A.bmp";
+		obj->textureRatios[0] = 1.f;
+		obj->orientationXYZ = orientation;
+		obj->friendlyName = "Stairs";
+		obj->scale = 1.f;
+		break;
 
 	default:
 		obj = NULL;
@@ -226,7 +248,7 @@ cMesh* cDungeonFactory::createDungeonPiece(int type, glm::vec3 position, glm::ve
 	}
 
 	if (obj) {
-		obj->positionXYZ = position;
+		obj->positionXYZ += position;
 	}
 	return obj;
 }

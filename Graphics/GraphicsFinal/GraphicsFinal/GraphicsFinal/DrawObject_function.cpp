@@ -200,7 +200,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
 
     {
         //GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
-        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("WinterRiver");
+        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Gold");
 
         // Be careful that you don't mix up the 2D and the cube assignments for the texture units
         //

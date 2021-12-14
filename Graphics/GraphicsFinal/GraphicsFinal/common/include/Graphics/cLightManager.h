@@ -50,7 +50,7 @@ public:
 
 	// Here's an array of lights that match
 	//	the ones inside the shader
-	static const unsigned int NUMBER_OF_LIGHTS = 10;
+	static const unsigned int NUMBER_OF_LIGHTS = 308;
 	sLight theLights[NUMBER_OF_LIGHTS];	
 
 	// This sets up the initial uniform locations from the shader
@@ -59,8 +59,14 @@ public:
 	// Copies the values from the array into the shader
 	void CopyLightInfoToShader(void);
 
+	void DayTimeStep(float deltaTime);
 	//TODO: Implement functions to save/load light info from a file.
 	//void SaveLightInformationToFile( std::string fileName );
 	//void LoadLightInformationFromFile( std::string fileName );
-
+private:
+	float elapsedDayTime = 0.f;
+	float sunset = 5.f;
+	float sunrise = 5.f;
+	float timeToAdjust = 5.f;
+	bool isDayTime = true;
 };

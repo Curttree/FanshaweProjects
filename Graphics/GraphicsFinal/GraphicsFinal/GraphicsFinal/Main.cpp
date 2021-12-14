@@ -129,13 +129,6 @@ int main(void) {
     ::g_pTheLights->theLights[0].param1.x = 2.f;    // Directional light
     ::g_pTheLights->TurnOnLight(0);
 
-    ::g_pTheLights->theLights[1].position = glm::vec4(::g_pConfigManager->_awayGoalLightPosition, 1.f);
-    ::g_pTheLights->theLights[1].diffuse = glm::vec4(1.f, 0.f, 0.f, 1.f);
-    ::g_pTheLights->theLights[1].specular = glm::vec4(1.f, 0.f, 0.f, 1.f);
-    ::g_pTheLights->theLights[1].atten = glm::vec4(0.003f, 0.0001f, 0.00027f, 20.f);
-    ::g_pTheLights->theLights[1].param1.x = 0.f;    // point light
-    ::g_pTheLights->TurnOffLight(1);
-
     // Get the uniform locations of the light shader values
     ::g_pTheLights->SetUpUniformLocations(program);
 
@@ -188,7 +181,10 @@ int main(void) {
     vecModelsToLoad.push_back("Plants/SM_Env_Plants_03.ply");
     vecModelsToLoad.push_back("Plants/SM_Env_Tree_Dead_01.ply");
     vecModelsToLoad.push_back("Plants/SM_Generic_Tree_02.ply");
-    vecModelsToLoad.push_back("Plants/SM_Generic_Tree_04.ply");
+    vecModelsToLoad.push_back("Plants/SM_Generic_Tree_04.ply"); 
+
+    vecModelsToLoad.push_back("SM_Prop_Dwarf_Torch_05.ply");
+    vecModelsToLoad.push_back("SM_Env_Dwarf_Stairs_01.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -226,13 +222,13 @@ int main(void) {
     // Add a skybox texture
     std::string errorTextString;
     ::g_pTextureManager->SetBasePath("assets/textures/cubemaps");
-    if (!::g_pTextureManager->CreateCubeTextureFromBMPFiles("WinterRiver",
-        "winterRiver_posX.bmp",    /* posX_fileName */
-        "winterRiver_negX.bmp",     /*negX_fileName */
-        "winterRiver2_negY.bmp",     /*negY_fileName*/
-        "winterRiver_posY.bmp",       /*posY_fileName*/
-        "winterRiver2_posZ.bmp",    /*posZ_fileName*/
-        "winterRiver2_negZ.bmp",      /*negZ_fileName*/
+    if (!::g_pTextureManager->CreateCubeTextureFromBMPFiles("Gold",
+        "Gold_Diffuse.bmp",    /* posX_fileName */
+        "Gold_Diffuse.bmp",     /*negX_fileName */
+        "Gold_Diffuse.bmp",     /*negY_fileName*/
+        "Gold_Diffuse.bmp",       /*posY_fileName*/
+        "Gold_Diffuse.bmp",    /*posZ_fileName*/
+        "Gold_Diffuse.bmp",      /*negZ_fileName*/
         true, errorTextString))
     {
         std::cout << "Didn't load because: " << errorTextString << std::endl;
@@ -307,7 +303,8 @@ int main(void) {
 
         // Update the title text
         glfwSetWindowTitle(pWindow, ::g_TitleText.c_str());
-
+        
+        ::g_pTheLights->DayTimeStep(deltaTime);
 
         // Copy the light information into the shader to draw the scene
         ::g_pTheLights->CopyLightInfoToShader();

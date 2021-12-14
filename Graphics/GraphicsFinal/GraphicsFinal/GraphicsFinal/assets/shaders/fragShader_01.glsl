@@ -55,7 +55,7 @@ const int SPOT_LIGHT_TYPE = 1;
 const int DIRECTIONAL_LIGHT_TYPE = 2;
 
 
-const int NUMBEROFLIGHTS = 10;
+const int NUMBEROFLIGHTS = 308;
 uniform sLight theLights[NUMBEROFLIGHTS];  	// 80 uniforms
 // 
 // uniform vec4 theLights[0].position;
@@ -265,10 +265,10 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 			float dotProduct = dot( -theLights[index].direction.xyz,  
 									   normalize(norm.xyz) );	// -1 to 1
 
-			dotProduct = max( 0.25f, dotProduct );		// Set lower limit as 25% so shadows are softer.
+			dotProduct = max( 0.1f, dotProduct );		
 		
 			lightContrib *= dotProduct;		
-			
+			lightContrib *= theLights[index].diffuse.a;
 //			finalObjectColour.rgb += (vertexMaterialColour.rgb * theLights[index].diffuse.rgb * lightContrib); 
 			finalObjectColour.rgb += (vertexMaterialColour.rgb * lightContrib); 
 									 //+ (materialSpecular.rgb * lightSpecularContrib.rgb);

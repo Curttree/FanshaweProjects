@@ -1,5 +1,6 @@
 #include "cDungeonMaster.h"
 #include "cDungeonFactory.h"
+#include "globals.h"
 
 cDungeonFactory* factory = cDungeonFactory::Instance();
 
@@ -32,6 +33,8 @@ void cDungeonMaster::BuildDungeonFromTSV(std::string fileName) {
 
 	int piece; 
 	glm::vec4 wallsToPlace;
+	glm::vec4 downstairCoords = glm::vec4(-1.f);
+	glm::vec4 upstairCoords = glm::vec4(-1.f);
 	for (int x = 0; x < x_size; x++) {
 		for (int z = 0; z < z_size; z++) {
 			piece = dungeonReader->GetObjectAtLocation(x, z);
@@ -40,13 +43,69 @@ void cDungeonMaster::BuildDungeonFromTSV(std::string fileName) {
 				wallsToPlace = dungeonReader->DetermineWallOrientation(x, z);
 				PlaceWalls(glm::vec3(x * 500.f - 250.f, 0, z * 500.f - 250.f), wallsToPlace);
 			}
-			cMesh* model = factory->createDungeonPiece(piece, glm::vec3(x*500.f, 0.f, z*500.f));
-			if (piece == 3 || piece == 4) {
-				//model->positionXYZ += glm::vec3(-250.f, 0.f, -250.f);
-				SetupDoors(model, x, z);
+			if (!(piece >= 5 && piece <= 8)) {
+				cMesh* model = factory->createDungeonPiece(piece, glm::vec3(x * 500.f, 0.f, z * 500.f));
+
+				if (piece == 3 || piece == 4) {
+					//model->positionXYZ += glm::vec3(-250.f, 0.f, -250.f);
+					SetupDoors(model, x, z);
+				}
+
+				if (model) {
+					dungeonModels.push_back(model);
+				}
 			}
-			if (model) {
-				dungeonModels.push_back(model);
+			else {
+				if (piece == 5) {
+					downstairCoords.x = x;
+					downstairCoords.y = z;
+				}
+				if (piece == 6) {
+					downstairCoords.z = x;
+					downstairCoords.w = z;
+				}
+				if (piece == 7) {
+					upstairCoords.x = x;
+					upstairCoords.y = z;
+				}
+				if (piece == 8) {
+					upstairCoords.z = x;
+					upstairCoords.w = z;
+				}
+				if (downstairCoords.x >= 0 &&
+					downstairCoords.y >= 0 &&
+					downstairCoords.z >= 0 &&
+					downstairCoords.w >= 0) {
+					// We have all four downstairs coordinates. Place the stairs.
+					cMesh* model = factory->createDungeonPiece(21, glm::vec3(downstairCoords.x * 500.f, 0.f, downstairCoords.y * 500.f));
+					if (downstairCoords.x > downstairCoords.z) {
+						model->orientationXYZ = (glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
+						model->positionXYZ += (glm::vec3(-500.f, -250.F, -500.f));
+					}
+					if (downstairCoords.x < downstairCoords.z) {
+						model->orientationXYZ = (glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
+					}
+					if (model) {
+						dungeonModels.push_back(model);
+					}
+				}
+				if (upstairCoords.x >= 0 &&
+					upstairCoords.y >= 0 &&
+					upstairCoords.z >= 0 &&
+					upstairCoords.w >= 0) {
+					// We have all four downstairs coordinates. Place the stairs.
+					cMesh* model = factory->createDungeonPiece(21, glm::vec3(upstairCoords.x * 500.f, 0.f, upstairCoords.y * 500.f));
+					if (upstairCoords.x > upstairCoords.z) {
+						model->orientationXYZ = (glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
+						//model->positionXYZ += (glm::vec3(-500.f, -250.F, -500.f));
+					}
+					if (upstairCoords.x < upstairCoords.z) {
+						model->orientationXYZ = (glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
+					}
+					if (model) {
+						dungeonModels.push_back(model);
+					}
+				}
 			}
 		}
 	}
@@ -54,6 +113,7 @@ void cDungeonMaster::BuildDungeonFromTSV(std::string fileName) {
 	//Place decorations
 	PlaceCrystals();
 	PlacePlants();
+	PlaceTorches(x_size, z_size);
 }
 
 void cDungeonMaster::PlaceWalls(glm::vec3 position, glm::vec4 wallsToPlace) {
@@ -161,6 +221,45 @@ void cDungeonMaster::PlaceCrystals() {
 	cMesh* crystal4 = factory->createDungeonPiece(10, glm::vec3(2560.f, 0.f, 550.f));
 	cMesh* crystal5 = factory->createDungeonPiece(7, glm::vec3(4170.f, 0.f, 1050.f));
 
+
+	::g_pTheLights->theLights[1].position = glm::vec4(glm::vec3(3000.f, 250.f, 1500.f), 1.f);
+	::g_pTheLights->theLights[1].diffuse = glm::vec4(1.f, 0.f, 1.f, 1.f);
+	::g_pTheLights->theLights[1].specular = glm::vec4(1.f, 0.f, 1.f, 1.f);
+	::g_pTheLights->theLights[1].atten = glm::vec4(0.003f, 0.0001f, 0.00027f, 400.f);
+	::g_pTheLights->theLights[1].param1.x = 0.f;    // point light
+	::g_pTheLights->TurnOnLight(1);
+
+	::g_pTheLights->theLights[2].position = glm::vec4(glm::vec3(3840.f, 250.f, 2300.f), 1.f);
+	::g_pTheLights->theLights[2].diffuse = glm::vec4(1.f, 0.f, 1.f, 1.f);
+	::g_pTheLights->theLights[2].specular = glm::vec4(1.f, 0.f, 1.f, 1.f);
+	::g_pTheLights->theLights[2].atten = glm::vec4(0.003f, 0.0001f, 0.00027f, 500.f);
+	::g_pTheLights->theLights[2].param1.x = 0.f;    // point light
+	::g_pTheLights->TurnOnLight(2);
+
+	::g_pTheLights->theLights[3].position = glm::vec4(glm::vec3(3150.f, 250.f, 2050.f), 1.f);
+	::g_pTheLights->theLights[3].diffuse = glm::vec4(1.f, 0.f, 1.f, 1.f);
+	::g_pTheLights->theLights[3].specular = glm::vec4(1.f, 0.f,1.f, 1.f);
+	::g_pTheLights->theLights[3].atten = glm::vec4(0.003f, 0.0001f, 0.00027f, 500.f);
+	::g_pTheLights->theLights[3].param1.x = 0.f;    // point light
+	::g_pTheLights->TurnOnLight(3);
+
+	::g_pTheLights->theLights[4].position = glm::vec4(glm::vec3(2560.f, 250.f, 550.f), 1.f);
+	::g_pTheLights->theLights[4].diffuse = glm::vec4(1.f, 0.f, 1.f, 1.f);
+	::g_pTheLights->theLights[4].specular = glm::vec4(1.f, 0.f, 1.f, 1.f);
+	::g_pTheLights->theLights[4].atten = glm::vec4(0.003f, 0.0001f, 0.00027f, 500.f);
+	::g_pTheLights->theLights[4].param1.x = 0.f;    // point light
+	::g_pTheLights->TurnOnLight(4);
+
+	::g_pTheLights->theLights[5].position = glm::vec4(glm::vec3(4170.f, 250.f, 1050.f), 1.f);
+	::g_pTheLights->theLights[5].diffuse = glm::vec4(1.f, 0.f, 1.f, 1.f);
+	::g_pTheLights->theLights[5].specular = glm::vec4(1.f, 0.f, 1.f, 1.f);
+	::g_pTheLights->theLights[5].atten = glm::vec4(0.003f, 0.0001f, 0.00027f, 500.f);
+	::g_pTheLights->theLights[5].param1.x = 0.f;    // point light
+	::g_pTheLights->TurnOnLight(5);
+
+
+
+
 	dungeonModels.push_back(crystal1);
 	dungeonModels.push_back(crystal2);
 	dungeonModels.push_back(crystal3);
@@ -202,4 +301,67 @@ void cDungeonMaster::PlacePlants() {
 	dungeonModels.push_back(plant7);
 	dungeonModels.push_back(plant8);
 	dungeonModels.push_back(plant9);
+}
+
+void cDungeonMaster::PlaceTorches(int x_size,int z_size) {
+	int x_step = 4;
+	int z_step = 4;
+	glm::vec4 adjacentWalls = glm::vec4(0.f);
+	// Automatic torch placement.
+	for (int x = 1; x < x_size; x += x_step) {
+		for (int z = 1; z < z_size; z += z_step) {
+			if (dungeonReader->GetObjectAtLocation(x, z) == 1) {
+				adjacentWalls = dungeonReader->DetermineWallOrientation(x, z);
+				if (adjacentWalls.x > 0.f) {
+					cMesh* model = factory->createDungeonPiece(20, glm::vec3(x*500.f-250.f, 0.f, z*500.f-250.f));
+					if (model) {
+						model->orientationXYZ = (glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
+						model->positionXYZ += glm::vec3(-215.f, 0.f, 0.f);
+						dungeonModels.push_back(model);
+						CreateFlame(model->positionXYZ + glm::vec3(20.f, 10.f, 0.f));
+					}
+				}
+				if (adjacentWalls.y > 0.f) {
+					cMesh* model = factory->createDungeonPiece(20, glm::vec3(x * 500.f - 250.f, 0.f, z * 500.f - 250.f));
+					if (model) {
+						model->orientationXYZ = (glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
+						model->positionXYZ += glm::vec3(215.f, 0.f, 0.f);
+						dungeonModels.push_back(model);
+						CreateFlame(model->positionXYZ + glm::vec3(-20.f, 10.f, 0.f));
+					}
+				}
+				if (adjacentWalls.z > 0.f) {
+					cMesh* model = factory->createDungeonPiece(20, glm::vec3(x * 500.f - 250.f, 0.f, z * 500.f - 250.f));
+					if (model) {
+						model->orientationXYZ = (glm::vec3(0.f, glm::pi<float>(), 0.f));
+						model->positionXYZ += glm::vec3(0.f, 0.f, -215.f);
+						dungeonModels.push_back(model);
+						CreateFlame(model->positionXYZ + glm::vec3(0.f, 10.f, 20.f));
+					}
+				}
+				if (adjacentWalls.w > 0.f) {
+					cMesh* model = factory->createDungeonPiece(20, glm::vec3(x * 500.f - 250.f, 0.f, z * 500.f - 250.f));
+					if (model) {
+						model->orientationXYZ = (glm::vec3(0.f, 0.f, 0.f));
+						model->positionXYZ += glm::vec3(0.f, 0.f, 215.f);
+						dungeonModels.push_back(model);
+						CreateFlame(model->positionXYZ + glm::vec3(0.f,10.f,-20.f));
+					}
+				}
+			}
+		}
+	}
+}
+
+void cDungeonMaster::CreateFlame(glm::vec3 position) {
+	candlesPlaced++;
+	if (candlesPlaced < ::g_pTheLights->NUMBER_OF_LIGHTS) {
+		::g_pTheLights->theLights[candlesPlaced].position = glm::vec4(position, 1.f);
+		::g_pTheLights->theLights[candlesPlaced].diffuse = glm::vec4(1.f, 0.4f, 0.f, 1.f);
+		::g_pTheLights->theLights[candlesPlaced].specular = glm::vec4(1.f, 0.4f, 0.f, 1.f);
+		::g_pTheLights->theLights[candlesPlaced].atten = glm::vec4(0.003f, 0.0001f, 0.00027f, 400.f);
+		::g_pTheLights->theLights[candlesPlaced].param1.x = 0.f;    // point light
+		::g_pTheLights->TurnOnLight(candlesPlaced);
+	}
+	std::cout << candlesPlaced++ << std::endl;
 }

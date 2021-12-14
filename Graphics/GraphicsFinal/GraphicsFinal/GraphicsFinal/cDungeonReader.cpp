@@ -48,6 +48,22 @@ int cDungeonReader::GetObjectAtLocation(int x_coordinate, int z_coordinate) {
 		// Portcullis.
 		return 4;
 	}
+	else if (dungeon[x_coordinate][z_coordinate] == 'S') {
+		// Down Stairs.
+		return 5;
+	}
+	else if (dungeon[x_coordinate][z_coordinate] == 'T') {
+		// Down Stairs second part.
+		return 6;
+	}
+	else if (dungeon[x_coordinate][z_coordinate] == 'U') {
+		// Down Stairs.
+		return 7;
+	}
+	else if (dungeon[x_coordinate][z_coordinate] == 'V') {
+		// Down Stairs second part.
+		return 8;
+	}
 
 	// Unknown character detected.
 	return -1;

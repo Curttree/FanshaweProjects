@@ -1,9 +1,9 @@
 {
   "Camera": {
 	  "Position":{
-    "x": 0.0,
-    "y": 50.0,
-  "z": -380.0}},
+    "x": 250.0,
+    "y": 250.0,
+  "z": 1000.0}},
   "Physics":{
 	  "PositiveXBoundary":125,
 	  "NegativeXBoundary":-125,

@@ -14,4 +14,7 @@ private:
 	void SetupDoors(cMesh* door, int x, int z);
 	void PlaceCrystals();
 	void PlacePlants();
+	void PlaceTorches(int x_size, int z_size);
+	void CreateFlame(glm::vec3 position);
+	int candlesPlaced = 8;		// Add 8 as first 0-8 are are reserved for other lights
 };
