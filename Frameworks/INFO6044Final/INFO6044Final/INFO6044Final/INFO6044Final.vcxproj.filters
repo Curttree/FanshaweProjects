@@ -1,0 +1,293 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{f7abf76a-489e-4047-bdc9-1e719172b10e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Non-Question Material">
+      <UniqueIdentifier>{719eea39-9d6a-4c68-b74a-bea8ab372859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Non-Question Material\Graphics">
+      <UniqueIdentifier>{23f3f941-ba7f-4881-a542-f9a88fefa7fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Non-Question Material\Graphics\Models">
+      <UniqueIdentifier>{f5d3c437-520d-4cb3-85f4-dd3507ab08a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Non-Question Material\Graphics\Models\VAOManager">
+      <UniqueIdentifier>{0e2ed442-1458-4ce7-91ac-fe521cc3402a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Non-Question Material\Graphics\LightManager">
+      <UniqueIdentifier>{1ffd7400-84cd-41ca-82de-cf20aad959cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Non-Question Material\Graphics\ShaderManager">
+      <UniqueIdentifier>{88a1a820-973e-49e8-a050-870a0e3e8952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Non-Question Material\Graphics\ShaderManager\Shaders">
+      <UniqueIdentifier>{4bcf918b-033b-49cf-8467-2fffa556428b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Non-Question Material\Global">
+      <UniqueIdentifier>{6502a789-1c50-4f43-979b-e8be03645daa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Non-Question Material\Cameras">
+      <UniqueIdentifier>{b2ac2e56-1c88-4e19-8dca-62d45c9e42e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Non-Question Material\Win32">
+      <UniqueIdentifier>{255f361b-b77d-49e0-a843-1dc451e97a29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Questions 4, 5">
+      <UniqueIdentifier>{4a2aa012-a745-4a3d-a8b9-e9c72c9d8fb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Question 1,2,3,6">
+      <UniqueIdentifier>{a52964b0-7770-4ea7-ad2e-ed1e9f554dd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Question 1,2,3,6\Tanks">
+      <UniqueIdentifier>{2a18564c-6a35-437e-b8ad-6a69fc6d8e56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Question 1,2,3,6\Maze">
+      <UniqueIdentifier>{64ba01dc-eda6-4c7f-9fb7-3882f8414924}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Question 1,2,3,6\Patterns">
+      <UniqueIdentifier>{1b421cac-41df-47f1-88db-348465ecc843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Question 1,2,3,6\Input">
+      <UniqueIdentifier>{bfd51c49-9dea-4d7e-a05f-3074cd08fe12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Questions 4, 5\Projectiles">
+      <UniqueIdentifier>{6e880aa8-da47-4c40-a03c-374a18f0d218}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Non-Question Material\Physics">
+      <UniqueIdentifier>{b887c95c-9af6-462d-9a2c-9cd27ee63e4a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\common\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Startup.cpp">
+      <Filter>Non-Question Material\Global</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Graphics\cVAOManager.cpp">
+      <Filter>Non-Question Material\Graphics\Models\VAOManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Graphics\cShader.cpp">
+      <Filter>Non-Question Material\Graphics\ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Graphics\cShaderManager.cpp">
+      <Filter>Non-Question Material\Graphics\ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Graphics\cLightHelper.cpp">
+      <Filter>Non-Question Material\Graphics\LightManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Graphics\cLightManager.cpp">
+      <Filter>Non-Question Material\Graphics\LightManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Shutdown.cpp">
+      <Filter>Non-Question Material\Global</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\FlyCamera\cFlyCamera.cpp">
+      <Filter>Non-Question Material\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="cWinContextMenu.cpp">
+      <Filter>Non-Question Material\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="globals.cpp">
+      <Filter>Non-Question Material\Global</Filter>
+    </ClCompile>
+    <ClCompile Include="cMesh.cpp">
+      <Filter>Non-Question Material\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GLFW_error_callback.cpp">
+      <Filter>Question 1,2,3,6\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="GLFW_key_callback.cpp">
+      <Filter>Question 1,2,3,6\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandling.cpp">
+      <Filter>Question 1,2,3,6\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="cGFLWKeyboardModifiers.cpp">
+      <Filter>Question 1,2,3,6\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawObject_function.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cPlayerTank.cpp">
+      <Filter>Question 1,2,3,6\Tanks</Filter>
+    </ClCompile>
+    <ClCompile Include="cCombatMediator.cpp">
+      <Filter>Question 1,2,3,6\Patterns</Filter>
+    </ClCompile>
+    <ClCompile Include="cMazeManager.cpp">
+      <Filter>Question 1,2,3,6\Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="cAITank.cpp">
+      <Filter>Question 1,2,3,6\Tanks</Filter>
+    </ClCompile>
+    <ClCompile Include="cBullet.cpp">
+      <Filter>Questions 4, 5\Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="cLaser.cpp">
+      <Filter>Questions 4, 5\Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="configManager.cpp">
+      <Filter>Non-Question Material</Filter>
+    </ClCompile>
+    <ClCompile Include="cEntity.cpp">
+      <Filter>Non-Question Material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cGravityGenerator.cpp">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cMathHelper.cpp">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cParticle.cpp">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cParticleContact.cpp">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cParticleContactResolver.cpp">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cParticleForceRegistry.cpp">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cParticleParticleContactGenerator.cpp">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cParticleWorld.cpp">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cPlaneParticleContactGenerator.cpp">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Physics\cWorldSpace.cpp">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="globals.h">
+      <Filter>Non-Question Material\Global</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\cVAOManager.h">
+      <Filter>Non-Question Material\Graphics\Models\VAOManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\sVertex_types.h">
+      <Filter>Non-Question Material\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\GLCommon.h">
+      <Filter>Non-Question Material\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\cShaderManager.h">
+      <Filter>Non-Question Material\Graphics\ShaderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\cLightHelper.h">
+      <Filter>Non-Question Material\Graphics\LightManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\cLightManager.h">
+      <Filter>Non-Question Material\Graphics\LightManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\FlyCamera\iCamera.h">
+      <Filter>Non-Question Material\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\FlyCamera\cFlyCamera.h">
+      <Filter>Non-Question Material\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="cWinContextMenu.h">
+      <Filter>Non-Question Material\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="cMesh.h">
+      <Filter>Non-Question Material\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="cCombatMediator.h">
+      <Filter>Question 1,2,3,6\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="iTank.h">
+      <Filter>Question 1,2,3,6\Tanks</Filter>
+    </ClInclude>
+    <ClInclude Include="cPlayerTank.h">
+      <Filter>Question 1,2,3,6\Tanks</Filter>
+    </ClInclude>
+    <ClInclude Include="iMediator.h">
+      <Filter>Question 1,2,3,6\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="iMessage.h">
+      <Filter>Question 1,2,3,6\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="cMazeManager.h">
+      <Filter>Question 1,2,3,6\Maze</Filter>
+    </ClInclude>
+    <ClInclude Include="eState.h">
+      <Filter>Question 1,2,3,6\Tanks</Filter>
+    </ClInclude>
+    <ClInclude Include="cAITank.h">
+      <Filter>Question 1,2,3,6\Tanks</Filter>
+    </ClInclude>
+    <ClInclude Include="cBullet.h">
+      <Filter>Questions 4, 5\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="cLaser.h">
+      <Filter>Questions 4, 5\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="configManager.h">
+      <Filter>Non-Question Material</Filter>
+    </ClInclude>
+    <ClInclude Include="cEntity.h">
+      <Filter>Non-Question Material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cGravityGenerator.h">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cMathHelper.h">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cParticle.h">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cParticleContact.h">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cParticleContactResolver.h">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cParticleForceRegistry.h">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cParticleParticleContactGenerator.h">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cParticleWorld.h">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cPlaneParticleContactGenerator.h">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\cWorldSpace.h">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\extern_includes.h">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\iForceGenerator.h">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\iParticleContactGenerator.h">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Physics\sParticleTemplate.h">
+      <Filter>Non-Question Material\Physics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\fragShader_01.glsl">
+      <Filter>Non-Question Material\Graphics\ShaderManager\Shaders</Filter>
+    </None>
+    <None Include="assets\shaders\vertShader_01.glsl">
+      <Filter>Non-Question Material\Graphics\ShaderManager\Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>

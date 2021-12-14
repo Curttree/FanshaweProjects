@@ -186,6 +186,8 @@ int main(void) {
     vecModelsToLoad.push_back("SM_Prop_Dwarf_Torch_05.ply");
     vecModelsToLoad.push_back("SM_Env_Dwarf_Stairs_01.ply");
 
+    vecModelsToLoad.push_back("FX_SunShafts.ply");
+
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
     for (std::vector<std::string>::iterator itModel = vecModelsToLoad.begin(); itModel != vecModelsToLoad.end(); itModel++)
@@ -216,8 +218,9 @@ int main(void) {
     #pragma region Textures
     // Load the textures
     ::g_pTextureManager->SetBasePath("assets/textures");
-
+    
     ::g_pTextureManager->Create2DTextureFromBMPFile("Dungeons_2_Texture_01_A.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("spotlight.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;
@@ -303,7 +306,7 @@ int main(void) {
 
         // Update the title text
         glfwSetWindowTitle(pWindow, ::g_TitleText.c_str());
-        
+        ::g_pTheLights->FlickerCandles();
         ::g_pTheLights->DayTimeStep(deltaTime);
 
         // Copy the light information into the shader to draw the scene

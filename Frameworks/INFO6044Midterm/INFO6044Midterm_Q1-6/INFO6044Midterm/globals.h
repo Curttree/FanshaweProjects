@@ -47,6 +47,9 @@ extern cLightManager* g_pTheLights;
 //extern cLightHelper* g_pTheLightHelper;
 
 extern iMediator* g_pCombatMediator;
+extern iTank* g_pPlayerTank;
+
+extern bool g_gameStarted;
 
 extern cMesh* g_pDebugSphere;	// = NULL;
 extern bool g_bShowDebugShere;	// = true;

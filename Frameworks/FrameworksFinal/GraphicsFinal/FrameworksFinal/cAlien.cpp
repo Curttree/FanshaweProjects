@@ -1,0 +1,53 @@
+#include "cAlien.h"
+cAlien::cAlien(int type)  {
+	mesh = new cMesh();
+	mesh->bDontLight = true;
+	mesh->bUseWholeObjectDiffuseColour = true;
+	mesh->wholeObjectSpecularRGB = glm::vec3(1.f, 1.f, 1.f);
+	mesh->wholeObjectDiffuseRGBA = glm::vec4(1.f, 1.f, 1.f, 1.f);
+	mesh->friendlyName = "Alien";
+	mesh->scale = 1.f;
+	switch (type) {
+		case(1): {
+			pose1 = "Invaders/SpaceInvader_I1_block_pose_1.ply";
+			pose2 = "Invaders/SpaceInvader_I1_block_pose_2.ply";
+			break;
+		}
+		case(2): {
+			pose1 = "Invaders/SpaceInvader_I2_block_pose_1.ply";
+			pose2 = "Invaders/SpaceInvader_I2_block_pose_2.ply";
+			break;
+		}
+		case(3): {
+			pose1 = "Invaders/SpaceInvader_I3_block_pose_1.ply";
+			pose2 = "Invaders/SpaceInvader_I3_block_pose_2.ply";
+			break;
+		}
+		default: {
+			break;
+		}
+	}
+	mesh->meshName = pose1;  
+
+	particleScale = 1.f;
+	glm::vec3 position = glm::vec3(mesh->positionXYZ.x, mesh->positionXYZ.y + particleScale, mesh->positionXYZ.z);
+	particle = new cParticle(position, 1.f, particleScale);
+	particle->SetDamping(0.9f);
+	worldSpace->_world->AddParticle(particle);
+	debugMesh = new cMesh();
+	debugMesh->meshName = "Sphere_xyz_n_rgba_uv.ply";
+	debugMesh->bIsWireframe = true;
+	debugMesh->bUseObjectDebugColour = true;
+	debugMesh->objectDebugColourRGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	debugMesh->bDontLight = true;
+	debugMesh->scale = particleScale;
+	debugMesh->positionXYZ = mesh->positionXYZ;
+}
+
+cAlien::cAlien(std::string _pose1, std::string _pose2) {
+	// For use if we want to define our own type.
+}
+
+cAlien::~cAlien() {
+
+}
