@@ -25,7 +25,6 @@ cEntity::~cEntity() {
 void cEntity::Update(float deltaTime) {
 	velocity = particle->GetVelocity();
 	mesh->positionXYZ = particle->GetPosition();
-	mesh->positionXYZ.y -= particleScale;
 	//mesh->orientationXYZ.y = atan2(velocity.x, velocity.z);
 	debugMesh->positionXYZ = particle->GetPosition();
 }

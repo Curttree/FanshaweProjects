@@ -11,11 +11,18 @@ public:
 	virtual bool RecieveMessage(sMessage theMessage);
 	virtual bool RecieveMessage(sMessage theMessage, sMessage& theResponse);
 	virtual bool SetReciever(iMediator* pTheReciever);
+	virtual void DelaySinceLastMove(float offset);
 private:
 	std::string pose1;
 	std::string pose2;
 	bool isFirstPose = true;
-	float deathTimer = 1.f;
+
+	float moveTimer = 0.5f;
+	float sinceLastMove = 0.f;
+
+	float deathTimer = 0.5f;
 	float currentDeathTime = 0.f;
 	bool isDead = false;
+
+	float direction = -1;
 };

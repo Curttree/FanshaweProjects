@@ -75,7 +75,7 @@ int main(void) {
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    ::g_TitleText = "Curtis Tremblay - INFO-6044 Final";
+    ::g_TitleText = "Curtis Tremblay - INFO-6044 Final -- Press <SPACE> to Start";
     pWindow = glfwCreateWindow(640, 800, ::g_TitleText.c_str(), NULL, NULL);
 
     if (!pWindow)
@@ -171,6 +171,9 @@ int main(void) {
     vecModelsToLoad.push_back("Invaders/SpaceInvader_Base_block.ply"); 
     vecModelsToLoad.push_back("Invaders/Invader_Single_Cube.ply");
     vecModelsToLoad.push_back("Invaders/SpaceInvader_Explosions.ply");
+    vecModelsToLoad.push_back("Invaders/SpaceInvader_Bomb_pose_1.ply");
+    vecModelsToLoad.push_back("Invaders/SpaceInvader_Bomb_pose_2.ply");
+    vecModelsToLoad.push_back("Invaders/SpaceInvader_Bomb_pose_3.ply");
 
 
     unsigned int totalVerticesLoaded = 0;
@@ -276,13 +279,20 @@ int main(void) {
         double deltaTime = currentTime - previousTime;
         deltaTime = (deltaTime > MAX_DELTA_TIME ? MAX_DELTA_TIME : deltaTime);
         previousTime = currentTime;
+        if (::g_pGameState->GameEnded()) {
+            std::cout << "============GAME OVER============" << std::endl;
+            glfwTerminate();
+            exit(EXIT_SUCCESS);
+        }
 
         glfwGetFramebufferSize(pWindow, &width, &height);
         ratio = width / (float)height;
 
         // Do game state calculations
-        worldSpace->_world->Update(deltaTime);
-        ::g_pGameState->Update(deltaTime);
+        if (::g_pGameState->GameStarted()) {
+            worldSpace->_world->Update(deltaTime);
+            ::g_pGameState->Update(deltaTime);
+        }
 
         // Turn on the depth buffer
         glEnable(GL_DEPTH);         // Turns on the depth buffer

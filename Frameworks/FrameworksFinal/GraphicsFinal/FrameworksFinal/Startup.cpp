@@ -20,5 +20,7 @@ bool g_StartUp(GLFWwindow* pWindow)
 
 	::g_pInvaderMediator = new cInvaderMediator();
 
+	srand(static_cast <unsigned> (time(0)));
+
 	return true;
 }

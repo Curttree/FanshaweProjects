@@ -198,6 +198,9 @@
     <ClCompile Include="cShieldPixel.cpp">
       <Filter>Invaders\Player</Filter>
     </ClCompile>
+    <ClCompile Include="cAlienMissile.cpp">
+      <Filter>Invaders\Aliens</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -328,6 +331,9 @@
     </ClInclude>
     <ClInclude Include="cShieldPixel.h">
       <Filter>Invaders\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="cAlienMissile.h">
+      <Filter>Invaders\Aliens\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

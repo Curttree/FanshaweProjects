@@ -52,7 +52,14 @@
 
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)	// "Space"
     {
-        ::g_pPlayer->Fire();
+
+        if (::g_pGameState->GameStarted()) {
+            ::g_pPlayer->Fire();
+        }
+        else {
+            g_pGameState->StartGame();
+        }
+
     }
     if ((key == GLFW_KEY_LEFT && action == GLFW_PRESS) && ::g_pPlayer)	// "down"
     {

@@ -52,15 +52,15 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
             ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
         }
 
-        std::stringstream strTitle;
+       // std::stringstream strTitle;
         // std::cout << 
-        glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
-        strTitle << "Camera: "
-            << cameraEye.x << ", "
-            << cameraEye.y << ", "
-            << cameraEye.z; //<< std::endl;
+        //glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
+        //strTitle << "Camera: "
+        //    << cameraEye.x << ", "
+        //    << cameraEye.y << ", "
+        //    << cameraEye.z; //<< std::endl;
 
-        ::g_TitleText = strTitle.str();
+        //::g_TitleText = strTitle.str();
 
     }//if ( cGFLWKeyboardModifiers::areAllModsUp(pWindow) )
 

@@ -1,7 +1,7 @@
 #include "cUfo.h"
 #include "globals.h"
 
-#define UPPER_LIMIT 1500.f
+#define UPPER_LIMIT 2000.f
 
 cMathHelper* _mathHelper = cMathHelper::Instance();
 
@@ -19,7 +19,7 @@ cUfo::cUfo() {
 	particleScale = 120.f;
 	glm::vec3 position = glm::vec3(mesh->positionXYZ.x, mesh->positionXYZ.y + particleScale, mesh->positionXYZ.z);
 	particle = new cParticle(position, 1.f, particleScale);
-	particle->SetDamping(0.9f);
+	particle->SetDamping(1.0f);
 	particle->type = mesh->friendlyName;
 	particle->owner = this;
 	worldSpace->_world->AddParticle(particle);
@@ -63,8 +63,8 @@ void cUfo::StartMoving() {
 	else {
 		direction = -1;
 	}
-	particle->SetVelocity(direction * glm::vec3(200.f, 0.f, 0.f));
-	particle->SetPosition( glm::vec3(-1.f * direction * 1100.f, 1250.f, 0.f));
+	particle->SetVelocity(direction * glm::vec3(250.f, 0.f, 0.f));
+	particle->SetPosition( glm::vec3(-1.f * direction * 1100.f, 1130.f, 0.f));
 }
 
 bool cUfo::RecieveMessage(sMessage theMessage) {

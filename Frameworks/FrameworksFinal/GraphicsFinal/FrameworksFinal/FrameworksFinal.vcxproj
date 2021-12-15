@@ -166,6 +166,7 @@
     <ClCompile Include="..\common\include\Physics\cWorldSpace.cpp" />
     <ClCompile Include="cAIPlayer.cpp" />
     <ClCompile Include="cAlien.cpp" />
+    <ClCompile Include="cAlienMissile.cpp" />
     <ClCompile Include="cBullet.cpp" />
     <ClCompile Include="cEntity.cpp" />
     <ClCompile Include="cGameStateManager.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="..\common\include\Physics\sParticleTemplate.h" />
     <ClInclude Include="cAIPlayer.h" />
     <ClInclude Include="cAlien.h" />
+    <ClInclude Include="cAlienMissile.h" />
     <ClInclude Include="cBullet.h" />
     <ClInclude Include="cEntity.h" />
     <ClInclude Include="cGameStateManager.h" />

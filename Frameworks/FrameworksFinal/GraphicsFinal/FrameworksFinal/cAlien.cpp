@@ -1,4 +1,6 @@
 #include "cAlien.h"
+#include "globals.h"
+
 cAlien::cAlien(int type)  {
 	mesh = new cMesh();
 	mesh->bDontLight = true;
@@ -54,17 +56,42 @@ cAlien::~cAlien() {
 
 }
 
+void cAlien::DelaySinceLastMove(float offset) {
+	sinceLastMove -= offset;
+}
+
 void cAlien::Update(float deltaTime) {
-	if (isDead && mesh->scale > 0.f) {
-		currentDeathTime += deltaTime;
-		if (currentDeathTime >= deathTimer) {
-			// We should properly dispose of the object, but for now, just hide them.
-			mesh->scale = 0.f;
-			currentDeathTime = 0.f;
+	if (isDead) {
+		if (mesh->scale > 0.f) {
+			currentDeathTime += deltaTime;
+			if (currentDeathTime >= deathTimer) {
+				// We should properly dispose of the object, but for now, just hide them.
+				mesh->scale = 0.f;
+				currentDeathTime = 0.f;
+			}
 		}
 	}
 	else {
+		sinceLastMove += deltaTime;
+		if (sinceLastMove >= moveTimer) {
+			particle->SetPosition(particle->GetPosition() + glm::vec3(direction * 10.f, 0.f, 0.f));
+			if (isFirstPose) {
+				mesh->meshName = pose2;
+			}
+			else {
+				mesh->meshName = pose1;
+			}
+			isFirstPose = !isFirstPose;
+			sinceLastMove = 0.f;
+		}
 		cEntity::Update(deltaTime);
+		if (mesh->positionXYZ.x > 950.f || mesh->positionXYZ.x < -950.f) {
+
+			sMessage collisionMessage;
+			collisionMessage.command = "Reverse Ships";
+
+			::g_pInvaderMediator->RecieveMessage(collisionMessage);
+		}
 	}
 }
 
@@ -75,6 +102,29 @@ bool cAlien::RecieveMessage(sMessage theMessage) {
 		isDead = true;
 		mesh->meshName = "Invaders/SpaceInvader_Explosions.ply";
 		worldSpace->_world->RemoveParticle(particle);
+	}
+	else if (theMessage.command == "Reverse Ships") {
+		if (particle->GetPosition().y > -750.f) {
+			particle->SetPosition(particle->GetPosition() + glm::vec3(direction * -10.f, -150.f, 0.f));
+			direction *= -1;
+		}
+		else {
+			if (!::g_pGameState->GameEnded() && !isDead) {
+				sMessage gameOver;
+				gameOver.command = "Game Over";
+
+				::g_pInvaderMediator->RecieveMessage(gameOver);
+			}
+		}
+	}
+	else if (theMessage.command == "Speed Up Ships") {
+		moveTimer -= 0.0075f;
+		if (direction > 0.f) {
+			direction+= 0.05f;
+		}
+		else {
+			direction-= 0.05f;
+		}
 	}
 	return true;
 }

@@ -15,7 +15,7 @@ cPlayer::cPlayer() {
 	mesh->meshName = "Invaders/SpaceInvader_Base_block.ply";
 
 	particleScale = 120.f;
-	glm::vec3 position = glm::vec3(mesh->positionXYZ.x, mesh->positionXYZ.y + particleScale, mesh->positionXYZ.z);
+	glm::vec3 position = glm::vec3(mesh->positionXYZ.x, mesh->positionXYZ.y, mesh->positionXYZ.z);
 	particle = new cParticle(position, 1.f, particleScale);
 	particle->SetDamping(0.9f);
 	particle->type = mesh->friendlyName;
@@ -82,4 +82,21 @@ void cPlayer::Fire() {
 		bullet->particle->SetVelocity(glm::vec3(0.f, 1000.f, 0.f));
 	}
 	// If bullet is in play don't do anything.
+}
+
+bool cPlayer::RecieveMessage(sMessage theMessage) {
+	if (theMessage.command == "Destroy") {
+		mesh->meshName = "Invaders/SpaceInvader_Explosions.ply";
+		particle->SetVelocity(glm::vec3(0.f, 0.f, 0.f));
+		movingRight = false;
+		movingLeft = false;
+
+	}
+	return true;
+}
+bool cPlayer::RecieveMessage(sMessage theMessage, sMessage& theResponse) {
+	return true;
+}
+bool cPlayer::SetReciever(iMediator* pTheReciever) {
+	return true;
 }
