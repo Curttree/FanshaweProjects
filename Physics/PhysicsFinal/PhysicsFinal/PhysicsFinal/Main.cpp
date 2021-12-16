@@ -164,7 +164,7 @@ int main(void) {
     // Eventually figure out how to adjust orientation of camera so it doesn't 'jump' on first movement.
     //::g_pFlyCamera->setAt(::g_pConfigManager->_cameraStartingOrientation);
 
-    worldSpace->Instance()->SetWorldBounds(::g_pConfigManager->_positiveBounds, ::g_pConfigManager->_negativeBounds);
+    worldSpace->Instance()->SetWorldBounds(::g_pConfigManager->_positiveBounds, ::g_pConfigManager->_negativeBounds, ::g_pConfigManager->_cornerRadius, ::g_pConfigManager->_samplePoints);
 
     cShaderManager::cShader vertShader;
     cShaderManager::cShader fragShader;
@@ -390,7 +390,7 @@ int main(void) {
 
 
 #pragma endregion
-    const double MAX_DELTA_TIME = 0.05;  // 50 ms
+    const double MAX_DELTA_TIME = 0.025;  // 50 ms
     double previousTime = glfwGetTime();
     std::vector<cMesh*> sortedTransparentObjects;
 

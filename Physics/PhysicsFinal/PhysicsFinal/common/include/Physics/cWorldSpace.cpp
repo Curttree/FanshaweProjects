@@ -20,7 +20,7 @@ cWorldSpace* cWorldSpace::Instance() {
 		//Initialize physics
 		_instance->_gravityGenerator = new cGravityGenerator(glm::vec3(0.0f, -9.81f, 0.0f));
 		_instance->_puckDragGenerator = new cApproxPuckDragGenerator(glm::vec3(0.0f, -65.f, 0.0f));
-		_instance->_world = new cParticleWorld(500);
+		_instance->_world = new cParticleWorld(5000);
 		_instance->_world->AddContactContactGenerator(&particleCollisionGenerator);
 	}
 
@@ -86,7 +86,7 @@ glm::vec3 cWorldSpace::getPositionInWorldSpace(const glm::vec3 orientationXYZ, c
 	return result * glm::vec4(startPositionXYZ.x, startPositionXYZ.y, startPositionXYZ.z, 1.f);
 }
 
-void cWorldSpace::SetWorldBounds(glm::vec3 positiveBounds, glm::vec3 negativeBounds) {
+void cWorldSpace::SetWorldBounds(glm::vec3 positiveBounds, glm::vec3 negativeBounds, float cornerRadius, int samplePoints) {
 	// Planes
 	cPlaneParticleContactGenerator* groundGenerator = new cPlaneParticleContactGenerator(glm::vec3(0.f, 1.f, 0.f), negativeBounds.y);
 	cPlaneParticleContactGenerator* ceilingGenerator = new cPlaneParticleContactGenerator(glm::vec3(0.f, -1.f, 0.f), -positiveBounds.y);
@@ -102,4 +102,31 @@ void cWorldSpace::SetWorldBounds(glm::vec3 positiveBounds, glm::vec3 negativeBou
 	_instance->_world->AddContactContactGenerator(frontWallGenerator);
 	std::cout << "World bounds set" << std::endl;
 
+	if (cornerRadius > 0.f && samplePoints > 0) {
+		// Find the four center points.
+		glm::vec3 cornerOneCenter = glm::vec3(-(negativeBounds.x) - cornerRadius, 0.f, (-negativeBounds.z) - cornerRadius);
+		glm::vec3 cornerTwoCenter = glm::vec3(-(positiveBounds.x) + cornerRadius, 0.f, -(negativeBounds.z) - cornerRadius);
+
+		for (int x = 0; x < samplePoints; x++) {
+			//Find the displacement.
+			float step = 90.f * (x + 1.f) / (samplePoints+1.f);	// Add one to the denominator, as our last point would be on the boundary.
+			glm::vec3 point = glm::rotateY(glm::vec3(-cornerRadius, 0.f, 0.f), glm::radians(step));
+			glm::vec3 normal = glm::rotateY(glm::vec3(1.0f, 0.f, 0.f), glm::radians(step));
+			point += cornerOneCenter; 
+			float displacement = glm::length(glm::vec3(point.x - cornerOneCenter.x, point.y, point.z));
+			displacement *= -1.f; 
+			_instance->_world->AddContactContactGenerator(new cPlaneParticleContactGenerator(normal, displacement));
+		}
+
+		for (int x = 0; x < samplePoints; x++) {
+				//Find the displacement.
+				float step = -90.f * (x + 1.f) / (samplePoints+1.f);	// Add one to the denominator, as our last point would be on the boundary.
+				glm::vec3 point = glm::rotateY(glm::vec3(cornerRadius, 0.f, 0.f), glm::radians(step));
+				glm::vec3 normal = glm::rotateY(glm::vec3(-1.0f, 0.f, 0.f), glm::radians(step));
+				point += cornerTwoCenter;
+				float displacement = glm::length(glm::vec3(point.x - cornerTwoCenter.x, point.y, point.z));
+				displacement *= -1.f; 
+				_instance->_world->AddContactContactGenerator(new cPlaneParticleContactGenerator(normal, displacement));
+		}
+	}
 }

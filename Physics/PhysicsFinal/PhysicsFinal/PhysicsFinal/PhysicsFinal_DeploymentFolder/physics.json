@@ -7,11 +7,15 @@
     "PositiveZBoundary": 250,
     "NegativeZBoundary": -250
   },
+  "Corners":{
+	  "Radius":35,
+	  "SamplePoints":1
+  },
   "ShotPositions": [
     {
       "x": 0,
       "y": 6,
-      "z": -60
+      "z": -10
     },
     {
       "x": -115,

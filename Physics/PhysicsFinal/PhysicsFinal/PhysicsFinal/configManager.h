@@ -39,6 +39,8 @@ public:
 	std::vector<sModelDrawInfo> _modelDrawInfo;
 	glm::vec3 _positiveBounds;
 	glm::vec3 _negativeBounds; 
+	float _cornerRadius = 0.f;
+	int _samplePoints = 0;
 	std::vector<iEntity*> actorEntities;
 	configManager(); 
 	void loadModelsIntoVAO(GLuint program, cVAOManager& gVAOManager, bool storeVertexData = false);

@@ -102,6 +102,14 @@ void configManager::initPhysics() {
             ::g_shotInfo.velocity = _physicsDescription["ShotDefinition"]["MaxVelocity"].GetFloat();
         }
     }
+    if (_physicsDescription.HasMember("Corners")) {
+        if (_physicsDescription["Corners"].HasMember("Radius")) {
+            _cornerRadius = _physicsDescription["Corners"]["Radius"].GetFloat();
+        }
+        if (_physicsDescription["Corners"].HasMember("SamplePoints")) {
+            _samplePoints = _physicsDescription["Corners"]["SamplePoints"].GetInt();
+        }
+    }
 }
 
 cMesh* configManager::initMesh(std::string meshName, int source) {

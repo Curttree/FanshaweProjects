@@ -7,14 +7,18 @@
     "PositiveZBoundary": 250,
     "NegativeZBoundary": -250
   },
+  "Corners":{
+	  "Radius":80,
+	  "SamplePoints":50
+  },
   "ShotPositions": [
     {
       "x": 0,
       "y": 6,
-      "z": -60
+      "z": -10
     },
     {
-      "x": -115,
+      "x": -121,
       "y": 6,
       "z": 70
     },
@@ -38,7 +42,7 @@
     "MaxVelocity": 173.809,
     "Pitch": {
       "MinDegrees": 2,
-      "MaxDegrees": 30
+      "MaxDegrees": 28
     },
     "Yaw": {
       "MinDegrees": -45,
