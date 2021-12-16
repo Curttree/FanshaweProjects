@@ -177,6 +177,15 @@
     <ClCompile Include="cApproxPuckDragGenerator.cpp">
       <Filter>PhysicsFinal</Filter>
     </ClCompile>
+    <ClCompile Include="cPostParticle.cpp">
+      <Filter>PhysicsFinal</Filter>
+    </ClCompile>
+    <ClCompile Include="cParticleConstraints.cpp">
+      <Filter>Physics\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="cNettingParticle.cpp">
+      <Filter>PhysicsFinal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -291,6 +300,15 @@
       <Filter>PhysicsFinal\HeaderFiles</Filter>
     </ClInclude>
     <ClInclude Include="cApproxPuckDragGenerator.h">
+      <Filter>PhysicsFinal\HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="cPostParticle.h">
+      <Filter>PhysicsFinal\HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="cParticleConstraints.h">
+      <Filter>Physics\Particles\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cNettingParticle.h">
       <Filter>PhysicsFinal\HeaderFiles</Filter>
     </ClInclude>
   </ItemGroup>

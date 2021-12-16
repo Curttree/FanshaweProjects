@@ -1,5 +1,7 @@
 #include "cParticleFactory.h"
 #include "cPuck.h"
+#include "cPostParticle.h"
+#include "cNettingParticle.h"
 
 #define PUCK 0
 #define IRON 1
@@ -24,8 +26,10 @@ cEntity* cParticleFactory::createParticle(int material, glm::vec3 position, glm:
 		result = new cPuck(position, velocity);
 		break;
 	case(IRON):
+		result = new cPostParticle(position);
 		break;
 	case(NYLON):
+		result = new cNettingParticle(position);
 		break;
 	default:
 		break;

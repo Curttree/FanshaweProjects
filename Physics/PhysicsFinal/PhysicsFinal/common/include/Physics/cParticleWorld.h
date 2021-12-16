@@ -23,7 +23,7 @@ public:
 
 	cParticleForceRegistry* GetForceRegistry() const;
 
-	bool AddContactContactGenerator(iParticleContactGenerator* generator);
+	bool AddConstraintGenerator(iParticleContactGenerator* generator);
 	bool RemoveContactContactGenerator(iParticleContactGenerator* generator);
 
 private:

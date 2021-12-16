@@ -84,25 +84,25 @@ void initDummy() {
     //}
 }
 void ArrowMotion() {
-    float cannonSpeed = 0.05f;
+    float shotAdjSpeed = 0.01f;
     if (keys[GLFW_KEY_LEFT]) {
-        if ((arrowModel->orientationXYZ.y + cannonSpeed) * -1 >= (g_shotInfo.lowerYaw)) {
-            arrowModel->orientationXYZ += glm::vec3(0.f, cannonSpeed, 0.f);
+        if ((arrowModel->orientationXYZ.y + shotAdjSpeed) * -1 >= (g_shotInfo.lowerYaw)) {
+            arrowModel->orientationXYZ += glm::vec3(0.f, shotAdjSpeed, 0.f);
         }
     }
     if (keys[GLFW_KEY_RIGHT]) {
-        if ((arrowModel->orientationXYZ.y - cannonSpeed) * -1 <= (g_shotInfo.upperYaw)) {
-            arrowModel->orientationXYZ -= glm::vec3(0.f, cannonSpeed, 0.f);
+        if ((arrowModel->orientationXYZ.y - shotAdjSpeed) * -1 <= (g_shotInfo.upperYaw)) {
+            arrowModel->orientationXYZ -= glm::vec3(0.f, shotAdjSpeed, 0.f);
         }
     }
     if (keys[GLFW_KEY_UP]) {
-        if ((arrowModel->orientationXYZ.x - cannonSpeed) * -1 <= (g_shotInfo.upperPitch)) {
-            arrowModel->orientationXYZ -= glm::vec3(cannonSpeed, 0.f, 0.f);
+        if ((arrowModel->orientationXYZ.x - shotAdjSpeed) * -1 <= (g_shotInfo.upperPitch)) {
+            arrowModel->orientationXYZ -= glm::vec3(shotAdjSpeed, 0.f, 0.f);
         }
     }
     if (keys[GLFW_KEY_DOWN]) {
-        if ((arrowModel->orientationXYZ.x + cannonSpeed) * -1 >= (g_shotInfo.lowerPitch)) {
-            arrowModel->orientationXYZ += glm::vec3(cannonSpeed, 0.f, 0.f);
+        if ((arrowModel->orientationXYZ.x + shotAdjSpeed) * -1 >= (g_shotInfo.lowerPitch)) {
+            arrowModel->orientationXYZ += glm::vec3(shotAdjSpeed, 0.f, 0.f);
         }
     }
 }
@@ -362,6 +362,7 @@ int main(void) {
     initArrow();
     ::g_vec_pMeshes.push_back(arrowModel);
     ::g_vec_pMeshes.push_back(dummy);
+    worldSpace->SetupNet(glm::vec3(0.f, 5.f, 216.f));
 
     // TODO: If this has a large performance impact as scene grows, refactor.
     // Move objects with transparency to their own vector.
@@ -386,7 +387,7 @@ int main(void) {
 
     pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
 
-    ::g_vec_Entities = ::g_pConfigManager->actorEntities;
+    //::g_vec_Entities = ::g_pConfigManager->actorEntities;
 
 
 #pragma endregion
@@ -486,6 +487,7 @@ int main(void) {
 
         DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
 
+        #endif
         if (::g_bShowCollisionObjects) {
             for (unsigned int index = 0; index != ::g_vec_pBoundaries.size(); index++)
             {
@@ -517,7 +519,6 @@ int main(void) {
                     ::g_pVAOManager);
             }
         }
-        #endif
 
         // After drawing the other objects, draw the skybox to limit overdraw.
 

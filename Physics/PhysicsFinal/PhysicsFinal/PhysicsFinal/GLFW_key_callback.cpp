@@ -83,7 +83,7 @@ cParticleFactory* particleFactory = cParticleFactory::Instance();
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
     {
         glm::vec3 direction = world->getPositionInWorldSpace(arrowModel->orientationXYZ, glm::vec3(0.f,0.f,1.f));
-        glm::vec3 position = ::g_pConfigManager->_shotPositions[::g_shotInfo.currentLocation] + glm::vec3(0.f, 5.f, 0.f);
+        glm::vec3 position = ::g_pConfigManager->_shotPositions[::g_shotInfo.currentLocation] + glm::vec3(0.f, 2.f, 0.f);
         particleFactory->createParticle(0,position, direction * g_shotInfo.velocity);
     }
     else if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)

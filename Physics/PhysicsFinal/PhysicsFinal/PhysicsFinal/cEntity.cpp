@@ -6,7 +6,6 @@ cEntity::cEntity(cMesh* _mesh, float _debugScale, float _density) {
 	particle = new cParticle(position,_density, particleScale);
 	particle->SetDamping(0.8f);
 	worldSpace->_world->AddParticle(particle);
-	worldSpace->_world->GetForceRegistry()->Register(particle, worldSpace->_gravityGenerator);
 	debugMesh = new cMesh();
 	debugMesh->meshName = "Sphere_xyz_n_rgba_uv.ply";
 	debugMesh->bIsWireframe = true;

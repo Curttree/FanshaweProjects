@@ -52,6 +52,9 @@ float cParticle::GetMass() {
 }
 
 float cParticle::GetInverseMass() {
+	if (GetMass() <= 0) {
+		return 0.f;
+	}
 	return 1.f / GetMass();
 }
 

@@ -18,6 +18,8 @@ class cWorldSpace {
 		static glm::vec3 getRandomVector3(float magnitude, bool overrideAlpha = false, float alpha = 0);
 		static glm::vec3 getPositionInWorldSpace(const glm::vec3 orientationXYZ, const glm::vec3 startPositionXYZ);
 		static void SetWorldBounds(glm::vec3 positiveBounds, glm::vec3 negativeBounds, float cornerRadius = 0.f, int samplePoints = 0);
+		static void SetupNet(glm::vec3 position);
+		static void SetupMesh(glm::vec3 position);
 	private:
 		cWorldSpace();
 

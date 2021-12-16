@@ -96,7 +96,7 @@ cParticleForceRegistry* cParticleWorld::GetForceRegistry() const
 	return forceRegistry;
 }
 
-bool cParticleWorld::AddContactContactGenerator(iParticleContactGenerator* generator)
+bool cParticleWorld::AddConstraintGenerator(iParticleContactGenerator* generator)
 {
 	// Check if null or already in list.
 	if (!generator || std::find(contactGenerators.begin(), contactGenerators.end(), generator) != contactGenerators.end())

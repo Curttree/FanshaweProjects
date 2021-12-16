@@ -25,7 +25,7 @@
     {
       "x": 0,
       "y": 6,
-      "z": 150
+      "z": 180
     }
   ],
   "Model":{"Offset": {
@@ -39,10 +39,10 @@
     "z": -50
   },
   "ShotDefinition": {
-    "MaxVelocity": 173.809,
+    "MaxVelocity": 125,
     "Pitch": {
       "MinDegrees": 2,
-      "MaxDegrees": 28
+      "MaxDegrees": 35
     },
     "Yaw": {
       "MinDegrees": -45,
