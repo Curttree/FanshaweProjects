@@ -12,5 +12,6 @@ cPuck::cPuck(glm::vec3 position, glm::vec3 velocity) :cEntity(new cMesh(),2.5f,2
 	::g_vec_Entities.push_back(this);
 	particle->SetPosition(position);
 	particle->SetVelocity(velocity);
-	particle->SetDamping(0.85f);
+	particle->SetDamping(0.82f);
+	worldSpace->_world->GetForceRegistry()->Register(particle, worldSpace->_puckDragGenerator);
 }

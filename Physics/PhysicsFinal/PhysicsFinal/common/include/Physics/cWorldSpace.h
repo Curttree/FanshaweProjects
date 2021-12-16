@@ -6,11 +6,13 @@
 #include "cGravityGenerator.h"
 #include "cPlaneParticleContactGenerator.h"
 #include "cParticleParticleContactGenerator.h"
+#include "../../../PhysicsFinal/cApproxPuckDragGenerator.h"
 
 class cWorldSpace {
 	public:
 		static cWorldSpace* Instance();
 		cGravityGenerator* _gravityGenerator;
+		cApproxPuckDragGenerator* _puckDragGenerator;
 		cParticleWorld* _world; 
 		static glm::mat3 axes;
 		static glm::vec3 getRandomVector3(float magnitude, bool overrideAlpha = false, float alpha = 0);

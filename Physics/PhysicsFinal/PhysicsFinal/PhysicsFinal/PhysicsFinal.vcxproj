@@ -171,6 +171,7 @@
     <ClCompile Include="..\common\include\Physics\cPlaneParticleContactGenerator.cpp" />
     <ClCompile Include="..\common\include\Physics\cWorldSpace.cpp" />
     <ClCompile Include="cAIPlayer.cpp" />
+    <ClCompile Include="cApproxPuckDragGenerator.cpp" />
     <ClCompile Include="cEntity.cpp" />
     <ClCompile Include="cGFLWKeyboardModifiers.cpp" />
     <ClCompile Include="cMesh.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="..\common\include\Physics\iParticleContactGenerator.h" />
     <ClInclude Include="..\common\include\Physics\sParticleTemplate.h" />
     <ClInclude Include="cAIPlayer.h" />
+    <ClInclude Include="cApproxPuckDragGenerator.h" />
     <ClInclude Include="cEntity.h" />
     <ClInclude Include="cMesh.h" />
     <ClInclude Include="configManager.h" />
