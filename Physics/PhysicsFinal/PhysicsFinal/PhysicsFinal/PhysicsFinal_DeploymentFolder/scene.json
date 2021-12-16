@@ -1,17 +1,4 @@
 {
-  "Camera": {
-	  "Position":{
-    "x": 0.0,
-    "y": 50.0,
-  "z": -380.0}},
-  "Physics":{
-	  "PositiveXBoundary":125,
-	  "NegativeXBoundary":-125,
-	  "PositiveYBoundary":200,
-	  "NegativeYBoundary":5,
-	  "PositiveZBoundary":250,
-	  "NegativeZBoundary":-250
-  },
   "Lights":[
 	  {"Type":2,
 		"Position":{

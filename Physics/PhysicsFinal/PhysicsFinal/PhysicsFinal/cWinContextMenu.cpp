@@ -47,9 +47,9 @@ void cWinContextMenu::showMenu(GLFWwindow* window, int x, int y)
     HMENU hPopupMenu = CreatePopupMenu();
     InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_CLOSE, (LPCWSTR)L"Exit");
     InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_TOGGLECOLLISION, (LPCWSTR)L"Toggle Hit Boxes");
-    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_POSITION3, (LPCWSTR)L"Camera Position - Transparency Ex. 2");
-    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_POSITION2, (LPCWSTR)L"Camera Position - Transparency Ex. 1");
-    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_POSITION1, (LPCWSTR)L"Camera Position - Starting Position");
+    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_POSITION3, (LPCWSTR)L"Camera Position 3");
+    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_POSITION2, (LPCWSTR)L"Camera Position 2");
+    InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, ID_POSITION1, (LPCWSTR)L"Camera Position 1");
 
     HWND hWnd = glfwGetWin32Window(window);
 
@@ -75,18 +75,29 @@ void cWinContextMenu::showMenu(GLFWwindow* window, int x, int y)
     case ID_POSITION1:
         std::cout << "Picked \"Camera Position 1\" (ID_POSITION1)" << std::endl;
 
+        ::g_shotInfo.currentLocation = 0;
+        ::dummy->positionXYZ = ::g_pConfigManager->_shotPositions[0] + ::g_shotInfo.playerOffset;
+        ::arrowModel->positionXYZ = ::g_pConfigManager->_shotPositions[0];
         ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
-        ::g_pFlyCamera->setEye(::g_pConfigManager->_cameraStartingPosition);
+        ::g_pFlyCamera->setEye(::g_pConfigManager->_shotPositions[0]+ ::g_pConfigManager->_cameraOffset);
         break;
     case ID_POSITION2:
         std::cout << "Picked \"Camera Position 2\" (ID_POSITION2)" << std::endl;
+
+        ::g_shotInfo.currentLocation = 1;
+        ::dummy->positionXYZ = ::g_pConfigManager->_shotPositions[1] + ::g_shotInfo.playerOffset;
+        ::arrowModel->positionXYZ = ::g_pConfigManager->_shotPositions[1];
         ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
-        ::g_pFlyCamera->setEye(glm::vec3(0.f, 11.f, -265.f));
+        ::g_pFlyCamera->setEye(::g_pConfigManager->_shotPositions[1] + ::g_pConfigManager->_cameraOffset);
         break;
     case ID_POSITION3:
         std::cout << "Picked \"Camera Position 3\" (ID_POSITION3)" << std::endl;
+
+        ::g_shotInfo.currentLocation = 2;
+        ::arrowModel->positionXYZ = ::g_pConfigManager->_shotPositions[2];
+        ::dummy->positionXYZ = ::g_pConfigManager->_shotPositions[2] + ::g_shotInfo.playerOffset;
         ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
-        ::g_pFlyCamera->setEye(glm::vec3(-159.f, 16.5f, 115.f));
+        ::g_pFlyCamera->setEye(::g_pConfigManager->_shotPositions[2] + ::g_pConfigManager->_cameraOffset);
         break;
     case ID_TOGGLECOLLISION:
         std::cout << "Picked \"Toggle Collision Visibility\" (ID_TOGGLECOLLISION)" << std::endl;

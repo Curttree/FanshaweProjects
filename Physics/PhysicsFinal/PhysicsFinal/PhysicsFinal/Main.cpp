@@ -49,6 +49,63 @@ void InitShaders(GLuint& program, cShaderManager::cShader& vertShader, cShaderMa
     }
 }
 
+void initArrow() {
+    arrowModel = new cMesh();
+    arrowModel->meshName = "Quad_x3_2_sided_axial_imposter_base_on_XY_axis.ply";
+    arrowModel->scale = 10.f;
+    arrowModel->positionXYZ = ::g_pConfigManager->_shotPositions[0];
+    arrowModel->textureNames[8] = "arrow.bmp";
+    arrowModel->textureRatios[8] = 1.f;
+    arrowModel->bUseDiscardTransparency = true;
+    arrowModel->discardColour = glm::vec3(0.f);
+    arrowModel->alphaTransparency = 0.5f;
+}
+void initDummy() {
+    dummy = new cMesh();
+    dummy->meshName = "HockeyPlayer.ply";
+    dummy->scale = 0.2f;
+    dummy->positionXYZ = ::g_pConfigManager->_shotPositions[0] + ::g_shotInfo.playerOffset;
+    dummy->textureNames[0] = "Player_SharedColors.bmp";
+    dummy->textureRatios[0] = 1.f;
+    dummy->alphaTransparency = ::g_shotInfo.playerTransparency;
+    dummy->wholeObjectShininess_SpecPower = 500000.f;
+
+
+    //{
+    //    "Model":"HockeyPlayer.ply",
+    //        "Scale" : 0.2,
+    //        "SpecPower" : 500000,
+    //        "Texture0" : "Player_SharedColors.bmp",
+    //        "MaskTexture0" : "Player_JerseyMask.bmp",
+    //        "MaskTextureFill0_Options" : ["Red.bmp"] ,
+    //        "MaskTexture1" : "Player_SkinMask.bmp",
+    //        "MaskTextureFill1_Options" : ["skintone00.bmp", "skintone01.bmp", "skintone02.bmp", "skintone03.bmp", "skintone04.bmp"] ,
+    //        "SpecularMapTexture" : "Player_SpecularMap.bmp"
+    //}
+}
+void ArrowMotion() {
+    float cannonSpeed = 0.05f;
+    if (keys[GLFW_KEY_LEFT]) {
+        if ((arrowModel->orientationXYZ.y + cannonSpeed) * -1 >= (g_shotInfo.lowerYaw)) {
+            arrowModel->orientationXYZ += glm::vec3(0.f, cannonSpeed, 0.f);
+        }
+    }
+    if (keys[GLFW_KEY_RIGHT]) {
+        if ((arrowModel->orientationXYZ.y - cannonSpeed) * -1 <= (g_shotInfo.upperYaw)) {
+            arrowModel->orientationXYZ -= glm::vec3(0.f, cannonSpeed, 0.f);
+        }
+    }
+    if (keys[GLFW_KEY_UP]) {
+        if ((arrowModel->orientationXYZ.x - cannonSpeed) * -1 <= (g_shotInfo.upperPitch)) {
+            arrowModel->orientationXYZ -= glm::vec3(cannonSpeed, 0.f, 0.f);
+        }
+    }
+    if (keys[GLFW_KEY_DOWN]) {
+        if ((arrowModel->orientationXYZ.x + cannonSpeed) * -1 >= (g_shotInfo.lowerPitch)) {
+            arrowModel->orientationXYZ += glm::vec3(cannonSpeed, 0.f, 0.f);
+        }
+    }
+}
 void Shutdown(GLFWwindow* pWindow){
     ::g_ShutDown(pWindow);
     glfwDestroyWindow(pWindow);
@@ -73,7 +130,7 @@ int main(void) {
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    ::g_TitleText = "Curtis Tremblay - INFO-6028 Project 3";
+    ::g_TitleText = "Curtis Tremblay - INFO-6019/6025 Final";
     pWindow = glfwCreateWindow(1200, 640, ::g_TitleText.c_str(), NULL, NULL);
 
     if (!pWindow)
@@ -103,7 +160,7 @@ int main(void) {
 
     ::g_StartUp(pWindow);
 
-    ::g_pFlyCamera->setEye(::g_pConfigManager->_cameraStartingPosition);
+    ::g_pFlyCamera->setEye(::g_pConfigManager->_shotPositions[0] + ::g_pConfigManager->_cameraOffset);
     // Eventually figure out how to adjust orientation of camera so it doesn't 'jump' on first movement.
     //::g_pFlyCamera->setAt(::g_pConfigManager->_cameraStartingOrientation);
 
@@ -229,7 +286,10 @@ int main(void) {
     vecModelsToLoad.push_back("Sphere_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
+    vecModelsToLoad.push_back("Quad_x3_2_sided_axial_imposter_base_on_XY_axis.ply");
     vecModelsToLoad.push_back("tile.ply");
+    vecModelsToLoad.push_back("puck_normalized.ply");
+    vecModelsToLoad.push_back("HockeyPlayer.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -261,6 +321,13 @@ int main(void) {
     #pragma region Textures
     // Load the textures
     ::g_pTextureManager->SetBasePath("assets/textures");
+    ::g_pTextureManager->Create2DTextureFromBMPFile("arrow.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Player_JerseyMask.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Player_SharedColors.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Player_SkinMask.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Player_SpecularMap.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("blue.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("skintone03.bmp", true);
 
     for (std::string texture : ::g_pConfigManager->_texturesToLoad) {
         ::g_pTextureManager->Create2DTextureFromBMPFile(texture, true);
@@ -291,6 +358,11 @@ int main(void) {
 
     ::g_vec_pMeshes = ::g_pConfigManager->_rink;
 
+    initDummy();
+    initArrow();
+    ::g_vec_pMeshes.push_back(arrowModel);
+    ::g_vec_pMeshes.push_back(dummy);
+
     // TODO: If this has a large performance impact as scene grows, refactor.
     // Move objects with transparency to their own vector.
     for (cMesh* mesh : ::g_vec_pMeshes) {
@@ -314,7 +386,8 @@ int main(void) {
 
     pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
 
-    ::g_vec_pActors = ::g_pConfigManager->actorEntities;
+    ::g_vec_Entities = ::g_pConfigManager->actorEntities;
+
 
 #pragma endregion
     const double MAX_DELTA_TIME = 0.05;  // 50 ms
@@ -349,7 +422,7 @@ int main(void) {
 
         // Update the title text
         glfwSetWindowTitle(pWindow, ::g_TitleText.c_str());
-
+        ArrowMotion();
 
         // Copy the light information into the shader to draw the scene
         ::g_pTheLights->CopyLightInfoToShader();
@@ -366,7 +439,7 @@ int main(void) {
 
         //::g_pFlyCamera->Update(deltaTime);
 
-        for (iEntity* actor : ::g_vec_pActors) {
+        for (iEntity* actor : ::g_vec_Entities) {
             actor->Update(deltaTime);
         }
         worldSpace->_world->Update(deltaTime);
@@ -429,10 +502,10 @@ int main(void) {
                     ::g_pVAOManager);
             }
 
-            for (unsigned int index = 0; index != ::g_vec_pActors.size(); index++)
+            for (unsigned int index = 0; index != ::g_vec_Entities.size(); index++)
             {
                 // So the code is a little easier...
-                cMesh* pCurrentMesh = ::g_vec_pActors[index]->GetDebugMesh();
+                cMesh* pCurrentMesh = ::g_vec_Entities[index]->GetDebugMesh();
 
                 matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
 

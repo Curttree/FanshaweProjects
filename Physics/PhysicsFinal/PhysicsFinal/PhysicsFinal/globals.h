@@ -12,6 +12,7 @@
 #include <vector>
 #include "configManager.h"
 #include "iEntity.h"
+#include "sShotDef.h"
 
 
 // These are all things that are "project global", 
@@ -56,12 +57,16 @@ extern std::vector<cMesh*> g_vec_pBoundaries;
 extern unsigned int g_selectedObject;	// = 0;
 extern unsigned int g_selectedLight;	// = 0;
 
-extern std::vector<iEntity*> g_vec_pActors;
+extern std::vector<iEntity*> g_vec_Entities;
 
 // This will be printed in the title bar
 extern std::string g_TitleText;	// = "";
 
+extern sShotDef g_shotInfo;
 
+extern cMesh* arrowModel;
+extern cMesh* dummy;
+extern bool keys[348];
 
 // List of objects to draw
 extern std::vector< cMesh* > g_vec_pMeshes;

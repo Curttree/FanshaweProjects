@@ -1,6 +1,10 @@
 #include "globals.h"
+#include "cParticleFactory.h"
 
 #include <sstream>
+
+cWorldSpace* world = cWorldSpace::Instance();
+cParticleFactory* particleFactory = cParticleFactory::Instance();
 
 /*static*/ void GLFW_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -49,6 +53,43 @@
         bAltDown = true;
     }
 
+    if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
+        keys[GLFW_KEY_UP] = true;
+    }
+    else if (key == GLFW_KEY_UP && action == GLFW_RELEASE) {
+        keys[GLFW_KEY_UP] = false;
+    }
+
+    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
+        keys[GLFW_KEY_DOWN] = true;
+    }
+    else if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE) {
+        keys[GLFW_KEY_DOWN] = false;
+    }
+
+    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
+        keys[GLFW_KEY_LEFT] = true;
+    }
+    else if (key == GLFW_KEY_LEFT && action == GLFW_RELEASE) {
+        keys[GLFW_KEY_LEFT] = false;
+    }
+
+    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
+        keys[GLFW_KEY_RIGHT] = true;
+    }
+    else if (key == GLFW_KEY_RIGHT && action == GLFW_RELEASE) {
+        keys[GLFW_KEY_RIGHT] = false;
+    }
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+    {
+        glm::vec3 direction = world->getPositionInWorldSpace(arrowModel->orientationXYZ, glm::vec3(0.f,0.f,1.f));
+        glm::vec3 position = ::g_pConfigManager->_shotPositions[::g_shotInfo.currentLocation] + glm::vec3(0.f, 5.f, 0.f);
+        particleFactory->createParticle(0,position, direction * g_shotInfo.velocity);
+    }
+    else if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+    }
 
 
 //   // If JUST the shift is down, move the "selected" object

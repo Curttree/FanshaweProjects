@@ -29,8 +29,8 @@ public:
 	rapidjson::Document _objects;
 	rapidjson::Document _sceneDescription;
 	rapidjson::Document _physicsDescription;
-	glm::vec3 _cameraStartingPosition;
-	glm::vec3 _cameraStartingOrientation;
+	glm::vec3 _shotPositions[3] = {glm::vec3(0.f),glm::vec3(0.f), glm::vec3(0.f) };
+	glm::vec3 _cameraOffset = glm::vec3(0.f);
 	glm::vec3 _rinkPosition = glm::vec3(0.f);
 	glm::vec3 _homeGoalLightPosition = glm::vec3(0.f);
 	glm::vec3 _awayGoalLightPosition = glm::vec3(0.f);
@@ -50,7 +50,6 @@ private:
 	float _bodyHeight;
 	std::vector<std::string> _modelsToLoad;
 	rapidjson::Document readJSONFile(std::string fileName);
-	void initCamera();
 	void initActors();
 	void initRink();
 	void initProps();

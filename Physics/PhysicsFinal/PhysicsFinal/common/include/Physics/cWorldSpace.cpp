@@ -18,7 +18,7 @@ cWorldSpace* cWorldSpace::Instance() {
 		_instance = new cWorldSpace;
 
 		//Initialize physics
-		_instance->_gravityGenerator = new cGravityGenerator(glm::vec3(0.0f, -9.81f, 0.0f));
+		_instance->_gravityGenerator = new cGravityGenerator(glm::vec3(0.0f, -50.81f, 0.0f));
 		_instance->_world = new cParticleWorld(500);
 		_instance->_world->AddContactContactGenerator(&particleCollisionGenerator);
 	}

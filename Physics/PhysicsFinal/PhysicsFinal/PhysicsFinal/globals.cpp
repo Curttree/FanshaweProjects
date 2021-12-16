@@ -16,12 +16,22 @@ bool g_bShowDebugShere = true;
 
 bool g_bShowCollisionObjects = false;
 std::vector< cMesh* > g_vec_pBoundaries; 
-std::vector<iEntity*> g_vec_pActors;
+std::vector<iEntity*> g_vec_Entities;
 
+cMesh* arrowModel = NULL;
+cMesh * dummy = NULL;
+
+bool keys[348];
 
 unsigned int g_selectedObject = 0;
 unsigned int g_selectedLight = 0;
 
+sShotDef g_shotInfo = { 0.25f * glm::pi<float>(),
+	-0.25f * glm::pi<float>(),
+	(7.f / 8.f),
+	0.f,
+	0.f,
+	glm::vec3(0.f) };
 
 // This will be printed in the title bar
 std::string g_TitleText = "";

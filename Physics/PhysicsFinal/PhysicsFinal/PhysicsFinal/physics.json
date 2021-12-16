@@ -1,34 +1,44 @@
-{  
-"WorldBoundaries":{
-	  "PositiveXBoundary":125,
-	  "NegativeXBoundary":-125,
-	  "PositiveYBoundary":200,
-	  "NegativeYBoundary":5,
-	  "PositiveZBoundary":250,
-	  "NegativeZBoundary":-250
+{
+  "WorldBoundaries": {
+    "PositiveXBoundary": 125,
+    "NegativeXBoundary": -125,
+    "PositiveYBoundary": 200,
+    "NegativeYBoundary": 5,
+    "PositiveZBoundary": 250,
+    "NegativeZBoundary": -250
   },
   "ShotPositions": [
     {
       "x": 0,
-      "y": 0,
-      "z": 0
+      "y": 6,
+      "z": -60
+    },
+    {
+      "x": -115,
+      "y": 6,
+      "z": 70
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": 150
     }
   ],
-  "ModelOffset": {
+  "Model":{"Offset": {
     "x": 10,
     "y": 0,
     "z": -10
-  },
+  },"AlphaTransparency":0.5},
   "CameraOffset": {
     "x": 0,
-    "y": 10,
-    "z": -10
+    "y": 15,
+    "z": -50
   },
   "ShotDefinition": {
-    "MaxVelocity": 25,
+    "MaxVelocity": 173.809,
     "Pitch": {
-      "MinDegrees": 0,
-      "MaxDegrees": 78
+      "MinDegrees": 2,
+      "MaxDegrees": 30
     },
     "Yaw": {
       "MinDegrees": -45,

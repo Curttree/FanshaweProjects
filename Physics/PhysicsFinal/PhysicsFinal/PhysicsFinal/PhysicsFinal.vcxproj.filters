@@ -55,6 +55,12 @@
     <Filter Include="Objects">
       <UniqueIdentifier>{ea568a30-a9b6-4529-a6b5-fd01d240a4b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PhysicsFinal">
+      <UniqueIdentifier>{c8793276-7435-475d-afbe-b3e09c999796}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PhysicsFinal\HeaderFiles">
+      <UniqueIdentifier>{aa79f05e-598f-4f61-8914-e14a0114a4b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -162,6 +168,12 @@
     <ClCompile Include="cAIPlayer.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="cParticleFactory.cpp">
+      <Filter>PhysicsFinal</Filter>
+    </ClCompile>
+    <ClCompile Include="cPuck.cpp">
+      <Filter>PhysicsFinal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -265,6 +277,15 @@
     </ClInclude>
     <ClInclude Include="iEntity.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="sShotDef.h">
+      <Filter>PhysicsFinal</Filter>
+    </ClInclude>
+    <ClInclude Include="cParticleFactory.h">
+      <Filter>PhysicsFinal\HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="cPuck.h">
+      <Filter>PhysicsFinal\HeaderFiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

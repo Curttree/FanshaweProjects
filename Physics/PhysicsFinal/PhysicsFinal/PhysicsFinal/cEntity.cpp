@@ -4,7 +4,7 @@ cEntity::cEntity(cMesh* _mesh, float _debugScale, float _density) {
 	mesh = _mesh;
 	glm::vec3 position = glm::vec3(mesh->positionXYZ.x, mesh->positionXYZ.y+particleScale, mesh->positionXYZ.z);
 	particle = new cParticle(position,_density, particleScale);
-	particle->SetDamping(0.9f);
+	particle->SetDamping(0.8f);
 	worldSpace->_world->AddParticle(particle);
 	worldSpace->_world->GetForceRegistry()->Register(particle, worldSpace->_gravityGenerator);
 	debugMesh = new cMesh();

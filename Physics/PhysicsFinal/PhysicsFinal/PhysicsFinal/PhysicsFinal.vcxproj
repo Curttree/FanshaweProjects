@@ -175,6 +175,8 @@
     <ClCompile Include="cGFLWKeyboardModifiers.cpp" />
     <ClCompile Include="cMesh.cpp" />
     <ClCompile Include="configManager.cpp" />
+    <ClCompile Include="cParticleFactory.cpp" />
+    <ClCompile Include="cPuck.cpp" />
     <ClCompile Include="cWinContextMenu.cpp" />
     <ClCompile Include="DrawObject_function.cpp" />
     <ClCompile Include="GLFW_error_callback.cpp" />
@@ -217,9 +219,12 @@
     <ClInclude Include="cEntity.h" />
     <ClInclude Include="cMesh.h" />
     <ClInclude Include="configManager.h" />
+    <ClInclude Include="cPuck.h" />
     <ClInclude Include="cWinContextMenu.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="iEntity.h" />
+    <ClInclude Include="cParticleFactory.h" />
+    <ClInclude Include="sShotDef.h" />
     <ClInclude Include="TextureMapping\C24BitBMPpixel.h" />
     <ClInclude Include="TextureMapping\cBasicTextureManager.h" />
     <ClInclude Include="TextureMapping\CTextureFromBMP.h" />

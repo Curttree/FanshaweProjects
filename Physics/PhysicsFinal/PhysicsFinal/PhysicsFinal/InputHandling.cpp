@@ -52,23 +52,33 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
             ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
         }
 
-        if (glfwGetKey(pWindow, GLFW_KEY_1) == GLFW_PRESS)	// "down"
+        if (glfwGetKey(pWindow, GLFW_KEY_1) == GLFW_PRESS)	// "1"
         {
-            ::g_pTheLights->TurnOnLight(0);
-        }
-        else if (::g_pTheLights->theLights[0].param2.x == 1.0f && glfwGetKey(pWindow, GLFW_KEY_1) == GLFW_RELEASE)	// If light is on and key is released, turn off.
-        {
-            ::g_pTheLights->TurnOffLight(0);
+            ::g_shotInfo.currentLocation = 0;
+            ::dummy->positionXYZ = ::g_pConfigManager->_shotPositions[0] + ::g_shotInfo.playerOffset;
+            ::arrowModel->positionXYZ = ::g_pConfigManager->_shotPositions[0];
+            ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
+            ::g_pFlyCamera->setEye(::g_pConfigManager->_shotPositions[0] + ::g_pConfigManager->_cameraOffset);
         }
 
-        if (glfwGetKey(pWindow, GLFW_KEY_2) == GLFW_PRESS)	// "down"
+        if (glfwGetKey(pWindow, GLFW_KEY_2) == GLFW_PRESS)	// "2"
         {
-            ::g_pTheLights->TurnOnLight(1);
+            ::g_shotInfo.currentLocation = 1;
+            ::dummy->positionXYZ = ::g_pConfigManager->_shotPositions[1] + ::g_shotInfo.playerOffset;
+            ::arrowModel->positionXYZ = ::g_pConfigManager->_shotPositions[1];
+            ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
+            ::g_pFlyCamera->setEye(::g_pConfigManager->_shotPositions[1] + ::g_pConfigManager->_cameraOffset);
         }
-        else if (::g_pTheLights->theLights[1].param2.x == 1.0f && glfwGetKey(pWindow, GLFW_KEY_2) == GLFW_RELEASE)	// If light is on and key is released, turn off.
+
+        if (glfwGetKey(pWindow, GLFW_KEY_3) == GLFW_PRESS)	// "3"
         {
-            ::g_pTheLights->TurnOffLight(1);
+            ::g_shotInfo.currentLocation = 2;
+            ::dummy->positionXYZ = ::g_pConfigManager->_shotPositions[2] + ::g_shotInfo.playerOffset;
+            ::arrowModel->positionXYZ = ::g_pConfigManager->_shotPositions[2];
+            ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
+            ::g_pFlyCamera->setEye(::g_pConfigManager->_shotPositions[2] + ::g_pConfigManager->_cameraOffset);
         }
+
 
         std::stringstream strTitle;
         // std::cout << 
@@ -78,9 +88,7 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
             << cameraEye.y << ", "
             << cameraEye.z; //<< std::endl;
 
-        #if defined _DEBUG
         ::g_TitleText = strTitle.str();
-        #endif
 
     }//if ( cGFLWKeyboardModifiers::areAllModsUp(pWindow) )
 
@@ -264,7 +272,6 @@ void GLFW_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 void GLFW_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
 
-#if defined _DEBUG
 #ifdef Windows_Context_Menu_Usage_Custom
 
     // Right button is pop-up
@@ -272,7 +279,6 @@ void GLFW_mouse_button_callback(GLFWwindow* window, int button, int action, int 
     {
         ShowWindowsContextMenu(window, button, action, mods);
     }
-#endif
 #endif
 
     return;

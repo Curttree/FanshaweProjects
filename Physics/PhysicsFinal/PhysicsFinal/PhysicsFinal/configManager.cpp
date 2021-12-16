@@ -2,6 +2,7 @@
 #include "cEntity.h"
 #include "iEntity.h"
 #include "cAIPlayer.h"
+#include "globals.h"
 
 configManager::configManager() {
     _actors = readJSONFile("actors.json");
@@ -9,7 +10,6 @@ configManager::configManager() {
     _sceneDescription = readJSONFile("scene.json");
     _physicsDescription = readJSONFile("physics.json");
     if (!_actors.HasParseError() && !_sceneDescription.HasParseError()) {
-        initCamera();
         initPhysics();
         initRink();
         initProps();
@@ -30,47 +30,79 @@ rapidjson::Document configManager::readJSONFile(std::string fileName) {
     return result;
 }
 
-void configManager::initCamera() {
-    // Determine camera's starting position.
-    if (_sceneDescription.HasMember("Camera")) {
-        if (_sceneDescription["Camera"].HasMember("Position")) {
-            float x, y, z;
-            x = _sceneDescription["Camera"]["Position"]["x"].GetFloat();
-            y = _sceneDescription["Camera"]["Position"]["y"].GetFloat();
-            z = _sceneDescription["Camera"]["Position"]["z"].GetFloat();
-            _cameraStartingPosition = glm::vec3(x, y, z);
-        }
-        //if (_sceneDescription["Camera"].HasMember("Orientation")) {
-        //    float x, y, z;
-        //    x = _sceneDescription["Camera"]["Orientation"]["x"].GetFloat();
-        //    y = _sceneDescription["Camera"]["Orientation"]["y"].GetFloat();
-        //    z = _sceneDescription["Camera"]["Orientation"]["z"].GetFloat();
-        //    _cameraStartingOrientation = glm::vec3(x, y, z);
-        //}
-    }
-    else {
-        // Fall back to default start position if no camera info has been provided.
-        _cameraStartingPosition = glm::vec3(0.f, 0.f, -4.f);
-    }
-}
-
 void configManager::initPhysics() {
     // Determine boundaries.
     if (_physicsDescription.HasMember("WorldBoundaries")) {
         // ASSUMPTION: If Physics is present all boundaries have been defined. 
         // If this is not always the case, this should be updated.
         float x, y, z;
-        x = _sceneDescription["Physics"]["PositiveXBoundary"].GetFloat();
-        y = _sceneDescription["Physics"]["PositiveYBoundary"].GetFloat();
-        z = _sceneDescription["Physics"]["PositiveZBoundary"].GetFloat();
+        x = _physicsDescription["WorldBoundaries"]["PositiveXBoundary"].GetFloat();
+        y = _physicsDescription["WorldBoundaries"]["PositiveYBoundary"].GetFloat();
+        z = _physicsDescription["WorldBoundaries"]["PositiveZBoundary"].GetFloat();
         _positiveBounds = glm::vec3(x, y, z);
-        x = _sceneDescription["Physics"]["NegativeXBoundary"].GetFloat();
-        y = _sceneDescription["Physics"]["NegativeYBoundary"].GetFloat();
-        z = _sceneDescription["Physics"]["NegativeZBoundary"].GetFloat();
+        x = _physicsDescription["WorldBoundaries"]["NegativeXBoundary"].GetFloat();
+        y = _physicsDescription["WorldBoundaries"]["NegativeYBoundary"].GetFloat();
+        z = _physicsDescription["WorldBoundaries"]["NegativeZBoundary"].GetFloat();
         _negativeBounds = glm::vec3(x, y, z);
     }
-}
+    if (_physicsDescription.HasMember("ShotPositions")) {
+        rapidjson::GenericArray<false, rapidjson::Value> list = _physicsDescription["ShotPositions"].GetArray();
+        int max = (int)list.Size() < 3 ? (int)list.Size() : 3 ;
+        for (rapidjson::SizeType current = 0; current < max; current++) {
+            float x, y, z;
+            x = _physicsDescription["ShotPositions"][current]["x"].GetFloat();
+            y = _physicsDescription["ShotPositions"][current]["y"].GetFloat();
+            z = _physicsDescription["ShotPositions"][current]["z"].GetFloat();
+            _shotPositions[current] = glm::vec3(x, y, z);
+        }
+    }
+    if (_physicsDescription.HasMember("CameraOffset")) {
+        float x, y, z;
+        x = _physicsDescription["CameraOffset"]["x"].GetFloat();
+        y = _physicsDescription["CameraOffset"]["y"].GetFloat();
+        z = _physicsDescription["CameraOffset"]["z"].GetFloat();
+        _cameraOffset = glm::vec3(x, y, z);
+    }
 
+    if (_physicsDescription.HasMember("Model")) {
+        if (_physicsDescription["Model"].HasMember("Offset")) {
+            float x, y, z;
+            x = _physicsDescription["Model"]["Offset"]["x"].GetFloat();
+            y = _physicsDescription["Model"]["Offset"]["y"].GetFloat();
+            z = _physicsDescription["Model"]["Offset"]["z"].GetFloat();
+            ::g_shotInfo.playerOffset = glm::vec3(x, y, z);
+        }
+        if (_physicsDescription["Model"].HasMember("AlphaTransparency")) {
+            ::g_shotInfo.playerTransparency = _physicsDescription["Model"]["AlphaTransparency"].GetFloat();
+        }
+    }
+    if (_physicsDescription.HasMember("ShotDefinition")) {
+        float degrees =  0.f;
+        if (_physicsDescription["ShotDefinition"].HasMember("Pitch")) {
+            if (_physicsDescription["ShotDefinition"]["Pitch"].HasMember("MinDegrees")) {
+                degrees = _physicsDescription["ShotDefinition"]["Pitch"]["MinDegrees"].GetFloat();
+                ::g_shotInfo.lowerPitch = glm::radians(degrees);
+            }
+            if (_physicsDescription["ShotDefinition"]["Pitch"].HasMember("MaxDegrees")) {
+                degrees = _physicsDescription["ShotDefinition"]["Pitch"]["MaxDegrees"].GetFloat();
+                ::g_shotInfo.upperPitch = glm::radians(degrees);
+            }
+        }
+        if (_physicsDescription["ShotDefinition"].HasMember("Yaw")) {
+            if (_physicsDescription["ShotDefinition"]["Yaw"].HasMember("MinDegrees")) {
+                degrees = _physicsDescription["ShotDefinition"]["Yaw"]["MinDegrees"].GetFloat();
+                ::g_shotInfo.lowerYaw = glm::radians(degrees);
+            }
+            if (_physicsDescription["ShotDefinition"]["Yaw"].HasMember("MaxDegrees")) {
+                degrees = _physicsDescription["ShotDefinition"]["Yaw"]["MaxDegrees"].GetFloat();
+                ::g_shotInfo.upperYaw = glm::radians(degrees);
+            }
+        }
+        if (_physicsDescription["ShotDefinition"].HasMember("MaxVelocity")) {
+            ::g_shotInfo.velocity = _physicsDescription["ShotDefinition"]["MaxVelocity"].GetFloat();
+        }
+    }
+}
 
 cMesh* configManager::initMesh(std::string meshName, int source) {
     cMesh* result = new cMesh();
