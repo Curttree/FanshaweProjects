@@ -1,26 +1,21 @@
-# INFO 6028 - Graphics - Project 3
+# INFO 6019/6025 - Physics 1 and Configuration - Final Exam Project
 ## By: Curtis Tremblay (Student Number: 1049697)
 
 
 ### Build Instructions
-- In Visual Studio, build project in x64 with either Debug (if testing the "alternative" debug rendering) or Release configuration (both options should work).
+- In Visual Studio, build project in x64 with either Debug (if testing that no Deployment package is created) or Release configuration (both options should work, though a deployment folder is only created in the ProjectDir when building as Release).
 ## Running the Project / Notes
 
-- Enhancements to the scene are: 
-		- Specular map for the skaters to represent different material specular properties (helmet and skates are shiny, skin is slightly shiny, everything else is matte).
-		- Imposters to make the spotlights look like they are 'on'.
-
-==================================
-NOTES FROM PROJECT 2 (FOR REFERENCE)
-- Camera navigation should be close to the default fly camera (minor changes were made but it should be pretty similar functionally).
-- Goal lights (Point lights) can be turned on by pressing and holding the 1 or 2 key.
-	- In the final 'game' these would be triggered on a puck entering the net. For now they can be enabled at will.
-- Transparency is shown via goal lights, watter bottles, and glass (highlighted in the video). If using Debug configuration, you can right click on the window and jump to camera locations that highlight the sorting of these objects.
-- Discard transparency is present via the 'decals' on the boards near the center of the scene.
-- Texture combinations are used in the following places:
-	- The ice uses a trivial combination of the painted lines and an ice texture to make the surface look like it had been skated on.
-	- The skaters use a base texture (with shared textures such as skate blades and their hockey stick) and a combination of texture masks to allow their uniform and skin colour to be easily changed
-	- The concrete around the arena uses a mask texture and the snow texture from the skybox to make it look like there is some snow on the ground. The idea was to make the skybox seem more connected to the scene from camera angles that will be available in the final 'game'
-- 9 lights are present in the scene (6 spot lights, 2 point lights which can be turned on/off, and a directional light). These are configurable via the scene.json file.
-- If the 'Debug' configuration is used, you should be able to use the Right Click menu to toggle the collision details (labelled as hitboxes though I realize that is likely not the correct terminology in this case). This will show spheres/planes for the particle physics simulation around the models.
-	- I am using "#if defined _DEBUG" to check for the current Configuration and control whether to show debug info. Not sure if this is the best/most scalable approach. If there is a better approach that I should be using instead, please let me know!
+- Multiple config files are available, though only 'physics.json' should be relevant to this project.
+- Controls are:
+	- Arrow Keys aim your shot, space bar fires a puck
+	- 1, 2, 3 keys change positions (as defined in config file). You can also right click on the window to select a position.
+	- Right clicking the window also lets you toggle visualization for the particles used for physics calculations.
+- Explanation of config options can be found in the attached video. All angles are given in degrees.
+- Multiple planes are used to approximate the corners of the rink. The amount and location of these planes is configurable, though 		I tried to set relatively accurate default values.
+- Sphere/sphere collision is present between pucks as well as the puck and the net.
+- A simple force generator was used to add 'drag' to the puck so it's tragectory is more accurate to a rubber puck rather than a round particle with a similarly small mass.
+- Mass values/dampening was set for the puck first, and then other values were adjusted to provide a better gameplay experience. Some values such as the netting have a higher mass/lower dampening to allow for the net to appear more taut than it might otherwise be.
+- Rod constraints are present to lock the post particles in place. Elastic constraints are used to approximate a mesh for the netting.
+- The deployment folder is created within the PhysicsFinal project folder. A .Zip file is also created (not sure whether that was a requirement this time).
+- The installer script will be automatically copied to the deployment folder on creation. Building an installer using the script and running it will install a folder containing the .exe and all other required files (along with an uninstaller) on the desktop.
