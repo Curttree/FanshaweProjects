@@ -147,6 +147,7 @@ int main(void) {
     std::vector<std::string> vecModelsToLoad;
     vecModelsToLoad.push_back("Sphere_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -178,6 +179,33 @@ int main(void) {
     ::g_pGameEngine->g_pTextureManager->SetBasePath("assets/textures");
 
     ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("BrightColouredUVMap.bmp", true);
+
+    // Add a skybox texture
+    std::string errorTextString;
+    ::g_pGameEngine->g_pTextureManager->SetBasePath("assets/textures/cubemaps");
+    if (!::g_pGameEngine->g_pTextureManager->CreateCubeTextureFromBMPFiles("WinterRiver",
+        "winterRiver_posX.bmp",    /* posX_fileName */
+        "winterRiver_negX.bmp",     /*negX_fileName */
+        "winterRiver2_negY.bmp",     /*negY_fileName*/
+        "winterRiver_posY.bmp",       /*posY_fileName*/
+        "winterRiver2_posZ.bmp",    /*posZ_fileName*/
+        "winterRiver2_negZ.bmp",      /*negZ_fileName*/
+        true, errorTextString))
+    {
+        std::cout << "Didn't load because: " << errorTextString << std::endl;
+    }
+    else
+    {
+        std::cout << "Loaded the skybox cube texture OK" << std::endl;
+    }
+
+    cMesh* pSkybox = new cMesh();
+
+    // Mimics a skybox
+    pSkybox->meshName = "Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply";
+    pSkybox->scale = 5'000'000.0f;
+
+    pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
 
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
     double previousTime = glfwGetTime();
@@ -276,6 +304,20 @@ int main(void) {
 
 
         DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pGameEngine->g_pVAOManager);
+
+        // After drawing the other objects, draw the skybox to limit overdraw.
+
+        GLint bIsSkyBox_LocID = glGetUniformLocation(program, "bIsSkyBox");
+        glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_TRUE);
+
+        // Move the "skybox object" with the camera
+        pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
+        DrawObject(
+            pSkybox, glm::mat4(1.0f),
+            matModel_Location, matModelInverseTranspose_Location,
+            program, ::g_pGameEngine->g_pVAOManager);
+
+        glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_FALSE);
 
 
         // "Present" what we've drawn.
