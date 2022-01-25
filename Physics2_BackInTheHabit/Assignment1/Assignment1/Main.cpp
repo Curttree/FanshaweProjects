@@ -97,6 +97,9 @@ int main(void) {
 
     ::g_StartUp(pWindow);
 
+    //TODO: Move from hard coded to dynamic camera placement.
+    ::g_pFlyCamera->setEye(glm::vec3(0.f, 25.f, -100.f));
+    ::g_pFlyCamera->setAt(glm::normalize(-::g_pFlyCamera->getEye()));
 
     cShaderManager::cShader vertShader;
     cShaderManager::cShader fragShader;

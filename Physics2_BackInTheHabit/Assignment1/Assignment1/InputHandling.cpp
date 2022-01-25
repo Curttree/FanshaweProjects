@@ -27,30 +27,41 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
     if ( cGFLWKeyboardModifiers::areAllModsUp(pWindow) )
     {
         // Use "fly" camera (keyboard for movement, mouse for aim)
-        if ( glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS )
+        //if ( glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS )
+        //{
+        //    ::g_pFlyCamera->MoveForward_Z(+cameraMoveSpeed);
+        //}
+        //if ( glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_PRESS )	// "backwards"
+        //{
+        //    ::g_pFlyCamera->MoveForward_Z(-cameraMoveSpeed);
+        //}
+        //if ( glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS )	// "left"
+        //{
+        //    ::g_pFlyCamera->MoveLeftRight_X(-cameraMoveSpeed);
+        //}
+        //if ( glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_PRESS )	// "right"
+        //{
+        //    ::g_pFlyCamera->MoveLeftRight_X(+cameraMoveSpeed);
+        //}
+        //if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS )	// "up"
+        //{
+        //    ::g_pFlyCamera->MoveUpDown_Y(-cameraMoveSpeed);
+        //}
+        //if ( glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS )	// "down"
+        //{
+        //    ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
+        //}
+
+        //Use track camera controls.
+        if (glfwGetKey(pWindow, GLFW_KEY_UP) == GLFW_PRESS)
         {
-            ::g_pFlyCamera->MoveForward_Z(+cameraMoveSpeed);
+            ::g_pFlyCamera->Zoom(+cameraMoveSpeed);
         }
-        if ( glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_PRESS )	// "backwards"
+        if (glfwGetKey(pWindow, GLFW_KEY_DOWN) == GLFW_PRESS)
         {
-            ::g_pFlyCamera->MoveForward_Z(-cameraMoveSpeed);
+            ::g_pFlyCamera->Zoom(-cameraMoveSpeed);
         }
-        if ( glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS )	// "left"
-        {
-            ::g_pFlyCamera->MoveLeftRight_X(-cameraMoveSpeed);
-        }
-        if ( glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_PRESS )	// "right"
-        {
-            ::g_pFlyCamera->MoveLeftRight_X(+cameraMoveSpeed);
-        }
-        if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS )	// "up"
-        {
-            ::g_pFlyCamera->MoveUpDown_Y(-cameraMoveSpeed);
-        }
-        if ( glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS )	// "down"
-        {
-            ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
-        }
+
 
         std::stringstream strTitle;
         // std::cout << 

@@ -109,6 +109,11 @@ public:
 	void Yaw_LeftRight(float angleDegrees, double deltaTime);	// around y
 	void Roll_CW_CCW(float angleDegrees, double deltaTime);		// around z
 
+	//Not really fly camera functionality, but putting here until a separate track camera can be created.
+	void Zoom(float amount);
+
+	void RotateAlongTrack(float amountDegrees);
+
 	// Note: This will never go below m_DEFAULT_MIN_DELTA_TIME_STEP
 	void setMinimumDeltaTimeStep(double newMinDeltaTimeStep);
 	double getMinimumDeltaTimeStep(void);
@@ -140,6 +145,11 @@ private:
 	};
 
 	eState m_CurrentState;
+
+	//For the eventual track camera.
+	float minRadius = 20.f;
+	float maxRadius = 1000.f;
+
 
 };
 

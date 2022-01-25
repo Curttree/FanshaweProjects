@@ -603,3 +603,10 @@ void cFlyCamera::m_tokenizeString(std::string theString, std::vector<std::string
 	return;
 }
 
+
+void cFlyCamera::Zoom(float amount) {
+	if (amount == 0 || (amount > 0 && glm::length(eye) <= minRadius) || (amount < 0 && glm::length(eye) >= maxRadius)) {
+		return;
+	}
+	setEye(eye +glm::normalize(m_at) * amount);
+}
