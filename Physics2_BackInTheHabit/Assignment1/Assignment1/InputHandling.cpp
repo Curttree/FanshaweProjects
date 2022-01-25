@@ -21,7 +21,7 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
 {
     float cameraMoveSpeed = ::g_pFlyCamera->movementSpeed;
 
-    float objectMovementSpeed = 0.1f;
+    float objectMovementSpeed = 5.f;
     float lightMovementSpeed = 10.0f;
 
     if ( cGFLWKeyboardModifiers::areAllModsUp(pWindow) )
@@ -60,6 +60,14 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
         if (glfwGetKey(pWindow, GLFW_KEY_DOWN) == GLFW_PRESS)
         {
             ::g_pFlyCamera->Zoom(-cameraMoveSpeed);
+        }
+        if (glfwGetKey(pWindow, GLFW_KEY_LEFT) == GLFW_PRESS)
+        {
+            ::g_pFlyCamera->RotateAlongTrack(cameraMoveSpeed/10.f);
+        }
+        if (glfwGetKey(pWindow, GLFW_KEY_RIGHT) == GLFW_PRESS)
+        {
+            ::g_pFlyCamera->RotateAlongTrack(-cameraMoveSpeed/10.f);
         }
 
 

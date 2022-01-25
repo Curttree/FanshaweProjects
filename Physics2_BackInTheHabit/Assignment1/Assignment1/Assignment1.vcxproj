@@ -162,12 +162,14 @@
     <ClCompile Include="..\common\include\Graphics\cShader.cpp" />
     <ClCompile Include="..\common\include\Graphics\cShaderManager.cpp" />
     <ClCompile Include="..\common\include\Graphics\cVAOManager.cpp" />
+    <ClCompile Include="cEntity.cpp" />
     <ClCompile Include="cGameEngine.cpp" />
     <ClCompile Include="cGFLWKeyboardModifiers.cpp" />
     <ClCompile Include="cMesh.cpp" />
     <ClCompile Include="CollisionListener.cpp" />
     <ClCompile Include="cWinContextMenu.cpp" />
     <ClCompile Include="DrawObject_function.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="GLFW_error_callback.cpp" />
     <ClCompile Include="GLFW_key_callback.cpp" />
     <ClCompile Include="globals.cpp" />
@@ -193,6 +195,8 @@
     <ClInclude Include="cMesh.h" />
     <ClInclude Include="CollisionListener.h" />
     <ClInclude Include="cWinContextMenu.h" />
+    <ClInclude Include="cEntity.h" />
+    <ClInclude Include="EntityManager.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="TextureMapping\C24BitBMPpixel.h" />
     <ClInclude Include="TextureMapping\cBasicTextureManager.h" />

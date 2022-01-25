@@ -9,6 +9,8 @@ cGameEngine* g_pGameEngine = NULL;
 
 std::vector< cMesh* > g_vec_pMeshes; 
 
+cEntity* g_pPlayerEntity = NULL;
+
 cMesh* g_pDebugSphere = NULL;
 bool g_bShowDebugShere = true;
 

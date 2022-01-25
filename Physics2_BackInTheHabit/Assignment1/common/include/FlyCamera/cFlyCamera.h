@@ -45,8 +45,10 @@ public:
 private:
 	glm::vec3 m_at;			// A direction, not a location
 	glm::vec3 m_up;
+	glm::vec3 m_left;		// Used for track camera. Does not update for fly cam.
 	// THESE DON'T LIKELY CHANGE
 	glm::vec3 m_frontOfCamera;// = glm::vec3(0,0,1);
+	glm::vec3 m_leftOfCamera;// = glm::vec3(0,0,1);
 	glm::vec3 m_upIsYVector;	// = glm::vec3(0,1,0);
 
 	// This is used by the update to tokenize or parse the command string
@@ -111,6 +113,7 @@ public:
 
 	//Not really fly camera functionality, but putting here until a separate track camera can be created.
 	void Zoom(float amount);
+	virtual glm::vec3 getLeft(void);
 
 	void RotateAlongTrack(float amountDegrees);
 
@@ -148,8 +151,7 @@ private:
 
 	//For the eventual track camera.
 	float minRadius = 20.f;
-	float maxRadius = 1000.f;
-
+	float maxRadius = 150.f;
 
 };
 

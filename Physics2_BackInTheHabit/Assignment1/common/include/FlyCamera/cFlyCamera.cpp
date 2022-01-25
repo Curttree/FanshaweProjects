@@ -14,6 +14,7 @@ cFlyCamera::cFlyCamera()
 
 	// This will be constant
 	this->m_frontOfCamera = glm::vec3(0.0f, 0.0f, 1.0f);
+	this->m_leftOfCamera = glm::vec3(-1.0f, 0.0f, 0.0f);
 
 	this->m_upIsYVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
@@ -609,4 +610,26 @@ void cFlyCamera::Zoom(float amount) {
 		return;
 	}
 	setEye(eye +glm::normalize(m_at) * amount);
+}
+
+void cFlyCamera::RotateAlongTrack(float amountDegrees) {
+	float distance = glm::length(glm::vec3(eye.x, 0.f, eye.z));	//Ensure we don't factor in the y-offset when moving around track.
+	setEye(eye + m_at * distance);
+	Yaw_LeftRight(amountDegrees);
+	setEye(eye - m_at * distance);
+
+	// Update left with the new m_at.
+	glm::mat4 matRotation = glm::mat4(this->qOrientation);
+
+	glm::vec4 leftOfCamera = glm::vec4(this->m_leftOfCamera, 1.0f);
+
+	glm::vec4 newLeft = matRotation * leftOfCamera;
+
+	// Update the "At"
+	this->m_left = glm::vec3(newLeft);
+
+}
+
+glm::vec3 cFlyCamera::getLeft(void) {
+	return this->m_left;
 }

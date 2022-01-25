@@ -33,23 +33,20 @@ extern cFlyCamera* g_pFlyCamera; // = NULL;
 //extern glm::vec3 g_cameraAt;	//	= glm::vec3(0.0f, 0.0f, 0.0f);
 // ************************************************
 
-
 extern cGameEngine* g_pGameEngine;
 // This got moved into the light manager class
 //extern cLightHelper* g_pTheLightHelper;
 
+extern cEntity* g_pPlayerEntity;
+
 extern cMesh* g_pDebugSphere;	// = NULL;
 extern bool g_bShowDebugShere;	// = true;
-
 
 extern unsigned int g_selectedObject;	// = 0;
 extern unsigned int g_selectedLight;	// = 0;
 
-
 // This will be printed in the title bar
 extern std::string g_TitleText;	// = "";
-
-
 
 // List of objects to draw
 extern std::vector< cMesh* > g_vec_pMeshes;

@@ -98,8 +98,8 @@ int main(void) {
     ::g_StartUp(pWindow);
 
     //TODO: Move from hard coded to dynamic camera placement.
-    ::g_pFlyCamera->setEye(glm::vec3(0.f, 25.f, -100.f));
-    ::g_pFlyCamera->setAt(glm::normalize(-::g_pFlyCamera->getEye()));
+    ::g_pFlyCamera->setEye(glm::vec3(0.f, 5.f, -50.f));
+    //::g_pFlyCamera->setAt(glm::vec3(0.f,0.f,1.f));
 
     cShaderManager::cShader vertShader;
     cShaderManager::cShader fragShader;
@@ -213,6 +213,7 @@ int main(void) {
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
     double previousTime = glfwGetTime();
 
+    ::g_pGameEngine->LoadPhysicsAssignmentOneScene();
 
     while (!glfwWindowShouldClose(pWindow)) {
         float ratio;
@@ -265,6 +266,7 @@ int main(void) {
         //    1'000'000.0f);   // Far plane (as small as possible)
 
         ::g_pFlyCamera->Update(deltaTime);
+        ::g_pGameEngine->Update(deltaTime);
 
         glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
         glm::vec3 cameraAt = ::g_pFlyCamera->getAtInWorldSpace();

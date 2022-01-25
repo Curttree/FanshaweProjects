@@ -43,6 +43,9 @@
     <Filter Include="GameEngine">
       <UniqueIdentifier>{54b1c600-ee5b-4c55-9b6e-1ccb3086ba09}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\Managers">
+      <UniqueIdentifier>{58e2f6cc-0a14-4f41-ab95-c82f30fbd4e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -117,6 +120,12 @@
     <ClCompile Include="CollisionListener.cpp">
       <Filter>GameEngine</Filter>
     </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>GameEngine\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="cEntity.cpp">
+      <Filter>GameEngine\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -169,6 +178,12 @@
     </ClInclude>
     <ClInclude Include="CollisionListener.h">
       <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>GameEngine\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="cEntity.h">
+      <Filter>GameEngine\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

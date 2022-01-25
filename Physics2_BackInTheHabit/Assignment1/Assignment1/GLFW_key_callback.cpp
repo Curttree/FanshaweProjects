@@ -49,6 +49,30 @@
         bAltDown = true;
     }
 
+    if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_W] = true;
+    }
+    else if (key == GLFW_KEY_W && action == GLFW_RELEASE) {
+        ::g_pGameEngine->keys[GLFW_KEY_W] = false;
+    }
+    if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_A] = true;
+    }
+    else if (key == GLFW_KEY_A && action == GLFW_RELEASE) {
+        ::g_pGameEngine->keys[GLFW_KEY_A] = false;
+    }
+    if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_S] = true;
+    }
+    else if (key == GLFW_KEY_S && action == GLFW_RELEASE) {
+        ::g_pGameEngine->keys[GLFW_KEY_S] = false;
+    }
+    if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_D] = true;
+    }
+    else if (key == GLFW_KEY_D && action == GLFW_RELEASE) {
+        ::g_pGameEngine->keys[GLFW_KEY_D] = false;
+    }
 
 
 //   // If JUST the shift is down, move the "selected" object
