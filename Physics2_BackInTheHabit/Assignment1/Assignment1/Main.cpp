@@ -167,6 +167,7 @@ int main(void) {
     vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
     vecModelsToLoad.push_back("ground.ply");
     vecModelsToLoad.push_back("billiardball.ply");
+    vecModelsToLoad.push_back("Quad_1_sided_aligned_on_XY_plane.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -199,6 +200,7 @@ int main(void) {
 
     ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("BrightColouredUVMap.bmp", true);
     ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("felt.bmp", true);
+    ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("wood.bmp", true);
     ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("cue.bmp", true);
     ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("1.bmp", true);
     ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("2.bmp", true);

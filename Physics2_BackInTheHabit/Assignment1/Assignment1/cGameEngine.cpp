@@ -103,11 +103,25 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		planeDesc.damping = 0.f;
 		planeDesc.isStatic = true;
 		planeDesc.mass = 1.f;
-		planeDesc.position = glm::vec3(0.f);
+		planeDesc.position = glm::vec3(0.f, 24.5f, -24.25f);
 		planeDesc.velocity = glm::vec3(0.f);
 		wall->rigidBody = m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
 
 		m_PhysicsWorld->AddRigidBody(wall->rigidBody);
+
+		cMesh* wallMesh = new cMesh();
+		wallMesh->meshName = "Quad_1_sided_aligned_on_XY_plane.ply";
+		wallMesh->textureNames[0] = "wood.bmp";
+		wallMesh->textureRatios[0] = 1.f;
+		wallMesh->bIsWireframe = false;
+		wallMesh->bDontLight = false;
+		wallMesh->scale = 50.0f;
+		wallMesh->positionXYZ = glm::vec3(0.f, 24.5f, -24.25f);
+		// Give this a friendly name
+		wallMesh->friendlyName = "Back Wall";
+		wall->mesh = wallMesh;
+
+		::g_vec_pMeshes.push_back(wallMesh);
 	}
 	// Create Front Wall
 	{
@@ -118,11 +132,26 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		planeDesc.damping = 0.f;
 		planeDesc.isStatic = true;
 		planeDesc.mass = 1.f;
-		planeDesc.position = glm::vec3(0.f);
+		planeDesc.position = glm::vec3(0.f, 24.5f, 24.25f);
 		planeDesc.velocity = glm::vec3(0.f);
 		wall->rigidBody = m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
 
 		m_PhysicsWorld->AddRigidBody(wall->rigidBody);
+
+		cMesh* wallMesh = new cMesh();
+		wallMesh->meshName = "Quad_1_sided_aligned_on_XY_plane.ply";
+		wallMesh->textureNames[0] = "wood.bmp";
+		wallMesh->textureRatios[0] = 1.f;
+		wallMesh->bIsWireframe = false;
+		wallMesh->bDontLight = false;
+		wallMesh->scale = 50.0f;
+		wallMesh->positionXYZ = glm::vec3(0.f, 24.5f, 24.25f);
+		wallMesh->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+		// Give this a friendly name
+		wallMesh->friendlyName = "Front Wall";
+		wall->mesh = wallMesh;
+
+		::g_vec_pMeshes.push_back(wallMesh);
 	}
 	// Create Left Wall
 	{
@@ -133,11 +162,26 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		planeDesc.damping = 0.f;
 		planeDesc.isStatic = true;
 		planeDesc.mass = 1.f;
-		planeDesc.position = glm::vec3(0.f);
+		planeDesc.position = glm::vec3(24.25f, 24.5f, 0.f);
 		planeDesc.velocity = glm::vec3(0.f);
 		wall->rigidBody = m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
 
 		m_PhysicsWorld->AddRigidBody(wall->rigidBody);
+
+		cMesh* wallMesh = new cMesh();
+		wallMesh->meshName = "Quad_1_sided_aligned_on_XY_plane.ply";
+		wallMesh->textureNames[0] = "wood.bmp";
+		wallMesh->textureRatios[0] = 1.f;
+		wallMesh->bIsWireframe = false;
+		wallMesh->bDontLight = false;
+		wallMesh->scale = 50.0f;
+		wallMesh->positionXYZ = glm::vec3(24.25f, 24.5f, 0.f);
+		wallMesh->orientationXYZ = glm::vec3(0.f, -glm::pi<float>()/2, 0.f);
+		// Give this a friendly name
+		wallMesh->friendlyName = "Left Wall";
+		wall->mesh = wallMesh;
+
+		::g_vec_pMeshes.push_back(wallMesh);
 	}
 	// Create Right Wall
 	{
@@ -148,11 +192,26 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		planeDesc.damping = 0.f;
 		planeDesc.isStatic = true;
 		planeDesc.mass = 1.f;
-		planeDesc.position = glm::vec3(0.f);
+		planeDesc.position = glm::vec3(-24.25f, 24.5f, 0.f);
 		planeDesc.velocity = glm::vec3(0.f);
 		wall->rigidBody = m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
 
 		m_PhysicsWorld->AddRigidBody(wall->rigidBody);
+
+		cMesh* wallMesh = new cMesh();
+		wallMesh->meshName = "Quad_1_sided_aligned_on_XY_plane.ply";
+		wallMesh->textureNames[0] = "wood.bmp";
+		wallMesh->textureRatios[0] = 1.f;
+		wallMesh->bIsWireframe = false;
+		wallMesh->bDontLight = false;
+		wallMesh->scale = 50.0f;
+		wallMesh->positionXYZ = glm::vec3(-24.25f, 24.5f, 0.f);
+		wallMesh->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
+		// Give this a friendly name
+		wallMesh->friendlyName = "Right Wall";
+		wall->mesh = wallMesh;
+
+		::g_vec_pMeshes.push_back(wallMesh);
 	}
 
 	//Create initial 'Player'
