@@ -12,6 +12,7 @@ namespace gdp2022Physics
 		, damping(desc.damping)
 		, restitution(desc.restitution)
 		, friction(desc.friction)
+		, friendlyName(desc.friendlyName)
 	{
 		if (isStatic || desc.mass <= 0.0f)
 		{
@@ -120,5 +121,9 @@ namespace gdp2022Physics
 	void cRigidBody::VerletStep3(float deltaTime)
 	{
 		VerletStep2(deltaTime);
+	}
+
+	std::string cRigidBody::GetFriendlyName() {
+		return friendlyName;
 	}
 }

@@ -2,6 +2,7 @@
 
 #include <extern/glm/glm.hpp>
 #include <extern/glm/gtx/quaternion.hpp>
+#include <string>
 
 namespace gdp2022Physics
 {
@@ -17,6 +18,8 @@ namespace gdp2022Physics
 		virtual void GetOrientation(glm::quat& orientationOut) = 0;
 		virtual glm::quat GetOrientation() = 0;
 		virtual void SetOrientation(const glm::quat& orientationIn) = 0;
+
+		virtual std::string GetFriendlyName() = 0;
 
 		virtual void ApplyForce(const glm::vec3& force) = 0;
 

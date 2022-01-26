@@ -187,19 +187,19 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
         if ( glfwGetKey(pWindow, GLFW_KEY_P) == GLFW_PRESS ) { ::g_pGameEngine->g_pTheLights->theLights[0].param1.z += 0.5f; }   // Outer
 
 
-        std::stringstream strTitle;
-        // std::cout << 
-        strTitle << "Light # " << ::g_selectedLight << " positionXYZ : "
-            << ::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].position.x << ", "
-            << ::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].position.y << ", "
-            << ::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].position.z << "  "
-            << "attenuation (C, L, Q): "
-            << ::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].atten.x << ", "        // Const
-            << ::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].atten.y << ", "        // Linear
-            << ::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].atten.z << "  "        // Quadratic
-            << (::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].param2.x > 0.0f ? " is on" : " is off");
-        //<< std::endl;
-        ::g_TitleText = strTitle.str();
+        //std::stringstream strTitle;
+        //// std::cout << 
+        //strTitle << "Light # " << ::g_selectedLight << " positionXYZ : "
+        //    << ::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].position.x << ", "
+        //    << ::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].position.y << ", "
+        //    << ::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].position.z << "  "
+        //    << "attenuation (C, L, Q): "
+        //    << ::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].atten.x << ", "        // Const
+        //    << ::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].atten.y << ", "        // Linear
+        //    << ::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].atten.z << "  "        // Quadratic
+        //    << (::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].param2.x > 0.0f ? " is on" : " is off");
+        ////<< std::endl;
+        //::g_TitleText = strTitle.str();
 
 
     }//if ( cGFLWKeyboardModifiers::...

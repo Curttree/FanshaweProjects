@@ -4,6 +4,7 @@
 #include "TextureMapping/cBasicTextureManager.h"
 #include <Graphics/cLightManager.h>
 #include "EntityManager.h"
+#include "AudioManager.h"
 // Physics
 #include <Fanshawe2022Physics/interfaces/iPhysicsFactory.h>
 #include <Fanshawe2022Physics/interfaces/iPhysicsWorld.h>
@@ -24,6 +25,7 @@ public:
 	void SwapPlayer(unsigned int newPlayerNum);
 
 	EntityManager entityManager;
+	AudioManager audioManager;
 
 	//TODO: Abstract components into their appropriate managers rather than handling as part of the 'main' loop
 	cVAOManager* g_pVAOManager;
@@ -40,7 +42,7 @@ private:
 	bool isRunning;
 	bool isPaused;
 	float gameSpeed = 1.f;
-	float objectMovementSpeed = 10.f;
+	float objectMovementSpeed = 15.f;
 
 	void MovePlayerObject();
 

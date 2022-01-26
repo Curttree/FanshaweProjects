@@ -10,6 +10,7 @@
 
 #include "globals.h"
 
+
 // Function signature for DrawObject()
 void DrawObject(
     cMesh* pCurrentMesh,
@@ -267,7 +268,7 @@ int main(void) {
         // *******************************************************
 
         // Update the title text
-        glfwSetWindowTitle(pWindow, ::g_TitleText.c_str());
+        //glfwSetWindowTitle(pWindow, ::g_TitleText.c_str());
 
 
         // Copy the light information into the shader to draw the scene

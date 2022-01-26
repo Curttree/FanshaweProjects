@@ -18,6 +18,7 @@ bool cGameEngine::Initialize(void)
 {
 	// init managers
 	entityManager.StartUp();
+	audioManager.StartUp();
 
 	g_pShaderManager = new cShaderManager();
 
@@ -33,17 +34,13 @@ bool cGameEngine::Initialize(void)
 	m_PhysicsWorld->RegisterCollisionListener(new gdp2022Physics::CollisionListener());
 	m_PhysicsWorld->SetGravity(glm::vec3(0.f, -9.81f, 0.f));
 
-	//LoadDemoScene(PHYSICS_SCENE_INDEX);
-
-	/*for (int i = 0; i < 255; ++i)
-		m_KeyDown[i] = false;*/
-
 	return true;
 }
 
 void cGameEngine::Destroy(void)
 {
 	entityManager.ShutDown();
+	audioManager.ShutDown();
 
 	delete g_pShaderManager;
 
@@ -103,7 +100,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		planeDesc.damping = 0.f;
 		planeDesc.isStatic = true;
 		planeDesc.mass = 1.f;
-		planeDesc.position = glm::vec3(0.f, 24.5f, -24.25f);
+		planeDesc.position = glm::vec3(0.f, 24.5f, -24.5f);
 		planeDesc.velocity = glm::vec3(0.f);
 		wall->rigidBody = m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
 
@@ -116,7 +113,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		wallMesh->bIsWireframe = false;
 		wallMesh->bDontLight = false;
 		wallMesh->scale = 50.0f;
-		wallMesh->positionXYZ = glm::vec3(0.f, 24.5f, -24.25f);
+		wallMesh->positionXYZ = glm::vec3(0.f, 24.5f, -24.5f);
 		// Give this a friendly name
 		wallMesh->friendlyName = "Back Wall";
 		wall->mesh = wallMesh;
@@ -132,7 +129,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		planeDesc.damping = 0.f;
 		planeDesc.isStatic = true;
 		planeDesc.mass = 1.f;
-		planeDesc.position = glm::vec3(0.f, 24.5f, 24.25f);
+		planeDesc.position = glm::vec3(0.f, 24.5f, 24.5f);
 		planeDesc.velocity = glm::vec3(0.f);
 		wall->rigidBody = m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
 
@@ -145,7 +142,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		wallMesh->bIsWireframe = false;
 		wallMesh->bDontLight = false;
 		wallMesh->scale = 50.0f;
-		wallMesh->positionXYZ = glm::vec3(0.f, 24.5f, 24.25f);
+		wallMesh->positionXYZ = glm::vec3(0.f, 24.5f, 24.5f);
 		wallMesh->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
 		// Give this a friendly name
 		wallMesh->friendlyName = "Front Wall";
@@ -162,7 +159,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		planeDesc.damping = 0.f;
 		planeDesc.isStatic = true;
 		planeDesc.mass = 1.f;
-		planeDesc.position = glm::vec3(24.25f, 24.5f, 0.f);
+		planeDesc.position = glm::vec3(24.5f, 24.5f, 0.f);
 		planeDesc.velocity = glm::vec3(0.f);
 		wall->rigidBody = m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
 
@@ -175,7 +172,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		wallMesh->bIsWireframe = false;
 		wallMesh->bDontLight = false;
 		wallMesh->scale = 50.0f;
-		wallMesh->positionXYZ = glm::vec3(24.25f, 24.5f, 0.f);
+		wallMesh->positionXYZ = glm::vec3(24.5f, 24.5f, 0.f);
 		wallMesh->orientationXYZ = glm::vec3(0.f, -glm::pi<float>()/2, 0.f);
 		// Give this a friendly name
 		wallMesh->friendlyName = "Left Wall";
@@ -192,7 +189,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		planeDesc.damping = 0.f;
 		planeDesc.isStatic = true;
 		planeDesc.mass = 1.f;
-		planeDesc.position = glm::vec3(-24.25f, 24.5f, 0.f);
+		planeDesc.position = glm::vec3(-24.5f, 24.5f, 0.f);
 		planeDesc.velocity = glm::vec3(0.f);
 		wall->rigidBody = m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
 
@@ -205,7 +202,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		wallMesh->bIsWireframe = false;
 		wallMesh->bDontLight = false;
 		wallMesh->scale = 50.0f;
-		wallMesh->positionXYZ = glm::vec3(-24.25f, 24.5f, 0.f);
+		wallMesh->positionXYZ = glm::vec3(-24.5f, 24.5f, 0.f);
 		wallMesh->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
 		// Give this a friendly name
 		wallMesh->friendlyName = "Right Wall";
@@ -226,6 +223,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		sphereDesc.position = glm::vec3(0.f, 1.f, 0.f);
 		sphereDesc.velocity = glm::vec3(0.f);
 		sphereDesc.restitution = 0.8f;
+		sphereDesc.friendlyName = "Ball";
 		ballOne->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
 		cMesh* ballMesh = new cMesh();
@@ -250,22 +248,23 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 	{
 		cEntity* ball = entityManager.CreateEntity();
 
-		gdp2022Physics::iShape* ballShape = new gdp2022Physics::SphereShape(2.f);
+		gdp2022Physics::iShape* ballShape = new gdp2022Physics::SphereShape(2.5f);
 		gdp2022Physics::cRigidBodyDesc sphereDesc;
 		sphereDesc.damping = 0.001f;
 		sphereDesc.isStatic = false;
-		sphereDesc.mass = 2.f;
-		sphereDesc.position = glm::vec3(10.f, 2.f, 0.f);
+		sphereDesc.mass = 2.5f;
+		sphereDesc.position = glm::vec3(10.f, 2.5f, 0.f);
 		sphereDesc.velocity = glm::vec3(0.f);
 		sphereDesc.restitution = 0.8f;
+		sphereDesc.friendlyName = "Ball";
 		ball->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
 		cMesh* ballMesh = new cMesh();
 		ballMesh->meshName = "billiardball.ply";
 		ballMesh->textureNames[0] = "2.bmp";
 		ballMesh->textureRatios[0] = 1.f;
-		ballMesh->scale = 2.0f;
-		ballMesh->positionXYZ = glm::vec3(10.f, 2.f, 0.f);
+		ballMesh->scale = 2.5f;
+		ballMesh->positionXYZ = glm::vec3(10.f, 2.5f, 0.f);
 		// Give this a friendly name
 		ballMesh->friendlyName = "Ball Two";
 		ball->mesh = ballMesh;
@@ -278,22 +277,23 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 	{
 		cEntity* ball = entityManager.CreateEntity();
 
-		gdp2022Physics::iShape* ballShape = new gdp2022Physics::SphereShape(0.5f);
+		gdp2022Physics::iShape* ballShape = new gdp2022Physics::SphereShape(1.5f);
 		gdp2022Physics::cRigidBodyDesc sphereDesc;
 		sphereDesc.damping = 0.001f;
 		sphereDesc.isStatic = false;
-		sphereDesc.mass = 0.5f;
-		sphereDesc.position = glm::vec3(-10.f, 0.5f, 10.f);
+		sphereDesc.mass = 1.5f;
+		sphereDesc.position = glm::vec3(-10.f, 1.5f, 10.f);
 		sphereDesc.velocity = glm::vec3(0.f);
 		sphereDesc.restitution = 0.8f;
+		sphereDesc.friendlyName = "Ball";
 		ball->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
 		cMesh* ballMesh = new cMesh();
 		ballMesh->meshName = "billiardball.ply";
 		ballMesh->textureNames[0] = "3.bmp";
 		ballMesh->textureRatios[0] = 1.f;
-		ballMesh->scale = 0.5f;
-		ballMesh->positionXYZ = glm::vec3(-10.f, 0.5f, 10.f);
+		ballMesh->scale = 1.5f;
+		ballMesh->positionXYZ = glm::vec3(-10.f, 1.5f, 10.f);
 		// Give this a friendly name
 		ballMesh->friendlyName = "Ball Three";
 		ball->mesh = ballMesh;
@@ -305,22 +305,23 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 	{
 		cEntity* ball = entityManager.CreateEntity();
 
-		gdp2022Physics::iShape* ballShape = new gdp2022Physics::SphereShape(1.25f);
+		gdp2022Physics::iShape* ballShape = new gdp2022Physics::SphereShape(4.f);
 		gdp2022Physics::cRigidBodyDesc sphereDesc;
 		sphereDesc.damping = 0.001f;
 		sphereDesc.isStatic = false;
-		sphereDesc.mass = 1.25f;
-		sphereDesc.position = glm::vec3(0.f, 1.25f, 10.f);
+		sphereDesc.mass = 4.f;
+		sphereDesc.position = glm::vec3(0.f, 4.f, 10.f);
 		sphereDesc.velocity = glm::vec3(0.f);
 		sphereDesc.restitution = 0.8f;
+		sphereDesc.friendlyName = "Ball";
 		ball->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
 		cMesh* ballMesh = new cMesh();
 		ballMesh->meshName = "billiardball.ply";
 		ballMesh->textureNames[0] = "4.bmp";
 		ballMesh->textureRatios[0] = 1.f;
-		ballMesh->scale = 1.25f;
-		ballMesh->positionXYZ = glm::vec3(0.f, 1.25f, 10.f);
+		ballMesh->scale = 4.f;
+		ballMesh->positionXYZ = glm::vec3(0.f, 4.f, 10.f);
 		// Give this a friendly name
 		ballMesh->friendlyName = "Ball Three";
 		ball->mesh = ballMesh;
@@ -340,6 +341,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		sphereDesc.position = glm::vec3(0.f, 0.75f, -10.f);
 		sphereDesc.velocity = glm::vec3(0.f);
 		sphereDesc.restitution = 0.8f;
+		sphereDesc.friendlyName = "Ball";
 		ball->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
 		cMesh* ballMesh = new cMesh();

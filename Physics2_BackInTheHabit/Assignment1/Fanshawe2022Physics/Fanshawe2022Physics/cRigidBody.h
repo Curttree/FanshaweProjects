@@ -28,6 +28,8 @@ namespace gdp2022Physics
 
 		virtual void ApplyForce(const glm::vec3& new_force);
 
+		virtual std::string GetFriendlyName();
+
 		void SetGravityAcceleration(const glm::vec3& new_gravity);
 		void UpdateAcceleration();
 
@@ -53,6 +55,7 @@ namespace gdp2022Physics
 		glm::vec3 gravity;
 
 		iShape* shape;
+		std::string friendlyName;
 
 		glm::vec3 force;
 

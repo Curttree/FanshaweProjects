@@ -1,5 +1,5 @@
 #pragma once
-
+#include <string>
 #include <extern/glm/glm.hpp>
 
 namespace gdp2022Physics
@@ -25,5 +25,7 @@ namespace gdp2022Physics
 		float damping;
 		float restitution;
 		float friction;
+
+		std::string friendlyName;
 	};
 }
