@@ -227,6 +227,9 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
     // Set up textures for this object
     SetUpTextures(pCurrentMesh, program);
 
+    //Testing Cull
+    glEnable(GL_CULL_FACE);
+
     // Alpha transparency
     glEnable(GL_BLEND);
     // Basic "alpha transparency"

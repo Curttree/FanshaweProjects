@@ -68,14 +68,30 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 
 		gdp2022Physics::iShape* planeShape = new gdp2022Physics::PlaneShape(0, glm::vec3(0.0f, 1.0f, 0.0f));
 		gdp2022Physics::cRigidBodyDesc planeDesc;
-		planeDesc.damping = 0.f;
+		planeDesc.damping = 0.1f;
 		planeDesc.isStatic = true;
 		planeDesc.mass = 1.f;
-		planeDesc.position = glm::vec3(0.f);
+		planeDesc.position = glm::vec3(0.f, -0.5f, 0.f);
 		planeDesc.velocity = glm::vec3(0.f);
+		planeDesc.friction = 1.f;
 		floor->rigidBody = m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
 
-		m_PhysicsWorld->AddRigidBody(floor->rigidBody); 
+		m_PhysicsWorld->AddRigidBody(floor->rigidBody);
+
+		cMesh* floorMesh = new cMesh();
+		floorMesh->meshName = "ground.ply";
+		floorMesh->textureNames[0] = "felt.bmp";
+		floorMesh->textureRatios[0] = 1.f;
+		floorMesh->bIsWireframe = false;
+		floorMesh->bDontLight = false;
+		floorMesh->scale = 50.0f;
+		floorMesh->positionXYZ = glm::vec3(0.f, -0.5f, 0.f);
+		// Give this a friendly name
+		floorMesh->friendlyName = "Floor";
+		floor->mesh = floorMesh;
+
+		::g_vec_pMeshes.push_back(floorMesh);
+
 	}
 
 	// Create Back Wall
@@ -154,11 +170,9 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		ballOne->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
 		cMesh* ballMesh = new cMesh();
-		ballMesh->meshName = "Sphere_xyz_n_rgba_uv.ply";
-		ballMesh->bIsWireframe = true;
-		ballMesh->bUseObjectDebugColour = true;
-		ballMesh->objectDebugColourRGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-		ballMesh->bDontLight = true;
+		ballMesh->meshName = "billiardball.ply";
+		ballMesh->textureNames[0] = "cue.bmp";
+		ballMesh->textureRatios[0] = 1.f;
 		ballMesh->scale = 1.0f;
 		ballMesh->positionXYZ = glm::vec3(0.f, 1.f, 0.f);
 		// Give this a friendly name
@@ -169,6 +183,8 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		::g_vec_pMeshes.push_back(ballMesh);
 
 		g_pPlayerEntity = ballOne;
+		::ballEntites.push_back(ballOne);
+		::player_inactive_texture = "1.bmp";
 	}	
 	
 	//Create other spheres
@@ -186,11 +202,9 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		ball->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
 		cMesh* ballMesh = new cMesh();
-		ballMesh->meshName = "Sphere_xyz_n_rgba_uv.ply";
-		ballMesh->bIsWireframe = true;
-		ballMesh->bUseObjectDebugColour = true;
-		ballMesh->objectDebugColourRGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-		ballMesh->bDontLight = true;
+		ballMesh->meshName = "billiardball.ply";
+		ballMesh->textureNames[0] = "2.bmp";
+		ballMesh->textureRatios[0] = 1.f;
 		ballMesh->scale = 2.0f;
 		ballMesh->positionXYZ = glm::vec3(10.f, 2.f, 0.f);
 		// Give this a friendly name
@@ -199,6 +213,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 
 		m_PhysicsWorld->AddRigidBody(ball->rigidBody);
 		::g_vec_pMeshes.push_back(ballMesh);
+		::ballEntites.push_back(ball);
 	}
 
 	{
@@ -215,11 +230,9 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		ball->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
 		cMesh* ballMesh = new cMesh();
-		ballMesh->meshName = "Sphere_xyz_n_rgba_uv.ply";
-		ballMesh->bIsWireframe = true;
-		ballMesh->bUseObjectDebugColour = true;
-		ballMesh->objectDebugColourRGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-		ballMesh->bDontLight = true;
+		ballMesh->meshName = "billiardball.ply";
+		ballMesh->textureNames[0] = "3.bmp";
+		ballMesh->textureRatios[0] = 1.f;
 		ballMesh->scale = 0.5f;
 		ballMesh->positionXYZ = glm::vec3(-10.f, 0.5f, 10.f);
 		// Give this a friendly name
@@ -228,6 +241,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 
 		m_PhysicsWorld->AddRigidBody(ball->rigidBody);
 		::g_vec_pMeshes.push_back(ballMesh);
+		::ballEntites.push_back(ball);
 	}
 	{
 		cEntity* ball = entityManager.CreateEntity();
@@ -243,11 +257,9 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		ball->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
 		cMesh* ballMesh = new cMesh();
-		ballMesh->meshName = "Sphere_xyz_n_rgba_uv.ply";
-		ballMesh->bIsWireframe = true;
-		ballMesh->bUseObjectDebugColour = true;
-		ballMesh->objectDebugColourRGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-		ballMesh->bDontLight = true;
+		ballMesh->meshName = "billiardball.ply";
+		ballMesh->textureNames[0] = "4.bmp";
+		ballMesh->textureRatios[0] = 1.f;
 		ballMesh->scale = 1.25f;
 		ballMesh->positionXYZ = glm::vec3(0.f, 1.25f, 10.f);
 		// Give this a friendly name
@@ -256,6 +268,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 
 		m_PhysicsWorld->AddRigidBody(ball->rigidBody);
 		::g_vec_pMeshes.push_back(ballMesh);
+		::ballEntites.push_back(ball);
 	}
 	{
 		cEntity* ball = entityManager.CreateEntity();
@@ -271,11 +284,9 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		ball->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
 		cMesh* ballMesh = new cMesh();
-		ballMesh->meshName = "Sphere_xyz_n_rgba_uv.ply";
-		ballMesh->bIsWireframe = true;
-		ballMesh->bUseObjectDebugColour = true;
-		ballMesh->objectDebugColourRGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-		ballMesh->bDontLight = true;
+		ballMesh->meshName = "billiardball.ply";
+		ballMesh->textureNames[0] = "5.bmp";
+		ballMesh->textureRatios[0] = 1.f;
 		ballMesh->scale = 0.75f;
 		ballMesh->positionXYZ = glm::vec3(0.f, 0.75f, -10.f);
 		// Give this a friendly name
@@ -284,6 +295,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 
 		m_PhysicsWorld->AddRigidBody(ball->rigidBody);
 		::g_vec_pMeshes.push_back(ballMesh);
+		::ballEntites.push_back(ball);
 	}
 }
 
@@ -304,4 +316,15 @@ void cGameEngine::MovePlayerObject() {
 	{
 		::g_pPlayerEntity->rigidBody->ApplyForce(glm::normalize(::g_pFlyCamera->getLeft()) * objectMovementSpeed);
 	}
+}
+
+void cGameEngine::SwapPlayer(unsigned int newPlayerNum) {
+	if (newPlayerNum >= ::ballEntites.size()) {
+		// We don't have that number. Ignore.
+		return;
+	}
+	::g_pPlayerEntity->mesh->textureNames[0] = ::player_inactive_texture;
+	::g_pPlayerEntity = ::ballEntites[newPlayerNum];
+	::player_inactive_texture = ::g_pPlayerEntity->mesh->textureNames[0];
+	::g_pPlayerEntity->mesh->textureNames[0] = "cue.bmp";
 }

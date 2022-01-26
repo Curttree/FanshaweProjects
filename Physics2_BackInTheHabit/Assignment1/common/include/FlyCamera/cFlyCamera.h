@@ -150,8 +150,8 @@ private:
 	eState m_CurrentState;
 
 	//For the eventual track camera.
-	float minRadius = 20.f;
-	float maxRadius = 150.f;
+	float minRadius = 50.f;
+	float maxRadius = 100.f;
 
 };
 

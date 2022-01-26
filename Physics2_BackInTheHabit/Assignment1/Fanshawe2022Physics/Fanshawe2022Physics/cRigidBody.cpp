@@ -11,6 +11,7 @@ namespace gdp2022Physics
 		, velocity(desc.velocity)
 		, damping(desc.damping)
 		, restitution(desc.restitution)
+		, friction(desc.friction)
 	{
 		if (isStatic || desc.mass <= 0.0f)
 		{

@@ -235,10 +235,10 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 			float dotProduct = dot( -theLights[index].direction.xyz,  
 									   normalize(norm.xyz) );	// -1 to 1
 
-			dotProduct = max( 0.25f, dotProduct );		// Set lower limit as 25% so shadows are softer.
+			dotProduct = max( 0.2f, dotProduct );		// Set lower limit as 20% so shadows are softer.
 		
 			lightContrib *= dotProduct;		
-			
+			lightContrib *= theLights[index].diffuse.a;
 //			finalObjectColour.rgb += (vertexMaterialColour.rgb * theLights[index].diffuse.rgb * lightContrib); 
 			finalObjectColour.rgb += (vertexMaterialColour.rgb * lightContrib); 
 									 //+ (materialSpecular.rgb * lightSpecularContrib.rgb);

@@ -63,23 +63,43 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
         }
         if (glfwGetKey(pWindow, GLFW_KEY_LEFT) == GLFW_PRESS)
         {
-            ::g_pFlyCamera->RotateAlongTrack(cameraMoveSpeed/10.f);
+            ::g_pFlyCamera->RotateAlongTrack(-cameraMoveSpeed/10.f);
         }
         if (glfwGetKey(pWindow, GLFW_KEY_RIGHT) == GLFW_PRESS)
         {
-            ::g_pFlyCamera->RotateAlongTrack(-cameraMoveSpeed/10.f);
+            ::g_pFlyCamera->RotateAlongTrack(cameraMoveSpeed/10.f);
+        }
+        if (glfwGetKey(pWindow, GLFW_KEY_1) == GLFW_PRESS || glfwGetKey(pWindow, GLFW_KEY_KP_1) == GLFW_PRESS)
+        {
+            ::g_pGameEngine->SwapPlayer(0);
+        }
+        if (glfwGetKey(pWindow, GLFW_KEY_2) == GLFW_PRESS || glfwGetKey(pWindow, GLFW_KEY_KP_2) == GLFW_PRESS)
+        {
+            ::g_pGameEngine->SwapPlayer(1);
+        }
+        if (glfwGetKey(pWindow, GLFW_KEY_3) == GLFW_PRESS || glfwGetKey(pWindow, GLFW_KEY_KP_3) == GLFW_PRESS)
+        {
+            ::g_pGameEngine->SwapPlayer(2);
+        }
+        if (glfwGetKey(pWindow, GLFW_KEY_4) == GLFW_PRESS || glfwGetKey(pWindow, GLFW_KEY_KP_4) == GLFW_PRESS)
+        {
+            ::g_pGameEngine->SwapPlayer(3);
+        }
+        if (glfwGetKey(pWindow, GLFW_KEY_5) == GLFW_PRESS || glfwGetKey(pWindow, GLFW_KEY_KP_5) == GLFW_PRESS)
+        {
+            ::g_pGameEngine->SwapPlayer(4);
         }
 
 
-        std::stringstream strTitle;
-        // std::cout << 
-        glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
-        strTitle << "Camera: "
-            << cameraEye.x << ", "
-            << cameraEye.y << ", "
-            << cameraEye.z; //<< std::endl;
+        //std::stringstream strTitle;
+        //// std::cout << 
+        //glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
+        //strTitle << "Camera: "
+        //    << cameraEye.x << ", "
+        //    << cameraEye.y << ", "
+        //    << cameraEye.z; //<< std::endl;
 
-        ::g_TitleText = strTitle.str();
+        //::g_TitleText = strTitle.str();
 
     }//if ( cGFLWKeyboardModifiers::areAllModsUp(pWindow) )
 

@@ -37,7 +37,10 @@ extern cGameEngine* g_pGameEngine;
 // This got moved into the light manager class
 //extern cLightHelper* g_pTheLightHelper;
 
+//Specific to physics demo. Track the possible players and their textures.
 extern cEntity* g_pPlayerEntity;
+extern std::vector<cEntity*> ballEntites;
+extern std::string player_inactive_texture;
 
 extern cMesh* g_pDebugSphere;	// = NULL;
 extern bool g_bShowDebugShere;	// = true;
