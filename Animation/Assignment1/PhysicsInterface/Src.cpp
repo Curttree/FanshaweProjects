@@ -1,0 +1,7 @@
+#include "Fanshawe2022Physics/interfaces/cRigidBodyDesc.h"
+#include "Fanshawe2022Physics/interfaces/eShapeType.h"
+#include "Fanshawe2022Physics/interfaces/iPhysicsFactory.h"
+#include "Fanshawe2022Physics/interfaces/iPhysicsWorld.h"
+#include "Fanshawe2022Physics/interfaces/iRigidBody.h"
+#include "Fanshawe2022Physics/interfaces/iShape.h"
+#include "Fanshawe2022Physics/interfaces/shapes.h"

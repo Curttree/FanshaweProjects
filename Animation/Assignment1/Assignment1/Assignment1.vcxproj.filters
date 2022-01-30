@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{f7abf76a-489e-4047-bdc9-1e719172b10e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win32">
+      <UniqueIdentifier>{255f361b-b77d-49e0-a843-1dc451e97a29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cameras">
+      <UniqueIdentifier>{b2ac2e56-1c88-4e19-8dca-62d45c9e42e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global">
+      <UniqueIdentifier>{6502a789-1c50-4f43-979b-e8be03645daa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{23f3f941-ba7f-4881-a542-f9a88fefa7fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Models">
+      <UniqueIdentifier>{f5d3c437-520d-4cb3-85f4-dd3507ab08a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Models\VAOManager">
+      <UniqueIdentifier>{0e2ed442-1458-4ce7-91ac-fe521cc3402a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\LightManager">
+      <UniqueIdentifier>{1ffd7400-84cd-41ca-82de-cf20aad959cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\ShaderManager">
+      <UniqueIdentifier>{88a1a820-973e-49e8-a050-870a0e3e8952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\ShaderManager\Shaders">
+      <UniqueIdentifier>{4bcf918b-033b-49cf-8467-2fffa556428b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{bfd51c49-9dea-4d7e-a05f-3074cd08fe12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Textures">
+      <UniqueIdentifier>{c4b0991b-83cb-4ee1-aa0e-dac2d768c9e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Textures\Headers">
+      <UniqueIdentifier>{c60719f3-310f-4292-acf8-f0b10a0a8dcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine">
+      <UniqueIdentifier>{54b1c600-ee5b-4c55-9b6e-1ccb3086ba09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Managers">
+      <UniqueIdentifier>{58e2f6cc-0a14-4f41-ab95-c82f30fbd4e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Managers\Header Files">
+      <UniqueIdentifier>{bfbf95f2-546e-4278-b5e0-e42d4adc3070}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Systems">
+      <UniqueIdentifier>{f0adfba1-5210-4a9b-bb58-5d58d438ae8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Components">
+      <UniqueIdentifier>{78562bbc-556e-457b-a383-80ffa13e0ba5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\common\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Startup.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Graphics\cVAOManager.cpp">
+      <Filter>Graphics\Models\VAOManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Graphics\cShader.cpp">
+      <Filter>Graphics\ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Graphics\cShaderManager.cpp">
+      <Filter>Graphics\ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Graphics\cLightHelper.cpp">
+      <Filter>Graphics\LightManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Graphics\cLightManager.cpp">
+      <Filter>Graphics\LightManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Shutdown.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\FlyCamera\cFlyCamera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="cWinContextMenu.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="globals.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="cMesh.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GLFW_error_callback.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="GLFW_key_callback.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandling.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="cGFLWKeyboardModifiers.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawObject_function.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureMapping\C24BitBMPpixel.cpp">
+      <Filter>Graphics\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureMapping\cBasicTextureManager.cpp">
+      <Filter>Graphics\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureMapping\CTextureFromBMP.cpp">
+      <Filter>Graphics\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureMapping\lodepng.cpp">
+      <Filter>Graphics\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameEngine.cpp">
+      <Filter>GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>GameEngine\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="cEntity.cpp">
+      <Filter>GameEngine\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>GameEngine\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationSystem.cpp">
+      <Filter>GameEngine\Systems</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="globals.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\cVAOManager.h">
+      <Filter>Graphics\Models\VAOManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\sVertex_types.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\GLCommon.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\cShaderManager.h">
+      <Filter>Graphics\ShaderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\cLightHelper.h">
+      <Filter>Graphics\LightManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\cLightManager.h">
+      <Filter>Graphics\LightManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\FlyCamera\iCamera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\FlyCamera\cFlyCamera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="cWinContextMenu.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="cMesh.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureMapping\C24BitBMPpixel.h">
+      <Filter>Graphics\Textures\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureMapping\cBasicTextureManager.h">
+      <Filter>Graphics\Textures\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureMapping\CTextureFromBMP.h">
+      <Filter>Graphics\Textures\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureMapping\lodepng.h">
+      <Filter>Graphics\Textures\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameEngine.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>GameEngine\Managers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>GameEngine\Managers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cEntity.h">
+      <Filter>GameEngine\Managers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationSystem.h">
+      <Filter>GameEngine\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="System.h">
+      <Filter>GameEngine\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>GameEngine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>GameEngine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyFrame.h">
+      <Filter>GameEngine\Components</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\fragShader_01.glsl">
+      <Filter>Graphics\ShaderManager\Shaders</Filter>
+    </None>
+    <None Include="assets\shaders\vertShader_01.glsl">
+      <Filter>Graphics\ShaderManager\Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>
