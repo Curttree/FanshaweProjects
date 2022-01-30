@@ -16,4 +16,5 @@ private:
 	int FindKeyFrameScaleIndex(Animation* animation, float time);
 	int FindKeyFrameRotIndex(Animation* animation, float time);
 	int FindKeyFrameEventIndex(Animation* animation, float old_time, float new_time);
+	void ColourCodeEasingType(cEntity* currentEntityPtr, EasingType type);
 };

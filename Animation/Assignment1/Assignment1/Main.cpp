@@ -167,7 +167,7 @@ int main(void) {
     vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
     vecModelsToLoad.push_back("ground.ply");
-    vecModelsToLoad.push_back("billiardball.ply");
+    vecModelsToLoad.push_back("character_skeleton_minion.ply");
     vecModelsToLoad.push_back("Quad_1_sided_aligned_on_XY_plane.ply");
 
     unsigned int totalVerticesLoaded = 0;
@@ -208,6 +208,7 @@ int main(void) {
     ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("3.bmp", true);
     ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("4.bmp", true);
     ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("5.bmp", true);
+    ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("white.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;

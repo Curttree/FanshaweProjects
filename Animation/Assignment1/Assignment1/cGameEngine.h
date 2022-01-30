@@ -47,5 +47,5 @@ private:
 	float gameSpeed = 1.f;
 	float objectMovementSpeed = 15.f;
 
-	void MovePlayerObject();
+	void HandlePlayerInput();
 };

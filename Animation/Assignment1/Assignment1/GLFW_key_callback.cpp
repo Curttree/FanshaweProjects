@@ -48,7 +48,7 @@
         // Shift is down and maybe other things, too
         bAltDown = true;
     }
-
+    // Consider universally passing value to gameEngine->keys.
     if (key == GLFW_KEY_W && action == GLFW_PRESS) {
         ::g_pGameEngine->keys[GLFW_KEY_W] = true;
     }
@@ -72,6 +72,12 @@
     }
     else if (key == GLFW_KEY_D && action == GLFW_RELEASE) {
         ::g_pGameEngine->keys[GLFW_KEY_D] = false;
+    }
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_SPACE] = true;
+    }
+    if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_R] = true;
     }
 
 

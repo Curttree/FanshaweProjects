@@ -46,7 +46,7 @@ void cGameEngine::Update(float dt)
 		animationSystem.Process(entityManager.GetEntities(), dt * gameSpeed);
 	}
 	entityManager.TimeStep(dt);
-	MovePlayerObject();
+	HandlePlayerInput();
 }
 
 void cGameEngine::SetGameSpeed(float speed) {
@@ -56,13 +56,34 @@ void cGameEngine::ReverseGameSpeed() {
 	gameSpeed *= -1.f;
 }
 
-void cGameEngine::MovePlayerObject() {
-
+void cGameEngine::HandlePlayerInput() {
+	if (keys[GLFW_KEY_SPACE]) {
+		isPaused = !isPaused;
+		keys[GLFW_KEY_SPACE] = false;
+	}
+	if (keys[GLFW_KEY_R]) {
+		ReverseGameSpeed();
+		keys[GLFW_KEY_R] = false;
+	}
 }
 
 void cGameEngine::LoadAnimationAssignmentOneScene() {
 	//Skeleton 
-	cEntity* skel = entityManager.CreateEntity();
+	cEntity* skel = entityManager.CreateEntity(); 
+
+	cMesh* skelMesh = new cMesh();
+	skelMesh->meshName = "character_skeleton_minion.ply";
+	skelMesh->textureNames[0] = "white.bmp";
+	skelMesh->textureRatios[0] = 1.f;
+	skelMesh->scale = 1.0f;
+	skelMesh->positionXYZ = glm::vec3(0.f, 0.f, 0.f); 
+	skelMesh->bUseWholeObjectDiffuseColour = true;
+	skelMesh->bDontLight = true;
+	skelMesh->bUseObjectDebugColour = true;
+	skelMesh->friendlyName = "Skeleton";
+	skel->mesh = skelMesh;
+
+	::g_vec_pMeshes.push_back(skelMesh);
 
 	skel->animation.currentTime = 0;
 	skel->animation.duration = 6.0f;
@@ -71,7 +92,7 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 	skel->animation.repeat = true;
 
 	skel->animation.keyFramePositions.push_back(KeyFramePosition(0, glm::vec3(0.f,0.f,0.f)));
-	skel->animation.keyFramePositions.push_back(KeyFramePosition(6, glm::vec3(20.f, 0.f, 0.f)));
+	skel->animation.keyFramePositions.push_back(KeyFramePosition(6, glm::vec3(20.f, 0.f, 0.f),EasingType::EaseIn));
 
 	skel->animation.keyFrameRotations.push_back(KeyFrameRotation(0, glm::quat(glm::vec3(0.f))));
 

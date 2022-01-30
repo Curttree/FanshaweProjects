@@ -52,8 +52,18 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 			{
 				animationPtr->playing = false;
 			}
-
-
+		}
+		if (animationPtr->currentTime < 0.f && dt * animationPtr->speed < 0.f)
+		{
+			animationPtr->currentTime = 0.f;
+			if (animationPtr->repeat == true)
+			{
+				animationPtr->currentTime = animationPtr->duration;
+			}
+			else
+			{
+				animationPtr->playing = false;
+			}
 		}
 
 		// Find active keyframes
@@ -125,6 +135,7 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 		default:
 			break;
 		}
+		ColourCodeEasingType(currentEntityPtr, keyFramePos2.easingType);
 		currentEntityPtr->position = keyFramePos1.position + (keyFramePos2.position - keyFramePos1.position) * posFraction;
 
 		//printf("KeyFrame(%d -> %.2f -> %d) position: (%.2f, %.2f)\n",
@@ -172,6 +183,8 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 		default:
 			break;
 		}
+		ColourCodeEasingType(currentEntityPtr, keyFrameScale2.easingType);
+
 		currentEntityPtr->scale = keyFrameScale1.scale + (keyFrameScale2.scale - keyFrameScale1.scale) * scaleFraction;
 
 
@@ -215,6 +228,7 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 		default:
 			break;
 		}
+		ColourCodeEasingType(currentEntityPtr, keyFrameRot2.easingType);
 
 		if (keyFrameRot2.InterpolationType == 1)
 		{
@@ -279,4 +293,39 @@ int AnimationSystem::FindKeyFrameEventIndex(Animation* animation, float old_time
 
 	// No events for this frame
 	return -1;
+}
+
+void AnimationSystem::ColourCodeEasingType(cEntity* currentEntityPtr, EasingType type) {
+	if (!currentEntityPtr->mesh) {
+		//No mesh, so nothing to colour.
+		return;
+	}
+
+	switch (type)
+	{
+	case EaseIn:
+		// Red
+		currentEntityPtr->mesh->wholeObjectSpecularRGB = glm::vec3(1.f, 0.f, 0.f);
+		currentEntityPtr->mesh->wholeObjectDiffuseRGBA = glm::vec4(1.f, 0.f, 0.f, 1.f);
+		currentEntityPtr->mesh->objectDebugColourRGBA = glm::vec4(1.f, 0.f, 0.f, 1.f);
+		break;
+	case EaseOut:
+		// Yellow
+		currentEntityPtr->mesh->wholeObjectSpecularRGB = glm::vec3(1.f, 1.f, 0.f);
+		currentEntityPtr->mesh->wholeObjectDiffuseRGBA = glm::vec4(1.f, 1.f, 0.f, 1.f);
+		currentEntityPtr->mesh->objectDebugColourRGBA = glm::vec4(1.f, 1.f, 0.f, 1.f);
+		break;
+	case EaseInOut:
+		// Green
+		currentEntityPtr->mesh->wholeObjectSpecularRGB = glm::vec3(0.f, 1.f, 0.f);
+		currentEntityPtr->mesh->wholeObjectDiffuseRGBA = glm::vec4(0.f, 1.f, 0.f, 1.f);
+		currentEntityPtr->mesh->objectDebugColourRGBA = glm::vec4(0.f, 1.f, 0.f, 1.f);
+		break;
+	default:
+		// No easing...White.
+		currentEntityPtr->mesh->wholeObjectSpecularRGB = glm::vec3(1.f);
+		currentEntityPtr->mesh->wholeObjectDiffuseRGBA = glm::vec4(1.f);
+		currentEntityPtr->mesh->objectDebugColourRGBA = glm::vec4(1.f);
+		break;
+	}
 }
