@@ -33,9 +33,8 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 			else {
 				currEventFrameidx = FindKeyFrameEventIndex(animationPtr, newTime, animationPtr->currentTime);
 			}
-			if (currEventFrameidx >= 0) {
-				//TODO : Callback function.
-				std::cout << animationPtr->keyFrameEvents[currEventFrameidx].message << std::endl;
+			if (currEventFrameidx >= 0 && animationPtr->keyFrameEvents[currEventFrameidx].command) {
+				animationPtr->keyFrameEvents[currEventFrameidx].command->Execute();
 			}
 		}
 
@@ -135,7 +134,6 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 		default:
 			break;
 		}
-		ColourCodeEasingType(currentEntityPtr, keyFramePos2.easingType);
 		currentEntityPtr->position = keyFramePos1.position + (keyFramePos2.position - keyFramePos1.position) * posFraction;
 
 		//printf("KeyFrame(%d -> %.2f -> %d) position: (%.2f, %.2f)\n",
@@ -183,7 +181,6 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 		default:
 			break;
 		}
-		ColourCodeEasingType(currentEntityPtr, keyFrameScale2.easingType);
 
 		currentEntityPtr->scale = keyFrameScale1.scale + (keyFrameScale2.scale - keyFrameScale1.scale) * scaleFraction;
 
@@ -228,7 +225,6 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 		default:
 			break;
 		}
-		ColourCodeEasingType(currentEntityPtr, keyFrameRot2.easingType);
 
 		//if (keyFrameRot2.InterpolationType == 1)
 		//{

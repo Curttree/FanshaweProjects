@@ -69,7 +69,7 @@ int main(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    pWindow = glfwCreateWindow(1200, 640, "Curtis Tremblay - INFO-6022 - Assignment 1", NULL, NULL);
+    pWindow = glfwCreateWindow(1200, 640, "Curtis Tremblay - INFO-6045 - Assignment 1 - PRESS 'C' TO TOGGLE COLOR CODING", NULL, NULL);
 
     if (!pWindow)
     {

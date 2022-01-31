@@ -119,8 +119,14 @@ void main()
 			discard;
 		}
 		else{
-		// Force color to be black as I was noticing some bleedover of the discard colour..
-		pixelColour = vec4(vec3DisSample.x,vec3DisSample.y,vec3DisSample.z,1.f);
+			if ( bUseDebugColour )
+			{
+				// Overwrite the vertex colour with this debug colour
+				pixelColour = objectDebugColour;	
+			}
+			else{
+				pixelColour = vec4(vec3DisSample.x,vec3DisSample.y,vec3DisSample.z,1.f);
+			}
 		}
 		return;
 	}// if (bDiscardTransWindowsOn)

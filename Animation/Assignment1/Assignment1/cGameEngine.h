@@ -38,6 +38,7 @@ public:
 	AnimationSystem animationSystem;
 
 	bool keys[348];
+	bool showColourChanges;
 
 private:
 	//void LoadScene();

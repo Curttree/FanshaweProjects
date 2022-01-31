@@ -170,6 +170,9 @@
     <ClCompile Include="..\common\include\Graphics\cVAOManager.cpp" />
     <ClCompile Include="AnimationSystem.cpp" />
     <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="cCommand_ColourChange.cpp" />
+    <ClCompile Include="cCommand_ConsoleOutput.cpp" />
+    <ClCompile Include="cCommand_PlaySound.cpp" />
     <ClCompile Include="cEntity.cpp" />
     <ClCompile Include="cGameEngine.cpp" />
     <ClCompile Include="cGFLWKeyboardModifiers.cpp" />
@@ -201,6 +204,9 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationSystem.h" />
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="cCommand_ColourChange.h" />
+    <ClInclude Include="cCommand_ConsoleOutput.h" />
+    <ClInclude Include="cCommand_PlaySound.h" />
     <ClInclude Include="cGameEngine.h" />
     <ClInclude Include="cMesh.h" />
     <ClInclude Include="Component.h" />
@@ -208,6 +214,7 @@
     <ClInclude Include="cEntity.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="globals.h" />
+    <ClInclude Include="iCommand.h" />
     <ClInclude Include="KeyFrame.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="TextureMapping\C24BitBMPpixel.h" />

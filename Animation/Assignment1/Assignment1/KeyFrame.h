@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "iCommand.h"
 #include <extern/glm/vec3.hpp>
 #include <extern/glm/gtx/quaternion.hpp>
 
@@ -46,9 +47,9 @@ struct KeyFrameRotation : Component
 
 struct KeyFrameEvent : Component
 {
-	KeyFrameEvent(float time, const std::string& message, const bool& triggered = false)
-		: time(time), message(message), triggered(triggered) {}
+	KeyFrameEvent(float time, iCommand* command, const bool& triggered = false)
+		: time(time), command(command), triggered(triggered) {}
 	float time;
-	std::string message;
+	iCommand* command;
 	bool triggered;
 };

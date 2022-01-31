@@ -11,8 +11,8 @@ public:
 	void StartUp(void);
 	void ShutDown(void);
 
-	//To be replaced with parameterized version.
-	void PlayAudio(glm::vec3 position);
+	//To be replaced with more scalable version.
+	void PlayAudio(int index);
 
 	void TimeStep(float deltaTime);
 private:
@@ -20,6 +20,6 @@ private:
 	FMOD_RESULT _result = FMOD_OK;
 
 	// Right now only set to play one sound. Need to scale up later.
-	FMOD::Sound* _sound;
+	std::vector<FMOD::Sound*> _sounds;
 	FMOD::Channel* _channel;
 };

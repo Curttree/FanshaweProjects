@@ -55,6 +55,12 @@
     <Filter Include="GameEngine\Components">
       <UniqueIdentifier>{78562bbc-556e-457b-a383-80ffa13e0ba5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\Commands">
+      <UniqueIdentifier>{6076b898-c3b1-4ac5-9bb4-2e4816fb135b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Commands\Header Files">
+      <UniqueIdentifier>{ee35ead9-cb6a-45cc-b01b-c2ed74a84a95}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -138,6 +144,15 @@
     <ClCompile Include="AnimationSystem.cpp">
       <Filter>GameEngine\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="cCommand_ConsoleOutput.cpp">
+      <Filter>GameEngine\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="cCommand_ColourChange.cpp">
+      <Filter>GameEngine\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="cCommand_PlaySound.cpp">
+      <Filter>GameEngine\Commands</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -211,6 +226,18 @@
     </ClInclude>
     <ClInclude Include="KeyFrame.h">
       <Filter>GameEngine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="cCommand_ConsoleOutput.h">
+      <Filter>GameEngine\Commands\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iCommand.h">
+      <Filter>GameEngine\Commands\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cCommand_ColourChange.h">
+      <Filter>GameEngine\Commands\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cCommand_PlaySound.h">
+      <Filter>GameEngine\Commands\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
