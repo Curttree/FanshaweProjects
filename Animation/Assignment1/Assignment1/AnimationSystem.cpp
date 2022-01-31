@@ -25,6 +25,7 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 		float newTime = animationPtr->currentTime + dt * animationPtr->speed;
 
 		// Handle Events
+		// Note: We are currently limited to one event per animation/iteration.
 		if (animationPtr->keyFrameEvents.size() > 0) {
 			int currEventFrameidx = -1;
 			if (dt * animationPtr->speed >= 0.f) {

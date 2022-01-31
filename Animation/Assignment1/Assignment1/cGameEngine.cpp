@@ -97,6 +97,10 @@ void cGameEngine::HandlePlayerInput() {
 		showColourChanges = !showColourChanges;
 		keys[GLFW_KEY_C] = false;
 	}
+	if (keys[GLFW_KEY_M]) {
+		isMuted = !isMuted;
+		keys[GLFW_KEY_M] = false;
+	}
 }
 
 void cGameEngine::LoadAnimationAssignmentOneScene() {
@@ -304,10 +308,13 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 	blood->animation.keyFrameEvents.push_back(KeyFrameEvent(20.5, new cCommand_ColourChange(bloodMesh, false, GetEasingColour(EasingType::EaseOut))));		//Position
 
 	// Additional Events
-	bush->animation.keyFrameEvents.push_back(KeyFrameEvent(4, new cCommand_ConsoleOutput("<Rustle, Rustle>")));
-	skel->animation.keyFrameEvents.push_back(KeyFrameEvent(11.5, new cCommand_PlaySound(0)));
-	bush->animation.keyFrameEvents.push_back(KeyFrameEvent(12.5, new cCommand_ConsoleOutput("<Rustle, Rustle>")));
-	bush->animation.keyFrameEvents.push_back(KeyFrameEvent(19, new cCommand_PlaySound(1)));
+	skel->animation.keyFrameEvents.push_back(KeyFrameEvent(0.5, new cCommand_ConsoleOutput("<Loop Start>")));
+	bush->animation.keyFrameEvents.push_back(KeyFrameEvent(4, new cCommand_PlaySound(3)));
+	skel->animation.keyFrameEvents.push_back(KeyFrameEvent(5.5, new cCommand_PlaySound(2)));
+	bush->animation.keyFrameEvents.push_back(KeyFrameEvent(11.2, new cCommand_PlaySound(3)));
+	exc->animation.keyFrameEvents.push_back(KeyFrameEvent(12.2, new cCommand_PlaySound(0)));
+	blood->animation.keyFrameEvents.push_back(KeyFrameEvent(18.5, new cCommand_PlaySound(1)));
+	skel->animation.keyFrameEvents.push_back(KeyFrameEvent(29.5, new cCommand_ConsoleOutput("<Loop End>")));
 }
 
 void cGameEngine::SwapPlayer(unsigned int newPlayerNum) {

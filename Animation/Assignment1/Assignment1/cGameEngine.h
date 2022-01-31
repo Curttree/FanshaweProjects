@@ -39,6 +39,7 @@ public:
 
 	bool keys[348];
 	bool showColourChanges;
+	bool isMuted;
 
 private:
 	//void LoadScene();
