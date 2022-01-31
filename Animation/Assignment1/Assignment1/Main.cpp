@@ -99,7 +99,7 @@ int main(void) {
     ::g_StartUp(pWindow);
 
     //TODO: Move from hard coded to dynamic camera placement.
-    ::g_pFlyCamera->setEye(glm::vec3(0.f, 5.f, -75.f));
+    ::g_pFlyCamera->setEye(glm::vec3(0.f, 5.f, -25.f));
     //::g_pFlyCamera->setAt(glm::vec3(0.f,0.f,1.f));
 
     cShaderManager::cShader vertShader;
@@ -121,29 +121,38 @@ int main(void) {
 //					// 2 = directional light
 //    ::g_pTheLights->theLights[0].param1.x = 1.0f;    // Spot light
     ::g_pGameEngine->g_pTheLights->theLights[0].param1.x = 2.0f;    // Directional light
-    ::g_pGameEngine->g_pTheLights->theLights[0].direction = glm::vec4(-0.5735f, -0.5735f, -0.1147f, 1.f);
-    ::g_pGameEngine->g_pTheLights->theLights[0].diffuse = glm::vec4(0.9922f, 0.9843f, 0.9775f, 0.85f);
+    ::g_pGameEngine->g_pTheLights->theLights[0].direction = glm::vec4(-0.1f, -0.4f, -0.3f, 1.f);
+    ::g_pGameEngine->g_pTheLights->theLights[0].diffuse = glm::vec4(0.9922f, 0.9843f, 0.9775f, 1.0f);
     ::g_pGameEngine->g_pTheLights->theLights[0].param1.y = 15.0f;   // Inner
     ::g_pGameEngine->g_pTheLights->theLights[0].param1.z = 30.0f;   // Outer
     ::g_pGameEngine->g_pTheLights->theLights[0].atten.y = 0.000001f;
     ::g_pGameEngine->g_pTheLights->theLights[0].atten.z = 0.00000001f;
-    ::g_pGameEngine->g_pTheLights->TurnOnLight(0);  // Or this!
+    ::g_pGameEngine->g_pTheLights->TurnOnLight(0);  // Or this!    
 
-    ::g_pGameEngine->g_pTheLights->theLights[1].position = glm::vec4(40.f,0.f,0.f, 1.f);
-    ::g_pGameEngine->g_pTheLights->theLights[1].diffuse = glm::vec4(0.9922f, 0.9843f, 0.9775f, 0.1f);
-    ::g_pGameEngine->g_pTheLights->theLights[1].specular = glm::vec4(0.9922f, 0.9843f, 0.9775f, 0.1f);
-    ::g_pGameEngine->g_pTheLights->theLights[1].atten = glm::vec4(1.f, 0.5f, 0.01f, 10.f);
-    ::g_pGameEngine->g_pTheLights->theLights[1].param1.x = 0.f;    // point light
-    ::g_pGameEngine->g_pTheLights->TurnOnLight(1);
+    ::g_pGameEngine->g_pTheLights->theLights[1].param1.x = 2.0f;    // Directional light
+    ::g_pGameEngine->g_pTheLights->theLights[1].direction = glm::vec4(0.1f, -0.4f, 0.3f, 1.f);
+    ::g_pGameEngine->g_pTheLights->theLights[1].diffuse = glm::vec4(0.9922f, 0.9843f, 0.9775f, 0.25f);
+    ::g_pGameEngine->g_pTheLights->theLights[1].param1.y = 15.0f;   // Inner
+    ::g_pGameEngine->g_pTheLights->theLights[1].param1.z = 30.0f;   // Outer
+    ::g_pGameEngine->g_pTheLights->theLights[1].atten.y = 0.000001f;
+    ::g_pGameEngine->g_pTheLights->theLights[1].atten.z = 0.00000001f;
+    ::g_pGameEngine->g_pTheLights->TurnOnLight(1);  // Or this!
 
-    ::g_pGameEngine->g_pTheLights->theLights[2].param1.x = 2.0f;    // Directional light
-    ::g_pGameEngine->g_pTheLights->theLights[2].direction = glm::vec4(0.5735f, -0.5735f, -0.1147f, 1.f);
-    ::g_pGameEngine->g_pTheLights->theLights[2].diffuse = glm::vec4(0.9922f, 0.9843f, 0.9775f, 0.05f);
-    ::g_pGameEngine->g_pTheLights->theLights[2].param1.y = 15.0f;   // Inner
-    ::g_pGameEngine->g_pTheLights->theLights[2].param1.z = 30.0f;   // Outer
-    ::g_pGameEngine->g_pTheLights->theLights[2].atten.y = 0.000001f;
-    ::g_pGameEngine->g_pTheLights->theLights[2].atten.z = 0.00000001f;
-    ::g_pGameEngine->g_pTheLights->TurnOnLight(2);
+    //::g_pGameEngine->g_pTheLights->theLights[1].position = glm::vec4(40.f,0.f,0.f, 1.f);
+    //::g_pGameEngine->g_pTheLights->theLights[1].diffuse = glm::vec4(0.9922f, 0.9843f, 0.9775f, 0.1f);
+    //::g_pGameEngine->g_pTheLights->theLights[1].specular = glm::vec4(0.9922f, 0.9843f, 0.9775f, 0.1f);
+    //::g_pGameEngine->g_pTheLights->theLights[1].atten = glm::vec4(1.f, 0.5f, 0.01f, 10.f);
+    //::g_pGameEngine->g_pTheLights->theLights[1].param1.x = 0.f;    // point light
+    //::g_pGameEngine->g_pTheLights->TurnOnLight(1);
+
+    //::g_pGameEngine->g_pTheLights->theLights[2].param1.x = 2.0f;    // Directional light
+    //::g_pGameEngine->g_pTheLights->theLights[2].direction = glm::vec4(0.5735f, -0.5735f, -0.1147f, 1.f);
+    //::g_pGameEngine->g_pTheLights->theLights[2].diffuse = glm::vec4(0.9922f, 0.9843f, 0.9775f, 0.05f);
+    //::g_pGameEngine->g_pTheLights->theLights[2].param1.y = 15.0f;   // Inner
+    //::g_pGameEngine->g_pTheLights->theLights[2].param1.z = 30.0f;   // Outer
+    //::g_pGameEngine->g_pTheLights->theLights[2].atten.y = 0.000001f;
+    //::g_pGameEngine->g_pTheLights->theLights[2].atten.z = 0.00000001f;
+    //::g_pGameEngine->g_pTheLights->TurnOnLight(2);
 
     // Get the uniform locations of the light shader values
     ::g_pGameEngine->g_pTheLights->SetUpUniformLocations(program);
@@ -169,6 +178,7 @@ int main(void) {
     vecModelsToLoad.push_back("ground.ply");
     vecModelsToLoad.push_back("character_skeleton_minion.ply");
     vecModelsToLoad.push_back("Quad_1_sided_aligned_on_XY_plane.ply");
+    vecModelsToLoad.push_back("Buxus_sphere_small.ply"); 
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -200,15 +210,10 @@ int main(void) {
     ::g_pGameEngine->g_pTextureManager->SetBasePath("assets/textures");
 
     ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("BrightColouredUVMap.bmp", true);
-    ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("felt.bmp", true);
-    ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("wood.bmp", true);
-    ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("cue.bmp", true);
-    ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("1.bmp", true);
-    ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("2.bmp", true);
-    ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("3.bmp", true);
-    ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("4.bmp", true);
-    ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("5.bmp", true);
     ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("white.bmp", true);
+    ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("leaf.bmp", true);
+    ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("exclaim.bmp", true);
+    ::g_pGameEngine->g_pTextureManager->Create2DTextureFromBMPFile("blood.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;

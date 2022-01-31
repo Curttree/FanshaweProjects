@@ -230,18 +230,19 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 		}
 		ColourCodeEasingType(currentEntityPtr, keyFrameRot2.easingType);
 
-		if (keyFrameRot2.InterpolationType == 1)
-		{
-			currentEntityPtr->rotation = glm::lerp(keyFrameRot1.rotation, keyFrameRot2.rotation, rotationFraction);
-		}
-		if (keyFrameRot2.InterpolationType == 2)
-		{
-			currentEntityPtr->rotation = glm::slerp(keyFrameRot1.rotation, keyFrameRot2.rotation, rotationFraction);
-		}
-		else
-		{
-			currentEntityPtr->rotation = keyFrameRot1.rotation + (keyFrameRot2.rotation - keyFrameRot1.rotation) * rotationFraction;
-		}
+		//if (keyFrameRot2.InterpolationType == 1)
+		//{
+		//	currentEntityPtr->rotation = glm::lerp(keyFrameRot1.rotation, keyFrameRot2.rotation, rotationFraction);
+		//}
+		//if (keyFrameRot2.InterpolationType == 2)
+		//{
+		//	currentEntityPtr->rotation = glm::slerp(keyFrameRot1.rotation, keyFrameRot2.rotation, rotationFraction);
+		//}
+		//else
+		//{
+		//	currentEntityPtr->rotation = keyFrameRot1.rotation + (keyFrameRot2.rotation - keyFrameRot1.rotation) * rotationFraction;
+		//}
+		currentEntityPtr->rotation = glm::slerp(keyFrameRot1.rotation, keyFrameRot2.rotation, rotationFraction);
 	}
 }
 
@@ -323,9 +324,9 @@ void AnimationSystem::ColourCodeEasingType(cEntity* currentEntityPtr, EasingType
 		break;
 	default:
 		// No easing...White.
-		currentEntityPtr->mesh->wholeObjectSpecularRGB = glm::vec3(1.f);
-		currentEntityPtr->mesh->wholeObjectDiffuseRGBA = glm::vec4(1.f);
-		currentEntityPtr->mesh->objectDebugColourRGBA = glm::vec4(1.f);
+		//currentEntityPtr->mesh->wholeObjectSpecularRGB = glm::vec3(1.f);
+		//currentEntityPtr->mesh->wholeObjectDiffuseRGBA = glm::vec4(1.f);
+		//currentEntityPtr->mesh->objectDebugColourRGBA = glm::vec4(1.f);
 		break;
 	}
 }

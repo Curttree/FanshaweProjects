@@ -107,11 +107,11 @@ void main()
 	if (bDiscardTransparencyWindowsOn)
 	{
 		// Eventually I may want to make this configurable.
-		vec3 discardColour = vec3(0.f,1.f,0.f);
+		vec3 discardColour = vec3(0.f,0.f,0.f);
 		vec3 vec3DisSample = texture( discardTexture, fUVx2.xy ).rgb;
 		// Take average of this RGB sample
 		//
-		if (abs(discardColour.r - vec3DisSample.r) < 0.75f &&  abs(discardColour.g - vec3DisSample.g) < 0.75f && abs(discardColour.b - vec3DisSample.b) < 0.75f)
+		if (abs(discardColour.r - vec3DisSample.r) < 0.15f &&  abs(discardColour.g - vec3DisSample.g) < 0.15f && abs(discardColour.b - vec3DisSample.b) < 0.15f)
 		{	// "close enough"
 		
 			// DON'T even draw the pixel here
@@ -120,7 +120,7 @@ void main()
 		}
 		else{
 		// Force color to be black as I was noticing some bleedover of the discard colour..
-		//pixelColour = vec4(vec3DisSample.x,vec3DisSample.y,vec3DisSample.z,1.f);
+		pixelColour = vec4(vec3DisSample.x,vec3DisSample.y,vec3DisSample.z,1.f);
 		}
 		return;
 	}// if (bDiscardTransWindowsOn)
