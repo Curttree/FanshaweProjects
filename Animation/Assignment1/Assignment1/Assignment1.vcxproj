@@ -168,6 +168,7 @@
     <ClCompile Include="..\common\include\Graphics\cShader.cpp" />
     <ClCompile Include="..\common\include\Graphics\cShaderManager.cpp" />
     <ClCompile Include="..\common\include\Graphics\cVAOManager.cpp" />
+    <ClCompile Include="AnimationSequence.cpp" />
     <ClCompile Include="AnimationSystem.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="cCommand_ColourChange.cpp" />

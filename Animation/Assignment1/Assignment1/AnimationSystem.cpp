@@ -7,69 +7,74 @@
 
 void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 {
-	Animation* animationPtr;
+	Animation* animPtr;
+	AnimationSequence* animSequencePtr;
 	cEntity* currentEntityPtr;
 
 	for (int i = 0; i < entities.size(); ++i)
 	{
 		currentEntityPtr = entities[i];
+		animSequencePtr = &currentEntityPtr->animations;
+		animPtr = animSequencePtr->GetCurrent();
 
-		animationPtr = &currentEntityPtr->animation;
+		//animPtr = &currentEntityPtr->animation;
 
-		if (animationPtr == 0)
+		if (animPtr == 0)
 			continue;
 
-		if (!animationPtr->playing)
+		if (!animPtr->playing)
 			continue;
 
-		float newTime = animationPtr->currentTime + dt * animationPtr->speed;
+		float newTime = animPtr->currentTime + dt * animPtr->speed;
 
 		// Handle Events
 		// Note: We are currently limited to one event per animation/iteration.
-		if (animationPtr->keyFrameEvents.size() > 0) {
+		if (animPtr->keyFrameEvents.size() > 0) {
 			int currEventFrameidx = -1;
-			if (dt * animationPtr->speed >= 0.f) {
-				currEventFrameidx = FindKeyFrameEventIndex(animationPtr, animationPtr->currentTime, newTime);
+			if (dt * animPtr->speed >= 0.f) {
+				currEventFrameidx = FindKeyFrameEventIndex(animPtr, animPtr->currentTime, newTime);
 			}
 			else {
-				currEventFrameidx = FindKeyFrameEventIndex(animationPtr, newTime, animationPtr->currentTime);
+				currEventFrameidx = FindKeyFrameEventIndex(animPtr, newTime, animPtr->currentTime);
 			}
-			if (currEventFrameidx >= 0 && animationPtr->keyFrameEvents[currEventFrameidx].command) {
-				animationPtr->keyFrameEvents[currEventFrameidx].command->Execute();
+			if (currEventFrameidx >= 0 && animPtr->keyFrameEvents[currEventFrameidx].command) {
+				animPtr->keyFrameEvents[currEventFrameidx].command->Execute();
 			}
 		}
 
-		animationPtr->currentTime = newTime;
+		animPtr->currentTime = newTime;
 
-		if (animationPtr->currentTime > animationPtr->duration)
+		if (animPtr->currentTime > animPtr->duration)
 		{
-			animationPtr->currentTime = animationPtr->duration;
-			if (animationPtr->repeat == true)
+			animPtr->currentTime = animPtr->duration;
+
+			if (animPtr->repeat == true)
 			{
-				animationPtr->currentTime = 0;
+				animPtr->currentTime = 0;
 			}
 			else
 			{
-				animationPtr->playing = false;
+				animPtr = animSequencePtr->NextAnimation();
+				animPtr->playing = false;
 			}
 		}
-		if (animationPtr->currentTime < 0.f && dt * animationPtr->speed < 0.f)
+		if (animPtr->currentTime < 0.f && dt * animPtr->speed < 0.f)
 		{
-			animationPtr->currentTime = 0.f;
-			if (animationPtr->repeat == true)
+			animPtr->currentTime = 0.f;
+			if (animPtr->repeat == true)
 			{
-				animationPtr->currentTime = animationPtr->duration;
+				animPtr->currentTime = animPtr->duration;
 			}
 			else
 			{
-				animationPtr->playing = false;
+				animPtr->playing = false;
 			}
 		}
 
 		// Find active keyframes
-		if (animationPtr->keyFramePositions.size() == 0
-			|| animationPtr->keyFrameScales.size() == 0
-			|| animationPtr->keyFrameRotations.size() == 0)
+		if (animPtr->keyFramePositions.size() == 0
+			|| animPtr->keyFrameScales.size() == 0
+			|| animPtr->keyFrameRotations.size() == 0)
 		{
 			printf("Contains an empty keyframe vector");
 			continue;
@@ -81,24 +86,24 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 		// 1, and 2, then we must find a point between the two 
 		// positions
 		// 
-		//KeyFrame keyframe = FindCurrentKeyFrame(animationPtr, animationPtr->currentTime);
+		//KeyFrame keyframe = FindCurrentKeyFrame(animPtr, animPtr->currentTime);
 		//positionPtr->value = keyframe.position;
 
 		// If there is only 1 KeyFrame in the animation, only use that
-		if (animationPtr->keyFramePositions.size() == 1)
+		if (animPtr->keyFramePositions.size() == 1)
 		{
 			// We only need to set the position of the only KeyFrame.
-			currentEntityPtr->position = animationPtr->keyFramePositions[0].position;
+			currentEntityPtr->position = animPtr->keyFramePositions[0].position;
 			return;
 		}
 
-		int currPosFrameidx = FindKeyFramePositionIndex(animationPtr, animationPtr->currentTime);
+		int currPosFrameidx = FindKeyFramePositionIndex(animPtr, animPtr->currentTime);
 
 		// If we are at the last KeyFrame, only use that KeyFrame.
-		if (currPosFrameidx == animationPtr->keyFramePositions.size() - 1)
+		if (currPosFrameidx == animPtr->keyFramePositions.size() - 1)
 		{
 			// We only need to set the position of the last KeyFrame.
-			currentEntityPtr->position = animationPtr->keyFramePositions[currPosFrameidx].position;
+			currentEntityPtr->position = animPtr->keyFramePositions[currPosFrameidx].position;
 			return;
 		}
 
@@ -107,8 +112,8 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 		// Find a position between the current KeyFrame, and the next KeyFrame
 		int nextPosFrameidx = currPosFrameidx + 1;
 
-		const KeyFramePosition& keyFramePos1 = animationPtr->keyFramePositions[currPosFrameidx];
-		const KeyFramePosition& keyFramePos2 = animationPtr->keyFramePositions[nextPosFrameidx];
+		const KeyFramePosition& keyFramePos1 = animPtr->keyFramePositions[currPosFrameidx];
+		const KeyFramePosition& keyFramePos2 = animPtr->keyFramePositions[nextPosFrameidx];
 
 		// Look into glm's easing functions
 		// 1. Ease-In
@@ -119,7 +124,7 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 
 		// As the animation time 
 		// How would I change this to implement glm::sineEaseIn(x)?
-		float posFraction = (animationPtr->currentTime - keyFramePos1.time) / (keyFramePos2.time - keyFramePos1.time);
+		float posFraction = (animPtr->currentTime - keyFramePos1.time) / (keyFramePos2.time - keyFramePos1.time);
 
 		switch (keyFramePos2.easingType)
 		{
@@ -140,33 +145,33 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 		//printf("KeyFrame(%d -> %.2f -> %d) position: (%.2f, %.2f)\n",
 		//	CurrentKeyFrameIndex, fraction, NextKeyFrameIndex, positionPtr->value.x, positionPtr->value.y);
 
-		//positionPtr->value = (coords1 + coords2) / 2.f * animationPtr->currentTime;
+		//positionPtr->value = (coords1 + coords2) / 2.f * animPtr->currentTime;
 
 		/* UPDATE SCALES*/
 
-		if (animationPtr->keyFrameScales.size() == 1)
+		if (animPtr->keyFrameScales.size() == 1)
 		{
 			// We only need to set the position of the only KeyFrame.
-			currentEntityPtr->scale = animationPtr->keyFrameScales[0].scale;
+			currentEntityPtr->scale = animPtr->keyFrameScales[0].scale;
 			return;
 		}
 
-		int currScaleFrameidx = FindKeyFrameScaleIndex(animationPtr, animationPtr->currentTime);
+		int currScaleFrameidx = FindKeyFrameScaleIndex(animPtr, animPtr->currentTime);
 
 		// If we are at the last KeyFrame, only use that KeyFrame.
-		if (currScaleFrameidx == animationPtr->keyFrameScales.size() - 1)
+		if (currScaleFrameidx == animPtr->keyFrameScales.size() - 1)
 		{
 			// We only need to set the position of the last KeyFrame.
-			currentEntityPtr->scale = animationPtr->keyFrameScales[currScaleFrameidx].scale;
+			currentEntityPtr->scale = animPtr->keyFrameScales[currScaleFrameidx].scale;
 			return;
 		}
 
 		int nextScaleFrameidx = currScaleFrameidx + 1;
 
-		const KeyFrameScale& keyFrameScale1 = animationPtr->keyFrameScales[currScaleFrameidx];
-		const KeyFrameScale& keyFrameScale2 = animationPtr->keyFrameScales[nextScaleFrameidx];
+		const KeyFrameScale& keyFrameScale1 = animPtr->keyFrameScales[currScaleFrameidx];
+		const KeyFrameScale& keyFrameScale2 = animPtr->keyFrameScales[nextScaleFrameidx];
 
-		float scaleFraction = (animationPtr->currentTime - keyFrameScale1.time) / (keyFrameScale2.time - keyFrameScale1.time);
+		float scaleFraction = (animPtr->currentTime - keyFrameScale1.time) / (keyFrameScale2.time - keyFrameScale1.time);
 
 		switch (keyFrameScale2.easingType)
 		{
@@ -188,29 +193,29 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 
 		/* UPDATE ROTATIONS*/
 
-		if (animationPtr->keyFrameRotations.size() == 1)
+		if (animPtr->keyFrameRotations.size() == 1)
 		{
 			// We only need to set the position of the only KeyFrame.
-			currentEntityPtr->rotation = animationPtr->keyFrameRotations[0].rotation;
+			currentEntityPtr->rotation = animPtr->keyFrameRotations[0].rotation;
 			return;
 		}
 
-		int currRotFrameidx = FindKeyFrameRotIndex(animationPtr, animationPtr->currentTime);
+		int currRotFrameidx = FindKeyFrameRotIndex(animPtr, animPtr->currentTime);
 
 		// If we are at the last KeyFrame, only use that KeyFrame.
-		if (currRotFrameidx == animationPtr->keyFrameRotations.size() - 1)
+		if (currRotFrameidx == animPtr->keyFrameRotations.size() - 1)
 		{
 			// We only need to set the position of the last KeyFrame.
-			currentEntityPtr->rotation = animationPtr->keyFrameRotations[currRotFrameidx].rotation;
+			currentEntityPtr->rotation = animPtr->keyFrameRotations[currRotFrameidx].rotation;
 			return;
 		}
 
 		int nextRotFrameidx = currRotFrameidx + 1;
 
-		const KeyFrameRotation& keyFrameRot1 = animationPtr->keyFrameRotations[currRotFrameidx];
-		const KeyFrameRotation& keyFrameRot2 = animationPtr->keyFrameRotations[nextRotFrameidx];
+		const KeyFrameRotation& keyFrameRot1 = animPtr->keyFrameRotations[currRotFrameidx];
+		const KeyFrameRotation& keyFrameRot2 = animPtr->keyFrameRotations[nextRotFrameidx];
 
-		float rotationFraction = (animationPtr->currentTime - keyFrameRot1.time) / (keyFrameRot2.time - keyFrameRot1.time);
+		float rotationFraction = (animPtr->currentTime - keyFrameRot1.time) / (keyFrameRot2.time - keyFrameRot1.time);
 
 		switch (keyFrameRot2.easingType)
 		{

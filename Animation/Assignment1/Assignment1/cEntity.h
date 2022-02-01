@@ -5,6 +5,7 @@
 
 #include "cMesh.h"
 #include "Animation.h"
+#include "AnimationSequence.h"
 
 class cEntity {
 public:
@@ -21,5 +22,7 @@ public:
 	float scale;	// Only use uniform scale for now until there is a need for non-uniform scaling.
 
 	Animation animation;
+
+	AnimationSequence animations;
 
 };
