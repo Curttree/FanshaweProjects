@@ -202,6 +202,7 @@
     <ClInclude Include="..\common\include\Graphics\GLCommon.h" />
     <ClInclude Include="..\common\include\Graphics\sVertex_types.h" />
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationSequence.h" />
     <ClInclude Include="AnimationSystem.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="cCommand_ColourChange.h" />

@@ -239,6 +239,9 @@
     <ClInclude Include="cCommand_PlaySound.h">
       <Filter>GameEngine\Commands\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationSequence.h">
+      <Filter>GameEngine\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\fragShader_01.glsl">
