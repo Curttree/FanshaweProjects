@@ -69,7 +69,7 @@ int main(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    pWindow = glfwCreateWindow(1200, 640, "Curtis Tremblay - INFO-6045 - Assignment 1 - PRESS 'C' TO TOGGLE COLOR CODING", NULL, NULL);
+    pWindow = glfwCreateWindow(1200, 640, "", NULL, NULL);
 
     if (!pWindow)
     {
@@ -245,10 +245,11 @@ int main(void) {
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
     double previousTime = glfwGetTime();
 
-
     ::g_pGameEngine->LoadAnimationAssignmentOneScene();
 
     while (!glfwWindowShouldClose(pWindow)) {
+
+        ::g_TitleText = "Curtis Tremblay - INFO-6045 - Assignment 1 | PRESS 'C' TO TOGGLE COLOR CODING | ACTIVE ANIMATION SEQUENCE: " + ::g_pGameEngine->GetActiveSequenceName();
         float ratio;
         int width, height;
         glm::mat4 matModel;             // used to be "m"; Sometimes it's called "world"
@@ -275,7 +276,7 @@ int main(void) {
         // *******************************************************
 
         // Update the title text
-        //glfwSetWindowTitle(pWindow, ::g_TitleText.c_str());
+        glfwSetWindowTitle(pWindow, ::g_TitleText.c_str());
 
 
         // Copy the light information into the shader to draw the scene

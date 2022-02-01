@@ -20,10 +20,12 @@ public:
 	void Render();
 
 	void LoadAnimationAssignmentOneScene();
-	void SwapPlayer(unsigned int newPlayerNum);
 
 	void SetGameSpeed(float speed);
 	void ReverseGameSpeed();
+
+	void CycleActiveSequence(int offset = 1);
+	std::string GetActiveSequenceName();
 
 	EntityManager entityManager;
 	AudioManager audioManager;
@@ -45,9 +47,10 @@ private:
 	//void LoadScene();
 
 	bool isRunning;
-	bool isPaused;
 	float gameSpeed = 1.f;
 	float objectMovementSpeed = 15.f;
+
+	int activeSequenceIndex;
 
 	void HandlePlayerInput();
 };

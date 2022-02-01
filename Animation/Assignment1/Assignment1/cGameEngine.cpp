@@ -47,9 +47,7 @@ void cGameEngine::Destroy(void)
 
 void cGameEngine::Update(float dt)
 {
-	if (!isPaused) {
-		animationSystem.Process(entityManager.GetEntities(), dt * gameSpeed);
-	}
+	animationSystem.Process(entityManager.GetEntities(), dt * gameSpeed);
 	entityManager.TimeStep(dt);
 	HandlePlayerInput();
 }
@@ -86,7 +84,8 @@ glm::vec3 GetEasingColour(EasingType type) {
 
 void cGameEngine::HandlePlayerInput() {
 	if (keys[GLFW_KEY_SPACE]) {
-		isPaused = !isPaused;
+		bool newVal = !entityManager.GetEntities()[activeSequenceIndex]->animations.playing;
+		entityManager.GetEntities()[activeSequenceIndex]->animations.playing = newVal;
 		keys[GLFW_KEY_SPACE] = false;
 	}
 	if (keys[GLFW_KEY_R]) {
@@ -101,9 +100,18 @@ void cGameEngine::HandlePlayerInput() {
 		isMuted = !isMuted;
 		keys[GLFW_KEY_M] = false;
 	}
+	if (keys[GLFW_KEY_LEFT]) {
+		CycleActiveSequence(-1);
+		keys[GLFW_KEY_LEFT] = false;
+	}
+	if (keys[GLFW_KEY_RIGHT]) {
+		CycleActiveSequence();
+		keys[GLFW_KEY_RIGHT] = false;
+	}
 }
 
 void cGameEngine::LoadAnimationAssignmentOneScene() {
+
 	//Skeleton 
 	cEntity* skel = entityManager.CreateEntity(); 
 
@@ -121,8 +129,6 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 
 	::g_vec_pMeshes.push_back(skelMesh);
 
-	skel->animations.currentTime = 0;
-	skel->animations.duration = 30.0f;
 	skel->animations.playing = true;
 	skel->animations.speed = 1.f;
 	skel->animations.repeat = true;
@@ -130,28 +136,28 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 	Animation skelEntranceAnimation;
 	skelEntranceAnimation.currentTime = 0;
 	skelEntranceAnimation.duration = 6.0f;
-	skelEntranceAnimation.playing = true;
+	skelEntranceAnimation.shouldPlay = true;
 	skelEntranceAnimation.speed = 1.f;
 	skelEntranceAnimation.repeat = false;
 
 	Animation skelInvestigateAnimation;
 	skelInvestigateAnimation.currentTime = 0;
 	skelInvestigateAnimation.duration = 6.0f;
-	skelInvestigateAnimation.playing = true;
+	skelInvestigateAnimation.shouldPlay = true;
 	skelInvestigateAnimation.speed = 1.f;
 	skelInvestigateAnimation.repeat = false;
 
 	Animation skelScaredAnimation;
 	skelScaredAnimation.currentTime = 0;
 	skelScaredAnimation.duration = 1.0f;
-	skelScaredAnimation.playing = true;
+	skelScaredAnimation.shouldPlay = true;
 	skelScaredAnimation.speed = 1.f;
 	skelScaredAnimation.repeat = false;
 
 	Animation skelRunAwayAnimation;
 	skelRunAwayAnimation.currentTime = 0;
 	skelRunAwayAnimation.duration = 17.0f;
-	skelRunAwayAnimation.playing = true;
+	skelRunAwayAnimation.shouldPlay = true;
 	skelRunAwayAnimation.speed = 1.f;
 	skelRunAwayAnimation.repeat = false;
 
@@ -249,8 +255,6 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 
 	::g_vec_pMeshes.push_back(bushMesh);
 
-	bush->animations.currentTime = 0;
-	bush->animations.duration = 30.0f;
 	bush->animations.playing = true;
 	bush->animations.speed = 1.f;
 	bush->animations.repeat = true;
@@ -258,14 +262,14 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 	Animation bushAnimation;
 	bushAnimation.currentTime = 0;
 	bushAnimation.duration = 6.0f;
-	bushAnimation.playing = true;
+	bushAnimation.shouldPlay = true;
 	bushAnimation.speed = 1.f;
 	bushAnimation.repeat = false;
 
 	Animation bushAnimationEase;
 	bushAnimationEase.currentTime = 0;
 	bushAnimationEase.duration = 24.0f;
-	bushAnimationEase.playing = true;
+	bushAnimationEase.shouldPlay = true;
 	bushAnimationEase.speed = 1.f;
 	bushAnimationEase.repeat = false;
 
@@ -326,8 +330,6 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 
 	::g_vec_pMeshes.push_back(excMesh);
 
-	exc->animations.currentTime = 0;
-	exc->animations.duration = 30.0f;
 	exc->animations.playing = true;
 	exc->animations.speed = 1.f;
 	exc->animations.repeat = true;
@@ -335,7 +337,7 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 	Animation excAnimation;
 	excAnimation.currentTime = 0;
 	excAnimation.duration = 30.0f;
-	excAnimation.playing = true;
+	excAnimation.shouldPlay = true;
 	excAnimation.speed = 1.f;
 	excAnimation.repeat = true;
 
@@ -378,8 +380,6 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 
 	::g_vec_pMeshes.push_back(bloodMesh);
 
-	blood->animations.currentTime = 0;
-	blood->animations.duration = 30.0f;
 	blood->animations.playing = true;
 	blood->animations.speed = 1.f;
 	blood->animations.repeat = true;
@@ -387,7 +387,7 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 	Animation bloodAnimation;
 	bloodAnimation.currentTime = 0;
 	bloodAnimation.duration = 30.0f;
-	bloodAnimation.playing = true;
+	bloodAnimation.shouldPlay = true;
 	bloodAnimation.speed = 1.f;
 	bloodAnimation.repeat = true;
 
@@ -412,14 +412,17 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 	blood->animations.animations.push_back(bloodAnimation);
 }
 
-void cGameEngine::SwapPlayer(unsigned int newPlayerNum) {
-	if (newPlayerNum >= ::ballEntites.size()) {
-		// We don't have that number. Ignore.
-		return;
+void cGameEngine::CycleActiveSequence(int offset) {
+	activeSequenceIndex+= offset;
+	if (activeSequenceIndex >= entityManager.GetEntities().size()) {
+		activeSequenceIndex = 0;
 	}
-	::g_pPlayerEntity->mesh->textureNames[0] = ::player_inactive_texture;
-	::g_pPlayerEntity = ::ballEntites[newPlayerNum];
-	::player_inactive_texture = ::g_pPlayerEntity->mesh->textureNames[0];
-	::g_pPlayerEntity->mesh->textureNames[0] = "cue.bmp";
+	else if (activeSequenceIndex < 0) {
+		activeSequenceIndex = entityManager.GetEntities().size()-1;
+	}
 }
 
+std::string cGameEngine::GetActiveSequenceName() {
+	// Right now I am using the mesh name. Consider moving the name to the sequence if we wish to break the dependency between the mesh and animation sequence.
+	return entityManager.GetEntities()[activeSequenceIndex]->mesh->friendlyName;
+}

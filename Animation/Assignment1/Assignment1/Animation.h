@@ -7,7 +7,7 @@
 
 struct Animation : Component
 {
-	bool playing;
+	bool shouldPlay;
 	float duration;
 	float currentTime;
 	float speed;

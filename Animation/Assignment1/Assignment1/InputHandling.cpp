@@ -218,7 +218,6 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
         //    << ::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].atten.z << "  "        // Quadratic
         //    << (::g_pGameEngine->g_pTheLights->theLights[::g_selectedLight].param2.x > 0.0f ? " is on" : " is off");
         ////<< std::endl;
-        //::g_TitleText = strTitle.str();
 
 
     }//if ( cGFLWKeyboardModifiers::...

@@ -20,8 +20,14 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 		if (animPtr == 0)
 			continue;
 
-		if (!animPtr->playing)
+		if (!animSequencePtr->playing)
 			continue;
+
+		if (!animPtr->shouldPlay) {
+			// Cycle to the next animation (to be re-evaluated next frame
+			animPtr = animSequencePtr->NextAnimation();
+			continue;
+		}
 
 		float newTime = animPtr->currentTime + dt * animPtr->speed;
 
@@ -64,7 +70,7 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 			}
 			else
 			{
-				animPtr->playing = false;
+				animPtr->shouldPlay = false;
 			}
 		}
 

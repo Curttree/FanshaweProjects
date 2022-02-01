@@ -85,6 +85,12 @@
     if (key == GLFW_KEY_M && action == GLFW_PRESS) {
         ::g_pGameEngine->keys[GLFW_KEY_M] = true;
     }
+    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_LEFT] = true;
+    }
+    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_RIGHT] = true;
+    }
 
 
 //   // If JUST the shift is down, move the "selected" object
