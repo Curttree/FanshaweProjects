@@ -127,68 +127,110 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 	skel->animations.speed = 1.f;
 	skel->animations.repeat = true;
 
-	Animation skelAnimation;
-	skelAnimation.currentTime = 0;
-	skelAnimation.duration = 30.0f;
-	skelAnimation.playing = true;
-	skelAnimation.speed = 1.f;
-	skelAnimation.repeat = true;
+	Animation skelEntranceAnimation;
+	skelEntranceAnimation.currentTime = 0;
+	skelEntranceAnimation.duration = 6.0f;
+	skelEntranceAnimation.playing = true;
+	skelEntranceAnimation.speed = 1.f;
+	skelEntranceAnimation.repeat = false;
+
+	Animation skelInvestigateAnimation;
+	skelInvestigateAnimation.currentTime = 0;
+	skelInvestigateAnimation.duration = 6.0f;
+	skelInvestigateAnimation.playing = true;
+	skelInvestigateAnimation.speed = 1.f;
+	skelInvestigateAnimation.repeat = false;
+
+	Animation skelScaredAnimation;
+	skelScaredAnimation.currentTime = 0;
+	skelScaredAnimation.duration = 1.0f;
+	skelScaredAnimation.playing = true;
+	skelScaredAnimation.speed = 1.f;
+	skelScaredAnimation.repeat = false;
+
+	Animation skelRunAwayAnimation;
+	skelRunAwayAnimation.currentTime = 0;
+	skelRunAwayAnimation.duration = 17.0f;
+	skelRunAwayAnimation.playing = true;
+	skelRunAwayAnimation.speed = 1.f;
+	skelRunAwayAnimation.repeat = false;
 
 	// Skeleton Animations.
-	skelAnimation.keyFramePositions.push_back(KeyFramePosition(0, glm::vec3(-17.f,0.f,0.f)));
-	skelAnimation.keyFrameRotations.push_back(KeyFrameRotation(0, glm::quat(glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f))));
-	skelAnimation.keyFrameScales.push_back(KeyFrameScale(0, 2.f));
+	skelEntranceAnimation.keyFramePositions.push_back(KeyFramePosition(0, glm::vec3(-17.f,0.f,0.f)));
+	skelEntranceAnimation.keyFrameRotations.push_back(KeyFrameRotation(0, glm::quat(glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f))));
+	skelEntranceAnimation.keyFrameScales.push_back(KeyFrameScale(0, 2.f));
 
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(0.5, new cCommand_ConsoleOutput("<Loop Start>")));
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(1, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseOut))));		// Postion
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(5.5, new cCommand_PlaySound(2)));
-	skelAnimation.keyFramePositions.push_back(KeyFramePosition(6, glm::vec3(0.f, 0.f, 0.f),EasingType::EaseOut));
+	skelEntranceAnimation.keyFrameEvents.push_back(KeyFrameEvent(0.5, new cCommand_ConsoleOutput("<Skeleton Loop Start>")));
+	skelEntranceAnimation.keyFrameEvents.push_back(KeyFrameEvent(1, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseOut))));		// Postion
+	skelEntranceAnimation.keyFrameEvents.push_back(KeyFrameEvent(5.5, new cCommand_PlaySound(2)));
+
+	skelEntranceAnimation.keyFramePositions.push_back(KeyFramePosition(6, glm::vec3(0.f, 0.f, 0.f),EasingType::EaseOut));
+	skelEntranceAnimation.keyFrameRotations.push_back(KeyFrameRotation(6, glm::quat(glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f))));
+	skelEntranceAnimation.keyFrameScales.push_back(KeyFrameScale(6, 2.f));
 
 	//Break up animation here.
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(6, new cCommand_ColourChange(skelMesh, true)));
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(8, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseInOut))));		// Rotation + Scale
-	skelAnimation.keyFrameScales.push_back(KeyFrameScale(8, 2.f));
-	skelAnimation.keyFrameRotations.push_back(KeyFrameRotation(8, glm::quat(glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f))));
-	skelAnimation.keyFrameScales.push_back(KeyFrameScale(8.5, 1.85f, EasingType::EaseInOut));
-	skelAnimation.keyFrameRotations.push_back(KeyFrameRotation(9, glm::quat(glm::vec3(0.f, 0.f, 0.f)), EasingType::EaseInOut));
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(9, new cCommand_ColourChange(skelMesh, true)));
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(10, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseInOut))));	// Position
-	skelAnimation.keyFramePositions.push_back(KeyFramePosition(10, glm::vec3(0.f, 0.f, 0.f)));
-	skelAnimation.keyFramePositions.push_back(KeyFramePosition(12, glm::vec3(0.f, 0.f, 8.f), EasingType::EaseInOut));
-	skelAnimation.keyFrameScales.push_back(KeyFrameScale(12, 1.85f));
+	skelInvestigateAnimation.keyFramePositions.push_back(KeyFramePosition(0, glm::vec3(0.f, 0.f, 0.f), EasingType::EaseOut));
+	skelInvestigateAnimation.keyFrameRotations.push_back(KeyFrameRotation(0, glm::quat(glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f))));
+	skelInvestigateAnimation.keyFrameScales.push_back(KeyFrameScale(0, 2.f));
 
+	skelInvestigateAnimation.keyFrameEvents.push_back(KeyFrameEvent(0.1, new cCommand_ColourChange(skelMesh, true)));
+	skelInvestigateAnimation.keyFrameEvents.push_back(KeyFrameEvent(2, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseInOut))));		// Rotation + Scale
+	skelInvestigateAnimation.keyFrameScales.push_back(KeyFrameScale(2, 2.f));
+	skelInvestigateAnimation.keyFrameRotations.push_back(KeyFrameRotation(2, glm::quat(glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f))));
+	skelInvestigateAnimation.keyFrameScales.push_back(KeyFrameScale(2.5, 1.85f, EasingType::EaseInOut));
+	skelInvestigateAnimation.keyFrameRotations.push_back(KeyFrameRotation(3, glm::quat(glm::vec3(0.f, 0.f, 0.f)), EasingType::EaseInOut));
+	skelInvestigateAnimation.keyFrameEvents.push_back(KeyFrameEvent(3, new cCommand_ColourChange(skelMesh, true)));
+	skelInvestigateAnimation.keyFrameEvents.push_back(KeyFrameEvent(4, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseInOut))));	// Position
+	skelInvestigateAnimation.keyFramePositions.push_back(KeyFramePosition(4, glm::vec3(0.f, 0.f, 0.f)));
+
+	skelInvestigateAnimation.keyFramePositions.push_back(KeyFramePosition(6, glm::vec3(0.f, 0.f, 8.f), EasingType::EaseInOut));
+	skelInvestigateAnimation.keyFrameRotations.push_back(KeyFrameRotation(6, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
+	skelInvestigateAnimation.keyFrameScales.push_back(KeyFrameScale(6, 1.85f));
 	// Break up animation here	
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(12, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::None))));			// Position + Scale
-	skelAnimation.keyFrameScales.push_back(KeyFrameScale(12.5, 3.f));
-	skelAnimation.keyFramePositions.push_back(KeyFramePosition(12.75, glm::vec3(0.f, 1.f, 8.f)));
-	skelAnimation.keyFrameScales.push_back(KeyFrameScale(13, 2.f));
-	skelAnimation.keyFramePositions.push_back(KeyFramePosition(13, glm::vec3(0.f, 0.f, 8.f)));
+	skelScaredAnimation.keyFramePositions.push_back(KeyFramePosition(0, glm::vec3(0.f, 0.f, 8.f), EasingType::EaseInOut));
+	skelScaredAnimation.keyFrameRotations.push_back(KeyFrameRotation(0, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
+	skelScaredAnimation.keyFrameScales.push_back(KeyFrameScale(0, 1.85f));
+
+	skelScaredAnimation.keyFrameEvents.push_back(KeyFrameEvent(0.1, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::None))));			// Position + Scale
+	skelScaredAnimation.keyFrameScales.push_back(KeyFrameScale(0.5, 3.f));
+	skelScaredAnimation.keyFramePositions.push_back(KeyFramePosition(0.75, glm::vec3(0.f, 1.f, 8.f)));
+
+	skelScaredAnimation.keyFrameScales.push_back(KeyFrameScale(1, 2.f));
+	skelScaredAnimation.keyFrameRotations.push_back(KeyFrameRotation(1, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
+	skelScaredAnimation.keyFramePositions.push_back(KeyFramePosition(1, glm::vec3(0.f, 0.f, 8.f)));
 
 	// Break up animation here
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(13, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseIn))));		// Position
-	skelAnimation.keyFramePositions.push_back(KeyFramePosition(15, glm::vec3(0.f, 0.f, 7.f), EasingType::EaseIn));
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(15, new cCommand_ColourChange(skelMesh, true)));
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(16, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseIn))));		// Position
-	skelAnimation.keyFramePositions.push_back(KeyFramePosition(16, glm::vec3(0.f, 0.f, 7.f)));
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(18, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseOut))));		// Rotation
-	skelAnimation.keyFramePositions.push_back(KeyFramePosition(18, glm::vec3(0.f, 0.f, 6.f), EasingType::EaseIn));
-	skelAnimation.keyFrameRotations.push_back(KeyFrameRotation(18, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
-	skelAnimation.keyFrameRotations.push_back(KeyFrameRotation(18.01, glm::quat(glm::vec3(0.f, glm::pi<float>() / 100.f, 0.f))));
-	skelAnimation.keyFramePositions.push_back(KeyFramePosition(18.4, glm::vec3(0.f, 0.f, 6.f)));
-	skelAnimation.keyFrameRotations.push_back(KeyFrameRotation(18.5, glm::quat(glm::vec3(0.f, glm::pi<float>(), 0.f)), EasingType::EaseOut));
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(18.5, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::None))));		// Position
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(20, new cCommand_ColourChange(skelMesh, true)));
-	skelAnimation.keyFramePositions.push_back(KeyFramePosition(20, glm::vec3(0.f, 0.f, 2.f)));
-	skelAnimation.keyFrameScales.push_back(KeyFrameScale(20, 2.f));
-	skelAnimation.keyFrameScales.push_back(KeyFrameScale(20.1, 0.f));
-	skelAnimation.keyFramePositions.push_back(KeyFramePosition(21, glm::vec3(-20.f, 0.f, 0.f)));
-	skelAnimation.keyFrameEvents.push_back(KeyFrameEvent(29.5, new cCommand_ConsoleOutput("<Loop End>")));
+	skelRunAwayAnimation.keyFrameScales.push_back(KeyFrameScale(0, 2.f));
+	skelRunAwayAnimation.keyFrameRotations.push_back(KeyFrameRotation(0, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
+	skelRunAwayAnimation.keyFramePositions.push_back(KeyFramePosition(0, glm::vec3(0.f, 0.f, 8.f)));
 
-	skelAnimation.keyFramePositions.push_back(KeyFramePosition(30, glm::vec3(-20.f, 0.f, 0.f)));
-	skelAnimation.keyFrameRotations.push_back(KeyFrameRotation(30, glm::quat(glm::vec3(0.f, glm::pi<float>(), 0.f))));
-	skelAnimation.keyFrameScales.push_back(KeyFrameScale(30, 0.f));
+	skelRunAwayAnimation.keyFrameEvents.push_back(KeyFrameEvent(0.1, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseIn))));		// Position
+	skelRunAwayAnimation.keyFramePositions.push_back(KeyFramePosition(2, glm::vec3(0.f, 0.f, 7.f), EasingType::EaseIn));
+	skelRunAwayAnimation.keyFrameEvents.push_back(KeyFrameEvent(2, new cCommand_ColourChange(skelMesh, true)));
+	skelRunAwayAnimation.keyFrameEvents.push_back(KeyFrameEvent(3, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseIn))));		// Position
+	skelRunAwayAnimation.keyFramePositions.push_back(KeyFramePosition(3, glm::vec3(0.f, 0.f, 7.f)));
+	skelRunAwayAnimation.keyFrameEvents.push_back(KeyFrameEvent(5, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseOut))));		// Rotation
+	skelRunAwayAnimation.keyFramePositions.push_back(KeyFramePosition(5, glm::vec3(0.f, 0.f, 6.f), EasingType::EaseIn));
+	skelRunAwayAnimation.keyFrameRotations.push_back(KeyFrameRotation(5, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
+	skelRunAwayAnimation.keyFrameRotations.push_back(KeyFrameRotation(5.01, glm::quat(glm::vec3(0.f, glm::pi<float>() / 100.f, 0.f))));
+	skelRunAwayAnimation.keyFramePositions.push_back(KeyFramePosition(5.4, glm::vec3(0.f, 0.f, 6.f)));
+	skelRunAwayAnimation.keyFrameRotations.push_back(KeyFrameRotation(5.5, glm::quat(glm::vec3(0.f, glm::pi<float>(), 0.f)), EasingType::EaseOut));
+	skelRunAwayAnimation.keyFrameEvents.push_back(KeyFrameEvent(5.5, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::None))));		// Position
+	skelRunAwayAnimation.keyFrameEvents.push_back(KeyFrameEvent(7, new cCommand_ColourChange(skelMesh, true)));
+	skelRunAwayAnimation.keyFramePositions.push_back(KeyFramePosition(7, glm::vec3(0.f, 0.f, 2.f)));
+	skelRunAwayAnimation.keyFrameScales.push_back(KeyFrameScale(7, 2.f));
+	skelRunAwayAnimation.keyFrameScales.push_back(KeyFrameScale(7.1, 0.f));
+	skelRunAwayAnimation.keyFramePositions.push_back(KeyFramePosition(8, glm::vec3(-20.f, 0.f, 0.f)));
+	skelRunAwayAnimation.keyFrameEvents.push_back(KeyFrameEvent(16.5, new cCommand_ConsoleOutput("<Skeleton Loop End>")));
 
-	skel->animations.animations.push_back(skelAnimation);
+	skelRunAwayAnimation.keyFramePositions.push_back(KeyFramePosition(17, glm::vec3(-20.f, 0.f, 0.f)));
+	skelRunAwayAnimation.keyFrameRotations.push_back(KeyFrameRotation(17, glm::quat(glm::vec3(0.f, glm::pi<float>(), 0.f))));
+	skelRunAwayAnimation.keyFrameScales.push_back(KeyFrameScale(17, 0.f));
+
+	skel->animations.animations.push_back(skelEntranceAnimation);
+	skel->animations.animations.push_back(skelInvestigateAnimation);
+	skel->animations.animations.push_back(skelScaredAnimation);
+	skel->animations.animations.push_back(skelRunAwayAnimation);
 
 	//Bush
 	cEntity* bush = entityManager.CreateEntity();
@@ -215,10 +257,17 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 
 	Animation bushAnimation;
 	bushAnimation.currentTime = 0;
-	bushAnimation.duration = 30.0f;
+	bushAnimation.duration = 6.0f;
 	bushAnimation.playing = true;
 	bushAnimation.speed = 1.f;
-	bushAnimation.repeat = true;
+	bushAnimation.repeat = false;
+
+	Animation bushAnimationEase;
+	bushAnimationEase.currentTime = 0;
+	bushAnimationEase.duration = 24.0f;
+	bushAnimationEase.playing = true;
+	bushAnimationEase.speed = 1.f;
+	bushAnimationEase.repeat = false;
 
 	// Bush Animation
 
@@ -234,20 +283,30 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 	bushAnimation.keyFrameEvents.push_back(KeyFrameEvent(5.25, new cCommand_ColourChange(bushMesh, true)));
 	bushAnimation.keyFrameRotations.push_back(KeyFrameRotation(5.25f, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
 
-	// Break Up animation here
-	bushAnimation.keyFrameEvents.push_back(KeyFrameEvent(11.2, new cCommand_PlaySound(3)));
-	bushAnimation.keyFrameEvents.push_back(KeyFrameEvent(12, new cCommand_ColourChange(bushMesh, false, GetEasingColour(EasingType::EaseIn))));		// Rotation
-	bushAnimation.keyFrameRotations.push_back(KeyFrameRotation(12.f, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
-	bushAnimation.keyFrameRotations.push_back(KeyFrameRotation(12.5f, glm::quat(glm::vec3(0.f, 0.f, glm::pi<float>() / 50.f)), EasingType::EaseIn));
-	bushAnimation.keyFrameRotations.push_back(KeyFrameRotation(13.f, glm::quat(glm::vec3(0.f, 0.f, -glm::pi<float>() / 50.f))));
-	bushAnimation.keyFrameRotations.push_back(KeyFrameRotation(13.5f, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
-	bushAnimation.keyFrameEvents.push_back(KeyFrameEvent(13.5, new cCommand_ColourChange(bushMesh, true)));
+	bushAnimation.keyFramePositions.push_back(KeyFramePosition(6, glm::vec3(0.f, 0.f, 15.f)));
+	bushAnimation.keyFrameRotations.push_back(KeyFrameRotation(6, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
+	bushAnimation.keyFrameScales.push_back(KeyFrameScale(6, 0.5f));
 
-	bushAnimation.keyFramePositions.push_back(KeyFramePosition(30, glm::vec3(0.f, 0.f, 15.f)));
-	bushAnimation.keyFrameRotations.push_back(KeyFrameRotation(30.f, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
-	bushAnimation.keyFrameScales.push_back(KeyFrameScale(30, 0.5f));
+	// Break Up animation here
+
+	bushAnimationEase.keyFramePositions.push_back(KeyFramePosition(0, glm::vec3(0.f, 0.f, 15.f)));
+	bushAnimationEase.keyFrameRotations.push_back(KeyFrameRotation(0, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
+	bushAnimationEase.keyFrameScales.push_back(KeyFrameScale(0, 0.5f));
+
+	bushAnimationEase.keyFrameEvents.push_back(KeyFrameEvent(5.2, new cCommand_PlaySound(3)));
+	bushAnimationEase.keyFrameEvents.push_back(KeyFrameEvent(6, new cCommand_ColourChange(bushMesh, false, GetEasingColour(EasingType::EaseIn))));		// Rotation
+	bushAnimationEase.keyFrameRotations.push_back(KeyFrameRotation(6.f, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
+	bushAnimationEase.keyFrameRotations.push_back(KeyFrameRotation(6.5f, glm::quat(glm::vec3(0.f, 0.f, glm::pi<float>() / 50.f)), EasingType::EaseIn));
+	bushAnimationEase.keyFrameRotations.push_back(KeyFrameRotation(7.f, glm::quat(glm::vec3(0.f, 0.f, -glm::pi<float>() / 50.f))));
+	bushAnimationEase.keyFrameRotations.push_back(KeyFrameRotation(7.5f, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
+	bushAnimationEase.keyFrameEvents.push_back(KeyFrameEvent(7.5, new cCommand_ColourChange(bushMesh, true)));
+
+	bushAnimationEase.keyFramePositions.push_back(KeyFramePosition(24, glm::vec3(0.f, 0.f, 15.f)));
+	bushAnimationEase.keyFrameRotations.push_back(KeyFrameRotation(24.f, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
+	bushAnimationEase.keyFrameScales.push_back(KeyFrameScale(24, 0.5f));
 
 	bush->animations.animations.push_back(bushAnimation);
+	bush->animations.animations.push_back(bushAnimationEase);
 
 	//exclamation Point
 	cEntity* exc = entityManager.CreateEntity();

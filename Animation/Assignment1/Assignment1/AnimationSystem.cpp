@@ -17,8 +17,6 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 		animSequencePtr = &currentEntityPtr->animations;
 		animPtr = animSequencePtr->GetCurrent();
 
-		//animPtr = &currentEntityPtr->animation;
-
 		if (animPtr == 0)
 			continue;
 
@@ -55,7 +53,6 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 			else
 			{
 				animPtr = animSequencePtr->NextAnimation();
-				animPtr->playing = false;
 			}
 		}
 		if (animPtr->currentTime < 0.f && dt * animPtr->speed < 0.f)
