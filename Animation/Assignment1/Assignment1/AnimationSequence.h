@@ -11,6 +11,7 @@ public:
 
 	Animation* GetCurrent();
 	Animation* NextAnimation();
+	Animation* PreviousAnimation();
 
 private:
 	int currentIndex;

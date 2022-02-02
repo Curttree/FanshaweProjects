@@ -53,8 +53,10 @@ void cGameEngine::Update(float dt)
 }
 
 void cGameEngine::SetGameSpeed(float speed) {
-	gameSpeed /= glm::abs(gameSpeed);
-	gameSpeed *= speed;
+	// Update game speed only for the active sequence. Uncomment code for the entire game speed.
+	//gameSpeed /= glm::abs(gameSpeed);
+	//gameSpeed *= speed;
+	entityManager.GetEntities()[activeSequenceIndex]->animations.speed = speed;
 }
 void cGameEngine::ReverseGameSpeed() {
 	gameSpeed *= -1.f;
@@ -161,7 +163,7 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 	skelRunAwayAnimation.speed = 1.f;
 	skelRunAwayAnimation.repeat = false;
 
-	// Skeleton Animations.
+	// Skeleton Animations - Entrance.
 	skelEntranceAnimation.keyFramePositions.push_back(KeyFramePosition(0, glm::vec3(-17.f,0.f,0.f)));
 	skelEntranceAnimation.keyFrameRotations.push_back(KeyFrameRotation(0, glm::quat(glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f))));
 	skelEntranceAnimation.keyFrameScales.push_back(KeyFrameScale(0, 2.f));
@@ -174,25 +176,24 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 	skelEntranceAnimation.keyFrameRotations.push_back(KeyFrameRotation(6, glm::quat(glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f))));
 	skelEntranceAnimation.keyFrameScales.push_back(KeyFrameScale(6, 2.f));
 
-	//Break up animation here.
+	// Skeleton Animations - Investigate noise.
 	skelInvestigateAnimation.keyFramePositions.push_back(KeyFramePosition(0, glm::vec3(0.f, 0.f, 0.f), EasingType::EaseOut));
 	skelInvestigateAnimation.keyFrameRotations.push_back(KeyFrameRotation(0, glm::quat(glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f))));
 	skelInvestigateAnimation.keyFrameScales.push_back(KeyFrameScale(0, 2.f));
 
 	skelInvestigateAnimation.keyFrameEvents.push_back(KeyFrameEvent(0.1, new cCommand_ColourChange(skelMesh, true)));
-	skelInvestigateAnimation.keyFrameEvents.push_back(KeyFrameEvent(2, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseInOut))));		// Rotation + Scale
+	skelInvestigateAnimation.keyFrameEvents.push_back(KeyFrameEvent(2, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseInOut))));		// Rotation + Scale + Position
 	skelInvestigateAnimation.keyFrameScales.push_back(KeyFrameScale(2, 2.f));
 	skelInvestigateAnimation.keyFrameRotations.push_back(KeyFrameRotation(2, glm::quat(glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f))));
 	skelInvestigateAnimation.keyFrameScales.push_back(KeyFrameScale(2.5, 1.85f, EasingType::EaseInOut));
 	skelInvestigateAnimation.keyFrameRotations.push_back(KeyFrameRotation(3, glm::quat(glm::vec3(0.f, 0.f, 0.f)), EasingType::EaseInOut));
-	skelInvestigateAnimation.keyFrameEvents.push_back(KeyFrameEvent(3, new cCommand_ColourChange(skelMesh, true)));
-	skelInvestigateAnimation.keyFrameEvents.push_back(KeyFrameEvent(4, new cCommand_ColourChange(skelMesh, false, GetEasingColour(EasingType::EaseInOut))));	// Position
 	skelInvestigateAnimation.keyFramePositions.push_back(KeyFramePosition(4, glm::vec3(0.f, 0.f, 0.f)));
 
 	skelInvestigateAnimation.keyFramePositions.push_back(KeyFramePosition(6, glm::vec3(0.f, 0.f, 8.f), EasingType::EaseInOut));
 	skelInvestigateAnimation.keyFrameRotations.push_back(KeyFrameRotation(6, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
 	skelInvestigateAnimation.keyFrameScales.push_back(KeyFrameScale(6, 1.85f));
-	// Break up animation here	
+
+	// Skeleton Animations - Scared jump.
 	skelScaredAnimation.keyFramePositions.push_back(KeyFramePosition(0, glm::vec3(0.f, 0.f, 8.f), EasingType::EaseInOut));
 	skelScaredAnimation.keyFrameRotations.push_back(KeyFrameRotation(0, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
 	skelScaredAnimation.keyFrameScales.push_back(KeyFrameScale(0, 1.85f));
@@ -205,7 +206,7 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 	skelScaredAnimation.keyFrameRotations.push_back(KeyFrameRotation(1, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
 	skelScaredAnimation.keyFramePositions.push_back(KeyFramePosition(1, glm::vec3(0.f, 0.f, 8.f)));
 
-	// Break up animation here
+	// Skeleton Animations - Run Away.
 	skelRunAwayAnimation.keyFrameScales.push_back(KeyFrameScale(0, 2.f));
 	skelRunAwayAnimation.keyFrameRotations.push_back(KeyFrameRotation(0, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
 	skelRunAwayAnimation.keyFramePositions.push_back(KeyFramePosition(0, glm::vec3(0.f, 0.f, 8.f)));
@@ -291,7 +292,7 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 	bushAnimation.keyFrameRotations.push_back(KeyFrameRotation(6, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
 	bushAnimation.keyFrameScales.push_back(KeyFrameScale(6, 0.5f));
 
-	// Break Up animation here
+	// Second shake. This time, ease in.
 
 	bushAnimationEase.keyFramePositions.push_back(KeyFramePosition(0, glm::vec3(0.f, 0.f, 15.f)));
 	bushAnimationEase.keyFrameRotations.push_back(KeyFrameRotation(0, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
@@ -414,7 +415,7 @@ void cGameEngine::LoadAnimationAssignmentOneScene() {
 
 void cGameEngine::CycleActiveSequence(int offset) {
 	activeSequenceIndex+= offset;
-	if (activeSequenceIndex >= entityManager.GetEntities().size()) {
+	if (activeSequenceIndex >= (int)entityManager.GetEntities().size()) {
 		activeSequenceIndex = 0;
 	}
 	else if (activeSequenceIndex < 0) {

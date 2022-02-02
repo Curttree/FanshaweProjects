@@ -29,7 +29,7 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 			continue;
 		}
 
-		float newTime = animPtr->currentTime + dt * animPtr->speed;
+		float newTime = animPtr->currentTime + dt * animPtr->speed * animSequencePtr->speed;
 
 		// Handle Events
 		// Note: We are currently limited to one event per animation/iteration.
@@ -70,7 +70,8 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
 			}
 			else
 			{
-				animPtr->shouldPlay = false;
+				animPtr = animSequencePtr->PreviousAnimation();
+				animPtr->currentTime = animPtr->duration;
 			}
 		}
 
