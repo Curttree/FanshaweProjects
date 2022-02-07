@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -27,7 +25,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetButtonDown("Jump"))
         {
-            Debug.Log("Space bar is pressed");
             velocity.y = Mathf.Sqrt(-2.0f * jumpHeight * gravity);
         }
 

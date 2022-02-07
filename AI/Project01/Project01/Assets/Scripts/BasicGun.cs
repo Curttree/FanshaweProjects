@@ -11,7 +11,6 @@ public class BasicGun : MonoBehaviour
 
     [SerializeField] private GameObject paintballPrefab;
     [SerializeField] private Transform spawnPoint;
-    [SerializeField] private float projectileSpeed;
     [SerializeField] private float rateOfFire;
 
     private float fireTime;
@@ -34,14 +33,6 @@ public class BasicGun : MonoBehaviour
     void Fire()
     {
         Ray ray = fpsCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.0f));
-        RaycastHit hitInfo;
-        //if (Physics.Raycast(ray, out hitInfo, range))
-        //{
-        //    destination = hitInfo.point;
-        //}
-        //else
-        //{
-        //}
         destination = ray.GetPoint(range);
         GameObject projectile = Instantiate(paintballPrefab, spawnPoint.position, Quaternion.identity);
         projectile.GetComponent<Rigidbody>().velocity = (destination - spawnPoint.position);

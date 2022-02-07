@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Paintball : MonoBehaviour
 {
-    private float lifeSpan = 5f;
+    private float lifeSpan = 1.5f;
     private float deathClock;
 
     // Start is called before the first frame update
@@ -28,7 +28,10 @@ public class Paintball : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Destroy(gameObject);
+        if (!collision.gameObject.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
 
         if (collision.gameObject.CompareTag("Enemy"))
         {
