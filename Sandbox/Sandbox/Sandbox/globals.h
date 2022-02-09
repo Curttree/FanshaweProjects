@@ -10,6 +10,7 @@
 #include "TextureMapping/cBasicTextureManager.h"
 #include "cMesh.h"
 #include <vector>
+#include <map>
 
 
 // These are all things that are "project global", 
@@ -70,6 +71,10 @@ bool g_FindObjectByUniqueID(unsigned int uniqueID_toFind, cMesh*& theObjectIFoun
 // If not found, return NULL (0)
 cMesh* g_FindObjectByUniqueID(unsigned int uniqueID_toFind);
 cMesh* g_findObjectByFriendlyName(std::string NametoFind);
+
+// A step in the right direction, but this should eventually be encapsulated.
+GLint g_GetUniformLocation(GLuint shaderProgram, std::string name);
+extern std::map< std::string, GLint> g_uniformLocations;
 
 
 

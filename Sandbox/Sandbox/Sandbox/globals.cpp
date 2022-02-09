@@ -21,6 +21,8 @@ bool g_bShowDebugShere = true;
 unsigned int g_selectedObject = 0;
 unsigned int g_selectedLight = 0;
 
+std::map< std::string, GLint> g_uniformLocations;
+
 
 // This will be printed in the title bar
 std::string g_TitleText = "";
@@ -107,4 +109,13 @@ std::string g_TitleText = "";
 //    return NULL;
 //}
 
-
+GLint g_GetUniformLocation(GLuint shaderProgram, std::string name) {
+	if (g_uniformLocations.count(name) > 0) {
+		return g_uniformLocations[name];
+	}
+	else {
+		// We don't have it yet..Fetch.
+		GLint location = glGetUniformLocation(shaderProgram, name.c_str());
+		g_uniformLocations.insert(std::make_pair(name, location));
+	}
+}

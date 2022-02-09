@@ -15,13 +15,16 @@ cShaderManager::cShader::~cShader()
 
 std::string cShaderManager::cShader::getShaderTypeString(void)
 {
-	switch ( this->shaderType )
+	switch (this->shaderType)
 	{
 	case cShader::VERTEX_SHADER:
 		return "VERTEX_SHADER";
 		break;
 	case cShader::FRAGMENT_SHADER:
 		return "FRAGMENT_SHADER";
+		break;
+	case cShader::GEOMETRY_SHADER:
+		return "GEOMETRY_SHADER";
 		break;
 	case cShader::UNKNOWN:
 	default:

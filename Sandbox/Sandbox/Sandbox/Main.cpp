@@ -26,12 +26,13 @@ void DrawDebugObjects(
     GLuint program,
     cVAOManager* pVAOManager);
 
-void InitShaders(GLuint& program, cShaderManager::cShader& vertShader, cShaderManager::cShader& fragShader) {
+void InitShaders(GLuint& program, cShaderManager::cShader& vertShader, cShaderManager::cShader& geomShader, cShaderManager::cShader& fragShader) {
     // Hardcoding shader file names. May try to place in a common location in the future / make configurable.
     vertShader.fileName = "assets/shaders/vertShader_01.glsl";
+    geomShader.fileName = "assets/shaders/geomShader_01.glsl";
     fragShader.fileName = "assets/shaders/fragShader_01.glsl";
 
-    if (::g_pShaderManager->createProgramFromFile("Shader#1", vertShader, fragShader))
+    if (::g_pShaderManager->createProgramFromFile("Shader#1", vertShader, geomShader, fragShader))
     {
         std::cout << "Shader compiled OK" << std::endl;
         // 
@@ -95,12 +96,29 @@ int main(void) {
 
     std::cout << "GL_MAX_UNIFORM_LOCATIONS: " << max_uniform_location << std::endl;
 
+    GLint max_vertex_uniform_components = 0;
+    glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &max_vertex_uniform_components);
+    std::cout << "GL_MAX_VERTEX_UNIFORM_COMPONENTS: " << max_vertex_uniform_components << std::endl;
+
+    GLint max_fragment_uniform_components = 0;
+    glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_COMPONENTS, &max_fragment_uniform_components);
+    std::cout << "GL_MAX_FRAGMENT_UNIFORM_COMPONENTS: " << max_fragment_uniform_components << std::endl;
+
+    GLint max_compute_uniform_components = 0;
+    glGetIntegerv(GL_MAX_COMPUTE_UNIFORM_COMPONENTS, &max_compute_uniform_components);
+    std::cout << "GL_MAX_COMPUTE_UNIFORM_COMPONENTS: " << max_compute_uniform_components << std::endl;
+
+    GLint max_geometry_uniform_components = 0;
+    glGetIntegerv(GL_MAX_GEOMETRY_UNIFORM_COMPONENTS, &max_geometry_uniform_components);
+    std::cout << "GL_MAX_GEOMETRY_UNIFORM_COMPONENTS: " << max_geometry_uniform_components << std::endl;
+
     ::g_StartUp(pWindow);
 
 
     cShaderManager::cShader vertShader;
     cShaderManager::cShader fragShader;
-    InitShaders(program, vertShader, fragShader);
+    cShaderManager::cShader geomShader;
+    InitShaders(program, vertShader, geomShader, fragShader);
 
     glUseProgram(program);
 

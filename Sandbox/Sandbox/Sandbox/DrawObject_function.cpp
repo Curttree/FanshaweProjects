@@ -33,8 +33,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
         glBindTexture(GL_TEXTURE_2D, TextureNumber);
 
-        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
-        GLint texture_00_LocID = glGetUniformLocation(shaderProgram, "texture_00");
+        GLint texture_00_LocID = g_GetUniformLocation(shaderProgram, "texture_00");
         glUniform1i(texture_00_LocID, textureUnit);
     }
     //*****************************************************************************************
@@ -50,8 +49,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
         glBindTexture(GL_TEXTURE_2D, TextureNumber);
 
-        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
-        GLint texture_01_LocID = glGetUniformLocation(shaderProgram, "texture_01");
+        GLint texture_01_LocID = g_GetUniformLocation(shaderProgram, "texture_01");
         glUniform1i(texture_01_LocID, textureUnit);
     }
     //*****************************************************************************************
@@ -67,8 +65,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
         glBindTexture(GL_TEXTURE_2D, TextureNumber);
 
-        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
-        GLint texture_02_LocID = glGetUniformLocation(shaderProgram, "texture_02");
+        GLint texture_02_LocID = g_GetUniformLocation(shaderProgram, "texture_02");
         glUniform1i(texture_02_LocID, textureUnit);
     }
     //*****************************************************************************************    
@@ -83,8 +80,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
         glBindTexture(GL_TEXTURE_2D, TextureNumber);
 
-        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
-        GLint texture_03_LocID = glGetUniformLocation(shaderProgram, "texture_03");
+        GLint texture_03_LocID = g_GetUniformLocation(shaderProgram, "texture_03");
         glUniform1i(texture_03_LocID, textureUnit);
     }
     //*****************************************************************************************    
@@ -98,8 +94,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
         glBindTexture(GL_TEXTURE_2D, TextureNumber);
 
-        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
-        GLint maskTexture_00_LocID = glGetUniformLocation(shaderProgram, "maskTexture_00");
+        GLint maskTexture_00_LocID = g_GetUniformLocation(shaderProgram, "maskTexture_00");
         glUniform1i(maskTexture_00_LocID, textureUnit);
 
         GLuint TextureNumber2 = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[6]);
@@ -108,8 +103,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         glActiveTexture(textureUnit2 + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
         glBindTexture(GL_TEXTURE_2D, TextureNumber2);
 
-        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
-        GLint maskTextureTop_00_LocID = glGetUniformLocation(shaderProgram, "maskTextureTop_00");
+        GLint maskTextureTop_00_LocID = g_GetUniformLocation(shaderProgram, "maskTextureTop_00");
         glUniform1i(maskTextureTop_00_LocID, textureUnit2);
     }
     //*****************************************************************************************    
@@ -122,24 +116,22 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
         glBindTexture(GL_TEXTURE_2D, TextureNumber);
 
-        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
-        GLint maskTexture_01_LocID = glGetUniformLocation(shaderProgram, "maskTexture_01");
+        GLint maskTexture_01_LocID = g_GetUniformLocation(shaderProgram, "maskTexture_01");
         glUniform1i(maskTexture_01_LocID, textureUnit);
 
-        GLuint TextureNumber2 = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[7]);
+        GLuint TextureNumber2 = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[6]);
 
-        GLuint textureUnit2 = 21;			// Texture unit go from 0 to 79. 20-39 are being used for textures to be used with masks.
+        GLuint textureUnit2 = 20;			// Texture unit go from 0 to 79. 20-30 are being used for textures to be used with masks.
         glActiveTexture(textureUnit2 + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
         glBindTexture(GL_TEXTURE_2D, TextureNumber2);
 
-        // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
-        GLint maskTextureTop_01_LocID = glGetUniformLocation(shaderProgram, "maskTextureTop_01");
+        GLint maskTextureTop_01_LocID = g_GetUniformLocation(shaderProgram, "maskTextureTop_01");
         glUniform1i(maskTextureTop_01_LocID, textureUnit2);
     }
     //*****************************************************************************************      
 
     // Set all the texture ratios in the shader
-    GLint textureRatios0to3_LocID = glGetUniformLocation(shaderProgram, "texture2D_Ratios0to3");
+    GLint textureRatios0to3_LocID = g_GetUniformLocation(shaderProgram, "texture2D_Ratios0to3");
     // Set them
     glUniform4f(textureRatios0to3_LocID,
         pCurrentMesh->textureRatios[0],
@@ -148,7 +140,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         pCurrentMesh->textureRatios[3]);
 
     // Set all the texture ratios in the shader
-    GLint mask_Ratios0to1_LocID = glGetUniformLocation(shaderProgram, "mask_Ratios0to1");
+    GLint mask_Ratios0to1_LocID = g_GetUniformLocation(shaderProgram, "mask_Ratios0to1");
     // Set them. Only use two for now, but utilizing vec4 in case we wish to expand.
     glUniform4f(mask_Ratios0to1_LocID,
         pCurrentMesh->textureRatios[4],
@@ -157,7 +149,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         0);
 
     {
-        GLint bDiscardTransparencyWindowsOn_LodID = glGetUniformLocation(shaderProgram, "bDiscardTransparencyWindowsOn");
+        GLint bDiscardTransparencyWindowsOn_LodID = g_GetUniformLocation(shaderProgram, "bDiscardTransparencyWindowsOn");
         // Turn discard transparency off
         glUniform1f(bDiscardTransparencyWindowsOn_LodID, (GLfloat)GL_FALSE);
 
@@ -169,7 +161,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
             GLuint discardTextureUnit = 30;			// Texture unit go from 0 to 79
             glActiveTexture(discardTextureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
             glBindTexture(GL_TEXTURE_2D, discardTextureNumber);
-            GLint discardTexture_LocID = glGetUniformLocation(shaderProgram, "discardTexture");
+            GLint discardTexture_LocID = g_GetUniformLocation(shaderProgram, "discardTexture");
             glUniform1i(discardTexture_LocID, discardTextureUnit);
 
             // Turn discard function on
@@ -192,13 +184,13 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         glBindTexture(GL_TEXTURE_CUBE_MAP, TextureNumber);
 
         // THIS SHOULDN'T BE HERE as it's the same each time and getUniformLocation is SLOOOOOOW
-        GLint cubeMap_00_LocID = glGetUniformLocation(shaderProgram, "cubeMap_00");
+        GLint cubeMap_00_LocID = g_GetUniformLocation(shaderProgram, "cubeMap_00");
         glUniform1i(cubeMap_00_LocID, textureUnit);
 
     }
 
     {   // Set up the blend values for the skyboxes
-        GLint cubeMap_Ratios0to3_LocID = glGetUniformLocation(shaderProgram, "cubeMap_Ratios0to3");
+        GLint cubeMap_Ratios0to3_LocID = g_GetUniformLocation(shaderProgram, "cubeMap_Ratios0to3");
 
         float howMuch_cubeMap_00 = 1.0f;
         float howMuch_cubeMap_01 = 0.0f;
@@ -233,7 +225,7 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Get the uniform (should be outside of the draw call)
-    GLint wholeObjectAlphaTransparency_LocID = glGetUniformLocation(program, "wholeObjectAlphaTransparency");
+    GLint wholeObjectAlphaTransparency_LocID = g_GetUniformLocation(program, "wholeObjectAlphaTransparency");
     // Set this value here
     glUniform1f(wholeObjectAlphaTransparency_LocID, pCurrentMesh->alphaTransparency);
 
@@ -305,17 +297,17 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
 
     // This is used for wireframe or whole object colour. 
     // If bUseDebugColour is TRUE, then the fragment colour is "objectDebugColour".
-    GLint bUseDebugColour_Location = glGetUniformLocation(program, "bUseDebugColour");
-    GLint objectDebugColour_Location = glGetUniformLocation(program, "objectDebugColour");
+    GLint bUseDebugColour_Location = g_GetUniformLocation(program, "bUseDebugColour");
+    GLint objectDebugColour_Location = g_GetUniformLocation(program, "objectDebugColour");
 
     // If true, then the lighting contribution is NOT used. 
     // This is useful for wireframe object
-    GLint bDontLightObject_Location = glGetUniformLocation(program, "bDontLightObject");
+    GLint bDontLightObject_Location = g_GetUniformLocation(program, "bDontLightObject");
 
     // The "whole object" colour (diffuse and specular)
-    GLint wholeObjectDiffuseColour_Location = glGetUniformLocation(program, "wholeObjectDiffuseColour");
-    GLint bUseWholeObjectDiffuseColour_Location = glGetUniformLocation(program, "bUseWholeObjectDiffuseColour");
-    GLint wholeObjectSpecularColour_Location = glGetUniformLocation(program, "wholeObjectSpecularColour");
+    GLint wholeObjectDiffuseColour_Location = g_GetUniformLocation(program, "wholeObjectDiffuseColour");
+    GLint bUseWholeObjectDiffuseColour_Location = g_GetUniformLocation(program, "bUseWholeObjectDiffuseColour");
+    GLint wholeObjectSpecularColour_Location = g_GetUniformLocation(program, "wholeObjectSpecularColour");
 
     if (pCurrentMesh->bUseWholeObjectDiffuseColour)
     {
