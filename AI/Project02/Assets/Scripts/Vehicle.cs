@@ -5,6 +5,7 @@ using UnityEngine;
 public class Vehicle : MonoBehaviour
 {
     public Seek _seek;
+    public Flocking _flocking;
     // Start is called before the first frame update
     void Start()
     {
