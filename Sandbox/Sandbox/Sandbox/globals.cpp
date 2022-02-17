@@ -23,6 +23,10 @@ unsigned int g_selectedLight = 0;
 
 std::map< std::string, GLint> g_uniformLocations;
 
+// Full screen quad mesh for 2nd rendering pass
+cMesh* g_pFullScreenQuad = NULL;
+// The FBO that the full screen quad is going to use
+cFBO* g_pFBO = NULL;
 
 // This will be printed in the title bar
 std::string g_TitleText = "";

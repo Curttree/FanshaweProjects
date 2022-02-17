@@ -1,0 +1,248 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Coordinator : MonoBehaviour
+{
+    public Vehicle vehicle;
+    public Vehicle[] followers; 
+    
+    private Vector3[] circleFormation; //position offset for circle formation
+    private Vector3[] vFormation; //position offsets for v formation
+    private Vector3[] squareFormation; //position offsets for square formation
+    private Vector3[] lineFormation; //position offsets for v formation
+    private Vector3[] rowsFormation; //position offsets for two rows formation
+    private Vector3[] positionOffset; //holds the current formation
+
+    private int lastFormation = 0;
+
+    public bool isFollowingPath;
+    public Transform[] pathNodes;
+    public int currentNode;
+    private float pathRadius = 10.0f; 
+    private int pathDirection = 1;
+
+    public Material[] targetMaterials;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        // Warning message if something has gone wrong with the setup in the inspector.
+        if (followers.Length != 12)
+        {
+            print("12 followers have not been set. Unexpected formations may occur.");
+        }
+
+        //Populate formations
+        positionOffset = new Vector3[12];
+
+        float circleRadius = 30f;
+
+        circleFormation = new Vector3[] { new Vector3(circleRadius * Mathf.Cos(0), 0, circleRadius * Mathf.Sin(0)),
+                                        new Vector3(circleRadius * Mathf.Cos(Mathf.PI/6), 0, circleRadius * Mathf.Sin(Mathf.PI/6)),
+                                        new Vector3(circleRadius * Mathf.Cos(Mathf.PI/3), 0, circleRadius * Mathf.Sin(Mathf.PI/3)),
+                                        new Vector3(circleRadius * Mathf.Cos(Mathf.PI/2), 0, circleRadius * Mathf.Sin(Mathf.PI/2)),
+                                        new Vector3(circleRadius * Mathf.Cos(2f * Mathf.PI/3f), 0, circleRadius * Mathf.Sin(2f * Mathf.PI/3f)),
+                                        new Vector3(circleRadius * Mathf.Cos(5f * Mathf.PI/6f), 0, circleRadius * Mathf.Sin(5f * Mathf.PI/6f)),
+                                        new Vector3(circleRadius * Mathf.Cos(Mathf.PI), 0, circleRadius * Mathf.Sin(Mathf.PI)),
+                                        new Vector3(circleRadius * Mathf.Cos(7f * Mathf.PI/6f), 0, circleRadius * Mathf.Sin(7f * Mathf.PI/6f)),
+                                        new Vector3(circleRadius * Mathf.Cos(4f * Mathf.PI/3f), 0, circleRadius * Mathf.Sin(4f * Mathf.PI/3f)),
+                                        new Vector3(circleRadius * Mathf.Cos(3f * Mathf.PI/2f), 0, circleRadius * Mathf.Sin(3f * Mathf.PI/2f)),
+                                        new Vector3(circleRadius * Mathf.Cos(5f * Mathf.PI/3f), 0, circleRadius * Mathf.Sin(5f * Mathf.PI/3f)),
+                                        new Vector3(circleRadius * Mathf.Cos(11f * Mathf.PI/6f), 0, circleRadius * Mathf.Sin(11f * Mathf.PI/6f)) };
+
+        squareFormation = new Vector3[] { new Vector3(-30, 0, -30),
+                                        new Vector3(-10, 0, -30),
+                                        new Vector3(10, 0, -30),
+                                        new Vector3(30, 0, -30),
+                                        new Vector3(30, 0, -10),
+                                        new Vector3(30, 0, 10),
+                                        new Vector3(30, 0, 30),
+                                        new Vector3(10, 0, 30),
+                                        new Vector3(-10, 0, 30),
+                                        new Vector3(-30, 0, 30),
+                                        new Vector3(-30, 0, 10),
+                                        new Vector3(-30, 0, -10) };
+
+        vFormation = new Vector3[] { new Vector3(0, 0, 10),
+                                        new Vector3(0, 0, -10),
+                                        new Vector3(20, 0, 20),
+                                        new Vector3(20, 0, -20),
+                                        new Vector3(40, 0, 30),
+                                        new Vector3(40, 0, -30),
+                                        new Vector3(60, 0, 40),
+                                        new Vector3(60, 0, -40),
+                                        new Vector3(80, 0, 50),
+                                        new Vector3(80, 0, -50),
+                                        new Vector3(100, 0, 60),
+                                        new Vector3(100, 0, -60) };
+
+        lineFormation = new Vector3[] { new Vector3(0, 0, 0),
+                                        new Vector3(20, 0, 0),
+                                        new Vector3(40, 0, 0),
+                                        new Vector3(60, 0, 0),
+                                        new Vector3(80, 0, 0),
+                                        new Vector3(100, 0, 0),
+                                        new Vector3(-20, 0, 0),
+                                        new Vector3(-40, 0, 0),
+                                        new Vector3(-60, 0, 0),
+                                        new Vector3(-80, 0, 0),
+                                        new Vector3(-100, 0, 0),
+                                        new Vector3(-120, 0, 0) };
+
+        rowsFormation = new Vector3[] { new Vector3(0, 0, -40), 
+                                        new Vector3(0, 0, -20),
+                                        new Vector3(0, 0, 0),
+                                        new Vector3(0, 0, 20),
+                                        new Vector3(0, 0, 40),
+                                        new Vector3(0, 0, 60),
+                                        new Vector3(60, 0, -40),
+                                        new Vector3(60, 0, -20),
+                                        new Vector3(60, 0, 0),
+                                        new Vector3(60, 0, 20),
+                                        new Vector3(60, 0, 40),
+                                        new Vector3(60, 0, 60) };
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            lastFormation = 1;
+            GetInFormation(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            lastFormation = 2;
+            GetInFormation(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            GetInFormation(3);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4))
+        {
+            GetInFormation(4);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5))
+        {
+            GetInFormation(5);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Keypad8))
+        {
+            pathNodes[currentNode].gameObject.GetComponent<MeshRenderer>().material = targetMaterials[1];
+            isFollowingPath = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha9) || Input.GetKeyDown(KeyCode.Keypad9))
+        {
+            pathDirection *= -1;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0))
+        {
+            pathNodes[currentNode].gameObject.GetComponent<MeshRenderer>().material = targetMaterials[0];
+            isFollowingPath = false;
+            GetInFormation(lastFormation);
+        }
+
+
+        if (isFollowingPath && lastFormation > 0)
+        {
+            Vector3 target = FindTarget();
+            vehicle.Seek(target);
+            //TODO: Rotate position depending on direction of movement.
+            //for (int x = 0; x < positionOffset.Length; x++)
+            //{
+            //    positionOffset[x] = transform.rotation * GetOriginalPosition(x);
+            //}
+            for (int x = 0; x < positionOffset.Length; x++)
+            {
+                if (x < followers.Length)
+                {
+                    followers[x].Seek(transform.position + positionOffset[x]);
+                }
+            }
+        }
+        else
+        {
+            vehicle.Seek(transform.position);
+        }
+    }
+
+    void GetInFormation(int form)
+    {
+        switch (form)
+        {
+            case 1:
+                positionOffset = circleFormation;
+                break;
+            case 2:
+                positionOffset = vFormation;
+                break;
+            case 3:
+                positionOffset = squareFormation;
+                break;
+            case 4:
+                positionOffset = lineFormation;
+                break;
+            case 5:
+                positionOffset = rowsFormation;
+                break;
+            default:
+                // invalid selection. Return without doing anything.
+                return;
+        }
+
+        lastFormation = form;
+
+        for (int x = 0; x < positionOffset.Length; x++)
+        {
+            if (x < followers.Length)
+            {
+                followers[x].Seek(transform.position + positionOffset[x]);
+            }
+        }
+    }
+
+    Vector3 GetOriginalPosition(int index)
+    {
+        // Gets the original formation position from the appropriate vector array.
+        switch (lastFormation)
+        {
+            case 1:
+                return circleFormation[index];
+            case 2:
+                return vFormation[index];
+            case 3:
+                return squareFormation[index];
+            case 4:
+                return lineFormation[index];
+            case 5:
+                return rowsFormation[index];
+            default:
+                // invalid selection. Return without doing anything.
+                return Vector3.zero;
+        }
+    }
+
+    Vector3 FindTarget()
+    {
+        Vector3 target = pathNodes[currentNode].position;
+        if (Vector3.Distance(transform.position, target) < pathRadius)
+        {
+            pathNodes[currentNode].gameObject.GetComponent<MeshRenderer>().material = targetMaterials[0];
+            currentNode += pathDirection;
+            if (currentNode >= pathNodes.Length)
+            {
+                currentNode = pathNodes.Length - 1;
+            }
+            if (currentNode < 0)
+            {
+                currentNode = 0;
+            }
+            pathNodes[currentNode].gameObject.GetComponent<MeshRenderer>().material = targetMaterials[1];
+        }
+        return target;
+    }
+}

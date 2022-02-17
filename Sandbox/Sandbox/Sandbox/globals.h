@@ -8,6 +8,7 @@
 #include "Graphics/cShaderManager.h"
 #include "Graphics/cLightManager.h"
 #include "TextureMapping/cBasicTextureManager.h"
+#include "cFBO/cFBO.h"
 #include "cMesh.h"
 #include <vector>
 #include <map>
@@ -76,6 +77,10 @@ cMesh* g_findObjectByFriendlyName(std::string NametoFind);
 GLint g_GetUniformLocation(GLuint shaderProgram, std::string name);
 extern std::map< std::string, GLint> g_uniformLocations;
 
+// Full screen quad mesh for 2nd rendering pass
+extern cMesh* g_pFullScreenQuad; // = NULL
+// The FBO that the full screen quad is going to use
+extern cFBO* g_pFBO;    // = NULL
 
 
 // ************************************************

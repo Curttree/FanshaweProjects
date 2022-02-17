@@ -36,6 +36,12 @@ uniform bool bIsImposter;
 // This is the camera eye location (update every frame)
 uniform vec4 eyeLocation;
 
+// Indicates which 'pass' we are doing
+const uint PASS_0_ENTIRE_SCENE = 0;
+const uint PASS_1_QUAD_ONLY = 1;
+uniform uint renderPassNumber;
+
+
 struct sLight
 {
 	vec4 position;			
@@ -112,6 +118,19 @@ void main()
 	
 	// HACK: See if the UV coordinates are actually being passed in
 	pixelOutputFragColour.rgba = vec4(0.0f, 0.0f, 0.0, 1.0f); 
+	
+	if ( renderPassNumber == PASS_1_QUAD_ONLY )
+	{
+		// Render the texture to the quad, and that's it
+
+		vec3 sampleColour = texture( texture_07, fUVx2.xy ).rgb;
+
+		pixelOutputFragColour.rgb = sampleColour.rgb;
+		pixelOutputFragColour.a = 1.0f;
+
+		// Early exit
+		return;
+	}
 	
 	pixelOutputFragColour.a = wholeObjectAlphaTransparency;
 	

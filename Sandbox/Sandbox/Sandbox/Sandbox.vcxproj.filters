@@ -55,6 +55,9 @@
     <Filter Include="GameEngine">
       <UniqueIdentifier>{54b1c600-ee5b-4c55-9b6e-1ccb3086ba09}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\FBO">
+      <UniqueIdentifier>{cf46654b-4242-40e2-9a58-405dfa286b6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -156,6 +159,9 @@
     <ClCompile Include="cGameEngine.cpp">
       <Filter>GameEngine</Filter>
     </ClCompile>
+    <ClCompile Include="cFBO\cFBO.cpp">
+      <Filter>Graphics\FBO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -247,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="cGameEngine.h">
       <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="cFBO\cFBO.h">
+      <Filter>Graphics\FBO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

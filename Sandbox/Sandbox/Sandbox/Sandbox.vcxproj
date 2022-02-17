@@ -164,6 +164,7 @@
     <ClCompile Include="..\common\include\Physics\cParticleWorld.cpp" />
     <ClCompile Include="..\common\include\Physics\cPlaneParticleContactGenerator.cpp" />
     <ClCompile Include="..\common\include\Physics\cWorldSpace.cpp" />
+    <ClCompile Include="cFBO\cFBO.cpp" />
     <ClCompile Include="cGameEngine.cpp" />
     <ClCompile Include="cGFLWKeyboardModifiers.cpp" />
     <ClCompile Include="cMesh.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="..\common\include\Physics\iForceGenerator.h" />
     <ClInclude Include="..\common\include\Physics\iParticleContactGenerator.h" />
     <ClInclude Include="..\common\include\Physics\sParticleTemplate.h" />
+    <ClInclude Include="cFBO\cFBO.h" />
     <ClInclude Include="cGameEngine.h" />
     <ClInclude Include="cMesh.h" />
     <ClInclude Include="cWinContextMenu.h" />
