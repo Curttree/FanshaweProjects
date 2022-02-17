@@ -8,9 +8,9 @@ public class SteeringBehaviour : MonoBehaviour
     public float weight = 1.0f;
     public float mass = 1.0f;
 
-    public float maxSpeed = 1.0f;
-    public float maxForce = 1.0f;
-    public float maxTurnSpeed = 1.0f;
+    public float maxSpeed = 10.0f;
+    public float maxForce = 10.0f;
+    public float maxTurnSpeed = 10.0f;
 
     public Rigidbody rb;
 

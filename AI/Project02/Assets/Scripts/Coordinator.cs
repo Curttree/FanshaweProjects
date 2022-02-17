@@ -17,6 +17,9 @@ public class Coordinator : MonoBehaviour
     private int lastFormation = 0;
 
     public bool isFollowingPath;
+    public bool isFlocking;
+
+
     public Transform[] pathNodes;
     public int currentNode;
     private float pathRadius = 10.0f; 
@@ -32,7 +35,7 @@ public class Coordinator : MonoBehaviour
         {
             print("12 followers have not been set. Unexpected formations may occur.");
         }
-
+        SetFlocking(isFlocking);
         //Populate formations
         positionOffset = new Vector3[12];
 
@@ -110,25 +113,43 @@ public class Coordinator : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
         {
-            lastFormation = 1;
+            isFlocking = false;
+            SetFlocking(isFlocking);
             GetInFormation(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
         {
-            lastFormation = 2;
+            isFlocking = false;
+            SetFlocking(isFlocking);
             GetInFormation(2);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
         {
+            isFlocking = false;
+            SetFlocking(isFlocking);
             GetInFormation(3);
         }
         if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4))
         {
+            isFlocking = false;
+            SetFlocking(isFlocking);
             GetInFormation(4);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5))
         {
+            isFlocking = false;
+            SetFlocking(isFlocking);
             GetInFormation(5);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6))
+        {
+            isFlocking = true;
+            SetFlocking(isFlocking);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Keypad7))
+        {
+            isFlocking = false;
+            SetFlocking(isFlocking);
         }
         if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Keypad8))
         {
@@ -244,5 +265,33 @@ public class Coordinator : MonoBehaviour
             pathNodes[currentNode].gameObject.GetComponent<MeshRenderer>().material = targetMaterials[1];
         }
         return target;
+    }
+
+    private void SetFlocking(bool value)
+    {
+        if (value)
+        {
+
+            foreach (Seek childSeek in GetComponentsInChildren<Seek>())
+            {
+                childSeek.enabled = false;
+            }
+            foreach (Flocking childFlock in GetComponentsInChildren<Flocking>())
+            {
+                childFlock.enabled = true;
+            }
+        }
+        else
+        {
+
+            foreach (Seek childSeek in GetComponentsInChildren<Seek>())
+            {
+                childSeek.enabled = true;
+            }
+            foreach (Flocking childFlock in GetComponentsInChildren<Flocking>())
+            {
+                childFlock.enabled = false;
+            }
+        }
     }
 }
