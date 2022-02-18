@@ -13,6 +13,7 @@ public class SteeringBehaviour : MonoBehaviour
     public float maxTurnSpeed = 10.0f;
 
     public Rigidbody rb;
+    public float rotationStart = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -65,7 +66,7 @@ public class SteeringBehaviour : MonoBehaviour
             /*Atan2 returns the angle in radians whose tan is direction.z/direction.x */
             float rotY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             /*Determines the amount to turn from it's current rotation to it's desired rotation based on max turn speed */
-            float rotationAmount = Mathf.LerpAngle(transform.rotation.eulerAngles.y, rotY, Time.deltaTime * maxTurnSpeed);
+            float rotationAmount = Mathf.LerpAngle(transform.rotation.eulerAngles.y, rotY + rotationStart, Time.deltaTime * maxTurnSpeed);
             /*Converts angle to Quaterion and applies rotation to agent*/
             transform.rotation = Quaternion.Euler(0, rotationAmount, 0);
         }

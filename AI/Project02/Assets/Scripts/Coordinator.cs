@@ -26,6 +26,7 @@ public class Coordinator : MonoBehaviour
     private int pathDirection = 1;
 
     public Material[] targetMaterials;
+    private Quaternion lastRotation;
 
     // Start is called before the first frame update
     void Start()
@@ -105,6 +106,8 @@ public class Coordinator : MonoBehaviour
                                         new Vector3(60, 0, 20),
                                         new Vector3(60, 0, 40),
                                         new Vector3(60, 0, 60) };
+
+        lastRotation = transform.rotation;
     }
 
     // Update is called once per frame
@@ -117,19 +120,19 @@ public class Coordinator : MonoBehaviour
             SetFlocking(isFlocking);
             GetInFormation(1);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
+        else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
         {
             isFlocking = false;
             SetFlocking(isFlocking);
             GetInFormation(2);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
+        else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
         {
             isFlocking = false;
             SetFlocking(isFlocking);
             GetInFormation(3);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4))
+        else if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4))
         {
             isFlocking = false;
             SetFlocking(isFlocking);
@@ -141,18 +144,20 @@ public class Coordinator : MonoBehaviour
             SetFlocking(isFlocking);
             GetInFormation(5);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6))
+        else if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6))
         {
             isFlocking = true;
             SetFlocking(isFlocking);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Keypad7))
+        else if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Keypad7))
         {
             isFlocking = false;
             SetFlocking(isFlocking);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Keypad8))
+        else if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Keypad8))
         {
+            isFlocking = false;
+            SetFlocking(isFlocking);
             pathNodes[currentNode].gameObject.GetComponent<MeshRenderer>().material = targetMaterials[1];
             isFollowingPath = true;
         }
@@ -160,11 +165,25 @@ public class Coordinator : MonoBehaviour
         {
             pathDirection *= -1;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0))
+        else if (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0))
         {
             pathNodes[currentNode].gameObject.GetComponent<MeshRenderer>().material = targetMaterials[0];
             isFollowingPath = false;
             GetInFormation(lastFormation);
+        }
+        else if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus))
+        {
+            isFlocking = true;
+            SetFlocking(isFlocking);
+            //Special case. Enable seeking for this object.
+            gameObject.GetComponent<Seek>().enabled = true;
+            pathNodes[currentNode].gameObject.GetComponent<MeshRenderer>().material = targetMaterials[1];
+            isFollowingPath = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
+        {
+            pathNodes[currentNode].gameObject.GetComponent<MeshRenderer>().material = targetMaterials[0];
+            isFollowingPath = false;
         }
 
 
@@ -173,10 +192,13 @@ public class Coordinator : MonoBehaviour
             Vector3 target = FindTarget();
             vehicle.Seek(target);
             //TODO: Rotate position depending on direction of movement.
-            //for (int x = 0; x < positionOffset.Length; x++)
-            //{
-            //    positionOffset[x] = transform.rotation * GetOriginalPosition(x);
-            //}
+            for (int x = 0; x < positionOffset.Length; x++)
+            {
+                Quaternion newRotation = transform.rotation * Quaternion.Inverse(lastRotation);
+                positionOffset[x] = newRotation * GetOriginalPosition(x);
+            }
+
+            lastRotation = transform.rotation;
             for (int x = 0; x < positionOffset.Length; x++)
             {
                 if (x < followers.Length)

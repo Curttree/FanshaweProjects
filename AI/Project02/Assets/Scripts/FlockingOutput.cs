@@ -16,6 +16,13 @@ public class FlockingOutput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        outputText.text = $"Flocking Values || Cohesion: {referenceFlocking.cohWeight}, Separation: {referenceFlocking.sepWeight}, Alignment: {referenceFlocking.aliWeight}";
+        if (referenceFlocking.enabled)
+        {
+            outputText.text = $"Flocking Values || Cohesion: {referenceFlocking.cohWeight}, Separation: {referenceFlocking.sepWeight}, Alignment: {referenceFlocking.aliWeight}";
+        }
+        else
+        {
+            outputText.text = "";
+        }
     }
 }

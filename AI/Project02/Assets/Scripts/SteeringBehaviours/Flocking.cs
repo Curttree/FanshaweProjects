@@ -23,7 +23,7 @@ public class Flocking : SteeringBehaviour
         CalculateWeights();
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -64,8 +64,6 @@ public class Flocking : SteeringBehaviour
                 aliCount = 0;
             }
         }
-
-
         CalculateWeights();
     }
 
@@ -175,7 +173,6 @@ public class Flocking : SteeringBehaviour
         steer += Separate() * sepWeight;
         steer += Align() * aliWeight;
         steer += Cohesion() * cohWeight;
-
         return steer;
     }
 }
