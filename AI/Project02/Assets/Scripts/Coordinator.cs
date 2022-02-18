@@ -68,43 +68,43 @@ public class Coordinator : MonoBehaviour
                                         new Vector3(-30, 0, 10),
                                         new Vector3(-30, 0, -10) };
 
-        vFormation = new Vector3[] { new Vector3(0, 0, 10),
-                                        new Vector3(0, 0, -10),
-                                        new Vector3(20, 0, 20),
+        vFormation = new Vector3[] { new Vector3(10, 0, 0),
+                                        new Vector3(-10, 0, 0),
                                         new Vector3(20, 0, -20),
-                                        new Vector3(40, 0, 30),
-                                        new Vector3(40, 0, -30),
-                                        new Vector3(60, 0, 40),
-                                        new Vector3(60, 0, -40),
-                                        new Vector3(80, 0, 50),
-                                        new Vector3(80, 0, -50),
-                                        new Vector3(100, 0, 60),
-                                        new Vector3(100, 0, -60) };
+                                        new Vector3(-20, 0, -20),
+                                        new Vector3(30, 0, -40),
+                                        new Vector3(-30, 0, -40),
+                                        new Vector3(40, 0, -60),
+                                        new Vector3(-40, 0, -60),
+                                        new Vector3(50, 0, -80),
+                                        new Vector3(-50, 0, -80),
+                                        new Vector3(60, 0, -100),
+                                        new Vector3(-60, 0, -100) };
 
         lineFormation = new Vector3[] { new Vector3(0, 0, 0),
-                                        new Vector3(20, 0, 0),
-                                        new Vector3(40, 0, 0),
-                                        new Vector3(60, 0, 0),
-                                        new Vector3(80, 0, 0),
-                                        new Vector3(100, 0, 0),
-                                        new Vector3(-20, 0, 0),
-                                        new Vector3(-40, 0, 0),
-                                        new Vector3(-60, 0, 0),
-                                        new Vector3(-80, 0, 0),
-                                        new Vector3(-100, 0, 0),
-                                        new Vector3(-120, 0, 0) };
-
-        rowsFormation = new Vector3[] { new Vector3(0, 0, -40), 
-                                        new Vector3(0, 0, -20),
-                                        new Vector3(0, 0, 0),
                                         new Vector3(0, 0, 20),
                                         new Vector3(0, 0, 40),
                                         new Vector3(0, 0, 60),
-                                        new Vector3(60, 0, -40),
-                                        new Vector3(60, 0, -20),
+                                        new Vector3(0, 0, 80),
+                                        new Vector3(0, 0, 100),
+                                        new Vector3(0, 0, -20),
+                                        new Vector3(0, 0, -40),
+                                        new Vector3(0, 0, -60),
+                                        new Vector3(0, 0, -80),
+                                        new Vector3(0, 0, -100),
+                                        new Vector3(0, 0, -120) };
+
+        rowsFormation = new Vector3[] { new Vector3(-40, 0, 0), 
+                                        new Vector3(-20, 0, 0),
+                                        new Vector3(0, 0, 0),
+                                        new Vector3(20, 0, 0),
+                                        new Vector3(40, 0, 0),
                                         new Vector3(60, 0, 0),
-                                        new Vector3(60, 0, 20),
-                                        new Vector3(60, 0, 40),
+                                        new Vector3(-40, 0, 60),
+                                        new Vector3(-20, 0, 60),
+                                        new Vector3(0, 0, 60),
+                                        new Vector3(20, 0, 60),
+                                        new Vector3(40, 0, 60),
                                         new Vector3(60, 0, 60) };
 
         lastRotation = transform.rotation;
@@ -159,7 +159,22 @@ public class Coordinator : MonoBehaviour
             isFlocking = false;
             SetFlocking(isFlocking);
             pathNodes[currentNode].gameObject.GetComponent<MeshRenderer>().material = targetMaterials[1];
-            isFollowingPath = true;
+            isFollowingPath = true; 
+            for (int x = 0; x < positionOffset.Length; x++)
+            {
+                Quaternion newRotation = transform.rotation * Quaternion.Inverse(Quaternion.Euler(0, 0, 0));
+
+                // Rotate all of our formations first.
+                circleFormation[x] = newRotation * circleFormation[x];
+                vFormation[x] = newRotation * vFormation[x];
+                squareFormation[x] = newRotation * squareFormation[x];
+                lineFormation[x] = newRotation * lineFormation[x];
+                rowsFormation[x] = newRotation * rowsFormation[x];
+
+                positionOffset[x] = GetOriginalPosition(x);
+            }
+            lastRotation = transform.rotation;
+
         }
         else if (Input.GetKeyDown(KeyCode.Alpha9) || Input.GetKeyDown(KeyCode.Keypad9))
         {
@@ -169,21 +184,35 @@ public class Coordinator : MonoBehaviour
         {
             pathNodes[currentNode].gameObject.GetComponent<MeshRenderer>().material = targetMaterials[0];
             isFollowingPath = false;
+            for (int x = 0; x < positionOffset.Length; x++)
+            {
+                Quaternion newRotation = Quaternion.Euler(0, 0, 0) * Quaternion.Inverse(lastRotation);
+
+                // Rotate all of our formations first.
+                circleFormation[x] = newRotation * circleFormation[x];
+                vFormation[x] = newRotation * vFormation[x];
+                squareFormation[x] = newRotation * squareFormation[x];
+                lineFormation[x] = newRotation * lineFormation[x];
+                rowsFormation[x] = newRotation * rowsFormation[x];
+
+                positionOffset[x] = GetOriginalPosition(x);
+            }
             GetInFormation(lastFormation);
         }
         else if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus))
         {
             isFlocking = true;
-            SetFlocking(isFlocking);
-            //Special case. Enable seeking for this object.
+            SetCombination(isFlocking);
             gameObject.GetComponent<Seek>().enabled = true;
             pathNodes[currentNode].gameObject.GetComponent<MeshRenderer>().material = targetMaterials[1];
             isFollowingPath = true;
         }
         else if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
-            pathNodes[currentNode].gameObject.GetComponent<MeshRenderer>().material = targetMaterials[0];
             isFollowingPath = false;
+            pathNodes[currentNode].gameObject.GetComponent<MeshRenderer>().material = targetMaterials[0];
+            isFlocking = false;
+            SetCombination(isFlocking);
         }
 
 
@@ -191,19 +220,30 @@ public class Coordinator : MonoBehaviour
         {
             Vector3 target = FindTarget();
             vehicle.Seek(target);
-            //TODO: Rotate position depending on direction of movement.
-            for (int x = 0; x < positionOffset.Length; x++)
+            if (!isFlocking)
             {
-                Quaternion newRotation = transform.rotation * Quaternion.Inverse(lastRotation);
-                positionOffset[x] = newRotation * GetOriginalPosition(x);
-            }
-
-            lastRotation = transform.rotation;
-            for (int x = 0; x < positionOffset.Length; x++)
-            {
-                if (x < followers.Length)
+                //TODO: Rotate position depending on direction of movement.
+                for (int x = 0; x < positionOffset.Length; x++)
                 {
-                    followers[x].Seek(transform.position + positionOffset[x]);
+                    Quaternion newRotation = transform.rotation * Quaternion.Inverse(lastRotation);
+
+                    // Rotate all of our formations first.
+                    circleFormation[x] = newRotation * circleFormation[x];
+                    vFormation[x] = newRotation * vFormation[x];
+                    squareFormation[x] = newRotation * squareFormation[x];
+                    lineFormation[x] = newRotation * lineFormation[x];
+                    rowsFormation[x] = newRotation * rowsFormation[x];
+
+                    positionOffset[x] = GetOriginalPosition(x);
+                }
+
+                lastRotation = transform.rotation;
+                for (int x = 0; x < positionOffset.Length; x++)
+                {
+                    if (x < followers.Length)
+                    {
+                        followers[x].Seek(transform.position + positionOffset[x]);
+                    }
                 }
             }
         }
@@ -315,5 +355,34 @@ public class Coordinator : MonoBehaviour
                 childFlock.enabled = false;
             }
         }
+    }
+
+    private void SetCombination(bool value)
+    {
+        if (value)
+        {
+
+            foreach (Seek childSeek in GetComponentsInChildren<Seek>())
+            {
+                childSeek.enabled = false;
+            }
+            foreach (Flocking childFlock in GetComponentsInChildren<Flocking>())
+            {
+                childFlock.enabled = true;
+            }
+        }
+        else
+        {
+
+            foreach (Seek childSeek in GetComponentsInChildren<Seek>())
+            {
+                childSeek.enabled = true;
+            }
+            foreach (Flocking childFlock in GetComponentsInChildren<Flocking>())
+            {
+                childFlock.enabled = false;
+            }
+        }
+
     }
 }

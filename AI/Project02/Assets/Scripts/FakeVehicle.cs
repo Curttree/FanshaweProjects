@@ -9,6 +9,9 @@ public class FakeVehicle : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        transform.position = transform.parent.position;
+        if (_flocking.enabled)
+        {
+            transform.position = transform.parent.position;
+        }
     }
 }

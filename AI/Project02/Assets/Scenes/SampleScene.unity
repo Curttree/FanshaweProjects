@@ -306,9 +306,9 @@ MonoBehaviour:
   maxTurnSpeed: 50
   rb: {fileID: 144491336}
   rotationStart: 0
-  sepRadius: 50
-  aliRadius: 50
-  cohRadius: 50
+  sepRadius: 30
+  aliRadius: 30
+  cohRadius: 30
   sepWeight: 1
   aliWeight: 1
   cohWeight: 1
@@ -340,7 +340,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 244818216}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
@@ -503,9 +503,9 @@ MonoBehaviour:
   maxTurnSpeed: 50
   rb: {fileID: 342895664}
   rotationStart: 0
-  sepRadius: 50
-  aliRadius: 50
-  cohRadius: 50
+  sepRadius: 30
+  aliRadius: 30
+  cohRadius: 30
   sepWeight: 1
   aliWeight: 1
   cohWeight: 1
@@ -693,9 +693,9 @@ MonoBehaviour:
   maxTurnSpeed: 50
   rb: {fileID: 477620098}
   rotationStart: 0
-  sepRadius: 50
-  aliRadius: 50
-  cohRadius: 50
+  sepRadius: 30
+  aliRadius: 30
+  cohRadius: 30
   sepWeight: 1
   aliWeight: 1
   cohWeight: 1
@@ -733,7 +733,7 @@ Transform:
   - {fileID: 1248864085}
   - {fileID: 244818220}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &575995174
 PrefabInstance:
@@ -918,9 +918,9 @@ MonoBehaviour:
   maxTurnSpeed: 50
   rb: {fileID: 575995180}
   rotationStart: 0
-  sepRadius: 50
-  aliRadius: 50
-  cohRadius: 50
+  sepRadius: 30
+  aliRadius: 30
+  cohRadius: 30
   sepWeight: 1
   aliWeight: 1
   cohWeight: 1
@@ -1108,9 +1108,9 @@ MonoBehaviour:
   maxTurnSpeed: 50
   rb: {fileID: 622382059}
   rotationStart: 0
-  sepRadius: 50
-  aliRadius: 50
-  cohRadius: 50
+  sepRadius: 30
+  aliRadius: 30
+  cohRadius: 30
   sepWeight: 1
   aliWeight: 1
   cohWeight: 1
@@ -1142,7 +1142,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 695805815}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
@@ -1331,7 +1331,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 787859472}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
@@ -1583,9 +1583,9 @@ MonoBehaviour:
   maxTurnSpeed: 50
   rb: {fileID: 901575990}
   rotationStart: 0
-  sepRadius: 50
-  aliRadius: 50
-  cohRadius: 50
+  sepRadius: 30
+  aliRadius: 30
+  cohRadius: 30
   sepWeight: 1
   aliWeight: 1
   cohWeight: 1
@@ -1837,7 +1837,7 @@ MonoBehaviour:
   mass: 1
   maxSpeed: 10
   maxForce: 10
-  maxTurnSpeed: 10
+  maxTurnSpeed: 0.5
   rb: {fileID: 976307708}
   rotationStart: 0
   arriveRadius: 5
@@ -2127,9 +2127,9 @@ MonoBehaviour:
   maxTurnSpeed: 50
   rb: {fileID: 1088080251}
   rotationStart: 0
-  sepRadius: 50
-  aliRadius: 50
-  cohRadius: 50
+  sepRadius: 30
+  aliRadius: 30
+  cohRadius: 30
   sepWeight: 1
   aliWeight: 1
   cohWeight: 1
@@ -2199,7 +2199,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: eaa61d08b70146b428510e4dfee57ff9, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: eaa61d08b70146b428510e4dfee57ff9, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -2321,9 +2321,9 @@ MonoBehaviour:
   maxTurnSpeed: 50
   rb: {fileID: 1104894208}
   rotationStart: 0
-  sepRadius: 50
-  aliRadius: 50
-  cohRadius: 50
+  sepRadius: 30
+  aliRadius: 30
+  cohRadius: 30
   sepWeight: 1
   aliWeight: 1
   cohWeight: 1
@@ -2392,7 +2392,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1232589361
 GameObject:
@@ -2487,7 +2487,7 @@ RectTransform:
   m_Children:
   - {fileID: 1620388124}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2521,7 +2521,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1248864081}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
@@ -2633,9 +2633,9 @@ MonoBehaviour:
   maxTurnSpeed: 80
   rb: {fileID: 1466160254}
   rotationStart: 0
-  sepRadius: 50
-  aliRadius: 50
-  cohRadius: 50
+  sepRadius: 30
+  aliRadius: 30
+  cohRadius: 30
   sepWeight: 1
   aliWeight: 1
   cohWeight: 1
@@ -2669,36 +2669,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!1 &1469390934
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1469390935}
-  m_Layer: 0
-  m_Name: Boids
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1469390935
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1469390934}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1522451512
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2882,9 +2852,9 @@ MonoBehaviour:
   maxTurnSpeed: 50
   rb: {fileID: 1522451518}
   rotationStart: 0
-  sepRadius: 50
-  aliRadius: 50
-  cohRadius: 50
+  sepRadius: 30
+  aliRadius: 30
+  cohRadius: 30
   sepWeight: 1
   aliWeight: 1
   cohWeight: 1
@@ -3166,9 +3136,9 @@ MonoBehaviour:
   maxTurnSpeed: 50
   rb: {fileID: 1631102881}
   rotationStart: 0
-  sepRadius: 50
-  aliRadius: 50
-  cohRadius: 50
+  sepRadius: 30
+  aliRadius: 30
+  cohRadius: 30
   sepWeight: 1
   aliWeight: 1
   cohWeight: 1
@@ -3200,7 +3170,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1655676289}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5000001
   m_Height: 2
@@ -3548,9 +3518,9 @@ MonoBehaviour:
   maxTurnSpeed: 50
   rb: {fileID: 1933558921}
   rotationStart: 0
-  sepRadius: 50
-  aliRadius: 50
-  cohRadius: 50
+  sepRadius: 30
+  aliRadius: 30
+  cohRadius: 30
   sepWeight: 1
   aliWeight: 1
   cohWeight: 1
@@ -3738,9 +3708,9 @@ MonoBehaviour:
   maxTurnSpeed: 50
   rb: {fileID: 1970279470}
   rotationStart: 0
-  sepRadius: 50
-  aliRadius: 50
-  cohRadius: 50
+  sepRadius: 30
+  aliRadius: 30
+  cohRadius: 30
   sepWeight: 1
   aliWeight: 1
   cohWeight: 1
