@@ -10,11 +10,27 @@ public:
 	cFBO() :
 		ID(0),
 		colourTexture_0_ID(0),
-		depthTexture_ID(0),
+		depthTexture_ID(0), 
+		vertexMaterialColour_1_ID(0),
+		vertexNormal_2_ID(0),
+		vertexWorldPos_3_ID(0),
+		vertexSpecular_4_ID(0),
 		width(-1), height(-1) {};
 
 	GLuint ID;						// = 0;
-	GLuint colourTexture_0_ID;		// = 0;
+	GLuint colourTexture_0_ID;		// = 0;	
+									
+	// Our fragment shader is using this lighting function:
+	// vec4 calcualteLightContrib( 
+	//		vec3 vertexMaterialColour, 
+	//		vec3 vertexNormal, 
+	//		vec3 vertexWorldPos, 
+	//		vec4 vertexSpecular );
+
+	GLuint vertexMaterialColour_1_ID;		// = 1;
+	GLuint vertexNormal_2_ID;		// = 2;
+	GLuint vertexWorldPos_3_ID;		// = 3;
+	GLuint vertexSpecular_4_ID;		// = 4;
 
 //	GLuint TBDTexture_1_ID;
 //	GLuint TBDTexture_2_ID;

@@ -345,8 +345,8 @@ int main(void) {
             ::g_pFullScreenQuad->friendlyName = "Full_Screen_Quad";
 
             // For now, place quad on the right side
-            ::g_pFullScreenQuad->positionXYZ = glm::vec3(-500.0f, 0.0f, 1500.0f);
-            ::g_pFullScreenQuad->scale = 250.0f;
+            ::g_pFullScreenQuad->positionXYZ = glm::vec3( 0.0f, 0.0f, 500.0f);
+            ::g_pFullScreenQuad->scale = 100.0f;
             //            ::g_pFullScreenQuad->bIsWireframe = true;
             ::g_pFullScreenQuad->bIsWireframe = false;
             ::g_pFullScreenQuad->bDontLight = true;
@@ -393,6 +393,36 @@ int main(void) {
         glm::mat4x4 matModelFullScreenQuad = glm::mat4(1.0f);   // identity matrix
 
         glCullFace(GL_FRONT);
+
+        // Place the camera in front of the quad (the "full screen" quad)
+        // Quad location is ::g_pFullScreenQuad->positionXYZ = glm::vec3( 0.0f, 0.0f, 500.0f);
+
+        matView = glm::mat4(1.0f);
+
+        glm::vec3 eyeForFullScreenQuad = glm::vec3(0.0f, 0.0f, 450.0f);   // "eye" is 100 units away from the quad
+        glm::vec3 atForFullScreenQuad = glm::vec3(0.0f, 0.0f, 500.0f);    // "at" the quad
+        glm::vec3 upForFullScreenQuad = glm::vec3(0.0f, 1.0f, 0.0f);      // "at" the quad
+        matView = glm::lookAt(eyeForFullScreenQuad,
+            atForFullScreenQuad,
+            upForFullScreenQuad);      // up in y direction
+
+//detail::tmat4x4<T> glm::gtc::matrix_transform::ortho	(	T const & 	left,
+//                                                         T const & 	right,
+//                                                         T const & 	bottom,
+//                                                         T const & 	top,
+//                                                         T const & 	zNear,
+//                                                         T const & 	zFar )		
+        matView = glm::ortho(
+            0.0f,   // Left
+            1.0f / (float)width,  // Right
+            0.0f,   // Top
+            1.0f / (float)height, // Bottom
+            30.0f, // zNear  Eye is at 450, quad is at 500, so 50 units away
+            70.0f); // zFar
+
+
+        glUniformMatrix4fv(::g_pShaderManager->getIDFromFriendlyName("matView"),
+            1, GL_FALSE, glm::value_ptr(matView));
 
         DrawObject(::g_pFullScreenQuad,
             matModelFullScreenQuad,

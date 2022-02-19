@@ -9,6 +9,10 @@ in vec4 fDebugColourOverride;	// If debug normals are being drawn, this is the c
 
 // Replaces gl_FragColor
 out vec4 pixelOutputFragColour;			// RGB Alpha   (0 to 1) 
+out vec4 pixelOutputMaterialColour;		// = 1;
+out vec4 pixelOutputNormal;				// = 2;
+out vec4 pixelOutputWorldPos;			// = 3;
+out vec4 pixelOutputSpecular;			// = 4;
 
 // The "whole object" colour (diffuse and specular)
 uniform vec4 wholeObjectDiffuseColour;	// Whole object diffuse colour
@@ -265,6 +269,12 @@ void main()
 											
 	pixelOutputFragColour = outColour;
 	pixelOutputFragColour.a = wholeObjectAlphaTransparency;
+	
+	// Output the other things for the G-Buffer:
+	pixelOutputNormal = vec4(fNormal.xyz, 1.0f);
+	pixelOutputMaterialColour = vec4(vertexDiffuseColour.rgb, 1.0f);
+	pixelOutputWorldPos = vec4(fVertWorldLocation.xyz, 1.0f);
+	pixelOutputSpecular = wholeObjectSpecularColour.rgba;			// = 4;	
 
 };
 

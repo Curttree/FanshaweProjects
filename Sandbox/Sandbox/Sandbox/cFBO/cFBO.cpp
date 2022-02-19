@@ -18,6 +18,11 @@ bool cFBO::shutdown(void)
 	glDeleteTextures(1, &(this->colourTexture_0_ID));
 	glDeleteTextures(1, &(this->depthTexture_ID));
 
+	glDeleteTextures(1, &(this->vertexMaterialColour_1_ID));
+	glDeleteTextures(1, &(this->vertexNormal_2_ID));
+	glDeleteTextures(1, &(this->vertexWorldPos_3_ID));
+	glDeleteTextures(1, &(this->vertexSpecular_4_ID));
+
 	glDeleteFramebuffers(1, &(this->ID));
 
 	return true;
@@ -40,9 +45,44 @@ bool cFBO::init(int width, int height, std::string& error)
 
 	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB8,		// 8 bits per colour
 //	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA32F,		// 8 bits per colour
-this->width,				// g_FBO_SizeInPixes
-this->height);			// g_FBO_SizeInPixes
+	this->width,				// g_FBO_SizeInPixes
+	this->height);			// g_FBO_SizeInPixes
 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//***************************************************************
+
+	// Here's the additional layers of the G-buffer
+	glGenTextures(1, &(this->vertexMaterialColour_1_ID));
+	glBindTexture(GL_TEXTURE_2D, this->vertexMaterialColour_1_ID);
+	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB8,		// 8 bits per colour
+		this->width,				// g_FBO_SizeInPixes
+		this->height);			// g_FBO_SizeInPixes
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+	glGenTextures(1, &(this->vertexNormal_2_ID));
+	glBindTexture(GL_TEXTURE_2D, this->vertexNormal_2_ID);
+	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA32F,		// 1 float per 'color' (xyz)
+		this->width,				// g_FBO_SizeInPixes
+		this->height);			// g_FBO_SizeInPixes
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glGenTextures(1, &(this->vertexWorldPos_3_ID));
+	glBindTexture(GL_TEXTURE_2D, this->vertexWorldPos_3_ID);
+	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA32F,		// 1 float per xyz coordinate
+		this->width,				// g_FBO_SizeInPixes
+		this->height);			// g_FBO_SizeInPixes
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glGenTextures(1, &(this->vertexSpecular_4_ID));
+	glBindTexture(GL_TEXTURE_2D, this->vertexSpecular_4_ID);
+	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB8,		// 8 bits per colour
+		this->width,				// g_FBO_SizeInPixes
+		this->height);			// g_FBO_SizeInPixes
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	//***************************************************************
@@ -74,6 +114,21 @@ this->height);			// g_FBO_SizeInPixes
 		GL_COLOR_ATTACHMENT0,			// Colour goes to #0
 		this->colourTexture_0_ID, 0);
 
+	glFramebufferTexture(GL_FRAMEBUFFER,
+		GL_COLOR_ATTACHMENT1,			// Vertex Colour goes to #01
+		this->vertexMaterialColour_1_ID, 0);
+
+	glFramebufferTexture(GL_FRAMEBUFFER,
+		GL_COLOR_ATTACHMENT2,			// Normal goes to #02
+		this->vertexNormal_2_ID, 0);
+
+	glFramebufferTexture(GL_FRAMEBUFFER,
+		GL_COLOR_ATTACHMENT3,			// Vertex World Position goes to #03
+		this->vertexWorldPos_3_ID, 0);
+
+	glFramebufferTexture(GL_FRAMEBUFFER,
+		GL_COLOR_ATTACHMENT4,			// Vertex Specular colour + Power Position goes to #03
+		this->vertexSpecular_4_ID, 0);
 
 	//	glFramebufferTexture(GL_FRAMEBUFFER,
 	//						 GL_DEPTH_ATTACHMENT,
@@ -83,15 +138,16 @@ this->height);			// g_FBO_SizeInPixes
 		this->depthTexture_ID, 0);
 
 	static const GLenum draw_bufers[] =
-	{
-		GL_COLOR_ATTACHMENT0
+	{ 
+		GL_COLOR_ATTACHMENT0,
+		GL_COLOR_ATTACHMENT1,
+		GL_COLOR_ATTACHMENT2,
+		GL_COLOR_ATTACHMENT3,
+		GL_COLOR_ATTACHMENT4
 	};
-	glDrawBuffers(1, draw_bufers);		// There are 4 outputs now
+	glDrawBuffers(5, draw_bufers);		// There are 5 outputs now
 
 	// ***************************************************************
-
-
-
 
 	// ADD ONE MORE THING...
 	bool bFrameBufferIsGoodToGo = true;
