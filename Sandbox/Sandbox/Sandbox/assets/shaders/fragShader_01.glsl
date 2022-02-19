@@ -36,6 +36,8 @@ uniform bool bIsImposter;
 // This is the camera eye location (update every frame)
 uniform vec4 eyeLocation;
 
+uniform vec2 screenWidthHeight;
+
 // Indicates which 'pass' we are doing
 const uint PASS_0_ENTIRE_SCENE = 0;
 const uint PASS_1_QUAD_ONLY = 1;
@@ -78,8 +80,13 @@ uniform sampler2D texture_00;		// GL_TEXTURE_2D
 uniform sampler2D texture_01;		// GL_TEXTURE_2D
 uniform sampler2D texture_02;		// GL_TEXTURE_2D
 uniform sampler2D texture_03;		// GL_TEXTURE_2D
+uniform sampler2D texture_04;		// GL_TEXTURE_2D
+uniform sampler2D texture_05;		// GL_TEXTURE_2D
+uniform sampler2D texture_06;		// GL_TEXTURE_2D
+uniform sampler2D texture_07;		// GL_TEXTURE_2D
 
 uniform vec4 texture2D_Ratios0to3;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
+uniform vec4 texture2D_Ratios4to7;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
 
 // Cube maps for skybox, etc.
 uniform samplerCube cubeMap_00;			// Tropical day time
@@ -122,11 +129,26 @@ void main()
 	if ( renderPassNumber == PASS_1_QUAD_ONLY )
 	{
 		// Render the texture to the quad, and that's it
-
-		vec3 sampleColour = texture( texture_07, fUVx2.xy ).rgb;
+		vec2 UVlookup;
+		UVlookup.x = gl_FragCoord.x / screenWidthHeight.x;	// Width
+		UVlookup.y = gl_FragCoord.y / screenWidthHeight.y;	// Height
+		vec3 sampleColour = texture( texture_07, UVlookup ).rgb;
 
 		pixelOutputFragColour.rgb = sampleColour.rgb;
 		pixelOutputFragColour.a = 1.0f;
+		// Chromatic Aberration
+		//vec3 sampleColour;
+		//float offset = 0.01f;
+		//vec2 UVred =   vec2(fUVx2.x + offset, fUVx2.y);
+		//vec2 UVgreen = vec2(fUVx2.x,          fUVx2.y + offset);
+		//vec2 UVblue =  vec2(fUVx2.x - offset, fUVx2.y - offset);
+
+		//sampleColour.r = texture( texture_07, UVred ).r;
+		//sampleColour.g = texture( texture_07, UVgreen ).g;
+		//sampleColour.b = texture( texture_07, UVblue ).b;
+
+		//pixelOutputFragColour.rgb = sampleColour;
+		//pixelOutputFragColour.a = 1.0f;
 
 		// Early exit
 		return;

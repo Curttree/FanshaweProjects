@@ -16,6 +16,12 @@ namespace gdp2022Physics
 		, orientation(desc.orientation)
 		, angularVelocity(desc.angularVelocity)
 		, angularDamping(desc.angularDamping)
+		, linearAcceleration(glm::vec3(0.f))
+		, angularAcceleration(glm::vec3(0.f))
+		, force(glm::vec3(0.f))
+		, gravity(glm::vec3(0.f))
+		, torque(glm::vec3(0.f))
+
 	{
 		if (isStatic || desc.mass <= 0.0f)
 		{

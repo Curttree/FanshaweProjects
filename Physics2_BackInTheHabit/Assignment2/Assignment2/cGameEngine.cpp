@@ -102,6 +102,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		planeDesc.mass = 1.f;
 		planeDesc.position = glm::vec3(0.f, 24.5f, -24.5f);
 		planeDesc.linearVelocity = glm::vec3(0.f);
+		planeDesc.friction = 0.75f;
 		wall->rigidBody = m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
 
 		m_PhysicsWorld->AddRigidBody(wall->rigidBody);
@@ -131,6 +132,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		planeDesc.mass = 1.f;
 		planeDesc.position = glm::vec3(0.f, 24.5f, 24.5f);
 		planeDesc.linearVelocity = glm::vec3(0.f);
+		planeDesc.friction = 0.75f;
 		planeDesc.orientation = glm::quat(glm::vec3(0.f, glm::pi<float>(), 0.f));
 		wall->rigidBody = m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
 
@@ -162,6 +164,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		planeDesc.mass = 1.f;
 		planeDesc.position = glm::vec3(24.5f, 24.5f, 0.f);
 		planeDesc.linearVelocity = glm::vec3(0.f);
+		planeDesc.friction = 0.75f;
 		planeDesc.orientation = glm::quat(glm::vec3(0.f, -glm::pi<float>() / 2, 0.f));
 		wall->rigidBody = m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
 
@@ -193,6 +196,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		planeDesc.mass = 1.f;
 		planeDesc.position = glm::vec3(-24.5f, 24.5f, 0.f);
 		planeDesc.linearVelocity = glm::vec3(0.f);
+		planeDesc.friction = 0.75f;
 		planeDesc.orientation = glm::quat(glm::vec3(0.f, glm::pi<float>() / 2, 0.f));
 		wall->rigidBody = m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
 
@@ -225,7 +229,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		sphereDesc.mass = 1.f;
 		sphereDesc.position = glm::vec3(0.f, 1.f, 0.f);
 		sphereDesc.linearVelocity = glm::vec3(0.f);
-		sphereDesc.restitution = 0.8f;
+		sphereDesc.restitution = 0.9f;
 		sphereDesc.friendlyName = "Ball";
 		ballOne->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
@@ -258,7 +262,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		sphereDesc.mass = 2.5f;
 		sphereDesc.position = glm::vec3(10.f, 2.5f, 0.f);
 		sphereDesc.linearVelocity = glm::vec3(0.f);
-		sphereDesc.restitution = 0.8f;
+		sphereDesc.restitution = 0.9f;
 		sphereDesc.friendlyName = "Ball";
 		ball->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
@@ -287,7 +291,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		sphereDesc.mass = 1.5f;
 		sphereDesc.position = glm::vec3(-10.f, 1.5f, 10.f);
 		sphereDesc.linearVelocity = glm::vec3(0.f);
-		sphereDesc.restitution = 0.8f;
+		sphereDesc.restitution = 0.9f;
 		sphereDesc.friendlyName = "Ball";
 		ball->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
@@ -315,7 +319,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		sphereDesc.mass = 4.f;
 		sphereDesc.position = glm::vec3(0.f, 4.f, 10.f);
 		sphereDesc.linearVelocity = glm::vec3(0.f);
-		sphereDesc.restitution = 0.8f;
+		sphereDesc.restitution = 0.9f;
 		sphereDesc.friendlyName = "Ball";
 		ball->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
@@ -343,7 +347,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		sphereDesc.mass = 0.75f;
 		sphereDesc.position = glm::vec3(0.f, 0.75f, -10.f);
 		sphereDesc.linearVelocity = glm::vec3(0.f);
-		sphereDesc.restitution = 0.8f;
+		sphereDesc.restitution = 0.9f;
 		sphereDesc.friendlyName = "Ball";
 		ball->rigidBody = m_PhysicsFactory->CreateRigidBody(sphereDesc, ballShape);
 
@@ -366,19 +370,19 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 void cGameEngine::MovePlayerObject() {
 	if (keys[GLFW_KEY_S])
 	{
-		::g_pPlayerEntity->rigidBody->ApplyForceAtPoint(glm::normalize(::g_pFlyCamera->getAt()) * objectMovementSpeed, glm::vec3(0.f,1.f,0.f));
+		::g_pPlayerEntity->rigidBody->ApplyForceAtPoint(glm::normalize(::g_pFlyCamera->getAt()) * objectMovementSpeed, glm::vec3(0.f,::g_pPlayerEntity->mesh->scale,0.f));
 	}
 	if (keys[GLFW_KEY_W])
 	{
-		::g_pPlayerEntity->rigidBody->ApplyForceAtPoint(glm::normalize(::g_pFlyCamera->getAt()) * -objectMovementSpeed, glm::vec3(0.f, 1.f, 0.f));
+		::g_pPlayerEntity->rigidBody->ApplyForceAtPoint(glm::normalize(::g_pFlyCamera->getAt()) * -objectMovementSpeed, glm::vec3(0.f, ::g_pPlayerEntity->mesh->scale, 0.f));
 	}
 	if (keys[GLFW_KEY_A])
 	{
-		::g_pPlayerEntity->rigidBody->ApplyForceAtPoint(glm::normalize(::g_pFlyCamera->getLeft()) * -objectMovementSpeed, glm::vec3(0.f, 1.f, 0.f));
+		::g_pPlayerEntity->rigidBody->ApplyForceAtPoint(glm::normalize(::g_pFlyCamera->getLeft()) * -objectMovementSpeed, glm::vec3(0.f, ::g_pPlayerEntity->mesh->scale, 0.f));
 	}
 	if (keys[GLFW_KEY_D])
 	{
-		::g_pPlayerEntity->rigidBody->ApplyForceAtPoint(glm::normalize(::g_pFlyCamera->getLeft()) * objectMovementSpeed, glm::vec3(0.f, 1.f, 0.f));
+		::g_pPlayerEntity->rigidBody->ApplyForceAtPoint(glm::normalize(::g_pFlyCamera->getLeft()) * objectMovementSpeed, glm::vec3(0.f, ::g_pPlayerEntity->mesh->scale, 0.f));
 	}
 }
 

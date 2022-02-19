@@ -5,6 +5,7 @@
 #include <string>
 #include <extern/glm/glm.hpp>
 #include <extern/glm/vec3.hpp>
+#include <extern/glm/gtx/quaternion.hpp>
 #include <vector>
 
 class cMesh

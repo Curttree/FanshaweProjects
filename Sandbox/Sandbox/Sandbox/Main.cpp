@@ -165,6 +165,7 @@ int main(void) {
     std::vector<std::string> vecModelsToLoad;
     vecModelsToLoad.push_back("Sphere_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba_uv.ply");
+    vecModelsToLoad.push_back("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -200,8 +201,40 @@ int main(void) {
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
     double previousTime = glfwGetTime();
 
+    //TODO: Replace with my own implementation
+    // Create the FBO (Frame Buffer Object)
+    // The texture we can render to
+    ::g_pFBO = new cFBO();
+    // Set this off screen texture buffer to some random size
+    std::string FBOerrorString;
+    //    if (::g_pFBO->init(1024, 1024, FBOerrorString))
+    if (::g_pFBO->init(8 * 1024, 8 * 1024, FBOerrorString))
+    {
+        std::cout << "FBO is all set!" << std::endl;
+    }
+    else
+    {
+        std::cout << "FBO Error: " << FBOerrorString << std::endl;
+    }
+
+    // Clear the OG back buffer once, BEFORE we render anything
+    float ratio;
+    int width, height;
+    glfwGetFramebufferSize(pWindow, &width, &height);
+    ratio = width / (float)height;
+    glViewport(0, 0, width, height);
+    glClearColor(0.0f, 164.0f / 255.0f, 239.0f / 255.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    const GLint RENDER_PASS_0_ENTIRE_SCENE = 0;
+    const GLint RENDER_PASS_1_QUAD_ONLY = 1;
+    GLint renderPassNumber_LocID = glGetUniformLocation(program, "renderPassNumber");
 
     while (!glfwWindowShouldClose(pWindow)) {
+
+        // Set pass to #0
+        glUniform1ui(renderPassNumber_LocID, RENDER_PASS_0_ENTIRE_SCENE);
+
         float ratio;
         int width, height;
         glm::mat4 matModel;             // used to be "m"; Sometimes it's called "world"
@@ -213,15 +246,21 @@ int main(void) {
         deltaTime = (deltaTime > MAX_DELTA_TIME ? MAX_DELTA_TIME : deltaTime);
         previousTime = currentTime;
 
-        glfwGetFramebufferSize(pWindow, &width, &height);
-        ratio = width / (float)height;
+        // Set the output of the renderer to the screen (default FBO)
+        GLuint FBO_ID = ::g_pFBO->ID;
+        glBindFramebuffer(GL_FRAMEBUFFER, ::g_pFBO->ID);
+
+        // Set the viewport to the size of my offscreen texture (FBO)
+        glViewport(0, 0, ::g_pFBO->width, ::g_pFBO->height);
+        ratio = ::g_pFBO->width / (float)::g_pFBO->height;
 
         // Turn on the depth buffer
         glEnable(GL_DEPTH);         // Turns on the depth buffer
         glEnable(GL_DEPTH_TEST);    // Check if the pixel is already closer
 
-        glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //glViewport(0, 0, width, height);
+        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        ::g_pFBO->clearBuffers(true, true);
 
         // *******************************************************
         // Screen is cleared and we are ready to draw the scene...
@@ -295,6 +334,72 @@ int main(void) {
 
         DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
 
+        //TODO: Replace with own implementation
+        // 2nd pass of the render, where we do something bizzare
+        if (::g_pFullScreenQuad == NULL)
+        {
+            ::g_pFullScreenQuad = new cMesh;
+            //            ::g_pFullScreenQuad->meshName = "Imposter_Shapes/Quad_2_sided_aligned_on_XY_plane.ply";
+            ::g_pFullScreenQuad->meshName = "Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply";
+            //            ::g_pFullScreenQuad->meshName = "bun_zipper_xyz_rgba_uv.ply";
+            ::g_pFullScreenQuad->friendlyName = "Full_Screen_Quad";
+
+            // For now, place quad on the right side
+            ::g_pFullScreenQuad->positionXYZ = glm::vec3(-500.0f, 0.0f, 1500.0f);
+            ::g_pFullScreenQuad->scale = 250.0f;
+            //            ::g_pFullScreenQuad->bIsWireframe = true;
+            ::g_pFullScreenQuad->bIsWireframe = false;
+            ::g_pFullScreenQuad->bDontLight = true;
+            ::g_pFullScreenQuad->bUseObjectDebugColour = true;
+            ::g_pFullScreenQuad->objectDebugColourRGBA = glm::vec4(0.7f, 0.7f, 0.7f, 1.0f);
+        }
+        // Point the output of the renderer to the real framebuffer
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        //  Clear the frame buffer. 
+        // NOTE: I'm clearing the color bit AND the depth buffer
+        // I'm using the Microsoft DirectX light blue colour from here:
+        // https://usbrandcolors.com/microsoft-colors/
+        glClearColor(0.0f, 164.0f / 255.0f, 239.0f / 255.0f, 1.0f);
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glfwGetFramebufferSize(pWindow, &width, &height);
+        ratio = width / (float)height;
+
+        matProjection = glm::perspective(
+            ::g_pFlyCamera->FOV,
+            ratio,
+            ::g_pFlyCamera->nearPlane,      // Near plane (as large as possible)
+            ::g_pFlyCamera->farPlane);      // Far plane (as small as possible)
+
+        glViewport(0, 0, width, height);
+
+        GLint screenWidthHeight_locID = glGetUniformLocation(program, "screenWidthHeight");
+        glUniform2f(screenWidthHeight_locID, width, height);
+
+        glUniform1ui(renderPassNumber_LocID, RENDER_PASS_1_QUAD_ONLY);
+
+        // Set the FBO colour texture to be the texture source for this quad
+
+        GLuint FSQ_textureUnit = 7;	    // We picked 7 just because yolo (i.e. it doesn't matter, we just had to pick one)
+        glActiveTexture(FSQ_textureUnit + GL_TEXTURE0);
+        GLuint TextureNumber = ::g_pFBO->colourTexture_0_ID;
+        glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+        // uniform sampler2D texture_07;
+        GLint FSQ_textureSamplerID = glGetUniformLocation(program, "texture_07");
+        glUniform1i(FSQ_textureSamplerID, FSQ_textureUnit);
+
+        glm::mat4x4 matModelFullScreenQuad = glm::mat4(1.0f);   // identity matrix
+
+        glCullFace(GL_FRONT);
+
+        DrawObject(::g_pFullScreenQuad,
+            matModelFullScreenQuad,
+            matModel_Location,
+            matModelInverseTranspose_Location,
+            program,
+            ::g_pVAOManager);
 
         // "Present" what we've drawn.
         glfwSwapBuffers(pWindow);        // Show what we've drawn

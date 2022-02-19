@@ -2,6 +2,7 @@
 
 #include "cRigidBody.h"
 #include <extern/glm/geometric.hpp>
+#include <iostream>
 
 namespace gdp2022Physics
 {
@@ -297,7 +298,7 @@ namespace gdp2022Physics
 			return true;
 
 		// Intersects if start or end position within radius from plane
-		if (abs(adist) <= r || abs(bdist) <= r)
+		if (abs(adist) <= r || abs(bdist) < r)
 			return true;
 
 		// No intersection
