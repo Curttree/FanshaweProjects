@@ -122,6 +122,27 @@ int main(void) {
 
     glUseProgram(program);
 
+    // ************************************************
+    // Now, I'm going to "load up" all the uniform locations
+    // (This was to show how a map could be used)
+    cShaderManager::cShaderProgram* pShaderProc = ::g_pShaderManager->pGetShaderProgramFromFriendlyName("Shader#1");
+
+    int theUniformIDLoc = -1;
+    theUniformIDLoc = glGetUniformLocation(program, "matModel");
+    pShaderProc->mapUniformName_to_UniformLocation["matModel"] = theUniformIDLoc;
+
+    // Or...
+    pShaderProc->mapUniformName_to_UniformLocation["matModel"] = glGetUniformLocation(program, "matModel");
+    pShaderProc->mapUniformName_to_UniformLocation["matView"] = glGetUniformLocation(program, "matView");
+    pShaderProc->mapUniformName_to_UniformLocation["matProjection"] = glGetUniformLocation(program, "matProjection");
+    pShaderProc->mapUniformName_to_UniformLocation["matModelInverseTranspose"] = glGetUniformLocation(program, "matModelInverseTranspose");
+
+    pShaderProc->mapUniformName_to_UniformLocation["wholeObjectSpecularColour"] = glGetUniformLocation(program, "wholeObjectSpecularColour");
+    // .. and so on...
+    pShaderProc->mapUniformName_to_UniformLocation["theLights[0].position"] = glGetUniformLocation(program, "wholeObjectSpecularColour");
+    // ... and so on..
+    // ************************************************
+
     mvp_location = glGetUniformLocation(program, "MVP");
     GLint matModel_Location = glGetUniformLocation(program, "matModel");
     GLint matView_Location = glGetUniformLocation(program, "matView");
@@ -350,8 +371,12 @@ int main(void) {
             cameraAt,    // "at"
             cameraUp);
 
+        cShaderManager::cShaderProgram* pShaderProc = ::g_pShaderManager->pGetShaderProgramFromFriendlyName("Shader#1");
 
-        glUniformMatrix4fv(matView_Location, 1, GL_FALSE, glm::value_ptr(matView));
+        glUniformMatrix4fv(pShaderProc->getUniformID_From_Name("matView"),
+            1, GL_FALSE, glm::value_ptr(matView));
+
+
         glUniformMatrix4fv(matProjection_Location, 1, GL_FALSE, glm::value_ptr(matProjection));
 
 
@@ -482,8 +507,7 @@ int main(void) {
             30.0f, // zNear  Eye is at 450, quad is at 500, so 50 units away
             70.0f); // zFar
 
-
-        glUniformMatrix4fv(::g_pShaderManager->getIDFromFriendlyName("matView"),
+        glUniformMatrix4fv(pShaderProc->getUniformID_From_Name("matView"),
             1, GL_FALSE, glm::value_ptr(matView));
 
         DrawObject(::g_pFullScreenQuad,
