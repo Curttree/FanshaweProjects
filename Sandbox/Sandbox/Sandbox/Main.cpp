@@ -166,6 +166,8 @@ int main(void) {
     vecModelsToLoad.push_back("Sphere_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply");
+    vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
+    vecModelsToLoad.push_back("HockeyPlayer.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -197,6 +199,26 @@ int main(void) {
     ::g_pTextureManager->SetBasePath("assets/textures");
 
     ::g_pTextureManager->Create2DTextureFromBMPFile("BrightColouredUVMap.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("ice.bmp", true);
+
+    // Add a skybox texture
+    std::string errorTextString;
+    ::g_pTextureManager->SetBasePath("assets/textures/cubemaps");
+    if (!::g_pTextureManager->CreateCubeTextureFromBMPFiles("Skybox",
+        "winterRiver_posX.bmp",    /* posX_fileName */
+        "winterRiver_negX.bmp",     /*negX_fileName */
+        "winterRiver2_negY.bmp",     /*negY_fileName*/
+        "winterRiver_posY.bmp",       /*posY_fileName*/
+        "winterRiver2_posZ.bmp",    /*posZ_fileName*/
+        "winterRiver2_negZ.bmp",      /*negZ_fileName*/
+        true, errorTextString))
+    {
+        std::cout << "Didn't load because: " << errorTextString << std::endl;
+    }
+    else
+    {
+        std::cout << "Loaded the skybox cube texture OK" << std::endl;
+    }
 
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
     double previousTime = glfwGetTime();
@@ -217,7 +239,7 @@ int main(void) {
         std::cout << "FBO Error: " << FBOerrorString << std::endl;
     }
 
-    // Clear the OG back buffer once, BEFORE we render anything
+    // Clear the Original back buffer once, BEFORE we render anything
     float ratio;
     int width, height;
     glfwGetFramebufferSize(pWindow, &width, &height);
@@ -230,6 +252,32 @@ int main(void) {
     const GLint RENDER_PASS_1_QUAD_ONLY = 1;
     GLint renderPassNumber_LocID = glGetUniformLocation(program, "renderPassNumber");
 
+#pragma region Objects
+
+    // TODO: If this has a large performance impact as scene grows, refactor.
+    // Move objects with transparency to their own vector.
+    for (cMesh* mesh : ::g_vec_pMeshes) {
+        if (mesh->alphaTransparency < 1.f) {
+            ::g_vec_pMeshesTransparency.push_back(mesh);
+        }
+    }
+    // Now that we have all of our transparent objects, remove from the original vector.
+    std::vector<cMesh*>::iterator location;
+    for (cMesh* mesh : ::g_vec_pMeshesTransparency) {
+        location = std::find(g_vec_pMeshes.begin(), g_vec_pMeshes.end(), mesh);
+        if (location != g_vec_pMeshes.end()) {
+            ::g_vec_pMeshes.erase(location);
+        }
+    }
+    cMesh* pSkybox = new cMesh();
+
+    // Mimics a skybox
+    pSkybox->meshName = "Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply";
+    pSkybox->scale = 5'000'000.0f;
+
+    pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
+
+#pragma endregion
     while (!glfwWindowShouldClose(pWindow)) {
 
         // Set pass to #0
@@ -330,6 +378,20 @@ int main(void) {
         }//for (unsigned int index
         // Scene is drawn
         // **********************************************************************   
+
+        // After drawing the other objects, draw the skybox to limit overdraw.
+
+        GLint bIsSkyBox_LocID = glGetUniformLocation(program, "bIsSkyBox");
+        glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_TRUE);
+
+        // Move the "skybox object" with the camera
+        pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
+        DrawObject(
+            pSkybox, glm::mat4(1.0f),
+            matModel_Location, matModelInverseTranspose_Location,
+            program, ::g_pVAOManager);
+
+        glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_FALSE);
 
 
         DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);

@@ -63,6 +63,7 @@ extern std::string g_TitleText;	// = "";
 
 // List of objects to draw
 extern std::vector< cMesh* > g_vec_pMeshes;
+extern std::vector< cMesh* > g_vec_pMeshesTransparency;
 
 // Note: This returns a COPY of the object as a stack variable (not a pointer)
 bool g_FindObjectByUniqueID(unsigned int uniqueID_toFind, cMesh& theObjectIFound);
