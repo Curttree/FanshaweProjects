@@ -12,8 +12,7 @@ out vec4 pixelOutputFragColour;			// RGB Alpha   (0 to 1)
 // These make up the G-Buffer:
 out vec4 pixelOutputMaterialColour;		// = 1;		rga (w unused)
 out vec4 pixelOutputNormal;				// = 2;		xyz (w unused)
-out vec4 pixelOutputWorldPos;			// = 3;		xyz 
-										//			w = 0 if lit, 1 if unlit
+out vec4 pixelOutputWorldPos;			// = 3;		xyz w = 0 if lit, 1 if unlit
 out vec4 pixelOutputSpecular;			// = 4;		rgb, w = power
 const float G_BUFFER_OBJECT_NOT_LIT = 0.0f;
 const float G_BUFFER_LIT = 1.0f;
@@ -52,6 +51,15 @@ const uint PASS_2_LIGHT_PASS = 2;		// Apply lighting to G-Buffer
 const uint PASS_3_2D_EFFECTS_PASS = 3;		// Optional effects (blur, whatever...)
 uniform uint renderPassNumber;
 
+// On the 2nd pass (light pass), I'll read from these ones
+// So I'll connect the FBO vertexMaterialColour_1_ID texture to texVertexMaterialColour.
+uniform sampler2D texVertexMaterialColour;
+uniform sampler2D texVertexNormal;
+uniform sampler2D texVertexWorldPos;
+uniform sampler2D texVertexSpecular;
+
+// On the 3rd pass (effects pass), we'll read from this ones
+uniform sampler2D texLightPassColourBuffer;
 
 struct sLight
 {
@@ -141,7 +149,7 @@ void main()
 		vec2 UVlookup;
 		UVlookup.x = gl_FragCoord.x / screenWidthHeight.x;	// Width
 		UVlookup.y = gl_FragCoord.y / screenWidthHeight.y;	// Height
-		vec3 sampleColour = texture( texture_07, UVlookup ).rgb;
+		vec3 sampleColour = texture( texLightPassColourBuffer, UVlookup ).rgb;
 
 		pixelOutputFragColour.rgb = sampleColour.rgb;
 		pixelOutputFragColour.a = 1.0f;
@@ -165,12 +173,62 @@ void main()
 	// Apply lighting to G-Buffer
 	if ( renderPassNumber == PASS_2_LIGHT_PASS )
 	{
+		// Now we do the light pass.
+		// The big difference is we are reading from the previous textures 
+		//	we wrote to in the 1st pass (that wrote to the G-Buffer)
+
+		// Get the UV for this pixel
+		vec2 UVlookup;
+		UVlookup.x = gl_FragCoord.x / screenWidthHeight.x;	// Width
+		UVlookup.y = gl_FragCoord.y / screenWidthHeight.y;	// Height
+
+		//	vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal, 
+        //                              vec3 vertexWorldPos, vec4 vertexSpecular );
+
+		vec4 vertDiffuse = 		 texture( texVertexMaterialColour, UVlookup ).rgba;
+		vec4 vertWorldPosition = texture( texVertexWorldPos,       UVlookup ).rgba;
+
+		// Is this pixel being lit (calculating light calculation)?
+		if ( vertWorldPosition.w == G_BUFFER_OBJECT_NOT_LIT )
+		{	
+			// Nope. 
+			pixelOutputFragColour.rgb = vertDiffuse.rgb;
+			pixelOutputFragColour.a = 1.0f;
+			// Early exit
+			return;
+		}
+
+		// Otherwise, we ARE lighting this pixel
+		// So get the additional info we need for lighting
+		vec4 vertNormal = 		 texture( texVertexNormal,         UVlookup ).rgba;
+		vec4 vertSpecular = 	 texture( texVertexSpecular,       UVlookup ).rgba;
+
+		//	vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal, 
+        //                              vec3 vertexWorldPos, vec4 vertexSpecular );
+		vertSpecular.rgb *= 0.0001f;
+		vertSpecular.rgb += vec3(1.0f);
+
+		vertNormal.xyz = normalize(vertNormal.xyz);
+		pixelOutputFragColour = calcualteLightContrib( vertDiffuse.rgb,	
+		                                               vertNormal.xyz, 		
+		                                               vertWorldPosition.xyz,	
+		                                               vertSpecular.rgba );
 
 
+
+		pixelOutputFragColour.a = 1.0f;
 		return;
 	}
 	
 	pixelOutputFragColour.a = wholeObjectAlphaTransparency;
+	pixelOutputFragColour.rgb = vec3(0.0f, 0.0f, 0.0f);
+
+	// Set the other FBO outputs
+	pixelOutputMaterialColour = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	pixelOutputNormal = vec4(fNormal.xyz, 1.0f);
+	pixelOutputWorldPos.xyz = vec3(0.0f, 0.0f, 0.0f);
+	pixelOutputWorldPos.w = G_BUFFER_LIT;
+	pixelOutputSpecular = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 	
 	// If face normals are being generated from the geometry shader, 
 	//	then this is true, and the colours are taken from the debug colour override value.
@@ -269,44 +327,49 @@ void main()
 			// + etc... the other 4 texture units
 	}
 
-	// Used for drawing "debug" objects (usually wireframe)
-	if ( bDontLightObject )
-	{
-		pixelOutputFragColour.rgb= vertexDiffuseColour.rgb;
-		pixelOutputFragColour.a = wholeObjectAlphaTransparency;		
-		// Early exit from shader
-		return;
-	}
 
 	// Makes this "black" but not quite...
 	vertexDiffuseColour.rgb *= 0.0001f;
 
-	vertexDiffuseColour.rgb += 	
-			(texture( texture_00, fUVx2.xy ).rgb * texture2D_Ratios0to3.x)  + 
-		    (texture( texture_01, fUVx2.xy ).rgb * texture2D_Ratios0to3.y)  + 
-			(texture( texture_02, fUVx2.xy ).rgb * texture2D_Ratios0to3.z)  + 
-			(texture( texture_03, fUVx2.xy ).rgb * texture2D_Ratios0to3.w);
+	if ( (bUseWholeObjectDiffuseColour == false) && 
+	     (bUseDebugColour == false) )
+	{
+		vertexDiffuseColour.rgb = 	
+				(texture( texture_00, fUVx2.xy ).rgb * texture2D_Ratios0to3.x)  + 
+				(texture( texture_01, fUVx2.xy ).rgb * texture2D_Ratios0to3.y)  + 
+				(texture( texture_02, fUVx2.xy ).rgb * texture2D_Ratios0to3.z)  + 
+				(texture( texture_03, fUVx2.xy ).rgb * texture2D_Ratios0to3.w);
 			// + etc... the other 4 texture units
 			
-	
-	vertexDiffuseColour.rgb += 	
+		vertexDiffuseColour.rgb += 	
 			(texture( maskTexture_00, fUVx2.xy ).rgb * texture( maskTextureTop_00, fUVx2.xy ).rgb * mask_Ratios0to1.x)  + 
 		    (texture( maskTexture_01, fUVx2.xy ).rgb * texture( maskTextureTop_01, fUVx2.xy ).rgb * mask_Ratios0to1.y);
 			// 		
+	}
+	// Used for drawing "debug" objects (usually wireframe)
+	//if ( bDontLightObject )
+	//{
+	//	pixelOutputFragColour.rgb= vertexDiffuseColour.rgb;
+	//	pixelOutputFragColour.a = wholeObjectAlphaTransparency;		
+	//	// Early exit from shader
+	//	return;
+	//}
 	
-	vec4 outColour = calcualteLightContrib( vertexDiffuseColour.rgb,		
-	                                        fNormal.xyz, 		// Normal at the vertex (in world coords)
-                                            fVertWorldLocation.xyz,	// Vertex WORLD position
-											wholeObjectSpecularColour.rgba );
-											
-	pixelOutputFragColour = outColour;
-	pixelOutputFragColour.a = wholeObjectAlphaTransparency;
+	//vec4 outColour = calcualteLightContrib( vertexDiffuseColour.rgb,		
+	//                                        fNormal.xyz, 		// Normal at the vertex (in world coords)
+    //                                        fVertWorldLocation.xyz,	// Vertex WORLD position
+	//										wholeObjectSpecularColour.rgba );
+	//										
+	//pixelOutputFragColour = outColour;
+	//pixelOutputFragColour.a = wholeObjectAlphaTransparency;
 	
 	// Output the other things for the G-Buffer:
-	pixelOutputNormal = vec4(fNormal.xyz, 1.0f);
+	pixelOutputNormal = vec4(normalize(fNormal.xyz), 1.0f);
 	pixelOutputMaterialColour = vec4(vertexDiffuseColour.rgb, 1.0f);
 	pixelOutputWorldPos = vec4(fVertWorldLocation.xyz, 1.0f);
+	pixelOutputWorldPos.w = G_BUFFER_LIT;
 	pixelOutputSpecular = wholeObjectSpecularColour.rgba;			// = 4;	
+	
 
 };
 

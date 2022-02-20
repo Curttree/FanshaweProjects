@@ -63,9 +63,9 @@ extern std::vector<iEntity*> g_vec_pActors;
 extern std::string g_TitleText;	// = "";
 
 // Full screen quad mesh for 2nd rendering pass
-//extern cMesh* g_pFullScreenQuad; // = NULL
+extern cMesh* g_pFullScreenQuad; // = NULL
 // The FBO that the full screen quad is going to use
-//extern cFBO* g_pFBO;    // = NULL
+extern cFBO* g_pFBO;    // = NULL
 
 
 // List of objects to draw

@@ -357,11 +357,11 @@ int main(void) {
 #pragma region FBO/2nd Pass Rendering
     // Create the FBO (Frame Buffer Object)
 // The texture we can render to
-    cFBO localFBO;
+    ::g_pFBO = new cFBO();
     // Set this off screen texture buffer to some random size
     std::string FBOerrorString;
     //    if (::g_pFBO->init(1024, 1024, FBOerrorString))
-    if (localFBO.init(8 * 1024, 8 * 1024, FBOerrorString))
+    if (::g_pFBO->init(8 * 1024, 8 * 1024, FBOerrorString))
     {
         std::cout << "FBO is all set!" << std::endl;
     }
@@ -404,15 +404,26 @@ int main(void) {
         deltaTime = (deltaTime > MAX_DELTA_TIME ? MAX_DELTA_TIME : deltaTime);
         previousTime = currentTime;
 
+
+        // Set pass to #0
+        glUniform1ui(renderPassNumber_LocID, PASS_1_G_BUFFER_PASS);
+
         glfwGetFramebufferSize(pWindow, &width, &height);
         ratio = width / (float)height;
+
+        // Set the output of the renderer to the screen (default FBO)
+        GLuint FBO_ID = ::g_pFBO->ID;
+        glBindFramebuffer(GL_FRAMEBUFFER, ::g_pFBO->ID);
+
+        // Set the viewport to the size of my offscreen texture (FBO)
+        glViewport(0, 0, ::g_pFBO->width, ::g_pFBO->height);
+        ratio = ::g_pFBO->width / (float)::g_pFBO->height;
 
         // Turn on the depth buffer
         glEnable(GL_DEPTH);         // Turns on the depth buffer
         glEnable(GL_DEPTH_TEST);    // Check if the pixel is already closer
 
-        glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        ::g_pFBO->clearBuffers(true, true);
 
         // *******************************************************
         // Screen is cleared and we are ready to draw the scene...
@@ -429,7 +440,7 @@ int main(void) {
         ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[0].position;
         #endif
 
-        matProjection = glm::perspective(
+        matProjection = glm::perspective<float>(
             ::g_pFlyCamera->FOV,
             ratio,
             ::g_pFlyCamera->nearPlane,      // Near plane (as large as possible)
@@ -451,7 +462,12 @@ int main(void) {
             cameraAt,    // "at"
             cameraUp);
 
-        glUniformMatrix4fv(matView_Location, 1, GL_FALSE, glm::value_ptr(matView));
+        cShaderManager::cShaderProgram* pShaderProc = ::g_pShaderManager->pGetShaderProgramFromFriendlyName("Shader#1");
+
+        glUniformMatrix4fv(pShaderProc->getUniformID_From_Name("matView"),
+            1, GL_FALSE, glm::value_ptr(matView));
+
+
         glUniformMatrix4fv(matProjection_Location, 1, GL_FALSE, glm::value_ptr(matProjection));
 
         // **********************************************************************
@@ -539,6 +555,7 @@ int main(void) {
             std::sort(::g_vec_pMeshesTransparency.begin(), ::g_vec_pMeshesTransparency.end(), [](const cMesh* a, const cMesh* b) -> bool
             {
                 // Find closest vertex for both objects. If this is identified as a performance bottleneck, optimize by only looking up/tracking exact vertex info if requested.
+                // Otherwise, just use position to get an approximation of where the object is located.
                 // This may also fail for more complex geometry, or cause other issues: https://www.khronos.org/opengl/wiki/Transparency_Sorting
                 //float minDistanceA = -1;     // Default to -1 so any valid distance will replace this.
                 //float minDistanceB = -1;     // Default to -1 so any valid distance will replace this.
@@ -555,10 +572,7 @@ int main(void) {
                 //        minDistanceB = candidate;
                 //    }
                 //}
-                //return minDistanceA > minDistanceB;
-
-                // Above approach is being removed for now. Storing vertex data on the heap proved troublesome once moving to FBO. Revisit with stack based approach if we feel this is needed, or otherwise optimize.
-                return glm::distance(a->positionXYZ, ::g_pFlyCamera->getEye()) > glm::distance(b->positionXYZ, ::g_pFlyCamera->getEye());
+                return glm::distance(a->positionXYZ , ::g_pFlyCamera->getEye()) > glm::distance(b->positionXYZ, ::g_pFlyCamera->getEye());
             });
         }
 
@@ -576,6 +590,213 @@ int main(void) {
                 program,
                 ::g_pVAOManager);
         }
+
+        glDisable(GL_BLEND);
+        {// STARTOF: 2nd (lighting pass)
+
+            // 2nd pass of the render, where we do something bizzare
+            if (::g_pFullScreenQuad == NULL)
+            {
+                ::g_pFullScreenQuad = new cMesh;
+                //            ::g_pFullScreenQuad->meshName = "Imposter_Shapes/Quad_2_sided_aligned_on_XY_plane.ply";
+                ::g_pFullScreenQuad->meshName = "Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply";
+                ::g_pFullScreenQuad->friendlyName = "Full_Screen_Quad";
+
+                ::g_pFullScreenQuad->positionXYZ = glm::vec3(0.0f, 0.0f, 500.0f);
+                ::g_pFullScreenQuad->scale = 100.0f;
+                ::g_pFullScreenQuad->bIsWireframe = false;
+                ::g_pFullScreenQuad->bDontLight = true;
+                ::g_pFullScreenQuad->bUseObjectDebugColour = true;
+                ::g_pFullScreenQuad->objectDebugColourRGBA = glm::vec4(0.7f, 0.7f, 0.7f, 1.0f);
+            }//if (::g_pFullScreenQuad == NULL)
+
+
+            // Set the viewport to the size of my offscreen texture (FBO)
+            //
+            // Note: We aren't rendering to the actual screen YET...
+            // ...we are reading from the off-screen FBO 
+            // ...AND writing to another FBO (in our case, they are the same 
+            //  FBO, but to a different texture withing that FBO)
+            // 
+            glViewport(0, 0, ::g_pFBO->width, ::g_pFBO->height);
+            ratio = ::g_pFBO->width / (float)::g_pFBO->height;
+            //            glfwGetFramebufferSize(pWindow, &width, &height);
+            //            ratio = width / (float)height;
+            //            glViewport(0, 0, width, height);
+
+
+            matView = glm::mat4(1.0f);
+
+
+            glm::vec3 eyeForFullScreenQuad = glm::vec3(0.0f, 0.0f, 450.0f);   // "eye" is 100 units away from the quad
+            glm::vec3 atForFullScreenQuad = glm::vec3(0.0f, 0.0f, 500.0f);    // "at" the quad
+            glm::vec3 upForFullScreenQuad = glm::vec3(0.0f, 1.0f, 0.0f);      // "at" the quad
+            matView = glm::lookAt(eyeForFullScreenQuad,
+                atForFullScreenQuad,
+                upForFullScreenQuad);      // up in y direction
+
+            glUniformMatrix4fv(pShaderProc->getUniformID_From_Name("matView"),
+                1, GL_FALSE, glm::value_ptr(matView));
+
+            matProjection = glm::ortho(
+                0.0f,   // Left
+                1.0f / (float)width,  // Right
+                0.0f,   // Top
+                1.0f / (float)height, // Bottom
+                30.0f, // zNear  Eye is at 450, quad is at 500, so 50 units away
+                70.0f); // zFar
+
+            glUniformMatrix4fv(pShaderProc->getUniformID_From_Name("matProjection"),
+                1, GL_FALSE, glm::value_ptr(matProjection));
+
+            GLint screenWidthHeight_locID = glGetUniformLocation(program, "screenWidthHeight");
+            glUniform2f(screenWidthHeight_locID, (float)width, (float)height);
+
+            glUniform1ui(renderPassNumber_LocID, PASS_2_LIGHT_PASS);
+
+            // Connect the 4 FBO G-Buffer textures to the shader
+            //uniform sampler2D texVertexMaterialColour;
+            //uniform sampler2D texVertexNormal;
+            //uniform sampler2D texVertexWorldPos;
+            //uniform sampler2D texVertexSpecular;
+
+            GLuint FSO_texVertexMaterialColour_TextureUnit = 5;	    // I picked 5 just because
+            glActiveTexture(FSO_texVertexMaterialColour_TextureUnit + GL_TEXTURE0);
+            GLuint texVertexMaterialColourTextureNumber = ::g_pFBO->vertexMaterialColour_1_ID;
+            glBindTexture(GL_TEXTURE_2D, texVertexMaterialColourTextureNumber);
+            // uniform sampler2D texVertexMaterialColour;
+            GLint FSQ_textureSamplerSamplerID = glGetUniformLocation(program, "texVertexMaterialColour");
+            glUniform1i(FSQ_textureSamplerSamplerID, FSO_texVertexMaterialColour_TextureUnit);
+
+            GLuint FSO_texVertexNormal_TextureUnit = 6;	    // I picked 6 just because
+            glActiveTexture(FSO_texVertexNormal_TextureUnit + GL_TEXTURE0);
+            GLuint texVertexNormalTextureNumber = ::g_pFBO->vertexNormal_2_ID;
+            glBindTexture(GL_TEXTURE_2D, texVertexNormalTextureNumber);
+            // uniform sampler2D texVertexNormal;
+            GLint FSQ_VertexNormalSamplerID = glGetUniformLocation(program, "texVertexNormal");
+            glUniform1i(FSQ_VertexNormalSamplerID, FSO_texVertexNormal_TextureUnit);
+
+            GLuint FSO_texVertexWorldPos_TextureUnit = 7;	    // I picked 7 just because
+            glActiveTexture(FSO_texVertexWorldPos_TextureUnit + GL_TEXTURE0);
+            GLuint texVertexWorldPosTextureNumber = ::g_pFBO->vertexWorldPos_3_ID;
+            glBindTexture(GL_TEXTURE_2D, texVertexWorldPosTextureNumber);
+            // uniform sampler2D texVertexWorldPos;
+            GLint FSQ_VertexWorldPosSamplerID = glGetUniformLocation(program, "texVertexWorldPos");
+            glUniform1i(FSQ_VertexWorldPosSamplerID, FSO_texVertexWorldPos_TextureUnit);
+
+            GLuint FSO_texVertexSpecular_TextureUnit = 8;	    // I picked 8 just because
+            glActiveTexture(FSO_texVertexSpecular_TextureUnit + GL_TEXTURE0);
+            GLuint texVertexSpecularTextureNumber = ::g_pFBO->vertexWorldPos_3_ID;
+            glBindTexture(GL_TEXTURE_2D, texVertexSpecularTextureNumber);
+            // uniform sampler2D texVertexSpecular;
+            GLint FSQ_VertexSpecularSamplerID = glGetUniformLocation(program, "texVertexSpecular");
+            glUniform1i(FSQ_VertexSpecularSamplerID, FSO_texVertexSpecular_TextureUnit);
+
+
+            glm::mat4x4 matModelFullScreenQuad = glm::mat4(1.0f);   // identity matrix
+
+            glCullFace(GL_FRONT);
+
+            DrawObject(::g_pFullScreenQuad,
+                matModelFullScreenQuad,
+                matModel_Location,
+                matModelInverseTranspose_Location,
+                program,
+                ::g_pVAOManager);
+
+        }// ENDOF: 2nd (lighting pass)
+
+        // 3rd pass of the render, where we do something bizzare
+        if (::g_pFullScreenQuad == NULL)
+        {
+            ::g_pFullScreenQuad = new cMesh;
+            ::g_pFullScreenQuad->meshName = "Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply";
+            ::g_pFullScreenQuad->friendlyName = "Full_Screen_Quad";
+
+            // For now, place quad on the right side
+            ::g_pFullScreenQuad->positionXYZ = glm::vec3(0.0f, 0.0f, 500.0f);
+            ::g_pFullScreenQuad->scale = 100.0f;
+            ::g_pFullScreenQuad->bIsWireframe = false;
+            ::g_pFullScreenQuad->bDontLight = true;
+            ::g_pFullScreenQuad->bUseObjectDebugColour = true;
+            ::g_pFullScreenQuad->objectDebugColourRGBA = glm::vec4(0.7f, 0.7f, 0.7f, 1.0f);
+        }
+        // Point the output of the renderer to the real framebuffer
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        //  Clear the frame buffer. 
+        // NOTE: I'm clearing the color bit AND the depth buffer
+        // I'm using the Microsoft DirectX light blue colour from here:
+        // https://usbrandcolors.com/microsoft-colors/
+        glClearColor(0.0f, 164.0f / 255.0f, 239.0f / 255.0f, 1.0f);
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glfwGetFramebufferSize(pWindow, &width, &height);
+        ratio = width / (float)height;
+
+        matProjection = glm::perspective <float>(
+            ::g_pFlyCamera->FOV,
+            ratio,
+            ::g_pFlyCamera->nearPlane,      // Near plane (as large as possible)
+            ::g_pFlyCamera->farPlane);      // Far plane (as small as possible)
+
+        glViewport(0, 0, width, height);
+
+        GLint screenWidthHeight_locID = glGetUniformLocation(program, "screenWidthHeight");
+        glUniform2f(screenWidthHeight_locID, (float)width, (float)height);
+
+        glUniform1ui(renderPassNumber_LocID, PASS_3_2D_EFFECTS_PASS);
+
+        // Set the FBO colour texture to be the texture source for this quad
+
+        GLuint FSQ_textureUnit = 7;	    // We picked 7 just because yolo (i.e. it doesn't matter, we just had to pick one)
+        glActiveTexture(FSQ_textureUnit + GL_TEXTURE0);
+        GLuint TextureNumber = ::g_pFBO->colourTexture_0_ID;
+        glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+        // uniform sampler2D texLightPassColourBuffer;
+        GLint FSQ_textureSamplerID = glGetUniformLocation(program, "texLightPassColourBuffer");
+        glUniform1i(FSQ_textureSamplerID, FSQ_textureUnit);
+
+        glm::mat4x4 matModelFullScreenQuad = glm::mat4(1.0f);   // identity matrix
+
+        glCullFace(GL_FRONT);
+
+        // Place the camera in front of the quad (the "full screen" quad)
+        // Quad location is ::g_pFullScreenQuad->positionXYZ = glm::vec3( 0.0f, 0.0f, 500.0f);
+
+        matView = glm::mat4(1.0f);
+
+        glm::vec3 eyeForFullScreenQuad = glm::vec3(0.0f, 0.0f, 450.0f);   // "eye" is 100 units away from the quad
+        glm::vec3 atForFullScreenQuad = glm::vec3(0.0f, 0.0f, 500.0f);    // "at" the quad
+        glm::vec3 upForFullScreenQuad = glm::vec3(0.0f, 1.0f, 0.0f);      // "at" the quad
+        matView = glm::lookAt(eyeForFullScreenQuad,
+            atForFullScreenQuad,
+            upForFullScreenQuad);      // up in y direction
+
+        //detail::tmat4x4<T> glm::gtc::matrix_transform::ortho	(	T const & 	left,
+        //                                                         T const & 	right,
+        //                                                         T const & 	bottom,
+        //                                                         T const & 	top,
+        //                                                         T const & 	zNear,
+        //                                                         T const & 	zFar )		
+        matProjection = glm::ortho(
+            0.0f,   // Left
+            1.0f / (float)width,  // Right
+            0.0f,   // Top
+            1.0f / (float)height, // Bottom
+            30.0f, // zNear  Eye is at 450, quad is at 500, so 50 units away
+            70.0f); // zFar
+
+        glUniformMatrix4fv(pShaderProc->getUniformID_From_Name("matProjection"),
+            1, GL_FALSE, glm::value_ptr(matProjection));
+
+        DrawObject(::g_pFullScreenQuad,
+            matModelFullScreenQuad,
+            matModel_Location,
+            matModelInverseTranspose_Location,
+            program,
+            ::g_pVAOManager);
 
         // "Present" what we've drawn.
         glfwSwapBuffers(pWindow);        // Show what we've drawn

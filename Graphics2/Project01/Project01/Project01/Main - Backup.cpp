@@ -274,9 +274,8 @@ int main(void) {
     {
         sModelDrawInfo theModel;
         std::string modelName = *itModel;
-        std::vector<sVertex> vecVertexArray;
         std::cout << "Loading " << modelName << "...";
-        if (!::g_pVAOManager->LoadModelIntoVAO(modelName, theModel, program, vecVertexArray))
+        if (!::g_pVAOManager->LoadModelIntoVAO(modelName, theModel, program))
         {
             std::cout << "didn't work because: " << std::endl;
             std::cout << ::g_pVAOManager->getLastError(true) << std::endl;
@@ -358,11 +357,11 @@ int main(void) {
 #pragma region FBO/2nd Pass Rendering
     // Create the FBO (Frame Buffer Object)
 // The texture we can render to
-    ::g_pFBO = new cFBO();
+    cFBO localFBO;
     // Set this off screen texture buffer to some random size
     std::string FBOerrorString;
     //    if (::g_pFBO->init(1024, 1024, FBOerrorString))
-    if (::g_pFBO->init(8 * 1024, 8 * 1024, FBOerrorString))
+    if (localFBO.init(8 * 1024, 8 * 1024, FBOerrorString))
     {
         std::cout << "FBO is all set!" << std::endl;
     }
@@ -405,26 +404,15 @@ int main(void) {
         deltaTime = (deltaTime > MAX_DELTA_TIME ? MAX_DELTA_TIME : deltaTime);
         previousTime = currentTime;
 
-
-        // Set pass to #0
-        glUniform1ui(renderPassNumber_LocID, PASS_1_G_BUFFER_PASS);
-
         glfwGetFramebufferSize(pWindow, &width, &height);
         ratio = width / (float)height;
-
-        // Set the output of the renderer to the screen (default FBO)
-        GLuint FBO_ID = ::g_pFBO->ID;
-        glBindFramebuffer(GL_FRAMEBUFFER, ::g_pFBO->ID);
-
-        // Set the viewport to the size of my offscreen texture (FBO)
-        glViewport(0, 0, ::g_pFBO->width, ::g_pFBO->height);
-        ratio = ::g_pFBO->width / (float)::g_pFBO->height;
 
         // Turn on the depth buffer
         glEnable(GL_DEPTH);         // Turns on the depth buffer
         glEnable(GL_DEPTH_TEST);    // Check if the pixel is already closer
 
-        ::g_pFBO->clearBuffers(true, true);
+        glViewport(0, 0, width, height);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // *******************************************************
         // Screen is cleared and we are ready to draw the scene...
@@ -441,7 +429,7 @@ int main(void) {
         ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[0].position;
         #endif
 
-        matProjection = glm::perspective<float>(
+        matProjection = glm::perspective(
             ::g_pFlyCamera->FOV,
             ratio,
             ::g_pFlyCamera->nearPlane,      // Near plane (as large as possible)
@@ -463,12 +451,7 @@ int main(void) {
             cameraAt,    // "at"
             cameraUp);
 
-        cShaderManager::cShaderProgram* pShaderProc = ::g_pShaderManager->pGetShaderProgramFromFriendlyName("Shader#1");
-
-        glUniformMatrix4fv(pShaderProc->getUniformID_From_Name("matView"),
-            1, GL_FALSE, glm::value_ptr(matView));
-
-
+        glUniformMatrix4fv(matView_Location, 1, GL_FALSE, glm::value_ptr(matView));
         glUniformMatrix4fv(matProjection_Location, 1, GL_FALSE, glm::value_ptr(matProjection));
 
         // **********************************************************************
@@ -556,24 +539,26 @@ int main(void) {
             std::sort(::g_vec_pMeshesTransparency.begin(), ::g_vec_pMeshesTransparency.end(), [](const cMesh* a, const cMesh* b) -> bool
             {
                 // Find closest vertex for both objects. If this is identified as a performance bottleneck, optimize by only looking up/tracking exact vertex info if requested.
-                // Otherwise, just use position to get an approximation of where the object is located.
                 // This may also fail for more complex geometry, or cause other issues: https://www.khronos.org/opengl/wiki/Transparency_Sorting
-                float minDistanceA = -1;     // Default to -1 so any valid distance will replace this.
-                float minDistanceB = -1;     // Default to -1 so any valid distance will replace this.
-                float candidate = 0;
-                for (const sVertex& vertex : ::g_pConfigManager->_vertexData[a->meshName]) {
-                    candidate = glm::distance((a->positionXYZ + glm::vec3(vertex.x, vertex.y, vertex.z)), ::g_pFlyCamera->getEye());
-                    if (candidate < minDistanceA || minDistanceA < 0) {
-                        minDistanceA = candidate;
-                    }
-                }
-                for (const sVertex& vertex : ::g_pConfigManager->_vertexData[b->meshName]) {
-                    candidate = glm::distance((b->positionXYZ + glm::vec3(vertex.x, vertex.y, vertex.z)), ::g_pFlyCamera->getEye());
-                    if (candidate < minDistanceB || minDistanceB < 0) {
-                        minDistanceB = candidate;
-                    }
-                }
-                return minDistanceA > minDistanceB;
+                //float minDistanceA = -1;     // Default to -1 so any valid distance will replace this.
+                //float minDistanceB = -1;     // Default to -1 so any valid distance will replace this.
+                //float candidate = 0;
+                //for (const sVertex& vertex : ::g_pConfigManager->_vertexData[a->meshName]) {
+                //    candidate = glm::distance((a->positionXYZ + glm::vec3(vertex.x, vertex.y, vertex.z)), ::g_pFlyCamera->getEye());
+                //    if (candidate < minDistanceA || minDistanceA < 0) {
+                //        minDistanceA = candidate;
+                //    }
+                //}
+                //for (const sVertex& vertex : ::g_pConfigManager->_vertexData[b->meshName]) {
+                //    candidate = glm::distance((b->positionXYZ + glm::vec3(vertex.x, vertex.y, vertex.z)), ::g_pFlyCamera->getEye());
+                //    if (candidate < minDistanceB || minDistanceB < 0) {
+                //        minDistanceB = candidate;
+                //    }
+                //}
+                //return minDistanceA > minDistanceB;
+
+                // Above approach is being removed for now. Storing vertex data on the heap proved troublesome once moving to FBO. Revisit with stack based approach if we feel this is needed, or otherwise optimize.
+                return glm::distance(a->positionXYZ, ::g_pFlyCamera->getEye()) > glm::distance(b->positionXYZ, ::g_pFlyCamera->getEye());
             });
         }
 
@@ -591,99 +576,6 @@ int main(void) {
                 program,
                 ::g_pVAOManager);
         }
-
-        glDisable(GL_BLEND);
-        // 2nd pass of the render, where we do something bizzare
-        if (::g_pFullScreenQuad == NULL)
-        {
-            ::g_pFullScreenQuad = new cMesh;
-            ::g_pFullScreenQuad->meshName = "Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply";
-            ::g_pFullScreenQuad->friendlyName = "Full_Screen_Quad";
-
-            // For now, place quad on the right side
-            ::g_pFullScreenQuad->positionXYZ = glm::vec3(0.0f, 0.0f, 500.0f);
-            ::g_pFullScreenQuad->scale = 100.0f;
-            ::g_pFullScreenQuad->bIsWireframe = false;
-            ::g_pFullScreenQuad->bDontLight = true;
-            ::g_pFullScreenQuad->bUseObjectDebugColour = true;
-            ::g_pFullScreenQuad->objectDebugColourRGBA = glm::vec4(0.7f, 0.7f, 0.7f, 1.0f);
-        }
-        // Point the output of the renderer to the real framebuffer
-
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        //  Clear the frame buffer. 
-        // NOTE: I'm clearing the color bit AND the depth buffer
-        // I'm using the Microsoft DirectX light blue colour from here:
-        // https://usbrandcolors.com/microsoft-colors/
-        glClearColor(0.0f, 164.0f / 255.0f, 239.0f / 255.0f, 1.0f);
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glfwGetFramebufferSize(pWindow, &width, &height);
-        ratio = width / (float)height;
-
-        matProjection = glm::perspective <float>(
-            ::g_pFlyCamera->FOV,
-            ratio,
-            ::g_pFlyCamera->nearPlane,      // Near plane (as large as possible)
-            ::g_pFlyCamera->farPlane);      // Far plane (as small as possible)
-
-        glViewport(0, 0, width, height);
-
-        GLint screenWidthHeight_locID = glGetUniformLocation(program, "screenWidthHeight");
-        glUniform2f(screenWidthHeight_locID, (float)width, (float)height);
-
-        glUniform1ui(renderPassNumber_LocID, PASS_3_2D_EFFECTS_PASS);
-
-        // Set the FBO colour texture to be the texture source for this quad
-
-        GLuint FSQ_textureUnit = 7;	    // We picked 7 just because yolo (i.e. it doesn't matter, we just had to pick one)
-        glActiveTexture(FSQ_textureUnit + GL_TEXTURE0);
-        GLuint TextureNumber = ::g_pFBO->colourTexture_0_ID;
-        glBindTexture(GL_TEXTURE_2D, TextureNumber);
-
-        // uniform sampler2D texture_07;
-        GLint FSQ_textureSamplerID = glGetUniformLocation(program, "texture_07");
-        glUniform1i(FSQ_textureSamplerID, FSQ_textureUnit);
-
-        glm::mat4x4 matModelFullScreenQuad = glm::mat4(1.0f);   // identity matrix
-
-        glCullFace(GL_FRONT);
-
-        // Place the camera in front of the quad (the "full screen" quad)
-        // Quad location is ::g_pFullScreenQuad->positionXYZ = glm::vec3( 0.0f, 0.0f, 500.0f);
-
-        matView = glm::mat4(1.0f);
-
-        glm::vec3 eyeForFullScreenQuad = glm::vec3(0.0f, 0.0f, 450.0f);   // "eye" is 100 units away from the quad
-        glm::vec3 atForFullScreenQuad = glm::vec3(0.0f, 0.0f, 500.0f);    // "at" the quad
-        glm::vec3 upForFullScreenQuad = glm::vec3(0.0f, 1.0f, 0.0f);      // "at" the quad
-        matView = glm::lookAt(eyeForFullScreenQuad,
-            atForFullScreenQuad,
-            upForFullScreenQuad);      // up in y direction
-
-        //detail::tmat4x4<T> glm::gtc::matrix_transform::ortho	(	T const & 	left,
-        //                                                         T const & 	right,
-        //                                                         T const & 	bottom,
-        //                                                         T const & 	top,
-        //                                                         T const & 	zNear,
-        //                                                         T const & 	zFar )		
-        matView = glm::ortho(
-            0.0f,   // Left
-            1.0f / (float)width,  // Right
-            0.0f,   // Top
-            1.0f / (float)height, // Bottom
-            30.0f, // zNear  Eye is at 450, quad is at 500, so 50 units away
-            70.0f); // zFar
-
-        glUniformMatrix4fv(pShaderProc->getUniformID_From_Name("matView"),
-            1, GL_FALSE, glm::value_ptr(matView));
-
-        DrawObject(::g_pFullScreenQuad,
-            matModelFullScreenQuad,
-            matModel_Location,
-            matModelInverseTranspose_Location,
-            program,
-            ::g_pVAOManager);
 
         // "Present" what we've drawn.
         glfwSwapBuffers(pWindow);        // Show what we've drawn
