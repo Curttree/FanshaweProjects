@@ -9,10 +9,14 @@ in vec4 fDebugColourOverride;	// If debug normals are being drawn, this is the c
 
 // Replaces gl_FragColor
 out vec4 pixelOutputFragColour;			// RGB Alpha   (0 to 1) 
-out vec4 pixelOutputMaterialColour;		// = 1;
-out vec4 pixelOutputNormal;				// = 2;
-out vec4 pixelOutputWorldPos;			// = 3;
-out vec4 pixelOutputSpecular;			// = 4;
+// These make up the G-Buffer:
+out vec4 pixelOutputMaterialColour;		// = 1;		rga (w unused)
+out vec4 pixelOutputNormal;				// = 2;		xyz (w unused)
+out vec4 pixelOutputWorldPos;			// = 3;		xyz 
+										//			w = 0 if lit, 1 if unlit
+out vec4 pixelOutputSpecular;			// = 4;		rgb, w = power
+const float G_BUFFER_OBJECT_NOT_LIT = 0.0f;
+const float G_BUFFER_LIT = 1.0f;
 
 // The "whole object" colour (diffuse and specular)
 uniform vec4 wholeObjectDiffuseColour;	// Whole object diffuse colour
@@ -43,8 +47,9 @@ uniform vec4 eyeLocation;
 uniform vec2 screenWidthHeight;
 
 // Indicates which 'pass' we are doing
-const uint PASS_0_ENTIRE_SCENE = 0;
-const uint PASS_1_QUAD_ONLY = 1;
+const uint PASS_1_G_BUFFER_PASS = 1;	// Renders only geometry to G-Buffer
+const uint PASS_2_LIGHT_PASS = 2;		// Apply lighting to G-Buffer
+const uint PASS_3_2D_EFFECTS_PASS = 3;		// Optional effects (blur, whatever...)
 uniform uint renderPassNumber;
 
 
@@ -130,7 +135,7 @@ void main()
 	// HACK: See if the UV coordinates are actually being passed in
 	pixelOutputFragColour.rgba = vec4(0.0f, 0.0f, 0.0, 1.0f); 
 	
-	if ( renderPassNumber == PASS_1_QUAD_ONLY )
+	if ( renderPassNumber == PASS_3_2D_EFFECTS_PASS )
 	{
 		// Render the texture to the quad, and that's it
 		vec2 UVlookup;
@@ -157,14 +162,31 @@ void main()
 		// Early exit
 		return;
 	}
+	// Apply lighting to G-Buffer
+	if ( renderPassNumber == PASS_2_LIGHT_PASS )
+	{
+
+
+		return;
+	}
 	
 	pixelOutputFragColour.a = wholeObjectAlphaTransparency;
 	
 	// If face normals are being generated from the geometry shader, 
-	//	then this is true, and the colours are taken from the 
+	//	then this is true, and the colours are taken from the debug colour override value.
+	// AND these AREN'T being lit
 	if ( int(fDebugColourOverride.w) == 1 )
-	{
-		pixelOutputFragColour = fDebugColourOverride;
+	{	
+		// Original colour buffer output
+		//pixelOutputFragColour = fDebugColourOverride;
+
+		// Now G-Buffer output:
+		pixelOutputMaterialColour.rgb = fDebugColourOverride.rgb;
+		// Don't care about normals (pixelOutputNormal)
+		pixelOutputWorldPos.xyz = fVertWorldLocation.xyz;
+		// This ISN'T lit, so set w = 
+		pixelOutputWorldPos.w = G_BUFFER_OBJECT_NOT_LIT;
+		// Not lit, so ignore specular, too (pixelOutputSpecular)
 		return;	
 	}
 	
@@ -206,7 +228,17 @@ void main()
 		{
 			pixelOutputFragColour.rgb += texture( cubeMap_00, fNormal.xyz ).rgb * cubeMap_Ratios0to3.x;
 		}
+		//if ( cubeMap_Ratios0to3.x > 0.0f )
+		//{
+		//	// Now G-Buffer output:
+		//	pixelOutputMaterialColour.rgb += texture( cubeMap_00, fNormal.xyz ).rgb * cubeMap_Ratios0to3.x;
+	//	}
 
+		// Don't care about normals (pixelOutputNormal)
+		pixelOutputWorldPos.xyz = fVertWorldLocation.xyz;
+		// This ISN'T lit, so set w = 
+		pixelOutputWorldPos.w = G_BUFFER_OBJECT_NOT_LIT;
+		// Not lit, so ignore specular, too (pixelOutputSpecular)
 		return;	
 	}//if ( bIsSkyBox )
 	

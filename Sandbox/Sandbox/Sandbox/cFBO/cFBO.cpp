@@ -189,11 +189,11 @@ void cFBO::clearColourBuffer(int bufferindex)
 void cFBO::clearBuffers(bool bClearColour, bool bClearDepth)
 {
 	glViewport(0, 0, this->width, this->height);
-	GLfloat	zero = 0.0f;
+	GLfloat	zero[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	GLfloat one = 1.0f;
 	if (bClearColour)
 	{
-		glClearBufferfv(GL_COLOR, 0, &zero);		// Colour
+		glClearBufferfv(GL_COLOR, 0, zero);		// Colour
 	}
 	if (bClearDepth)
 	{
@@ -205,6 +205,10 @@ void cFBO::clearBuffers(bool bClearColour, bool bClearDepth)
 	//  should be used to clear stencil buffers; be used to clear stencil buffers; 
 	//  other forms do not accept a buffer of GL_STENCIL.
 
+	glClearBufferfv(GL_COLOR, 1, zero);		// vertexMaterialColour_1_ID
+	glClearBufferfv(GL_COLOR, 2, zero);		// vertexNormal_2_ID
+	glClearBufferfv(GL_COLOR, 3, zero);		// vertexWorldPos_3_ID
+	glClearBufferfv(GL_COLOR, 4, zero);		// vertexSpecular_4_ID
 	// 
 	glStencilMask(0xFF);
 

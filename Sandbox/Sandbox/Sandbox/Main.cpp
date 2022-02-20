@@ -269,8 +269,14 @@ int main(void) {
     glClearColor(0.0f, 164.0f / 255.0f, 239.0f / 255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    const GLint RENDER_PASS_0_ENTIRE_SCENE = 0;
-    const GLint RENDER_PASS_1_QUAD_ONLY = 1;
+    enum eRenderPasses
+    {
+        PASS_1_G_BUFFER_PASS = 1,	// Renders only geometry to G-Buffer
+        PASS_2_LIGHT_PASS = 2,		// Apply lighting to G-Buffer
+        PASS_3_2D_EFFECTS_PASS = 3		// Optional effects (blur, whatever...)
+    };
+    //const GLint RENDER_PASS_0_ENTIRE_SCENE = 0;
+    //const GLint RENDER_PASS_1_QUAD_ONLY = 1;
     GLint renderPassNumber_LocID = glGetUniformLocation(program, "renderPassNumber");
 
 #pragma region Objects
@@ -302,7 +308,7 @@ int main(void) {
     while (!glfwWindowShouldClose(pWindow)) {
 
         // Set pass to #0
-        glUniform1ui(renderPassNumber_LocID, RENDER_PASS_0_ENTIRE_SCENE);
+        glUniform1ui( renderPassNumber_LocID, PASS_1_G_BUFFER_PASS );
 
         float ratio;
         int width, height;
@@ -347,7 +353,7 @@ int main(void) {
         // HACK: Debug sphere is 5th item added
 //        ::g_vecMeshes[5].positionXYZ = gTheLights.theLights[0].position;
 
-        matProjection = glm::perspective(
+        matProjection = glm::perspective<float>(
             ::g_pFlyCamera->FOV,
             ratio,
             ::g_pFlyCamera->nearPlane,      // Near plane (as large as possible)
@@ -453,7 +459,7 @@ int main(void) {
         glfwGetFramebufferSize(pWindow, &width, &height);
         ratio = width / (float)height;
 
-        matProjection = glm::perspective(
+        matProjection = glm::perspective <float> (
             ::g_pFlyCamera->FOV,
             ratio,
             ::g_pFlyCamera->nearPlane,      // Near plane (as large as possible)
@@ -462,9 +468,9 @@ int main(void) {
         glViewport(0, 0, width, height);
 
         GLint screenWidthHeight_locID = glGetUniformLocation(program, "screenWidthHeight");
-        glUniform2f(screenWidthHeight_locID, width, height);
+        glUniform2f(screenWidthHeight_locID, (float)width, (float)height);
 
-        glUniform1ui(renderPassNumber_LocID, RENDER_PASS_1_QUAD_ONLY);
+        glUniform1ui(renderPassNumber_LocID, PASS_3_2D_EFFECTS_PASS);
 
         // Set the FBO colour texture to be the texture source for this quad
 
