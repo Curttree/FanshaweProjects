@@ -220,30 +220,27 @@ public class Coordinator : MonoBehaviour
         {
             Vector3 target = FindTarget();
             vehicle.Seek(target);
-            if (!isFlocking)
+            //TODO: Rotate position depending on direction of movement.
+            for (int x = 0; x < positionOffset.Length; x++)
             {
-                //TODO: Rotate position depending on direction of movement.
-                for (int x = 0; x < positionOffset.Length; x++)
+                Quaternion newRotation = transform.rotation * Quaternion.Inverse(lastRotation);
+
+                // Rotate all of our formations first.
+                circleFormation[x] = newRotation * circleFormation[x];
+                vFormation[x] = newRotation * vFormation[x];
+                squareFormation[x] = newRotation * squareFormation[x];
+                lineFormation[x] = newRotation * lineFormation[x];
+                rowsFormation[x] = newRotation * rowsFormation[x];
+
+                positionOffset[x] = GetOriginalPosition(x);
+            }
+
+            lastRotation = transform.rotation;
+            for (int x = 0; x < positionOffset.Length; x++)
+            {
+                if (x < followers.Length)
                 {
-                    Quaternion newRotation = transform.rotation * Quaternion.Inverse(lastRotation);
-
-                    // Rotate all of our formations first.
-                    circleFormation[x] = newRotation * circleFormation[x];
-                    vFormation[x] = newRotation * vFormation[x];
-                    squareFormation[x] = newRotation * squareFormation[x];
-                    lineFormation[x] = newRotation * lineFormation[x];
-                    rowsFormation[x] = newRotation * rowsFormation[x];
-
-                    positionOffset[x] = GetOriginalPosition(x);
-                }
-
-                lastRotation = transform.rotation;
-                for (int x = 0; x < positionOffset.Length; x++)
-                {
-                    if (x < followers.Length)
-                    {
-                        followers[x].Seek(transform.position + positionOffset[x]);
-                    }
+                    followers[x].Seek(transform.position + positionOffset[x]);
                 }
             }
         }
@@ -364,11 +361,13 @@ public class Coordinator : MonoBehaviour
 
             foreach (Seek childSeek in GetComponentsInChildren<Seek>())
             {
-                childSeek.enabled = false;
+                childSeek.enabled = true;
+                childSeek.weight = 0.35f;
             }
             foreach (Flocking childFlock in GetComponentsInChildren<Flocking>())
             {
                 childFlock.enabled = true;
+                childFlock.weight = 0.65f;
             }
         }
         else
@@ -376,11 +375,12 @@ public class Coordinator : MonoBehaviour
 
             foreach (Seek childSeek in GetComponentsInChildren<Seek>())
             {
-                childSeek.enabled = true;
+                childSeek.weight = 1f;
             }
             foreach (Flocking childFlock in GetComponentsInChildren<Flocking>())
             {
                 childFlock.enabled = false;
+                childFlock.weight = 1f;
             }
         }
 

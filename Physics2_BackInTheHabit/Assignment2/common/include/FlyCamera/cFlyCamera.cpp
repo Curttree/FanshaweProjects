@@ -16,6 +16,7 @@ cFlyCamera::cFlyCamera()
 	this->m_frontOfCamera = glm::vec3(0.0f, 0.0f, 1.0f);
 	this->m_leftOfCamera = glm::vec3(-1.0f, 0.0f, 0.0f);
 
+	this->m_left = glm::vec3(-1.0f, 0.0f, 0.0f);
 	this->m_upIsYVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
 

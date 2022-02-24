@@ -17,7 +17,7 @@
     - 8 = Enable path following (note: a formation must be set before this is supported, otherwise objects will start path following once a formation is set)
     - 9 = Reverse path direction (objects will still continue towards current waypoint, but then reverse direction afterwards)
     - 0 = Stop path following and return to previous formations default orientation
-    - + = Enable flocking + path following (does not work properly. Flocking is enabled, parent follows path if formation had been previously set, but members of flock do not follow behind)
+    - + = Enable flocking + path following (requires some formation to have been previously set in order to path follow)
     - - = Disable flocking + path following
 
 - Flocking controls (only supported when flocking has been enabled)

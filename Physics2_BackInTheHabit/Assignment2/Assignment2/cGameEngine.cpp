@@ -383,7 +383,23 @@ void cGameEngine::MovePlayerObject() {
 	if (keys[GLFW_KEY_D])
 	{
 		::g_pPlayerEntity->rigidBody->ApplyForceAtPoint(glm::normalize(::g_pFlyCamera->getLeft()) * objectMovementSpeed, glm::vec3(0.f, ::g_pPlayerEntity->mesh->scale, 0.f));
-	}
+	}	
+	//if (keys[GLFW_KEY_S])
+	//{
+	//	::g_pPlayerEntity->rigidBody->ApplyForce(glm::normalize(::g_pFlyCamera->getAt()) * objectMovementSpeed);
+	//}
+	//if (keys[GLFW_KEY_W])
+	//{
+	//	::g_pPlayerEntity->rigidBody->ApplyForce(glm::normalize(::g_pFlyCamera->getAt()) * -objectMovementSpeed);
+	//}
+	//if (keys[GLFW_KEY_A])
+	//{
+	//	::g_pPlayerEntity->rigidBody->ApplyForce(glm::normalize(::g_pFlyCamera->getLeft()) * -objectMovementSpeed);
+	//}
+	//if (keys[GLFW_KEY_D])
+	//{
+	//	::g_pPlayerEntity->rigidBody->ApplyForce(glm::normalize(::g_pFlyCamera->getLeft()) * objectMovementSpeed);
+	//}
 }
 
 void cGameEngine::SwapPlayer(unsigned int newPlayerNum) {
