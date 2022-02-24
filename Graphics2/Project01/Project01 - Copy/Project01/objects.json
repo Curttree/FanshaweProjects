@@ -102,5 +102,16 @@
   "DiscardTexture":"lightBeam.bmp",
   "DiscardColour":{"r":0,"g":0,"b":0},
   "SpecPower":0
+  },
+  "TV":{
+  "Model":"tv.ply",
+  "Scale":10,
+  "Texture0":"blue.bmp"
+  },
+  "Screen":{
+  "Model":"Imposter_Shapes\\Quad_1_sided_aligned_on_XY_plane.ply",
+  "Scale":4.2,  
+  "IsReflective":true,
+  "Texture0":"white.bmp"
   }
 }

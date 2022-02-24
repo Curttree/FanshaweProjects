@@ -394,6 +394,7 @@ int main(void) {
 
     const GLint RENDER_PASS_0_ENTIRE_SCENE = 0;
     const GLint RENDER_PASS_1_QUAD_ONLY = 1;
+    const GLint PASS_3_2D_EFFECTS_PASS = 3;
     GLint renderPassNumber_LocID = glGetUniformLocation(program, "renderPassNumber");
 #pragma endregion
 
@@ -444,7 +445,9 @@ int main(void) {
         // Copy the light information into the shader to draw the scene
         ::g_pTheLights->CopyLightInfoToShader();
 
+#if defined _DEBUG
         ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[0].position;
+#endif
         // Place the "debug sphere" at the same location as the selected light (again)
         // HACK: Debug sphere is 5th item added
 //        ::g_vecMeshes[5].positionXYZ = gTheLights.theLights[0].position;
@@ -615,15 +618,11 @@ int main(void) {
         if (::g_pFullScreenQuad == NULL)
         {
             ::g_pFullScreenQuad = new cMesh;
-            //            ::g_pFullScreenQuad->meshName = "Imposter_Shapes/Quad_2_sided_aligned_on_XY_plane.ply";
             ::g_pFullScreenQuad->meshName = "Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply";
-            //            ::g_pFullScreenQuad->meshName = "bun_zipper_xyz_rgba_uv.ply";
             ::g_pFullScreenQuad->friendlyName = "Full_Screen_Quad";
 
-            // For now, place quad on the right side
             ::g_pFullScreenQuad->positionXYZ = glm::vec3(0.0f, 0.0f, 500.0f);
             ::g_pFullScreenQuad->scale = 100.0f;
-            //            ::g_pFullScreenQuad->bIsWireframe = true;
             ::g_pFullScreenQuad->bIsWireframe = false;
             ::g_pFullScreenQuad->bDontLight = true;
             ::g_pFullScreenQuad->bUseObjectDebugColour = true;
@@ -653,7 +652,7 @@ int main(void) {
         GLint screenWidthHeight_locID = glGetUniformLocation(program, "screenWidthHeight");
         glUniform2f(screenWidthHeight_locID, width, height);
 
-        glUniform1ui(renderPassNumber_LocID, RENDER_PASS_1_QUAD_ONLY);
+        glUniform1ui(renderPassNumber_LocID, PASS_3_2D_EFFECTS_PASS);
 
         // Set the FBO colour texture to be the texture source for this quad
 

@@ -46,6 +46,7 @@ uniform vec2 screenWidthHeight;
 const uint PASS_0_ENTIRE_SCENE = 0;
 const uint PASS_1_QUAD_ONLY = 1;
 const uint PASS_2_MONITOR = 2;
+const uint PASS_3_2D_EFFECTS_PASS = 3;
 uniform uint renderPassNumber;
 
 
@@ -68,7 +69,7 @@ const int SPOT_LIGHT_TYPE = 1;
 const int DIRECTIONAL_LIGHT_TYPE = 2;
 
 
-const int NUMBEROFLIGHTS = 143;
+const int NUMBEROFLIGHTS = 10;
 uniform sLight theLights[NUMBEROFLIGHTS];  	// 80 uniforms
 // 
 // uniform vec4 theLights[0].position;
@@ -164,7 +165,39 @@ void main()
 		// Early exit
 		return;
 	}
-	
+
+	if (renderPassNumber == PASS_3_2D_EFFECTS_PASS)
+	{
+		// Render the texture to the quad, and add in effects.
+
+		vec2 UVlookup;
+		UVlookup.x = gl_FragCoord.x / screenWidthHeight.x;	// Width
+		UVlookup.y = gl_FragCoord.y / screenWidthHeight.y;	// Height
+		vec3 sampleColour = texture(texture_07, UVlookup).rgb;
+
+		pixelOutputFragColour.rgb = sampleColour.rgb;
+		pixelOutputFragColour.b *= 1.5f;
+		pixelOutputFragColour.a = 1.0f;
+
+
+		// chromatic aberration example 
+		//vec3 sampleColour;
+		//float offset = 0.01f;
+		//vec2 UVred =   vec2(fUVx2.x + offset, fUVx2.y);
+		//vec2 UVgreen = vec2(fUVx2.x,          fUVx2.y + offset);
+		//vec2 UVblue =  vec2(fUVx2.x - offset, fUVx2.y - offset);
+
+		//sampleColour.r = texture( texture_07, UVred ).r;
+		//sampleColour.g = texture( texture_07, UVgreen ).g;
+		//sampleColour.b = texture( texture_07, UVblue ).b;
+
+		//pixelOutputFragColour.rgb = sampleColour;
+		//pixelOutputFragColour.a = 1.0f;
+
+		// Early exit
+		return;
+	}
+
 	pixelOutputFragColour.a = wholeObjectAlphaTransparency;
 	
 	// If face normals are being generated from the geometry shader, 
@@ -182,7 +215,7 @@ void main()
 		vec3 vec3DisSample = texture( discardTexture, fUVx2.xy ).rgb;
 		// Take average of this RGB sample
 		//
-		if (abs(discardColour.r - vec3DisSample.r) < 0.66f &&  abs(discardColour.g - vec3DisSample.g) < 0.66f && abs(discardColour.b - vec3DisSample.b) < 0.66f)
+		if (abs(discardColour.r - vec3DisSample.r) < 0.7f &&  abs(discardColour.g - vec3DisSample.g) < 0.7f && abs(discardColour.b - vec3DisSample.b) < 0.7f)
 		{	// "close enough"
 		
 			// DON'T even draw the pixel here
