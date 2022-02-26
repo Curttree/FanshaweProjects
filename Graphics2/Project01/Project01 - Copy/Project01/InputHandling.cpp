@@ -19,7 +19,7 @@ bool g_MouseIsInsideWindow = false;
 
 void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
 {
-    float cameraMoveSpeed = ::g_pFlyCamera->movementSpeed;
+    float cameraMoveSpeed = ::g_pActiveCamera->movementSpeed;
 
     float objectMovementSpeed = 0.1f;
     float lightMovementSpeed = 10.0f;
@@ -29,28 +29,37 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
         // Use "fly" camera (keyboard for movement, mouse for aim)
         if ( glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS )
         {
-            ::g_pFlyCamera->MoveForward_Z(+cameraMoveSpeed);
+            ::g_pActiveCamera->MoveForward_Z(+cameraMoveSpeed);
         }
         if ( glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_PRESS )	// "backwards"
         {
-            ::g_pFlyCamera->MoveForward_Z(-cameraMoveSpeed);
+            ::g_pActiveCamera->MoveForward_Z(-cameraMoveSpeed);
         }
         if ( glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS )	// "left"
         {
-            ::g_pFlyCamera->MoveLeftRight_X(-cameraMoveSpeed);
+            ::g_pActiveCamera->MoveLeftRight_X(-cameraMoveSpeed);
         }
         if ( glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_PRESS )	// "right"
         {
-            ::g_pFlyCamera->MoveLeftRight_X(+cameraMoveSpeed);
+            ::g_pActiveCamera->MoveLeftRight_X(+cameraMoveSpeed);
         }
         if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS )	// "up"
         {
-            ::g_pFlyCamera->MoveUpDown_Y(-cameraMoveSpeed);
+            ::g_pActiveCamera->MoveUpDown_Y(-cameraMoveSpeed);
         }
         if ( glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS )	// "down"
         {
-            ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
+            ::g_pActiveCamera->MoveUpDown_Y(+cameraMoveSpeed);
         }
+        if (glfwGetKey(pWindow, GLFW_KEY_L) == GLFW_PRESS)	// "down"
+        {
+            ::g_pActiveCamera = ::g_pFlyCamera;
+        }
+        if (glfwGetKey(pWindow, GLFW_KEY_T) == GLFW_PRESS)	// "down"
+        {
+            ::g_pActiveCamera = ::g_pTVCamera;
+        }
+
 
         if (glfwGetKey(pWindow, GLFW_KEY_1) == GLFW_PRESS)	// "down"
         {
@@ -197,7 +206,7 @@ void handleAsyncMouse(GLFWwindow* window, double deltaTime)
     double x, y;
     glfwGetCursorPos(window, &x, &y);
 
-    ::g_pFlyCamera->setMouseXY(x, y);
+    ::g_pActiveCamera->setMouseXY(x, y);
 
     const float MOUSE_SENSITIVITY = 2.0f;
 
@@ -208,9 +217,9 @@ void handleAsyncMouse(GLFWwindow* window, double deltaTime)
         && ::g_MouseIsInsideWindow )
     {
         // Mouse button is down so turn the camera
-        ::g_pFlyCamera->Yaw_LeftRight( ::g_pFlyCamera->getDeltaMouseX() * MOUSE_SENSITIVITY, deltaTime );
+        ::g_pActiveCamera->Yaw_LeftRight( ::g_pActiveCamera->getDeltaMouseX() * MOUSE_SENSITIVITY, deltaTime );
 
-        ::g_pFlyCamera->Pitch_UpDown( -::g_pFlyCamera->getDeltaMouseY() * MOUSE_SENSITIVITY, deltaTime );
+        ::g_pActiveCamera->Pitch_UpDown( -::g_pActiveCamera->getDeltaMouseY() * MOUSE_SENSITIVITY, deltaTime );
 
     }
 
@@ -220,15 +229,15 @@ void handleAsyncMouse(GLFWwindow* window, double deltaTime)
         const float MOUSE_WHEEL_SENSITIVITY = 0.1f;
 
         // Adjust the movement speed based on the wheel position
-        ::g_pFlyCamera->movementSpeed -= ( ::g_pFlyCamera->getMouseWheel() * MOUSE_WHEEL_SENSITIVITY );
+        ::g_pActiveCamera->movementSpeed -= ( ::g_pActiveCamera->getMouseWheel() * MOUSE_WHEEL_SENSITIVITY );
 
         // Clear the mouse wheel delta (or it will increase constantly)
-        ::g_pFlyCamera->clearMouseWheelValue();
+        ::g_pActiveCamera->clearMouseWheelValue();
 
 
-        if ( ::g_pFlyCamera->movementSpeed <= 0.0f )
+        if ( ::g_pActiveCamera->movementSpeed <= 0.0f )
         {
-            ::g_pFlyCamera->movementSpeed = 0.0f;
+            ::g_pActiveCamera->movementSpeed = 0.0f;
         }
     }
 
@@ -256,7 +265,7 @@ void GLFW_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     float mouseScrollWheelSensitivity = 0.1f;
 
-    ::g_pFlyCamera->setMouseWheelDelta(yoffset * mouseScrollWheelSensitivity);
+    ::g_pActiveCamera->setMouseWheelDelta(yoffset * mouseScrollWheelSensitivity);
 
     return;
 }

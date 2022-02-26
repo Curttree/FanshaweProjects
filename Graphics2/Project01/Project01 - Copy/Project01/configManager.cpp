@@ -126,6 +126,13 @@ cMesh* configManager::initMesh(std::string meshName, int source) {
                 result->refractionIndex = _objects[meshName.c_str()]["RefractionIndex"].GetFloat();
                 result->bDoesRefract = true;
             }
+            if (_objects[meshName.c_str()].HasMember("DiffuseColour")) {
+                result->bUseWholeObjectDiffuseColour = true;
+                result->wholeObjectDiffuseRGBA.r = _objects[meshName.c_str()]["DiffuseColour"]["r"].GetFloat();
+                result->wholeObjectDiffuseRGBA.g = _objects[meshName.c_str()]["DiffuseColour"]["g"].GetFloat();
+                result->wholeObjectDiffuseRGBA.b = _objects[meshName.c_str()]["DiffuseColour"]["b"].GetFloat();
+                result->wholeObjectDiffuseRGBA.a = 1.f;
+            }
         }
     }
     else if (source == ACTOR) {

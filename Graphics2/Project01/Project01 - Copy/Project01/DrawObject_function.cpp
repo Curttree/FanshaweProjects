@@ -182,7 +182,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
 
     {
         GLint eyeLocation_LocID = g_GetUniformLocation(shaderProgram, "eyeLocation");
-        glUniform4f(eyeLocation_LocID, ::g_pFlyCamera->eye.x, ::g_pFlyCamera->eye.y, ::g_pFlyCamera->eye.z, 1.f);
+        glUniform4f(eyeLocation_LocID, ::g_pActiveCamera->eye.x, ::g_pActiveCamera->eye.y, ::g_pActiveCamera->eye.z, 1.f);
 
         GLint bDoesReflect_LodID = g_GetUniformLocation(shaderProgram, "bDoesReflect");
         // Turn discard transparency off
@@ -222,6 +222,14 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
     else{
         glUniform1f(bUseSpecularMap_Location, (float)GL_FALSE);
     }
+
+    GLuint staticTextureNumber = ::g_pTextureManager->getTextureIDFromName(::g_pEffectsManager->GetStaticTexture());
+    // Picking texture unit 72 since it's not in use.
+    GLuint staticTextureUnit = 72;			// Texture unit go from 0 to 79
+    glActiveTexture(staticTextureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+    glBindTexture(GL_TEXTURE_2D, staticTextureNumber);
+    GLint staticTexture_LocID = g_GetUniformLocation(shaderProgram, "staticTexture");
+    glUniform1i(staticTexture_LocID, staticTextureUnit);
 
 
     {

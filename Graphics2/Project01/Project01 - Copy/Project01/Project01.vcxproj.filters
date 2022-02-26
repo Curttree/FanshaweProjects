@@ -58,6 +58,9 @@
     <Filter Include="FBO">
       <UniqueIdentifier>{0448401f-5bde-4610-8c7a-8c535c07564a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\EffectsManager">
+      <UniqueIdentifier>{17aa7887-ebc5-444c-9ce3-ae4a270ad0ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -168,6 +171,9 @@
     <ClCompile Include="cFBO\cFBO.cpp">
       <Filter>FBO</Filter>
     </ClCompile>
+    <ClCompile Include="cEffectsManager.cpp">
+      <Filter>Graphics\EffectsManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -274,6 +280,9 @@
     </ClInclude>
     <ClInclude Include="cFBO\cFBO.h">
       <Filter>FBO</Filter>
+    </ClInclude>
+    <ClInclude Include="cEffectsManager.h">
+      <Filter>Graphics\EffectsManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

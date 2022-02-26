@@ -75,18 +75,18 @@ void cWinContextMenu::showMenu(GLFWwindow* window, int x, int y)
     case ID_POSITION1:
         std::cout << "Picked \"Camera Position 1\" (ID_POSITION1)" << std::endl;
 
-        ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
-        ::g_pFlyCamera->setEye(::g_pConfigManager->_cameraStartingPosition);
+        ::g_pActiveCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
+        ::g_pActiveCamera->setEye(::g_pConfigManager->_cameraStartingPosition);
         break;
     case ID_POSITION2:
         std::cout << "Picked \"Camera Position 2\" (ID_POSITION2)" << std::endl;
-        ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
-        ::g_pFlyCamera->setEye(glm::vec3(0.f, 11.f, -265.f));
+        ::g_pActiveCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
+        ::g_pActiveCamera->setEye(glm::vec3(0.f, 11.f, -265.f));
         break;
     case ID_POSITION3:
         std::cout << "Picked \"Camera Position 3\" (ID_POSITION3)" << std::endl;
-        ::g_pFlyCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
-        ::g_pFlyCamera->setEye(glm::vec3(-159.f, 16.5f, 115.f));
+        ::g_pActiveCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
+        ::g_pActiveCamera->setEye(glm::vec3(-159.f, 16.5f, 115.f));
         break;
     case ID_TOGGLECOLLISION:
         std::cout << "Picked \"Toggle Collision Visibility\" (ID_TOGGLECOLLISION)" << std::endl;

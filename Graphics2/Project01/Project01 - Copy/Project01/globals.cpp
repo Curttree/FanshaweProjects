@@ -1,12 +1,15 @@
 #include "globals.h"
 
 cFlyCamera* g_pFlyCamera = NULL;
+cFlyCamera* g_pActiveCamera = NULL;
+cFlyCamera* g_pTVCamera = NULL;
 
 cVAOManager* g_pVAOManager = NULL;
 cShaderManager* g_pShaderManager = NULL;
 cLightManager* g_pTheLights = NULL; 
 cBasicTextureManager* g_pTextureManager = NULL;
-configManager* g_pConfigManager = NULL;
+configManager* g_pConfigManager = NULL; 
+cEffectsManager* g_pEffectsManager = NULL;
 
 std::vector< cMesh* > g_vec_pMeshes;
 std::vector< cMesh* > g_vec_pMeshesTransparency;

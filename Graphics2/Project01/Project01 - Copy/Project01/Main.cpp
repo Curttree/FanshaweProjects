@@ -15,6 +15,8 @@
 
 cWorldSpace* worldSpace = cWorldSpace::Instance();
 
+cMesh* pSkybox;
+
 // Function signature for DrawObject()
 void DrawObject(
     cMesh* pCurrentMesh,
@@ -30,6 +32,21 @@ void DrawDebugObjects(
     GLint matModelInverseTranspose_Location,
     GLuint program,
     cVAOManager* pVAOManager);
+
+void DrawAllObjects(
+    GLint matModel_Location,
+    GLint matModelInverseTranspose_Location,
+    GLint matProjection_Location,
+    GLuint program,
+    bool drawDebug = true);
+
+void DrawAllObjects(
+    GLint matModel_Location,
+    GLint matModelInverseTranspose_Location,
+    GLint matProjection_Location,
+    GLuint program,
+    glm::mat4 matView,
+    bool drawDebug = true);
 
 void InitShaders(GLuint& program, cShaderManager::cShader& vertShader, cShaderManager::cShader& geomShader, cShaderManager::cShader& fragShader) {
     // Hardcoding shader file names. May try to place in a common location in the future / make configurable.
@@ -49,6 +66,22 @@ void InitShaders(GLuint& program, cShaderManager::cShader& vertShader, cShaderMa
         std::cout << "Error making shader program: " << std::endl;
         std::cout << ::g_pShaderManager->getLastError() << std::endl;
     }
+}
+
+void ClearFBO(cFBO* fbo) {
+
+    // Set the output of the renderer to the fbo
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo->ID);
+
+    // Set the viewport to the size of my offscreen texture (FBO)
+    glViewport(0, 0, fbo->width, fbo->height);
+
+    // Turn on the depth buffer
+    glEnable(GL_DEPTH);         // Turns on the depth buffer
+    glEnable(GL_DEPTH_TEST);    // Check if the pixel is already closer
+
+    fbo->clearBuffers(true, true);
+
 }
 
 void Shutdown(GLFWwindow* pWindow){
@@ -122,6 +155,7 @@ int main(void) {
     ::g_StartUp(pWindow);
 
     ::g_pFlyCamera->setEye(::g_pConfigManager->_cameraStartingPosition);
+    ::g_pTVCamera->setEye(::g_pConfigManager->_cameraStartingPosition + glm::vec3(0.f,0.f,100.f));
     // Eventually figure out how to adjust orientation of camera so it doesn't 'jump' on first movement.
     //::g_pFlyCamera->setAt(::g_pConfigManager->_cameraStartingOrientation);
 
@@ -320,6 +354,8 @@ int main(void) {
     {
         std::cout << "Loaded the skybox cube texture OK" << std::endl;
     }
+
+    ::g_pEffectsManager->Initialize();
     #pragma endregion
 
 #pragma region Objects
@@ -342,7 +378,7 @@ int main(void) {
             ::g_vec_pMeshes.erase(location);
         }
     }
-    cMesh* pSkybox = new cMesh();
+    pSkybox = new cMesh();
 
     // Mimics a skybox
     pSkybox->meshName = "Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply";
@@ -356,14 +392,15 @@ int main(void) {
     monitor->meshName = "Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply";
     monitor->friendlyName = "TV Monitor";
 
-    monitor->positionXYZ = glm::vec3(0.0f, 10.0f, 10.0f);
-    monitor->scale = 100.0f;
+    monitor->positionXYZ = glm::vec3(-155, 16.f, -158.0f);
+    monitor->orientationXYZ = glm::vec3(0.0f, glm::pi<float>()/2, 0.f);
+    monitor->scale = 4.2f;
     monitor->bIsWireframe = false;
     monitor->bDontLight = true;
     monitor->bUseObjectDebugColour = true;
     monitor->objectDebugColourRGBA = glm::vec4(0.7f, 0.7f, 0.7f, 1.0f);
 
-    ::g_vec_pMeshes.push_back(monitor);
+    //::g_vec_pMeshes.push_back(monitor);
 
 #pragma endregion
 
@@ -376,7 +413,17 @@ int main(void) {
     //    if (::g_pFBO->init(1024, 1024, FBOerrorString))
     if (::g_pFBO->init(1200, 640, FBOerrorString))
     {
-        std::cout << "FBO is all set!" << std::endl;
+        std::cout << "Full Screen FBO is all set!" << std::endl;
+    }
+    else
+    {
+        std::cout << "FBO Error: " << FBOerrorString << std::endl;
+    }
+    cFBO smallFBO;
+    // Set this off screen texture buffer to a smaller size since it is being rendered at a low resolution.
+    if (smallFBO.init(300, 160, FBOerrorString))
+    {
+        std::cout << "Smaller FBO is all set!" << std::endl;
     }
     else
     {
@@ -394,6 +441,7 @@ int main(void) {
 
     const GLint RENDER_PASS_0_ENTIRE_SCENE = 0;
     const GLint RENDER_PASS_1_QUAD_ONLY = 1;
+    const GLint PASS_2_MONITOR = 2;
     const GLint PASS_3_2D_EFFECTS_PASS = 3;
     GLint renderPassNumber_LocID = glGetUniformLocation(program, "renderPassNumber");
 #pragma endregion
@@ -403,9 +451,6 @@ int main(void) {
     std::vector<cMesh*> sortedTransparentObjects;
 
     while (!glfwWindowShouldClose(pWindow)) {
-
-        // Set pass to #0
-        glUniform1ui(renderPassNumber_LocID, RENDER_PASS_0_ENTIRE_SCENE);
 
         float ratio;
         int width, height;
@@ -418,29 +463,8 @@ int main(void) {
         deltaTime = (deltaTime > MAX_DELTA_TIME ? MAX_DELTA_TIME : deltaTime);
         previousTime = currentTime;
 
-        // Set the output of the renderer to the screen (default FBO)
-        GLuint FBO_ID = ::g_pFBO->ID;
-        glBindFramebuffer(GL_FRAMEBUFFER, ::g_pFBO->ID);
-
-        // Set the viewport to the size of my offscreen texture (FBO)
-        glViewport(0, 0, ::g_pFBO->width, ::g_pFBO->height);
-        ratio = ::g_pFBO->width / (float)::g_pFBO->height;
-
-        // Turn on the depth buffer
-        glEnable(GL_DEPTH);         // Turns on the depth buffer
-        glEnable(GL_DEPTH_TEST);    // Check if the pixel is already closer
-
-        //glViewport(0, 0, width, height);
-        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        ::g_pFBO->clearBuffers(true, true);
-
-        // *******************************************************
-        // Screen is cleared and we are ready to draw the scene...
-        // *******************************************************
-
         // Update the title text
         glfwSetWindowTitle(pWindow, ::g_TitleText.c_str());
-
 
         // Copy the light information into the shader to draw the scene
         ::g_pTheLights->CopyLightInfoToShader();
@@ -448,23 +472,6 @@ int main(void) {
 #if defined _DEBUG
         ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[0].position;
 #endif
-        // Place the "debug sphere" at the same location as the selected light (again)
-        // HACK: Debug sphere is 5th item added
-//        ::g_vecMeshes[5].positionXYZ = gTheLights.theLights[0].position;
-
-        matProjection = glm::perspective(
-            ::g_pFlyCamera->FOV,
-            ratio,
-            ::g_pFlyCamera->nearPlane,      // Near plane (as large as possible)
-            ::g_pFlyCamera->farPlane);      // Far plane (as small as possible)
-
-        //matProjection = glm::perspective(
-        //    0.6f,       // in degrees
-        //    ratio,
-        //    10.0f,       // Near plane (as large as possible)
-        //    1'000'000.0f);   // Far plane (as small as possible)
-
-        ::g_pFlyCamera->Update(deltaTime);
 
 
         for (iEntity* actor : ::g_vec_pActors) {
@@ -472,149 +479,83 @@ int main(void) {
         }
         worldSpace->_world->Update(deltaTime);
 
-        glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
-        glm::vec3 cameraAt = ::g_pFlyCamera->getAtInWorldSpace();
-        glm::vec3 cameraUp = ::g_pFlyCamera->getUpVector();
+        // Now handle the proper scene.
+        ClearFBO(::g_pFBO);
 
+        //glm::vec3 eye = ::g_pActiveCamera->getEye();
+        // First get a smaller version of the scene for the monitor.
+        {
+        ClearFBO(&smallFBO);
+
+        glUniform1ui(renderPassNumber_LocID, RENDER_PASS_0_ENTIRE_SCENE);
+
+        glm::mat4 matView;
+
+        glm::vec3 cameraEye = ::g_pTVCamera->getEye();
+        glm::vec3 cameraAt = ::g_pTVCamera->getAtInWorldSpace();
+        glm::vec3 cameraUp = ::g_pTVCamera->getUpVector();
 
         matView = glm::mat4(1.0f);
         matView = glm::lookAt(cameraEye,   // "eye"
             cameraAt,    // "at"
             cameraUp);
 
-        cShaderManager::cShaderProgram* pShaderProc = ::g_pShaderManager->pGetShaderProgramFromFriendlyName("Shader#1");
+        //::g_pActiveCamera->setEye(glm::vec3(0.f, 19.f, 0.f));
+        DrawAllObjects(matModel_Location, matModelInverseTranspose_Location, matProjection_Location, program, matView, false);
+
+        //::g_pActiveCamera = ::g_pTVCamera;
+        glUniform1ui(renderPassNumber_LocID, PASS_2_MONITOR);
+        // Set the FBO colour texture to be the texture source for this quad
+
+        cameraEye = ::g_pActiveCamera->getEye();
+        cameraAt = ::g_pActiveCamera->getAtInWorldSpace();
+        cameraUp = ::g_pActiveCamera->getUpVector();
+
+        matView = glm::mat4(1.0f);
+        matView = glm::lookAt(cameraEye,   // "eye"
+            cameraAt,    // "at"
+            cameraUp);
 
         glUniformMatrix4fv(pShaderProc->getUniformID_From_Name("matView"),
             1, GL_FALSE, glm::value_ptr(matView));
 
+        GLuint FSQ_textureUnit = 8;	    // We picked 8 just because it's close to our arbitrary 7 value.
+        glActiveTexture(FSQ_textureUnit + GL_TEXTURE0);
+        GLuint TextureNumber = smallFBO.colourTexture_0_ID;
+        glBindTexture(GL_TEXTURE_2D, TextureNumber);
 
-        glUniformMatrix4fv(matProjection_Location, 1, GL_FALSE, glm::value_ptr(matProjection));
+        // uniform sampler2D texture_08;
+        GLint FSQ_textureSamplerID = glGetUniformLocation(program, "texture_08");
+        glUniform1i(FSQ_textureSamplerID, FSQ_textureUnit);
 
+        glCullFace(GL_FRONT);
 
-        // **********************************************************************
-        // Draw the "scene" of all objects.
-        // i.e. go through the vector and draw each one...
-        // **********************************************************************
-         // Disable GL_Blend while we draw non-transparent objects
-        glDisable(GL_BLEND);
+        //::g_pActiveCamera->setEye(eye);
+        // Set pass to #0
+        glBindFramebuffer(GL_FRAMEBUFFER, ::g_pFBO->ID);
+        glViewport(0, 0, ::g_pFBO->width, ::g_pFBO->height);
 
-        for (unsigned int index = 0; index != ::g_vec_pMeshes.size(); index++)
-        {
-            // So the code is a little easier...
-            cMesh* pCurrentMesh = ::g_vec_pMeshes[index];
+        //::g_pActiveCamera->setEye(eye);
+        //::g_pActiveCamera->setAt(at);
+        DrawObject(monitor,
+            glm::mat4(1.0f),
+            matModel_Location,
+            matModelInverseTranspose_Location,
+            program,
+            ::g_pVAOManager);
 
-            matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
-
-            DrawObject(pCurrentMesh,
-                matModel,
-                matModel_Location,
-                matModelInverseTranspose_Location,
-                program,
-                ::g_pVAOManager);
-
-
-        }//for (unsigned int index
-        // Scene is drawn
-        // **********************************************************************   
-
-#if defined _DEBUG
-
-        DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
-
-        if (::g_bShowCollisionObjects) {
-            for (unsigned int index = 0; index != ::g_vec_pBoundaries.size(); index++)
-            {
-                // So the code is a little easier...
-                cMesh* pCurrentMesh = ::g_vec_pBoundaries[index];
-
-                matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
-
-                DrawObject(pCurrentMesh,
-                    matModel,
-                    matModel_Location,
-                    matModelInverseTranspose_Location,
-                    program,
-                    ::g_pVAOManager);
-            }
-
-            for (unsigned int index = 0; index != ::g_vec_pActors.size(); index++)
-            {
-                // So the code is a little easier...
-                cMesh* pCurrentMesh = ::g_vec_pActors[index]->GetDebugMesh();
-
-                matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
-
-                DrawObject(pCurrentMesh,
-                    matModel,
-                    matModel_Location,
-                    matModelInverseTranspose_Location,
-                    program,
-                    ::g_pVAOManager);
-            }
-        }
-#endif
-
-        // After drawing the other objects, draw the skybox to limit overdraw.
-
-        GLint bIsSkyBox_LocID = glGetUniformLocation(program, "bIsSkyBox");
-        glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_TRUE);
-
-        // Move the "skybox object" with the camera
-        pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
-        DrawObject(
-            pSkybox, glm::mat4(1.0f),
-            matModel_Location, matModelInverseTranspose_Location,
-            program, ::g_pVAOManager);
-
-        glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_FALSE);
-
-        // Now that non-transparent objects are drawn, sort and draw transparent objects.
-        glEnable(GL_BLEND);
-
-        // Utilize lambda function to assist with sorting (only if there is more than one transparent object.
-        if (::g_vec_pMeshesTransparency.size() >= 2) {
-            std::sort(::g_vec_pMeshesTransparency.begin(), ::g_vec_pMeshesTransparency.end(), [](const cMesh* a, const cMesh* b) -> bool
-            {
-                // Find closest vertex for both objects. If this is identified as a performance bottleneck, optimize by only looking up/tracking exact vertex info if requested.
-                // Otherwise, just use position to get an approximation of where the object is located.
-                // This may also fail for more complex geometry, or cause other issues: https://www.khronos.org/opengl/wiki/Transparency_Sorting
-                //float minDistanceA = -1;     // Default to -1 so any valid distance will replace this.
-                //float minDistanceB = -1;     // Default to -1 so any valid distance will replace this.
-                //float candidate = 0;
-                //for (const sVertex& vertex : ::g_pConfigManager->_vertexData[a->meshName]) {
-                //    candidate = glm::distance((a->positionXYZ + glm::vec3(vertex.x, vertex.y, vertex.z)), ::g_pFlyCamera->getEye());
-                //    if (candidate < minDistanceA || minDistanceA < 0) {
-                //        minDistanceA = candidate;
-                //    }
-                //}
-                //for (const sVertex& vertex : ::g_pConfigManager->_vertexData[b->meshName]) {
-                //    candidate = glm::distance((b->positionXYZ + glm::vec3(vertex.x, vertex.y, vertex.z)), ::g_pFlyCamera->getEye());
-                //    if (candidate < minDistanceB || minDistanceB < 0) {
-                //        minDistanceB = candidate;
-                //    }
-                //}
-                return glm::distance(a->positionXYZ, ::g_pFlyCamera->getEye()) > glm::distance(b->positionXYZ, ::g_pFlyCamera->getEye());
-            });
         }
 
-        for (unsigned int index = 0; index != ::g_vec_pMeshesTransparency.size(); index++)
-        {
-            // So the code is a little easier...
-            cMesh* pCurrentMesh = ::g_vec_pMeshesTransparency[index];
+        ::g_pFlyCamera->Update(deltaTime);
+        glUniform1ui(renderPassNumber_LocID, RENDER_PASS_0_ENTIRE_SCENE);
 
-            matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
+        // *******************************************************
+        // Screen is cleared and we are ready to draw the scene...
+        // *******************************************************
 
-            DrawObject(pCurrentMesh,
-                matModel,
-                matModel_Location,
-                matModelInverseTranspose_Location,
-                program,
-                ::g_pVAOManager);
-        }
+        DrawAllObjects(matModel_Location, matModelInverseTranspose_Location, matProjection_Location, program);
 
-        glDisable(GL_BLEND);
-        //TODO: Replace with own implementation
-        // 2nd pass of the render, where we do something bizzare
+        // Now that the scene has been rendered to the FBO, Get it's colour texture and write to our full screen quad.
         if (::g_pFullScreenQuad == NULL)
         {
             ::g_pFullScreenQuad = new cMesh;
@@ -632,8 +573,7 @@ int main(void) {
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         //  Clear the frame buffer. 
-        // NOTE: I'm clearing the color bit AND the depth buffer
-        // I'm using the Microsoft DirectX light blue colour from here:
+        // NOTE: Using the Microsoft DirectX light blue colour from here, but can be another colour:
         // https://usbrandcolors.com/microsoft-colors/
         glClearColor(0.0f, 164.0f / 255.0f, 239.0f / 255.0f, 1.0f);
 
@@ -642,10 +582,10 @@ int main(void) {
         ratio = width / (float)height;
 
         matProjection = glm::perspective(
-            ::g_pFlyCamera->FOV,
+            ::g_pActiveCamera->FOV,
             ratio,
-            ::g_pFlyCamera->nearPlane,      // Near plane (as large as possible)
-            ::g_pFlyCamera->farPlane);      // Far plane (as small as possible)
+            ::g_pActiveCamera->nearPlane,      // Near plane (as large as possible)
+            ::g_pActiveCamera->farPlane);      // Far plane (as small as possible)
 
         glViewport(0, 0, width, height);
 
@@ -680,13 +620,7 @@ int main(void) {
         matView = glm::lookAt(eyeForFullScreenQuad,
             atForFullScreenQuad,
             upForFullScreenQuad);      // up in y direction
-
-//detail::tmat4x4<T> glm::gtc::matrix_transform::ortho	(	T const & 	left,
-//                                                         T const & 	right,
-//                                                         T const & 	bottom,
-//                                                         T const & 	top,
-//                                                         T const & 	zNear,
-//                                                         T const & 	zFar )		
+	
         matView = glm::ortho(
             0.0f,   // Left
             1.0f / (float)width,  // Right
@@ -729,8 +663,8 @@ void DrawDebugObjects(
 
     {   // Draw a sphere where the camera is looking.
         // Take the at - eye --> vector 
-        glm::vec3 eye = ::g_pFlyCamera->getEye();
-        glm::vec3 at = ::g_pFlyCamera->getAtInWorldSpace();
+        glm::vec3 eye = ::g_pActiveCamera->getEye();
+        glm::vec3 at = ::g_pActiveCamera->getAtInWorldSpace();
 
         glm::vec3 deltaDirection = at - eye;
         // Normalize to make this vector 1.0 units in length
@@ -865,4 +799,176 @@ void DrawDebugObjects(
     }//if ( ::g_bShowDebugShere )
 
     return;
+}
+
+void DrawAllObjects(
+    GLint matModel_Location,
+    GLint matModelInverseTranspose_Location,
+    GLint matProjection_Location,
+    GLuint program,
+    glm::mat4 matView,
+    bool drawDebug ) {
+
+    glm::mat4 matModel;             // used to be "m"; Sometimes it's called "world"
+    glm::mat4 matProjection;        // used to be "p";
+    float ratio = ::g_pFBO->width / (float)::g_pFBO->height;
+
+    matProjection = glm::perspective(
+        ::g_pActiveCamera->FOV,
+        ratio,
+        ::g_pActiveCamera->nearPlane,      // Near plane (as large as possible)
+        ::g_pActiveCamera->farPlane);      // Far plane (as small as possible)
+
+    cShaderManager::cShaderProgram* pShaderProc = ::g_pShaderManager->pGetShaderProgramFromFriendlyName("Shader#1");
+
+    glUniformMatrix4fv(pShaderProc->getUniformID_From_Name("matView"),
+        1, GL_FALSE, glm::value_ptr(matView));
+
+
+    glUniformMatrix4fv(matProjection_Location, 1, GL_FALSE, glm::value_ptr(matProjection));
+
+
+    // **********************************************************************
+    // Draw the "scene" of all objects.
+    // i.e. go through the vector and draw each one...
+    // **********************************************************************
+     // Disable GL_Blend while we draw non-transparent objects
+    glDisable(GL_BLEND);
+
+    for (unsigned int index = 0; index != ::g_vec_pMeshes.size(); index++)
+    {
+        // So the code is a little easier...
+        cMesh* pCurrentMesh = ::g_vec_pMeshes[index];
+
+        matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
+
+        DrawObject(pCurrentMesh,
+            matModel,
+            matModel_Location,
+            matModelInverseTranspose_Location,
+            program,
+            ::g_pVAOManager);
+
+
+    }//for (unsigned int index
+    // Scene is drawn
+    // **********************************************************************   
+
+#if defined _DEBUG
+    if (drawDebug) {
+
+        DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
+
+        if (::g_bShowCollisionObjects) {
+            for (unsigned int index = 0; index != ::g_vec_pBoundaries.size(); index++)
+            {
+                // So the code is a little easier...
+                cMesh* pCurrentMesh = ::g_vec_pBoundaries[index];
+
+                matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
+
+                DrawObject(pCurrentMesh,
+                    matModel,
+                    matModel_Location,
+                    matModelInverseTranspose_Location,
+                    program,
+                    ::g_pVAOManager);
+            }
+
+            for (unsigned int index = 0; index != ::g_vec_pActors.size(); index++)
+            {
+                // So the code is a little easier...
+                cMesh* pCurrentMesh = ::g_vec_pActors[index]->GetDebugMesh();
+
+                matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
+
+                DrawObject(pCurrentMesh,
+                    matModel,
+                    matModel_Location,
+                    matModelInverseTranspose_Location,
+                    program,
+                    ::g_pVAOManager);
+            }
+        }
+    }
+#endif
+
+    // After drawing the other objects, draw the skybox to limit overdraw.
+
+    GLint bIsSkyBox_LocID = glGetUniformLocation(program, "bIsSkyBox");
+    glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_TRUE);
+
+    // Move the "skybox object" with the camera
+    pSkybox->positionXYZ = ::g_pActiveCamera->getEye();
+    DrawObject(
+        pSkybox, glm::mat4(1.0f),
+        matModel_Location, matModelInverseTranspose_Location,
+        program, ::g_pVAOManager);
+
+    glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_FALSE);
+
+    // Now that non-transparent objects are drawn, sort and draw transparent objects.
+    glEnable(GL_BLEND);
+
+    // Utilize lambda function to assist with sorting (only if there is more than one transparent object.
+    if (::g_vec_pMeshesTransparency.size() >= 2) {
+        std::sort(::g_vec_pMeshesTransparency.begin(), ::g_vec_pMeshesTransparency.end(), [](const cMesh* a, const cMesh* b) -> bool
+        {
+            // Find closest vertex for both objects. If this is identified as a performance bottleneck, optimize by only looking up/tracking exact vertex info if requested.
+            // Otherwise, just use position to get an approximation of where the object is located.
+            // This may also fail for more complex geometry, or cause other issues: https://www.khronos.org/opengl/wiki/Transparency_Sorting
+            //float minDistanceA = -1;     // Default to -1 so any valid distance will replace this.
+            //float minDistanceB = -1;     // Default to -1 so any valid distance will replace this.
+            //float candidate = 0;
+            //for (const sVertex& vertex : ::g_pConfigManager->_vertexData[a->meshName]) {
+            //    candidate = glm::distance((a->positionXYZ + glm::vec3(vertex.x, vertex.y, vertex.z)), ::g_pFlyCamera->getEye());
+            //    if (candidate < minDistanceA || minDistanceA < 0) {
+            //        minDistanceA = candidate;
+            //    }
+            //}
+            //for (const sVertex& vertex : ::g_pConfigManager->_vertexData[b->meshName]) {
+            //    candidate = glm::distance((b->positionXYZ + glm::vec3(vertex.x, vertex.y, vertex.z)), ::g_pFlyCamera->getEye());
+            //    if (candidate < minDistanceB || minDistanceB < 0) {
+            //        minDistanceB = candidate;
+            //    }
+            //}
+            return glm::distance(a->positionXYZ, ::g_pActiveCamera->getEye()) > glm::distance(b->positionXYZ, ::g_pActiveCamera->getEye());
+        });
+    }
+
+    for (unsigned int index = 0; index != ::g_vec_pMeshesTransparency.size(); index++)
+    {
+        // So the code is a little easier...
+        cMesh* pCurrentMesh = ::g_vec_pMeshesTransparency[index];
+
+        matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
+
+        DrawObject(pCurrentMesh,
+            matModel,
+            matModel_Location,
+            matModelInverseTranspose_Location,
+            program,
+            ::g_pVAOManager);
+    }
+}
+
+void DrawAllObjects(
+    GLint matModel_Location,
+    GLint matModelInverseTranspose_Location,
+    GLint matProjection_Location,
+    GLuint program,
+    bool drawDebug) 
+{
+    glm::mat4 matView;
+
+    glm::vec3 cameraEye = ::g_pActiveCamera->getEye();
+    glm::vec3 cameraAt = ::g_pActiveCamera->getAtInWorldSpace();
+    glm::vec3 cameraUp = ::g_pActiveCamera->getUpVector();
+
+    matView = glm::mat4(1.0f);
+    matView = glm::lookAt(cameraEye,   // "eye"
+        cameraAt,    // "at"
+        cameraUp);
+
+    DrawAllObjects(matModel_Location, matModelInverseTranspose_Location, matProjection_Location, program, matView, drawDebug);
 }

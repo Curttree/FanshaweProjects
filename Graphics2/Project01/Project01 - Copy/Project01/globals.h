@@ -8,6 +8,7 @@
 #include "Graphics/cShaderManager.h"
 #include "Graphics/cLightManager.h"
 #include "TextureMapping/cBasicTextureManager.h"
+#include "cEffectsManager.h"
 #include "cMesh.h"
 #include <vector>
 #include "configManager.h"
@@ -31,7 +32,9 @@ bool g_ShutDown(GLFWwindow* pWindow);
 //   | (__/ _` | '  \/ -_) '_/ _` |
 //    \___\__,_|_|_|_\___|_| \__,_|
 //                                 
+extern cFlyCamera* g_pActiveCamera; // = NULL;
 extern cFlyCamera* g_pFlyCamera; // = NULL;
+extern cFlyCamera* g_pTVCamera; // = NULL;
 
 // This the keyboard based eye location
 // Like if you AREN'T using the fly camera
@@ -45,6 +48,7 @@ extern configManager* g_pConfigManager;
 extern cVAOManager* g_pVAOManager;
 extern cShaderManager* g_pShaderManager;
 extern cBasicTextureManager* g_pTextureManager;
+extern cEffectsManager* g_pEffectsManager;
 
 extern cLightManager* g_pTheLights;
 
@@ -84,8 +88,6 @@ bool g_FindObjectByUniqueID(unsigned int uniqueID_toFind, cMesh*& theObjectIFoun
 // If not found, return NULL (0)
 cMesh* g_FindObjectByUniqueID(unsigned int uniqueID_toFind);
 cMesh* g_findObjectByFriendlyName(std::string NametoFind);
-
-
 
 // ************************************************
 //    _  __         _                      _                 _ _  __ _            

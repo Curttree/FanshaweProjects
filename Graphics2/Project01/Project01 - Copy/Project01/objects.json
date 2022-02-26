@@ -16,8 +16,15 @@
   "Glass":{
   "Model":"glass.ply",
   "Scale":10.0,
-  "AlphaTransparency":0.35,
+  "AlphaTransparency":0.55,
   "RefractionIndex":1.495,
+  "Texture0":"glass.bmp"
+  },  
+  "Glass2":{
+  "Model":"glass.ply",
+  "Scale":9.95,
+  "AlphaTransparency":0.15,
+  "IsReflective":true,
   "Texture0":"glass.bmp"
   },
   "GoalPosts":{
@@ -50,14 +57,13 @@
   "Texture0":"metal.bmp"
   },
   "Bottle":{
-  "Model":"bottle.ply",
+  "Model":"bottle2.ply",
   "Scale":0.25,
-  "RefractionIndex":1.33,
   "AlphaTransparency":0.55,
   "Texture0":"glass.bmp"
   },
   "Water":{
-  "Model":"bottle.ply",
+  "Model":"bottle2.ply",
   "Scale":0.24,
   "RefractionIndex":1.33,
   "Texture0":"glass.bmp"
@@ -112,6 +118,7 @@
   "Model":"Imposter_Shapes\\Quad_1_sided_aligned_on_XY_plane.ply",
   "Scale":4.2,  
   "IsReflective":true,
-  "Texture0":"white.bmp"
+  "Texture0":"white.bmp",
+  "DiffuseColour":{"r":0.2,"g":0.2,"b":0.2}
   }
 }

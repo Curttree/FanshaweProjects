@@ -10,10 +10,13 @@ bool g_ShutDown(GLFWwindow* pWindow)
 	delete ::g_pTheLights;
 
 	delete ::g_pFlyCamera;
+	delete ::g_pTVCamera;
 
 	delete ::g_pTextureManager;
 
 	delete ::g_pConfigManager;
+
+	delete ::g_pEffectsManager;
 
 	return true;
 }

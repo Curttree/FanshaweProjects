@@ -90,6 +90,7 @@ uniform sampler2D texture_04;		// GL_TEXTURE_2D
 uniform sampler2D texture_05;		// GL_TEXTURE_2D
 uniform sampler2D texture_06;		// GL_TEXTURE_2D
 uniform sampler2D texture_07;		// GL_TEXTURE_2D
+uniform sampler2D texture_08;		// GL_TEXTURE_2D
 
 uniform vec4 texture2D_Ratios0to3;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
 uniform vec4 texture2D_Ratios4to7;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
@@ -108,7 +109,6 @@ uniform sampler2D maskTexture_01;		// GL_TEXTURE_2D
 uniform sampler2D maskTextureTop_00;		// GL_TEXTURE_2D
 uniform sampler2D maskTextureTop_01;		// GL_TEXTURE_2D
 uniform vec4 mask_Ratios0to1;
-
 
 // if true, then we only sample from the cubeMaps (skyboxes)
 uniform bool bIsSkyBox;
@@ -130,6 +130,9 @@ uniform float fRefractionIndex;
 uniform bool bUseSpecularMap;	
 uniform sampler2D specularMapTexture;	
 
+// Effect textures
+uniform sampler2D staticTexture;
+
 void main()
 {
 	// This is the pixel colour on the screen.
@@ -148,21 +151,15 @@ void main()
 
 		pixelOutputFragColour.rgb = sampleColour.rgb;
 		pixelOutputFragColour.a = 1.0f;
-		// Chromatic Aberration
-		//vec3 sampleColour;
-		//float offset = 0.01f;
-		//vec2 UVred =   vec2(fUVx2.x + offset, fUVx2.y);
-		//vec2 UVgreen = vec2(fUVx2.x,          fUVx2.y + offset);
-		//vec2 UVblue =  vec2(fUVx2.x - offset, fUVx2.y - offset);
+		return;
+	}
 
-		//sampleColour.r = texture( texture_07, UVred ).r;
-		//sampleColour.g = texture( texture_07, UVgreen ).g;
-		//sampleColour.b = texture( texture_07, UVblue ).b;
-
-		//pixelOutputFragColour.rgb = sampleColour;
-		//pixelOutputFragColour.a = 1.0f;
-
-		// Early exit
+	if (renderPassNumber == PASS_2_MONITOR)
+	{
+		vec3 sampleColour = texture(texture_08, fUVx2.xy).rgb;
+		sampleColour.rgb *= texture(staticTexture, fUVx2.xy).rgb;
+		pixelOutputFragColour.rgb = sampleColour.rgb;
+		pixelOutputFragColour.a = 1.0f;
 		return;
 	}
 
@@ -175,8 +172,32 @@ void main()
 		UVlookup.y = gl_FragCoord.y / screenWidthHeight.y;	// Height
 		vec3 sampleColour = texture(texture_07, UVlookup).rgb;
 
+		for (float i = 1; i < 6; i++)
+		{
+			float offset = i * 0.00025f;
+			vec2 UVlookup;
+			UVlookup.x = gl_FragCoord.x / screenWidthHeight.x+offset;	// Width
+			UVlookup.y = gl_FragCoord.y / screenWidthHeight.y+offset;	// Height
+			sampleColour.r += texture(texture_07, UVlookup).r;
+			sampleColour.g += texture(texture_07, UVlookup).g;
+			sampleColour.b += texture(texture_07, UVlookup).b;
+		}
+		for (float i = -1; i > -6; i--)
+		{
+			float offset = i * 0.00025f;
+			vec2 UVlookup;
+			UVlookup.x = gl_FragCoord.x / screenWidthHeight.x + offset;	// Width
+			UVlookup.y = gl_FragCoord.y / screenWidthHeight.y + offset;	// Height
+			sampleColour.r += texture(texture_07, UVlookup).r;
+			sampleColour.g += texture(texture_07, UVlookup).g;
+			sampleColour.b += texture(texture_07, UVlookup).b;
+		}
+		sampleColour /= 11.f;
+
 		pixelOutputFragColour.rgb = sampleColour.rgb;
-		pixelOutputFragColour.b *= 1.5f;
+
+		// Tint the colour blue.
+		pixelOutputFragColour.b *= 1.25f;
 		pixelOutputFragColour.a = 1.0f;
 
 
@@ -259,18 +280,21 @@ void main()
 		{
 			pixelOutputFragColour.rgb += texture( cubeMap_00, vec3(reflectVector.x, -reflectVector.y, reflectVector.z)).rgb;
 		}
+		if (bUseWholeObjectDiffuseColour) {
+			pixelOutputFragColour.rgb *= wholeObjectDiffuseColour.rgb;
+		}
 
 		return;	
 	}//if ( bDoesReflect )
 	
 	if ( bDoesRefract )
 	{
-		vec3 refractVector = refract((fVertWorldLocation.xyz - eyeLocation.xyz), fNormal.xyz, fRefractionIndex);
+		vec3 refractVector = refract((eyeLocation.xyz - fVertWorldLocation.xyz), fNormal.xyz, fRefractionIndex);
 		pixelOutputFragColour.rgba = vec4(0.0f, 0.0f, 0.0f, wholeObjectAlphaTransparency);
 
 		if ( cubeMap_Ratios0to3.x > 0.0f )
 		{
-			pixelOutputFragColour.rgb += texture( cubeMap_00, vec3(refractVector.x,-refractVector.y,refractVector.z) ).rgb;
+			pixelOutputFragColour.rgb += texture( cubeMap_00, vec3(refractVector.x,refractVector.y,refractVector.z) ).rgb;
 		}
 
 		return;	
@@ -382,7 +406,7 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 			float dotProduct = dot( -theLights[index].direction.xyz,  
 									   normalize(norm.xyz) );	// -1 to 1
 
-			dotProduct = max( 0.1f, dotProduct );		
+			dotProduct = max( 0.25f, dotProduct );		
 		
 			lightContrib *= dotProduct;		
 			lightContrib *= theLights[index].diffuse.a;
