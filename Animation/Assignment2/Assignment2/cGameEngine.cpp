@@ -122,8 +122,8 @@ void cGameEngine::LoadAnimationAssignmentTwoScene() {
 	tentacleMesh->textureRatios[0] = 1.f;
 	tentacleMesh->scale = 1.0f;
 	tentacleMesh->positionXYZ = glm::vec3(0.f, 0.f, 0.f);
-	tentacleMesh->bUseWholeObjectDiffuseColour = true;
-	tentacleMesh->bDontLight = false;
+	tentacleMesh->bUseWholeObjectDiffuseColour = false;
+	tentacleMesh->bDontLight = true;
 	tentacleMesh->bUseObjectDebugColour = false;
 	tentacleMesh->friendlyName = "Trent";
 	tentacleMesh->bUseBones = true;

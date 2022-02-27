@@ -64,6 +64,9 @@
     <Filter Include="GameEngine\Components\Header Files">
       <UniqueIdentifier>{a201943e-3754-41a3-a726-75df89e80cce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Bones">
+      <UniqueIdentifier>{2eb04408-e0b3-49a0-9dcd-0d18fa69dc81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -159,6 +162,9 @@
     <ClCompile Include="AnimationSequence.cpp">
       <Filter>GameEngine\Components</Filter>
     </ClCompile>
+    <ClCompile Include="cBone.cpp">
+      <Filter>Graphics\Bones</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -247,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="KeyFrame.h">
       <Filter>GameEngine\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cBone.h">
+      <Filter>Graphics\Bones</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

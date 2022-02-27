@@ -37,6 +37,60 @@ sModelDrawInfo::sModelDrawInfo()
 	return;
 }
 
+static glm::vec3 assignColor(int boneID) {
+    // Auto generate colors for each mesh that we have loaded.
+    // Result should show five different colors then applies different shades of these colors.
+    //float r = 0.f;
+    //float g = 0.f;
+    //float b = 0.f;
+    //float increment = 1.0f / g_vecModeles.size() * 3;
+    //int cycleCount = 0;
+    //for (int x = 0; x < g_vecModeles.size(); x++) {
+    //    switch (cycleCount) {
+    //    case 0:
+    //        g_vecModeles[x].vertexColourOverrideHACK = glm::vec3(r + increment, g, b);
+    //        break;
+    //    case 1:
+    //        g_vecModeles[x].vertexColourOverrideHACK = glm::vec3(r, g + increment, b);
+    //        break;
+    //    case 2:
+    //        g_vecModeles[x].vertexColourOverrideHACK = glm::vec3(r, g, b + increment);
+    //        break;
+    //    case 3:
+    //        g_vecModeles[x].vertexColourOverrideHACK = glm::vec3(r + increment, g + increment, b);
+    //        break;
+    //    case 4:
+    //        g_vecModeles[x].vertexColourOverrideHACK = glm::vec3(r + increment, g, b + increment);
+    //        break;
+    //    default:
+    //        g_vecModeles[x].vertexColourOverrideHACK = glm::vec3(r, g + increment, b + increment);
+    //        break;
+    //    }
+
+    //    if (cycleCount == 5) {
+    //        //End of cycle. Increment colors and reset the counter.
+    //        r += increment;
+    //        g += increment;
+    //        b += increment;
+    //        cycleCount = 0;
+    //    }
+    //    if (cycleCount < 5) {
+    //        cycleCount++;
+    //    }
+    //}
+
+    //NOTE: Above can be modified/used when we are loading bones from the file (Code originally from Graphics Project 1). For now just assign a colour based on the bone ID.
+    switch (boneID) {
+    case 0:
+        return glm::vec3(1.f, 0.f, 0.f);
+    case 1:
+        return glm::vec3(0.f, 1.f, 0.f);
+    case 2:
+        return glm::vec3(0.f, 0.f, 1.f);
+    default:
+        return glm::vec3(1.f, 1.f, 0.f);
+    }
+}
 
 bool cVAOManager::LoadModelIntoVAO(
 		std::string fileName, 
@@ -344,10 +398,20 @@ bool LoadPLYModelFromFile(std::string fileName, sModelDrawInfo& drawInfo)
 
         // Copy colour...
         // And convert from 0-255 into 0-1
-        drawInfo.pVertices[index].r = (vecVertexArray[index].red / 255.0f);
-        drawInfo.pVertices[index].g = (vecVertexArray[index].green / 255.0f);
-        drawInfo.pVertices[index].b = (vecVertexArray[index].blue / 255.0f);
-        drawInfo.pVertices[index].a = (vecVertexArray[index].alpha / 255.0f);
+        if (fileName == "assets/models/tentacle.ply") {
+            glm::vec3 color = assignColor(vecVertexArray[index].boneId);
+            drawInfo.pVertices[index].r = color.r;
+            drawInfo.pVertices[index].g = color.g;
+            drawInfo.pVertices[index].b = color.b;
+            drawInfo.pVertices[index].a = 1.f;
+
+        }
+        else {
+            drawInfo.pVertices[index].r = (vecVertexArray[index].red / 255.0f);
+            drawInfo.pVertices[index].g = (vecVertexArray[index].green / 255.0f);
+            drawInfo.pVertices[index].b = (vecVertexArray[index].blue / 255.0f);
+            drawInfo.pVertices[index].a = (vecVertexArray[index].alpha / 255.0f);
+        }
 
         // And copy the other things, too:
 //        float nx, ny, nz, nw;   // in vec4 vNormal;	Vertex normal X,Y,Z (W ignored)
@@ -397,3 +461,4 @@ std::string cVAOManager::getFilePath(void)
 {
     return this->m_FilePath;
 }
+
