@@ -172,6 +172,7 @@
     <ClCompile Include="AnimationSystem.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="cBone.cpp" />
+    <ClCompile Include="BoneSystem.cpp" />
     <ClCompile Include="cCommand_ColourChange.cpp" />
     <ClCompile Include="cCommand_ConsoleOutput.cpp" />
     <ClCompile Include="cCommand_PlaySound.cpp" />
@@ -207,7 +208,9 @@
     <ClInclude Include="AnimationSequence.h" />
     <ClInclude Include="AnimationSystem.h" />
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="BoneSystem.h" />
     <ClInclude Include="cBone.h" />
+    <ClInclude Include="cBoneHierarchy.h" />
     <ClInclude Include="cCommand_ColourChange.h" />
     <ClInclude Include="cCommand_ConsoleOutput.h" />
     <ClInclude Include="cCommand_PlaySound.h" />

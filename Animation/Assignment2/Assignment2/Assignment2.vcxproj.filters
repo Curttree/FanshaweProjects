@@ -165,6 +165,9 @@
     <ClCompile Include="cBone.cpp">
       <Filter>Graphics\Bones</Filter>
     </ClCompile>
+    <ClCompile Include="BoneSystem.cpp">
+      <Filter>GameEngine\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -255,6 +258,12 @@
       <Filter>GameEngine\Components\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cBone.h">
+      <Filter>Graphics\Bones</Filter>
+    </ClInclude>
+    <ClInclude Include="BoneSystem.h">
+      <Filter>GameEngine\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="cBoneHierarchy.h">
       <Filter>Graphics\Bones</Filter>
     </ClInclude>
   </ItemGroup>

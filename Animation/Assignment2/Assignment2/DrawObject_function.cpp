@@ -395,27 +395,7 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
         BoneMatrixLocations.push_back(glGetUniformLocation(program, "BoneMatrices[3]"));
         for (int i = 0; i < 4; i++)
         {
-            glm::mat4 BoneTranslationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.0f, 0.f));
-            glm::mat4 BoneRotationMatrix = glm::mat4_cast(glm::quat(1.0f, 0.0f, 0.0f, 0.0f));
-
-            glm::mat4 rotateZ = glm::rotate(glm::mat4(1.0f),
-                0.f,
-                glm::vec3(0.0f, 0.0f, 1.0f));    
-            glm::mat4 rotateY = glm::rotate(glm::mat4(1.0f),
-                    0.f,
-                    glm::vec3(0.0f, 1.0f, 0.0f));
-            glm::mat4 rotateX = glm::rotate(glm::mat4(1.0f),
-                0.f,
-                glm::vec3(1.0f, 0.0f, 0.0f));
-
-            BoneRotationMatrix *= rotateZ;
-            BoneRotationMatrix *= rotateY;
-            BoneRotationMatrix *= rotateX;
-
-            glm::mat4 BoneScaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.f));
-            glm::mat4 BoneModelMatrix = BoneTranslationMatrix * BoneRotationMatrix * BoneScaleMatrix;
-
-            glUniformMatrix4fv(BoneMatrixLocations[i], 1, GL_FALSE, glm::value_ptr(BoneModelMatrix));
+            glUniformMatrix4fv(BoneMatrixLocations[i], 1, GL_FALSE, glm::value_ptr(pCurrentMesh->bones->bones[i]->GetModelMatrix()));
         }
     }
     else {

@@ -1,6 +1,8 @@
 #include "cGameEngine.h"
 #include "globals.h"
 
+#include "cBone.h"
+
 // If I am going to continue to add commands, I should switch to a factory.
 #include "cCommand_ConsoleOutput.h"
 #include "cCommand_ColourChange.h"
@@ -47,7 +49,8 @@ void cGameEngine::Destroy(void)
 
 void cGameEngine::Update(float dt)
 {
-	animationSystem.Process(entityManager.GetEntities(), dt * gameSpeed);
+	//animationSystem.Process(entityManager.GetEntities(), dt * gameSpeed);
+	boneSystem.Process(entityManager.GetEntities(), dt * gameSpeed);
 	entityManager.TimeStep(dt);
 	HandlePlayerInput();
 }
@@ -112,6 +115,15 @@ void cGameEngine::HandlePlayerInput() {
 	}
 }
 
+Transform CreateTransformFromBone(cBone* bone)
+{
+	Transform transform;
+	transform.position = bone->GetPosition();
+	transform.scale = bone->GetScale();
+	transform.rotation = bone->GetRotation();
+	return transform;
+}
+
 void cGameEngine::LoadAnimationAssignmentTwoScene() {
 	//Skeleton 
 	cEntity* trent = entityManager.CreateEntity();
@@ -127,31 +139,53 @@ void cGameEngine::LoadAnimationAssignmentTwoScene() {
 	tentacleMesh->bUseObjectDebugColour = false;
 	tentacleMesh->friendlyName = "Trent";
 	tentacleMesh->bUseBones = true;
-	trent->mesh = tentacleMesh;
 
+
+	trent->position = tentacleMesh->positionXYZ;
+	trent->rotation = tentacleMesh->orientationXYZ;
+	trent->scale = tentacleMesh->scale;
+
+	// Create a bone hierarchy for 4 bones for our 4-tier-cone.obj model
+	cBone* boneA = new cBone();
+	cBone* boneB = new cBone();
+	cBone* boneC = new cBone();
+	cBone* boneD = new cBone();
+
+	boneA->index = 0;
+	boneB->index = 1;
+	boneC->index = 2;
+	boneD->index = 3;
+
+	boneA->SetPosition(glm::vec3(0.f, 0.f, 0.f));
+	boneB->SetPosition(glm::vec3(0.f, 4.f, 0.f));
+	boneC->SetPosition(glm::vec3(0.f, 4.f, 0.f));
+	boneD->SetPosition(glm::vec3(0.f, 4.f, 0.f));
+
+	boneA->AddChild(boneB);
+	boneB->SetParent(boneA);
+
+	boneB->AddChild(boneC);
+	boneC->SetParent(boneB);
+
+	boneC->AddChild(boneD);
+	boneD->SetParent(boneC);
+
+	tentacleMesh->bones = new cBoneHierarchy();
+	tentacleMesh->bones->rootBone = boneA;
+	tentacleMesh->bones->bones.push_back(boneA);
+	tentacleMesh->bones->bones.push_back(boneB);
+	tentacleMesh->bones->bones.push_back(boneC);
+	tentacleMesh->bones->bones.push_back(boneD);
+
+	for (int i = 0; i < tentacleMesh->bones->bones.size(); ++i)
+	{
+		Transform boneTransform = CreateTransformFromBone(tentacleMesh->bones->bones[i]);
+		tentacleMesh->bones->currentTransforms.push_back(boneTransform);
+	}
+
+	trent->mesh = tentacleMesh;
 	::g_vec_pMeshes.push_back(tentacleMesh);
 
-	trent->animations.playing = true;
-	trent->animations.speed = 1.f;
-	trent->animations.repeat = true;
-
-	Animation firstAnimation;
-	firstAnimation.currentTime = 0;
-	firstAnimation.duration = 6.0f;
-	firstAnimation.shouldPlay = true;
-	firstAnimation.speed = 1.f;
-	firstAnimation.repeat = false;
-
-	// First Animation
-	firstAnimation.keyFramePositions.push_back(KeyFramePosition(0, glm::vec3(0.f, 0.f, 20.f)));
-	firstAnimation.keyFrameRotations.push_back(KeyFrameRotation(0, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
-	firstAnimation.keyFrameScales.push_back(KeyFrameScale(0, 1.f));
-
-	firstAnimation.keyFramePositions.push_back(KeyFramePosition(6, glm::vec3(0.f, 0.f, 20.f)));
-	firstAnimation.keyFrameRotations.push_back(KeyFrameRotation(6, glm::quat(glm::vec3(0.f, 0.f, 0.f))));
-	firstAnimation.keyFrameScales.push_back(KeyFrameScale(6, 1.f));
-
-	trent->animations.animations.push_back(firstAnimation);
 }
 
 void cGameEngine::LoadAnimationAssignmentOneScene() {

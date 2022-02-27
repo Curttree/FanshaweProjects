@@ -6,6 +6,7 @@
 #include "EntityManager.h"
 #include "AudioManager.h"
 #include "AnimationSystem.h"
+#include "BoneSystem.h"
 
 class cGameEngine {
 
@@ -39,6 +40,7 @@ public:
 	cLightManager* g_pTheLights;
 
 	AnimationSystem animationSystem;
+	BoneSystem boneSystem;
 
 	bool keys[348];
 	bool showColourChanges;

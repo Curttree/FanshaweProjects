@@ -6,6 +6,7 @@
 #include <extern/glm/glm.hpp>
 #include <extern/glm/vec3.hpp>
 #include <vector>
+#include "cBoneHierarchy.h"
 
 class cMesh
 {
@@ -58,6 +59,8 @@ public:
 	std::vector< cMesh* > vec_pChildMeshes;
 
 	bool bUseBones;
+
+	cBoneHierarchy* bones;
 
 private:
 	unsigned int m_UniqueID;
