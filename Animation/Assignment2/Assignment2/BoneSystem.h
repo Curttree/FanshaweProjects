@@ -5,7 +5,7 @@
 #include <extern/glm/gtx/quaternion.hpp>
 #include <extern/glm/mat4x4.hpp>
 
-class cBoneHierarchy;
+struct cBoneHierarchy;
 class cBone;
 
 class BoneSystem : System
@@ -16,4 +16,5 @@ private:
 	void UpdateHierarchy(cBoneHierarchy* boneHierarchy);
 	void UpdateBone(cBoneHierarchy* boneHierarchy, cBone* bone,
 		const glm::mat4 parentModelMatrix);
+	float animationTime = 10.f;
 };

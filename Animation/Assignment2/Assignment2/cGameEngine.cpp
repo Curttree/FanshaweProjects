@@ -133,7 +133,7 @@ void cGameEngine::LoadAnimationAssignmentTwoScene() {
 	tentacleMesh->textureNames[0] = "white.bmp";
 	tentacleMesh->textureRatios[0] = 1.f;
 	tentacleMesh->scale = 1.0f;
-	tentacleMesh->positionXYZ = glm::vec3(0.f, 0.f, 0.f);
+	tentacleMesh->positionXYZ = glm::vec3(0.f, -10.f, 50.f);
 	tentacleMesh->bUseWholeObjectDiffuseColour = false;
 	tentacleMesh->bDontLight = true;
 	tentacleMesh->bUseObjectDebugColour = false;

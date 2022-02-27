@@ -20,18 +20,38 @@ void BoneSystem::Process(const std::vector<cEntity*>& entities, float dt)
 
 void BoneSystem::UpdateHierarchy(cBoneHierarchy* boneHierarchy /*, Animation* animation */)
 {
-	// 0 -> 90 over 5 seconds
-	// quat(1, 0, 0, 0) -> quat(0.7071, 0.0f, 0.0f, 0.7071) over 5 seconds
 
+	glm::vec3 posStart = glm::vec3(0.f,0.f,0.f);
+	glm::vec3 posMid = glm::vec3(0.f,3.f,2.f);
+	glm::vec3 posEnd = glm::vec3(0.f, 0.f, 0.f);
 
-	glm::quat start = glm::quat(1.f, 0.f, 0.f, 0.f);
-	glm::quat end = glm::quat(.07071f, 0.f, 0.f, 0.7071f);
-	float rotationFraction = boneHierarchy->time / 5.f;
-	glm::quat currentRotation = glm::slerp(start, end, rotationFraction);
+	glm::vec3 scaleStart = glm::vec3(1.f);
+	glm::vec3 scaleMid = glm::vec3(5.f,1.f,1.f);
+	glm::vec3 scaleEnd =glm::vec3(1.f);
+
+	glm::quat rotationStart = glm::quat(glm::vec3(0.f,0.f,0.f));
+	glm::quat rotationEnd = glm::quat(glm::vec3(0.f, glm::pi<float>(), 0.f));
+	if (boneHierarchy->time >= animationTime) {
+		boneHierarchy->time = 0.f;
+	}
+	float animationFraction = boneHierarchy->time / animationTime;
+	glm::vec3 currentScale = scaleStart;
+	glm::vec3 currentPos = scaleStart;
+	if (animationFraction < 0.5f) {
+		currentScale = scaleStart + (scaleMid - scaleStart) * animationFraction * 2.f;
+		currentPos = posStart + (posMid - posStart) * animationFraction * 2.f;
+	}
+	else {
+		currentScale = scaleMid + (scaleEnd - scaleMid) * (animationFraction - 0.5f) * 2.f;
+		currentPos = posMid + (posEnd - posMid) * (animationFraction - 0.5f) * 2.f;
+	}
+	glm::quat currentRotation = glm::slerp(rotationStart, rotationEnd, animationFraction);
 
 	for (int i = 0; i < boneHierarchy->currentTransforms.size(); ++i)
 	{
+		boneHierarchy->currentTransforms[i].position = currentPos;
 		boneHierarchy->currentTransforms[i].rotation = currentRotation;
+		boneHierarchy->currentTransforms[i].scale = currentScale;
 	}
 
 	UpdateBone(boneHierarchy, boneHierarchy->rootBone, glm::mat4(1.f));
