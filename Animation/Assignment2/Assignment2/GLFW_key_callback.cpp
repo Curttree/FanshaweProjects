@@ -49,47 +49,35 @@
         bAltDown = true;
     }
     // Consider universally passing value to gameEngine->keys.
-    //if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-    //    ::g_pGameEngine->keys[GLFW_KEY_W] = true;
-    //}
-    //else if (key == GLFW_KEY_W && action == GLFW_RELEASE) {
-    //    ::g_pGameEngine->keys[GLFW_KEY_W] = false;
-    //}
-    //if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-    //    ::g_pGameEngine->keys[GLFW_KEY_A] = true;
-    //}
-    //else if (key == GLFW_KEY_A && action == GLFW_RELEASE) {
-    //    ::g_pGameEngine->keys[GLFW_KEY_A] = false;
-    //}
-    //if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-    //    ::g_pGameEngine->keys[GLFW_KEY_S] = true;
-    //}
-    //else if (key == GLFW_KEY_S && action == GLFW_RELEASE) {
-    //    ::g_pGameEngine->keys[GLFW_KEY_S] = false;
-    //}
-    //if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-    //    ::g_pGameEngine->keys[GLFW_KEY_D] = true;
-    //}
-    //else if (key == GLFW_KEY_D && action == GLFW_RELEASE) {
-    //    ::g_pGameEngine->keys[GLFW_KEY_D] = false;
-    //}
-    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-        ::g_pGameEngine->keys[GLFW_KEY_SPACE] = true;
+    if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_1] = true;
     }
-    if (key == GLFW_KEY_R && action == GLFW_PRESS) {
-        ::g_pGameEngine->keys[GLFW_KEY_R] = true;
+    if (key == GLFW_KEY_2 && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_2] = true;
     }
-    if (key == GLFW_KEY_C && action == GLFW_PRESS) {
-        ::g_pGameEngine->keys[GLFW_KEY_C] = true;
+    if (key == GLFW_KEY_3 && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_3] = true;
     }
-    if (key == GLFW_KEY_M && action == GLFW_PRESS) {
-        ::g_pGameEngine->keys[GLFW_KEY_M] = true;
+    if (key == GLFW_KEY_4 && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_4] = true;
     }
-    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
-        ::g_pGameEngine->keys[GLFW_KEY_LEFT] = true;
+    if (key == GLFW_KEY_5 && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_5] = true;
     }
-    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
-        ::g_pGameEngine->keys[GLFW_KEY_RIGHT] = true;
+    if (key == GLFW_KEY_KP_1 && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_KP_1] = true;
+    }
+    if (key == GLFW_KEY_KP_2 && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_KP_2] = true;
+    }
+    if (key == GLFW_KEY_KP_3 && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_KP_3] = true;
+    }
+    if (key == GLFW_KEY_KP_4 && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_KP_4] = true;
+    }
+    if (key == GLFW_KEY_KP_5 && action == GLFW_PRESS) {
+        ::g_pGameEngine->keys[GLFW_KEY_KP_5] = true;
     }
 
 

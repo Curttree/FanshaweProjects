@@ -245,10 +245,11 @@ namespace gdp2022Physics
 
 
 	#pragma region Helper Methods
-	glm::vec3 ProjectOn(glm::vec3 b, glm::vec3 a)
+	glm::vec3 ProjectOn(glm::vec3 v, glm::vec3 s)
 	{
-		float multiplier = ((a.x * b.x) + (a.y * b.y) + (a.z * b.z)) / ((b.x * b.x) + (b.y * b.y) + (b.z * b.z));
-		return glm::vec3(b.x * multiplier, b.y * multiplier, b.z * multiplier);
+		return glm::dot(v, s) / glm::dot(s, s) * s;
+		//float multiplier = ((a.x * b.x) + (a.y * b.y) + (a.z * b.z)) / ((b.x * b.x) + (b.y * b.y) + (b.z * b.z));
+		//return glm::vec3(b.x * multiplier, b.y * multiplier, b.z * multiplier);
 	}
 
 	// Page 224 Chapter 5 Basic Primitive Tests

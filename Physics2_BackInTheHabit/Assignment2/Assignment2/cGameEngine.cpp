@@ -70,7 +70,7 @@ void cGameEngine::LoadPhysicsAssignmentOneScene() {
 		planeDesc.mass = 1.f;
 		planeDesc.position = glm::vec3(0.f, -0.5f, 0.f);
 		planeDesc.linearVelocity = glm::vec3(0.f);
-		planeDesc.friction = 0.95f;
+		planeDesc.friction = 0.985f;
 		floor->rigidBody = m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
 
 		m_PhysicsWorld->AddRigidBody(floor->rigidBody);

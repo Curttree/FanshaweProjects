@@ -42,7 +42,7 @@ private:
 	bool isRunning;
 	bool isPaused;
 	float gameSpeed = 1.f;
-	float objectMovementSpeed = 10.f;
+	float objectMovementSpeed = 5.f;
 
 	void MovePlayerObject();
 

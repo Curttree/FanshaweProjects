@@ -88,30 +88,45 @@ glm::vec3 GetEasingColour(EasingType type) {
 }
 
 void cGameEngine::HandlePlayerInput() {
-	if (keys[GLFW_KEY_SPACE]) {
-		bool newVal = !entityManager.GetEntities()[activeSequenceIndex]->animations.playing;
-		entityManager.GetEntities()[activeSequenceIndex]->animations.playing = newVal;
-		keys[GLFW_KEY_SPACE] = false;
+	if (keys[GLFW_KEY_1]) {
+		boneSystem.PlaySequence(entityManager.GetEntities(), 0);
+		keys[GLFW_KEY_1] = false;
 	}
-	if (keys[GLFW_KEY_R]) {
-		ReverseGameSpeed();
-		keys[GLFW_KEY_R] = false;
+	else if (keys[GLFW_KEY_2]) {
+		boneSystem.PlaySequence(entityManager.GetEntities(), 1);
+		keys[GLFW_KEY_2] = false;
 	}
-	if (keys[GLFW_KEY_C]) {
-		showColourChanges = !showColourChanges;
-		keys[GLFW_KEY_C] = false;
+	else if (keys[GLFW_KEY_3]) {
+		boneSystem.PlaySequence(entityManager.GetEntities(), 2);
+		keys[GLFW_KEY_3] = false;
 	}
-	if (keys[GLFW_KEY_M]) {
-		isMuted = !isMuted;
-		keys[GLFW_KEY_M] = false;
+	else if (keys[GLFW_KEY_4]) {
+		boneSystem.PlaySequence(entityManager.GetEntities(), 3);
+		keys[GLFW_KEY_4] = false;
 	}
-	if (keys[GLFW_KEY_LEFT]) {
-		CycleActiveSequence(-1);
-		keys[GLFW_KEY_LEFT] = false;
+	else if (keys[GLFW_KEY_5]) {
+		boneSystem.PlaySequence(entityManager.GetEntities(), 4);
+		keys[GLFW_KEY_5] = false;
 	}
-	if (keys[GLFW_KEY_RIGHT]) {
-		CycleActiveSequence();
-		keys[GLFW_KEY_RIGHT] = false;
+	else if (keys[GLFW_KEY_KP_1]) {
+		boneSystem.PlaySequence(entityManager.GetEntities(), 0);
+		keys[GLFW_KEY_KP_1] = false;
+	}
+	else if (keys[GLFW_KEY_KP_2]) {
+		boneSystem.PlaySequence(entityManager.GetEntities(), 1);
+		keys[GLFW_KEY_KP_2] = false;
+	}
+	else if (keys[GLFW_KEY_KP_3]) {
+		boneSystem.PlaySequence(entityManager.GetEntities(), 2);
+		keys[GLFW_KEY_KP_3] = false;
+	}
+	else if (keys[GLFW_KEY_KP_4]) {
+		boneSystem.PlaySequence(entityManager.GetEntities(), 3);
+		keys[GLFW_KEY_KP_4] = false;
+	}
+	else if (keys[GLFW_KEY_KP_5]) {
+		boneSystem.PlaySequence(entityManager.GetEntities(), 4);
+		keys[GLFW_KEY_KP_5] = false;
 	}
 }
 
