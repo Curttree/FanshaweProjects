@@ -2,6 +2,8 @@
 #include <Windows.h>	
 #include <process.h>	// Actual thread calls
 #include "cPlant.h"
+#include "cHerbivore.h"
+#include "cCarnivore.h"
 #include <Containers/cCurtArray.h>
 #include <Containers/cCurtMap.h>
 #include <extern/glm/glm.hpp>
@@ -11,8 +13,10 @@ public:
 	cEcosystemManager();
 	~cEcosystemManager();
 	void GeneratePlants(unsigned int count);
+	void GenerateAnimals(unsigned int herbs, unsigned int carns);
 	void TimeStep(float deltaTime);
 
-private:
 	cCurtArray<cPlant*> plants = cCurtArray<cPlant*>();
+	cCurtArray<cHerbivore*> herbivores = cCurtArray<cHerbivore*>();
+	cCurtArray<cCarnivore*> carnivores = cCurtArray<cCarnivore*>();
 };

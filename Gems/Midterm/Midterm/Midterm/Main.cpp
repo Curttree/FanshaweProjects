@@ -191,6 +191,7 @@ int main(void) {
     vecModelsToLoad.push_back("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply");
     vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
     vecModelsToLoad.push_back("tile.ply");
+    vecModelsToLoad.push_back("animal.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -225,6 +226,9 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("grass.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("path.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("fruit.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("carn.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("herb.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("sleep.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;
@@ -311,8 +315,9 @@ int main(void) {
         }
     }
 #pragma endregion
-#pragma region QUESTION_2 Plants
+#pragma region QUESTION_2 QUESTION_3 Plants and Animals
     ::g_pEcoSystemManager->GeneratePlants(10);
+    ::g_pEcoSystemManager->GenerateAnimals(5,3);
 
 #pragma endregion
 #pragma region Objects

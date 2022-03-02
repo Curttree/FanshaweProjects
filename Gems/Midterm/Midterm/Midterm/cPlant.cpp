@@ -34,3 +34,9 @@ void cPlant::TimeStep(float deltaTime) {
 		mesh->textureNames[0] = "fruit.bmp";
 	}
 }
+
+void cPlant::HasBeenEaten() {
+	hasBloomed = false;
+	elapsedTime = 0.f;
+	mesh->textureNames[0] = "grass.bmp";
+}

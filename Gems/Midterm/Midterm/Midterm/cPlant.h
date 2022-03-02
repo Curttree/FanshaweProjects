@@ -9,6 +9,7 @@ public:
 	cPlant(glm::vec3 location, float _maturityTime);
 	virtual ~cPlant();
 	void TimeStep(float deltaTime);
+	void HasBeenEaten();
 	glm::vec3 position;
 	bool hasBloomed;
 	float maturityTime = 0.f;

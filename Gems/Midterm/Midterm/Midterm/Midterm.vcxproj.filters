@@ -183,6 +183,15 @@
     <ClCompile Include="cEcosystemManager.cpp">
       <Filter>Midterm</Filter>
     </ClCompile>
+    <ClCompile Include="cAnimal.cpp">
+      <Filter>Midterm\Populations</Filter>
+    </ClCompile>
+    <ClCompile Include="cHerbivore.cpp">
+      <Filter>Midterm\Populations</Filter>
+    </ClCompile>
+    <ClCompile Include="cCarnivore.cpp">
+      <Filter>Midterm\Populations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -295,6 +304,18 @@
     </ClInclude>
     <ClInclude Include="globalFunctions.h">
       <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="iAnimal.h">
+      <Filter>Midterm\Populations</Filter>
+    </ClInclude>
+    <ClInclude Include="cHerbivore.h">
+      <Filter>Midterm\Populations</Filter>
+    </ClInclude>
+    <ClInclude Include="cAnimal.h">
+      <Filter>Midterm\Populations</Filter>
+    </ClInclude>
+    <ClInclude Include="cCarnivore.h">
+      <Filter>Midterm\Populations</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
