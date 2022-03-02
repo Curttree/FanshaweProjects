@@ -15,6 +15,9 @@ public:
 	~cEcosystemManager();
 	void GeneratePlants(unsigned int count);
 	void GenerateAnimals(unsigned int herbs, unsigned int carns);
+	void BirthHerbivore(glm::vec3 position);
+	void BirthCarnivore(glm::vec3 position);
+	void PlantSeed(glm::vec3 position);
 	void TimeStep(float deltaTime);
 
 	cCurtArray<cPlant*> plants = cCurtArray<cPlant*>();

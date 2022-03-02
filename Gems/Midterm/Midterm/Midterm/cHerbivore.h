@@ -11,4 +11,6 @@ public:
 	virtual void EatFood();
 protected:
 	cPlant* food;
+	float poopTimer = 0.f;
+	float poopMaxTime = 60.f;
 };

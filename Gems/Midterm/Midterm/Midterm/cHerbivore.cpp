@@ -38,7 +38,22 @@ void cHerbivore::TimeStep(float deltaTime) {
 			}
 		}
 	}
-
+	if (hasEaten) {
+		poopTimer += deltaTime;
+		if (poopTimer >= poopMaxTime) {
+			poopTimer = 0.f;
+			std::cout << "Poop." << std::endl;
+			float chance = ::gGetRandBetween(0.f, 100.f);
+			if (chance <= 10.f) {
+				std::cout << "A baby herbivore has been born." << std::endl;
+				::g_pEcoSystemManager->BirthHerbivore(position);
+			}
+			else if (chance <= 35.f){
+				std::cout << "A seed has been planted." << std::endl;
+				::g_pEcoSystemManager->PlantSeed(position);
+			}
+		}
+	}
 }
 void cHerbivore::Born(glm::vec3 location) {
 	cAnimal::Born(location);
@@ -65,6 +80,7 @@ void cHerbivore::EatFood() {
 	food->HasBeenEaten();
 	food = 0;
 	isHungry = false;
+	hasEaten = true;
 	hungryAtTime = ::gGetRandBetween(10.f, 30.f);
 	mesh->textureNames[0] = "herb.bmp";
 	SelectNewWanderTarget();

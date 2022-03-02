@@ -12,6 +12,12 @@ void cCarnivore::TimeStep(float deltaTime) {
 			mesh->textureNames[0] = "carn.bmp";
 			isSleeping = false;
 			sleepTimer = 0.f;
+			unsigned int babyChance = ::gGetRandBetween(0, 50);
+			if (babyChance == 2) {
+				// Arbitratily picked a number.. Need to rewrite if odds changed (if implemented in scalable project).
+				std::cout << "A baby carnivore has been born." << std::endl;
+				::g_pEcoSystemManager->BirthCarnivore(this->position);
+			}
 		}
 	}
 	else {
@@ -71,6 +77,7 @@ void cCarnivore::EatFood() {
 	food->HasBeenEaten();
 	food = 0;
 	isHungry = false;
+	hasEaten = true;
 	hungryAtTime = ::gGetRandBetween(30.f, 50.f);
 	SelectNewWanderTarget();
 }

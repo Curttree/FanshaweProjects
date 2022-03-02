@@ -116,6 +116,7 @@ int main(void) {
 
     ::g_StartUp(pWindow);
 
+    ::g_pFlyCamera->setEye(glm::vec3(25.f, 20.f, -50.f));
 
     cShaderManager::cShader vertShader;
     cShaderManager::cShader fragShader;
@@ -235,12 +236,12 @@ int main(void) {
     std::string errorTextString;
     ::g_pTextureManager->SetBasePath("assets/textures/cubemaps");
     if (!::g_pTextureManager->CreateCubeTextureFromBMPFiles("Skybox",
-        "winterRiver_posX.bmp",    /* posX_fileName */
-        "winterRiver_negX.bmp",     /*negX_fileName */
-        "winterRiver2_negY.bmp",     /*negY_fileName*/
-        "winterRiver_posY.bmp",       /*posY_fileName*/
-        "winterRiver2_posZ.bmp",    /*posZ_fileName*/
-        "winterRiver2_negZ.bmp",      /*negZ_fileName*/
+        "Daylight Box_Right.bmp",    /* posX_fileName */
+        "Daylight Box_Left.bmp",     /*negX_fileName */
+        "Daylight Box_Bottom.bmp",     /*negY_fileName*/
+        "Daylight Box_Top.bmp",       /*posY_fileName*/
+        "Daylight Box_Front.bmp",    /*posZ_fileName*/
+        "Daylight Box_Back.bmp",      /*negZ_fileName*/
         true, errorTextString))
     {
         std::cout << "Didn't load because: " << errorTextString << std::endl;
@@ -469,7 +470,7 @@ int main(void) {
         glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_FALSE);
 
 
-        DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
+        //DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
 
         //TODO: Replace with own implementation
         // 2nd pass of the render, where we do something bizzare
