@@ -52,7 +52,7 @@ void cCarnivore::Born(glm::vec3 location) {
 	cAnimal::Born(location);
 	mesh->textureNames[0] = "carn.bmp";
 	hungryAtTime = ::gGetRandBetween(5.f, 10.f);
-	movementSpeed = 0.015f;
+	movementSpeed = 0.01f;
 }
 void cCarnivore::LocateFood() {
 	food = 0;
@@ -67,7 +67,7 @@ void cCarnivore::LocateFood() {
 }
 
 void cCarnivore::EatFood() {
-	std::cout << "YumYumYum" << std::endl;
+	std::cout << "YumYumYum! A carnivore has eaten." << std::endl;
 	food->HasBeenEaten();
 	food = 0;
 	isHungry = false;

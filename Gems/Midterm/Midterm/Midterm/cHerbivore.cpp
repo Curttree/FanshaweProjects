@@ -28,6 +28,15 @@ void cHerbivore::TimeStep(float deltaTime) {
 			mesh->positionXYZ = position;
 			SelectNewWanderTarget();
 		}
+		//Check to see if there are nearby carnivores.
+		float distance = 0.f;
+		for (unsigned int index = 0; index < ::g_pEcoSystemManager->carnivores.get_size(); index++) {
+			distance = glm::distance(::g_pEcoSystemManager->carnivores[index]->position, this->position);
+			if (distance < 0.5f && glm::dot((::g_pEcoSystemManager->carnivores[index]->position - this->position), (wanderTarget - this->position)) > 0.f) {
+				std::cout << "Run Away!" << std::endl;
+				SelectNewWanderTarget();
+			}
+		}
 	}
 
 }
@@ -35,7 +44,7 @@ void cHerbivore::Born(glm::vec3 location) {
 	cAnimal::Born(location);
 	mesh->textureNames[0] = "herb.bmp";
 	hungryAtTime = ::gGetRandBetween(5.f, 10.f);
-	movementSpeed = 0.01f;
+	movementSpeed = 0.015f;
 }
 
 void cHerbivore::LocateFood() {
