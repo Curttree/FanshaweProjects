@@ -13,10 +13,60 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Provided Files">
+      <UniqueIdentifier>{f5ac27b8-36d3-4335-972c-dd8979b9ee90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Custom Containers">
+      <UniqueIdentifier>{8d30025e-60cd-4ccb-adb0-dd43e2f00667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Custom Containers\Header Files">
+      <UniqueIdentifier>{7f44d6f3-1d86-47b2-a60e-c8fad13db84d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GemsProject01.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cPerson.cpp">
+      <Filter>Provided Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cPersonGenerator.cpp">
+      <Filter>Provided Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cSnotify.cpp">
+      <Filter>Provided Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Surnames\read_Names_2010Census.cpp">
+      <Filter>Provided Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cCurtArray.cpp">
+      <Filter>Custom Containers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cMusicGenerator.h">
+      <Filter>Provided Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cPerson.h">
+      <Filter>Provided Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cPersonGenerator.h">
+      <Filter>Provided Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cSnotify.h">
+      <Filter>Provided Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cSong.h">
+      <Filter>Provided Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cCurtArray.h">
+      <Filter>Custom Containers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cCurtLinkedList.h">
+      <Filter>Custom Containers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cCurtMap.h">
+      <Filter>Custom Containers\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

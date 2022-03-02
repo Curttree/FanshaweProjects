@@ -6,13 +6,14 @@ class cCurtMap {
 public:
 	cCurtMap();
 	cCurtMap(unsigned int _size);
-	virtual ~cCurtMap();
+	virtual ~cCurtMap() {};
 
 	T get(std::string key);
 	void insert(std::string key, T value);
 private:
-	unsigned int size;
+	unsigned int size = 0;
 	static const unsigned int default_size = 10;
 	cCurtArray<T> data;
 	unsigned int getHashValue(std::string key);
+	void allocateSpace();
 };

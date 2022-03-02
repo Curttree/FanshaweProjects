@@ -5,11 +5,10 @@ class cCurtArray {
 public:
 	cCurtArray();
 	cCurtArray(unsigned int size);
-	cCurtArray(T[] c_array);
-	virtual ~cCurtAray();
+	virtual ~cCurtAray() {};
 
 	T getAtIndex(unsigned int index);
-	T setAtIndex(unsigned int index);
+	T setAtIndex(unsigned int index, T new_data);
 
 	void push_back(T entry);
 
@@ -23,12 +22,20 @@ public:
 	bool erase(unsigned int index);
 
 	//Returns the number of non-null entries in the array.
-	unsigned int size();
+	unsigned int get_size();
 
 	//Returns the current maximum capacity of the array (all null and non-null values)
-	unsigned int capacity();
+	unsigned int get_capacity();
 private:
+	// Doubles the size of the array
+	void allocateSpace();
 	// Increases the size of the array by x ammount.
 	void allocateSpace(unsigned int newIndicies);
+	void init();
+	unsigned int capacity = 0;
+	unsigned int DEFAULT_CAPACITY = 10;
+	unsigned int size = 0;
+
+	T** data;
 };
 

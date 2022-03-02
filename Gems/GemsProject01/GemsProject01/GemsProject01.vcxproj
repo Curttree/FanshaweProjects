@@ -139,7 +139,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GemsProject01.cpp" />
+    <ClCompile Include="cCurtArray.cpp" />
+    <ClCompile Include="cPerson.cpp" />
+    <ClCompile Include="cPersonGenerator.cpp" />
+    <ClCompile Include="cSnotify.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Surnames\read_Names_2010Census.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cCurtArray.h" />
+    <ClInclude Include="cCurtMap.h" />
+    <ClInclude Include="cCurtLinkedList.h" />
+    <ClInclude Include="cMusicGenerator.h" />
+    <ClInclude Include="cPerson.h" />
+    <ClInclude Include="cPersonGenerator.h" />
+    <ClInclude Include="cSnotify.h" />
+    <ClInclude Include="cSong.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
