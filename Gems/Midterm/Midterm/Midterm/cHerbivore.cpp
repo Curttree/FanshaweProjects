@@ -35,7 +35,7 @@ void cHerbivore::Born(glm::vec3 location) {
 	cAnimal::Born(location);
 	mesh->textureNames[0] = "herb.bmp";
 	hungryAtTime = ::gGetRandBetween(5.f, 10.f);
-	movementSpeed = 0.1f;
+	movementSpeed = 0.01f;
 }
 
 void cHerbivore::LocateFood() {

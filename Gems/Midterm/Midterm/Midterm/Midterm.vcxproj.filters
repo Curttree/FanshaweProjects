@@ -192,6 +192,9 @@
     <ClCompile Include="cCarnivore.cpp">
       <Filter>Midterm\Populations</Filter>
     </ClCompile>
+    <ClCompile Include="sAnimalThreadDesc.cpp">
+      <Filter>Midterm\Populations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">

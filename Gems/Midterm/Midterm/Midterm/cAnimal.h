@@ -12,6 +12,10 @@ public:
 	virtual void LocateFood();
 	virtual void EatFood();
 	glm::vec3 position;
+	// This is static so we can call this outside the function
+	// It's for init the critical section for rand
+	static void InitCriticalSection(void);
+	static void DelCriticalSection(void);
 protected:
 	bool isHungry = false;
 	float hungryAtTime = 0.f;

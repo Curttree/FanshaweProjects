@@ -347,7 +347,7 @@ int main(void) {
     pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
 
 #pragma endregion
-
+    ::g_pEcoSystemManager->runThreads = true;
     while (!glfwWindowShouldClose(pWindow)) {
 
         // Set pass to #0

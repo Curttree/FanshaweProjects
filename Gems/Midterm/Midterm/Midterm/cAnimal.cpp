@@ -2,6 +2,25 @@
 #include "globals.h"
 #include "globalFunctions.h"
 
+CRITICAL_SECTION CS_for_random_lookup;
+bool bCS_is_initialized;
+
+void cAnimal::InitCriticalSection(void)
+{
+	if (!bCS_is_initialized)
+	{
+		InitializeCriticalSection(&CS_for_random_lookup);
+
+		bCS_is_initialized = true;
+	}
+	return;
+}
+
+//static 
+void cAnimal::DelCriticalSection(void)
+{
+	DeleteCriticalSection(&CS_for_random_lookup);
+}
 void cAnimal::TimeStep(float deltaTime) {
 	if (!isHungry) {
 		hungerTimer+=deltaTime;

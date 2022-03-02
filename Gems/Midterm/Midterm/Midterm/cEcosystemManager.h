@@ -8,6 +8,7 @@
 #include <Containers/cCurtMap.h>
 #include <extern/glm/glm.hpp>
 #include <extern/glm/vec3.hpp> // glm::vec3
+#include "sAnimalThreadDesc.cpp"
 class cEcosystemManager {
 public:
 	cEcosystemManager();
@@ -19,4 +20,9 @@ public:
 	cCurtArray<cPlant*> plants = cCurtArray<cPlant*>();
 	cCurtArray<cHerbivore*> herbivores = cCurtArray<cHerbivore*>();
 	cCurtArray<cCarnivore*> carnivores = cCurtArray<cCarnivore*>();
+
+
+	cCurtArray< sAnimalThreadDesc* > vec_pAnimalThreads;
+	bool runThreads;
+	bool killThreads;
 };

@@ -49,7 +49,7 @@ void cCarnivore::Born(glm::vec3 location) {
 	cAnimal::Born(location);
 	mesh->textureNames[0] = "carn.bmp";
 	hungryAtTime = ::gGetRandBetween(10.f, 20.f);
-	movementSpeed = 0.15f;
+	movementSpeed = 0.015f;
 }
 void cCarnivore::LocateFood() {
 	food = 0;
