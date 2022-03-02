@@ -17,6 +17,9 @@ void cHerbivore::TimeStep(float deltaTime) {
 	}
 	else {
 		cAnimal::TimeStep(deltaTime);
+		if (isHungry) {
+			mesh->textureNames[0] = "hungry.bmp";
+		}
 		//Check to see if we have touched the path.
 		unsigned int x = static_cast<unsigned int>(position.x);
 		unsigned int y = static_cast<unsigned int>(position.z);
@@ -54,5 +57,6 @@ void cHerbivore::EatFood() {
 	food = 0;
 	isHungry = false;
 	hungryAtTime = ::gGetRandBetween(10.f, 30.f);
+	mesh->textureNames[0] = "herb.bmp";
 	SelectNewWanderTarget();
 }

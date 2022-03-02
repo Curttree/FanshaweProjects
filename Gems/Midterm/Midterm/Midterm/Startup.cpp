@@ -2,6 +2,7 @@
 
 bool g_StartUp(GLFWwindow* pWindow)
 {
+	srand(time(0));
 
 	::g_pFlyCamera = new cFlyCamera();
 

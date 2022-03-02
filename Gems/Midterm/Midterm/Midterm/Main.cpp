@@ -229,6 +229,7 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("carn.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("herb.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("sleep.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("hungry.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;

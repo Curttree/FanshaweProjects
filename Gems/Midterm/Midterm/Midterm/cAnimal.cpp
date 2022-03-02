@@ -6,7 +6,6 @@ void cAnimal::TimeStep(float deltaTime) {
 	if (!isHungry) {
 		hungerTimer+=deltaTime;
 		if (hungerTimer >= hungryAtTime) {
-			std::cout << "Hungry" << std::endl;
 			isHungry = true;
 		}
 		else {
@@ -14,7 +13,6 @@ void cAnimal::TimeStep(float deltaTime) {
 			mesh->positionXYZ = position;
 			float distance = glm::distance(wanderTarget,position);
 			if (distance < 0.25f) {
-				std::cout << "Arrived" << std::endl;
 				SelectNewWanderTarget();
 			}
 		}
