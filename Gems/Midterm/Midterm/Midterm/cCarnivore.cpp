@@ -4,6 +4,9 @@
 
 void cCarnivore::TimeStep(float deltaTime) {
 	if (isSleeping) {
+		if (!isHungry) {
+			hungerTimer += deltaTime;
+		}
 		sleepTimer += deltaTime;
 		if (sleepTimer > sleepingMaxTime) {
 			mesh->textureNames[0] = "carn.bmp";
@@ -48,7 +51,7 @@ void cCarnivore::TimeStep(float deltaTime) {
 void cCarnivore::Born(glm::vec3 location) {
 	cAnimal::Born(location);
 	mesh->textureNames[0] = "carn.bmp";
-	hungryAtTime = ::gGetRandBetween(10.f, 20.f);
+	hungryAtTime = ::gGetRandBetween(5.f, 10.f);
 	movementSpeed = 0.015f;
 }
 void cCarnivore::LocateFood() {
@@ -64,6 +67,8 @@ void cCarnivore::LocateFood() {
 }
 
 void cCarnivore::EatFood() {
+	std::cout << "YumYumYum" << std::endl;
+	food->HasBeenEaten();
 	food = 0;
 	isHungry = false;
 	hungryAtTime = ::gGetRandBetween(30.f, 50.f);

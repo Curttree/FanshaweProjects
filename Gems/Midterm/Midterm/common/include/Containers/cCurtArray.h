@@ -85,7 +85,7 @@ public:
 		delete this->data[index];
 
 		for (unsigned int x = index; x <= size; x++) {
-			this->data[x] = *(this->data[x + 1]);
+			this->data[x] = this->data[x + 1];
 		}
 
 		//We have shifted all data back. Set index at size to null and decrement size.

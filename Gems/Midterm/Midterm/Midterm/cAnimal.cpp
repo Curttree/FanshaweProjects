@@ -52,6 +52,10 @@ void cAnimal::Born(glm::vec3 location) {
 	SelectNewWanderTarget();
 }
 
+bool cAnimal::IsAlive() {
+	return isAlive;
+}
+
 void cAnimal::SelectNewWanderTarget() {
 	unsigned int x = ::gGetRandBetween(0, 50);
 	unsigned int y = ::gGetRandBetween(0, 50);
@@ -66,4 +70,10 @@ void cAnimal::LocateFood() {
 void cAnimal::EatFood() {
 	//We don't know what to eat.
 	return;
+}
+
+void cAnimal::HasBeenEaten() {
+	//Set scale to 0 for now. Eventually, see if we can remove from our list of models.
+	mesh->scale = 0.f;
+	isAlive = false;
 }

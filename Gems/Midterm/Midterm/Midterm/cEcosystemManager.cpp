@@ -8,7 +8,21 @@ cEcosystemManager::cEcosystemManager() {
 }
 
 cEcosystemManager::~cEcosystemManager() {
+	this->killThreads = true;
+	Sleep(100);
+	for (unsigned int index = 0; index != this->vec_pAnimalThreads.get_size(); index++)
+	{
+		if (!this->vec_pAnimalThreads[index]->bIsAlive) {
 
+			delete this->vec_pAnimalThreads[index];
+		}
+		else {
+			//Something went wrong.
+			std::cout << "Something's wrong, I can feel it." << std::endl;
+		}
+	}
+
+	cAnimal::DelCriticalSection();
 }
 
 void cEcosystemManager::GeneratePlants(unsigned int count) {
@@ -41,15 +55,13 @@ DWORD WINAPI AnimalTimeStepWorkerThreadFunction(LPVOID lpParameter)
 		// HACK: see if animal object exists
 		if (pNewAnimalThreadInfo->pAnimal)
 		{
-
+			if (!pNewAnimalThreadInfo->pAnimal->IsAlive()) {
+				pNewAnimalThreadInfo->bIsAlive = false;
+				return 0;
+			}
 			// Is the thread running? 
 			if (*(pNewAnimalThreadInfo->pRunThreads))
 			{
-				// Sleep(0) allows other threads to "cut into" this threads time
-
-	//			1 ms -> 1000 Hz
-	//			2 ms -> 500 Hz
-	//			4 ms -> 250 Hz
 				double deltaTime = 4.0 / 1000.0;	// 4 ms or 250 Hz
 				Sleep(4);
 
@@ -61,13 +73,14 @@ DWORD WINAPI AnimalTimeStepWorkerThreadFunction(LPVOID lpParameter)
 				// (Is it OK to wait 100 ms for the Daleks to "wake up"?
 				Sleep(100);
 			}
-
 		}
 	}
 	pNewAnimalThreadInfo->bIsAlive = false;
 	return 0;
 }
 void cEcosystemManager::GenerateAnimals(unsigned int herbs, unsigned int carns) {
+
+	cAnimal::InitCriticalSection();
 	for (unsigned int counter = 0; counter < herbs; counter++) {
 		bool valid = false;
 		while (!valid) {
@@ -153,5 +166,25 @@ void cEcosystemManager::TimeStep(float deltaTime) {
 	//Do the time step for the plants.
 	for (unsigned int index = 0; index < plants.get_size(); index++) {
 		plants[index]->TimeStep(deltaTime);
+	}
+
+	//Cleanup any dead threads.
+	unsigned int threadCount = vec_pAnimalThreads.get_size();
+	for (unsigned int index = 0; index < threadCount; index++) {
+		if (vec_pAnimalThreads[index] && !vec_pAnimalThreads[index]->bIsAlive) {
+			vec_pAnimalThreads.erase(index);
+			threadCount--;
+			index--;
+		}
+	}
+
+	//Cleanup any dead animals.
+	unsigned int herbCount = herbivores.get_size();
+	for (unsigned int index = 0; index < herbCount; index++) {
+		if (!herbivores[index]->IsAlive()) {
+			herbivores.erase(index);
+			herbCount--;
+			index--;
+		}
 	}
 }
