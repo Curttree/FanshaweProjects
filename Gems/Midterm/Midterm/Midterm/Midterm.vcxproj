@@ -148,7 +148,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c" />
-    <ClCompile Include="..\common\include\Containers\cCurtMap.cpp" />
     <ClCompile Include="..\common\include\FlyCamera\cFlyCamera.cpp" />
     <ClCompile Include="..\common\include\Graphics\cLightHelper.cpp" />
     <ClCompile Include="..\common\include\Graphics\cLightManager.cpp" />
@@ -192,7 +191,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\include\Containers\cCurtArray.h" />
-    <ClInclude Include="..\common\include\Containers\cCurtMap.h" />
     <ClInclude Include="..\common\include\FlyCamera\cFlyCamera.h" />
     <ClInclude Include="..\common\include\FlyCamera\iCamera.h" />
     <ClInclude Include="..\common\include\Graphics\cLightHelper.h" />

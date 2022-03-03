@@ -12,5 +12,5 @@ public:
 protected:
 	cPlant* food;
 	float poopTimer = 0.f;
-	float poopMaxTime = 60.f;
+	float poopMaxTime = 10.f;
 };

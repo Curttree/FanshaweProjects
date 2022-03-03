@@ -40,7 +40,11 @@ void cHerbivore::TimeStep(float deltaTime) {
 	}
 	if (hasEaten) {
 		poopTimer += deltaTime;
-		if (poopTimer >= poopMaxTime) {
+
+		unsigned int x = static_cast<unsigned int>(position.x);
+		unsigned int y = static_cast<unsigned int>(position.z);
+		if (poopTimer >= poopMaxTime && ::g_pmazeMaker->maze[x][y][0]) {
+			//Don't poop if on the path. Wait until we are on the grass.
 			poopTimer = 0.f;
 			std::cout << "Poop." << std::endl;
 			float chance = ::gGetRandBetween(0.f, 100.f);
@@ -82,6 +86,7 @@ void cHerbivore::EatFood() {
 	isHungry = false;
 	hasEaten = true;
 	hungryAtTime = ::gGetRandBetween(10.f, 30.f);
+	hungerTimer = 0.f;
 	mesh->textureNames[0] = "herb.bmp";
 	SelectNewWanderTarget();
 }

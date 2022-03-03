@@ -24,7 +24,7 @@ public:
 	cCurtArray<cHerbivore*> herbivores = cCurtArray<cHerbivore*>();
 	cCurtArray<cCarnivore*> carnivores = cCurtArray<cCarnivore*>();
 
-
+	cCurtArray<cCurtArray<cCurtArray<bool>>> paths;
 	cCurtArray< sAnimalThreadDesc* > vec_pAnimalThreads;
 	bool runThreads;
 	bool killThreads;

@@ -174,9 +174,6 @@
     <ClCompile Include="cMazeMaker.cpp">
       <Filter>Midterm</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\include\Containers\cCurtMap.cpp">
-      <Filter>Midterm\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="cPlant.cpp">
       <Filter>Midterm\Populations</Filter>
     </ClCompile>
@@ -297,9 +294,6 @@
       <Filter>Midterm</Filter>
     </ClInclude>
     <ClInclude Include="..\common\include\Containers\cCurtArray.h">
-      <Filter>Midterm\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\include\Containers\cCurtMap.h">
       <Filter>Midterm\Containers</Filter>
     </ClInclude>
     <ClInclude Include="cPlant.h">
