@@ -9,6 +9,8 @@
 #include <extern/glm/glm.hpp>
 #include <extern/glm/vec3.hpp> // glm::vec3
 #include "sAnimalThreadDesc.cpp"
+#include "cMazeMaker.h"
+
 class cEcosystemManager {
 public:
 	cEcosystemManager();
@@ -19,6 +21,7 @@ public:
 	void BirthCarnivore(glm::vec3 position);
 	void PlantSeed(glm::vec3 position);
 	void TimeStep(float deltaTime);
+	void CopyPaths(cMazeMaker* mazeMaker);
 
 	cCurtArray<cPlant*> plants = cCurtArray<cPlant*>();
 	cCurtArray<cHerbivore*> herbivores = cCurtArray<cHerbivore*>();

@@ -9,14 +9,10 @@ in vec4 fDebugColourOverride;	// If debug normals are being drawn, this is the c
 
 // Replaces gl_FragColor
 out vec4 pixelOutputFragColour;			// RGB Alpha   (0 to 1) 
-// These make up the G-Buffer:
-out vec4 pixelOutputMaterialColour;		// = 1;		rga (w unused)
-out vec4 pixelOutputNormal;				// = 2;		xyz (w unused)
-out vec4 pixelOutputWorldPos;			// = 3;		xyz 
-										//			w = 0 if lit, 1 if unlit
-out vec4 pixelOutputSpecular;			// = 4;		rgb, w = power
-const float G_BUFFER_OBJECT_NOT_LIT = 0.0f;
-const float G_BUFFER_LIT = 1.0f;
+out vec4 pixelOutputMaterialColour;		// = 1;
+out vec4 pixelOutputNormal;				// = 2;
+out vec4 pixelOutputWorldPos;			// = 3;
+out vec4 pixelOutputSpecular;			// = 4;
 
 // The "whole object" colour (diffuse and specular)
 uniform vec4 wholeObjectDiffuseColour;	// Whole object diffuse colour
@@ -47,9 +43,10 @@ uniform vec4 eyeLocation;
 uniform vec2 screenWidthHeight;
 
 // Indicates which 'pass' we are doing
-const uint PASS_1_G_BUFFER_PASS = 1;	// Renders only geometry to G-Buffer
-const uint PASS_2_LIGHT_PASS = 2;		// Apply lighting to G-Buffer
-const uint PASS_3_2D_EFFECTS_PASS = 3;		// Optional effects (blur, whatever...)
+const uint PASS_0_ENTIRE_SCENE = 0;
+const uint PASS_1_QUAD_ONLY = 1;
+const uint PASS_2_MONITOR = 2;
+const uint PASS_3_2D_EFFECTS_PASS = 3;
 uniform uint renderPassNumber;
 
 
@@ -72,7 +69,7 @@ const int SPOT_LIGHT_TYPE = 1;
 const int DIRECTIONAL_LIGHT_TYPE = 2;
 
 
-const int NUMBEROFLIGHTS = 143;
+const int NUMBEROFLIGHTS = 10;
 uniform sLight theLights[NUMBEROFLIGHTS];  	// 80 uniforms
 // 
 // uniform vec4 theLights[0].position;
@@ -93,6 +90,7 @@ uniform sampler2D texture_04;		// GL_TEXTURE_2D
 uniform sampler2D texture_05;		// GL_TEXTURE_2D
 uniform sampler2D texture_06;		// GL_TEXTURE_2D
 uniform sampler2D texture_07;		// GL_TEXTURE_2D
+uniform sampler2D texture_08;		// GL_TEXTURE_2D
 
 uniform vec4 texture2D_Ratios0to3;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
 uniform vec4 texture2D_Ratios4to7;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
@@ -112,7 +110,6 @@ uniform sampler2D maskTextureTop_00;		// GL_TEXTURE_2D
 uniform sampler2D maskTextureTop_01;		// GL_TEXTURE_2D
 uniform vec4 mask_Ratios0to1;
 
-
 // if true, then we only sample from the cubeMaps (skyboxes)
 uniform bool bIsSkyBox;
 
@@ -123,9 +120,18 @@ uniform sampler2D discardTexture;
 uniform vec3 discardColour;		
 uniform bool bDiscardTransparencyWindowsOn;
 
+//Reflection and Refraction
+uniform bool bDoesReflect;
+uniform bool bDoesRefract;
+uniform float fRefractionIndex;
+
+
 // Specular map values. Decide whether you want to use a map, or whole object spec value (default)
 uniform bool bUseSpecularMap;	
 uniform sampler2D specularMapTexture;	
+
+// Effect textures
+uniform sampler2D staticTexture;
 
 void main()
 {
@@ -135,7 +141,7 @@ void main()
 	// HACK: See if the UV coordinates are actually being passed in
 	pixelOutputFragColour.rgba = vec4(0.0f, 0.0f, 0.0, 1.0f); 
 	
-	if ( renderPassNumber == PASS_3_2D_EFFECTS_PASS )
+	if ( renderPassNumber == PASS_1_QUAD_ONLY )
 	{
 		// Render the texture to the quad, and that's it
 		vec2 UVlookup;
@@ -145,7 +151,57 @@ void main()
 
 		pixelOutputFragColour.rgb = sampleColour.rgb;
 		pixelOutputFragColour.a = 1.0f;
-		// Chromatic Aberration
+		return;
+	}
+
+	if (renderPassNumber == PASS_2_MONITOR)
+	{
+		vec3 sampleColour = texture(texture_08, fUVx2.xy).rgb;
+		sampleColour.rgb *= texture(staticTexture, fUVx2.xy).rgb;
+		pixelOutputFragColour.rgb = sampleColour.rgb;
+		pixelOutputFragColour.a = 1.0f;
+		return;
+	}
+
+	if (renderPassNumber == PASS_3_2D_EFFECTS_PASS)
+	{
+		// Render the texture to the quad, and add in effects.
+
+		vec2 UVlookup;
+		UVlookup.x = gl_FragCoord.x / screenWidthHeight.x;	// Width
+		UVlookup.y = gl_FragCoord.y / screenWidthHeight.y;	// Height
+		vec3 sampleColour = texture(texture_07, UVlookup).rgb;
+
+		for (float i = 1; i < 6; i++)
+		{
+			float offset = i * 0.00025f;
+			vec2 UVlookup;
+			UVlookup.x = gl_FragCoord.x / screenWidthHeight.x+offset;	// Width
+			UVlookup.y = gl_FragCoord.y / screenWidthHeight.y+offset;	// Height
+			sampleColour.r += texture(texture_07, UVlookup).r;
+			sampleColour.g += texture(texture_07, UVlookup).g;
+			sampleColour.b += texture(texture_07, UVlookup).b;
+		}
+		for (float i = -1; i > -6; i--)
+		{
+			float offset = i * 0.00025f;
+			vec2 UVlookup;
+			UVlookup.x = gl_FragCoord.x / screenWidthHeight.x + offset;	// Width
+			UVlookup.y = gl_FragCoord.y / screenWidthHeight.y + offset;	// Height
+			sampleColour.r += texture(texture_07, UVlookup).r;
+			sampleColour.g += texture(texture_07, UVlookup).g;
+			sampleColour.b += texture(texture_07, UVlookup).b;
+		}
+		sampleColour /= 11.f;
+
+		pixelOutputFragColour.rgb = sampleColour.rgb;
+
+		// Tint the colour blue.
+		pixelOutputFragColour.b *= 1.25f;
+		pixelOutputFragColour.a = 1.0f;
+
+
+		// chromatic aberration example 
 		//vec3 sampleColour;
 		//float offset = 0.01f;
 		//vec2 UVred =   vec2(fUVx2.x + offset, fUVx2.y);
@@ -162,31 +218,14 @@ void main()
 		// Early exit
 		return;
 	}
-	// Apply lighting to G-Buffer
-	if ( renderPassNumber == PASS_2_LIGHT_PASS )
-	{
 
-
-		return;
-	}
-	
 	pixelOutputFragColour.a = wholeObjectAlphaTransparency;
 	
 	// If face normals are being generated from the geometry shader, 
-	//	then this is true, and the colours are taken from the debug colour override value.
-	// AND these AREN'T being lit
+	//	then this is true, and the colours are taken from the 
 	if ( int(fDebugColourOverride.w) == 1 )
-	{	
-		// Original colour buffer output
-		//pixelOutputFragColour = fDebugColourOverride;
-
-		// Now G-Buffer output:
-		pixelOutputMaterialColour.rgb = fDebugColourOverride.rgb;
-		// Don't care about normals (pixelOutputNormal)
-		pixelOutputWorldPos.xyz = fVertWorldLocation.xyz;
-		// This ISN'T lit, so set w = 
-		pixelOutputWorldPos.w = G_BUFFER_OBJECT_NOT_LIT;
-		// Not lit, so ignore specular, too (pixelOutputSpecular)
+	{
+		pixelOutputFragColour = fDebugColourOverride;
 		return;	
 	}
 	
@@ -197,7 +236,7 @@ void main()
 		vec3 vec3DisSample = texture( discardTexture, fUVx2.xy ).rgb;
 		// Take average of this RGB sample
 		//
-		if (abs(discardColour.r - vec3DisSample.r) < 0.15f &&  abs(discardColour.g - vec3DisSample.g) < 0.15f && abs(discardColour.b - vec3DisSample.b) < 0.15f)
+		if (abs(discardColour.r - vec3DisSample.r) < 0.7f &&  abs(discardColour.g - vec3DisSample.g) < 0.7f && abs(discardColour.b - vec3DisSample.b) < 0.7f)
 		{	// "close enough"
 		
 			// DON'T even draw the pixel here
@@ -228,19 +267,38 @@ void main()
 		{
 			pixelOutputFragColour.rgb += texture( cubeMap_00, fNormal.xyz ).rgb * cubeMap_Ratios0to3.x;
 		}
-		//if ( cubeMap_Ratios0to3.x > 0.0f )
-		//{
-		//	// Now G-Buffer output:
-		//	pixelOutputMaterialColour.rgb += texture( cubeMap_00, fNormal.xyz ).rgb * cubeMap_Ratios0to3.x;
-	//	}
 
-		// Don't care about normals (pixelOutputNormal)
-		pixelOutputWorldPos.xyz = fVertWorldLocation.xyz;
-		// This ISN'T lit, so set w = 
-		pixelOutputWorldPos.w = G_BUFFER_OBJECT_NOT_LIT;
-		// Not lit, so ignore specular, too (pixelOutputSpecular)
 		return;	
 	}//if ( bIsSkyBox )
+	
+	if ( bDoesReflect )
+	{
+		vec3 reflectVector = reflect((fVertWorldLocation.xyz - eyeLocation.xyz), fNormal.xyz);
+		pixelOutputFragColour.rgba = vec4(0.0f, 0.0f, 0.0f, wholeObjectAlphaTransparency);
+
+		if ( cubeMap_Ratios0to3.x > 0.0f )
+		{
+			pixelOutputFragColour.rgb += texture( cubeMap_00, vec3(reflectVector.x, -reflectVector.y, reflectVector.z)).rgb;
+		}
+		if (bUseWholeObjectDiffuseColour) {
+			pixelOutputFragColour.rgb *= wholeObjectDiffuseColour.rgb;
+		}
+
+		return;	
+	}//if ( bDoesReflect )
+	
+	if ( bDoesRefract )
+	{
+		vec3 refractVector = refract((eyeLocation.xyz - fVertWorldLocation.xyz), fNormal.xyz, fRefractionIndex);
+		pixelOutputFragColour.rgba = vec4(0.0f, 0.0f, 0.0f, wholeObjectAlphaTransparency);
+
+		if ( cubeMap_Ratios0to3.x > 0.0f )
+		{
+			pixelOutputFragColour.rgb += texture( cubeMap_00, vec3(refractVector.x,refractVector.y,refractVector.z) ).rgb;
+		}
+
+		return;	
+	}//if ( bDoesRefract )
 	
 	// Copy model vertex colours?
 	vec4 vertexDiffuseColour = fVertexColour;
@@ -348,7 +406,7 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 			float dotProduct = dot( -theLights[index].direction.xyz,  
 									   normalize(norm.xyz) );	// -1 to 1
 
-			dotProduct = max( 0.1f, dotProduct );		
+			dotProduct = max( 0.25f, dotProduct );		
 		
 			lightContrib *= dotProduct;		
 			lightContrib *= theLights[index].diffuse.a;

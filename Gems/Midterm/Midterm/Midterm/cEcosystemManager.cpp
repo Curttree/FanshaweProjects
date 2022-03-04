@@ -25,6 +25,20 @@ cEcosystemManager::~cEcosystemManager() {
 	cAnimal::DelCriticalSection();
 }
 
+void cEcosystemManager::CopyPaths(cMazeMaker* maze) {
+
+	for (unsigned int x = 0; x < maze->maze.size(); x++) {
+		this->paths.push_back(cCurtArray<cCurtArray<bool>>());
+		for (unsigned int y = 0; y < maze->maze[x].size(); y++) {
+			this->paths[x].push_back(cCurtArray<bool>());
+			for (unsigned int z = 0; z < maze->maze[x][y].size(); z++) {
+				this->paths[x][y].push_back(maze->maze[x][y][z]);
+			}
+		}
+	}
+	std::cout << "Copied" << std::endl;
+}
+
 void cEcosystemManager::PlantSeed(glm::vec3 position) {
 	float baseTime = 5.f;
 	float randAddition = ::gGetRandBetween(0.f, 4.f);
@@ -102,11 +116,18 @@ void cEcosystemManager::GenerateAnimals(unsigned int herbs, unsigned int carns) 
 	}
 
 	for (unsigned int counter = 0; counter < carns; counter++) {
+		bool valid = false;
+		while (!valid) {
 			int x_coord = ::gGetRandBetween(0, 50);
 			int y_coord = ::gGetRandBetween(0, 50);
-			float x_add = ::gGetRandBetween(0.2f, 0.8f);
-			float y_add = ::gGetRandBetween(0.2f, 0.8f);
-			BirthCarnivore(glm::vec3(x_coord * 1.f + x_add, -0.3f, y_coord * 1.f + y_add));
+			if (!::g_pmazeMaker->maze[x_coord][y_coord][0]) {
+				//We found sand, we can place the animal.
+				valid = true;
+				float x_add = ::gGetRandBetween(0.2f, 0.8f);
+				float y_add = ::gGetRandBetween(0.2f, 0.8f);
+				BirthCarnivore(glm::vec3(x_coord * 1.f + x_add, -0.3f, y_coord * 1.f + y_add));
+			}
+		}
 	}
 }
 

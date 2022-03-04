@@ -318,6 +318,7 @@ int main(void) {
     }
 #pragma endregion
 #pragma region QUESTION_2 QUESTION_3 Plants and Animals
+    //::g_pEcoSystemManager->CopyPaths(::g_pmazeMaker);
     ::g_pEcoSystemManager->GeneratePlants(10);
     ::g_pEcoSystemManager->GenerateAnimals(5,3);
 

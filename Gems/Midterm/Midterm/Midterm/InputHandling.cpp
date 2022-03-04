@@ -219,12 +219,12 @@ void GLFW_cursor_enter_callback(GLFWwindow* window, int entered)
 {
     if ( entered )
     {
-        std::cout << "Mouse cursor is over the window" << std::endl;
+        //std::cout << "Mouse cursor is over the window" << std::endl;
         ::g_MouseIsInsideWindow = true;
     }
     else
     {
-        std::cout << "Mouse cursor is no longer over the window" << std::endl;
+       // std::cout << "Mouse cursor is no longer over the window" << std::endl;
         ::g_MouseIsInsideWindow = false;
     }
     return;

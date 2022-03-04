@@ -42,6 +42,9 @@
     <ClCompile Include="cCurtArray.cpp">
       <Filter>Custom Containers</Filter>
     </ClCompile>
+    <ClCompile Include="cCurtMap.cpp">
+      <Filter>Custom Containers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cMusicGenerator.h">

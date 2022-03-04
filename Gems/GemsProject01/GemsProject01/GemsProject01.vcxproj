@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cCurtArray.cpp" />
+    <ClCompile Include="cCurtMap.cpp" />
     <ClCompile Include="cPerson.cpp" />
     <ClCompile Include="cPersonGenerator.cpp" />
     <ClCompile Include="cSnotify.cpp" />

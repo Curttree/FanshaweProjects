@@ -10,7 +10,7 @@ namespace gdp2022Physics
 	CollisionHandler::~CollisionHandler() {};
 
 	// Helper Method declarations. These are defined below.
-	glm::vec3 ClosestPtPointPlane(const glm::vec3& pt, const glm::vec3& norm, float dotProduct); 
+	glm::vec3 ClosestPtPointPlane(const glm::vec3& pt, const glm::vec3& norm, float dotProduct);
 	bool TestMovingSpherePlane(const glm::vec3& a, const glm::vec3& b, float r, const glm::vec3& norm, float dotProduct);
 	bool TestMovingSphereSphere(
 		const glm::vec3& s0Center, const float s0Radius,
@@ -29,8 +29,8 @@ namespace gdp2022Physics
 		float collisionTime = 0.f;
 
 		if (!TestMovingSphereSphere(a_body->previousPosition, a_sphere->GetRadius(),
-									b_body->previousPosition, b_sphere->GetRadius(),
-									vecA, vecB, collisionTime)) 
+			b_body->previousPosition, b_sphere->GetRadius(),
+			vecA, vecB, collisionTime))
 		{
 			// No current or future collision. We can exit.
 			return false;
@@ -178,6 +178,27 @@ namespace gdp2022Physics
 		return true;
 	}
 
+	bool CollisionHandler::CollideSphereAABB(float deltaTime, cRigidBody* sphere, SphereShape* sphereShape,
+		cRigidBody* aabb, AABBShape* aabbShape) {
+		return false;
+	}
+
+	bool CollisionHandler::CollideAABBPlane(float deltaTime, cRigidBody* aabb, AABBShape* aabbShape,
+		cRigidBody* plane, PlaneShape* planeShape) {
+		return false;
+	}
+
+	bool CollisionHandler::CollideAABBAABB(float deltaTime, cRigidBody* a_aabb, AABBShape* a_aabbShape,
+		cRigidBody* b_aabb, AABBShape* b_aabbShape) {
+
+		if (!TestAABBAABB(a_aabbShape, b_aabbShape))
+		{
+			// No current or future collision. We can exit.
+			return false;
+		}
+		return false;
+	}
+
 	void CollisionHandler::Collide(
 		float deltaTime, std::vector<cRigidBody*>& bodies, std::vector<CollidingBodies>& collidingBodies)
 	{
@@ -216,6 +237,13 @@ namespace gdp2022Physics
 							collision = true;
 						}
 					}
+					else if (shapeB->GetShapeType() == eShapeType::AABB) {
+						if (CollideSphereAABB(deltaTime,
+							bodyA, SphereShape::Cast(shapeA),
+							bodyB, AABBShape::Cast(shapeB))) {
+							collision = true;
+						}
+					}
 				}
 				else if (shapeA->GetShapeType() == eShapeType::Plane)
 				{
@@ -231,6 +259,26 @@ namespace gdp2022Physics
 					else if (shapeB->GetShapeType() == eShapeType::Plane)
 					{
 						// Not worrying about plane/plane collisions.
+					}
+					else if (shapeB->GetShapeType() == eShapeType::AABB)
+					{
+						if (CollideAABBPlane(deltaTime,
+							bodyB, AABBShape::Cast(shapeB),
+							bodyA, PlaneShape::Cast(shapeA)))
+						{
+							collision = true;
+						}
+					}
+				}
+				else if (shapeA->GetShapeType() == eShapeType::AABB) {
+					if (shapeB->GetShapeType() == eShapeType::AABB)
+					{
+						if (CollideAABBAABB(deltaTime,
+							bodyA, AABBShape::Cast(shapeA),
+							bodyB, AABBShape::Cast(shapeB)))
+						{
+							collision = true;
+						}
 					}
 				}
 
@@ -306,6 +354,21 @@ namespace gdp2022Physics
 		return false;
 	}
 
+	// Page 79 Chapter 4 Bounding Volumes
+	// Christer Ericson - Real-time Collision Detection
+	int TestAABBAABB(AABBShape* a, AABBShape* b)
+	{
+		glm::vec3 a_min = a->GetMin();
+		glm::vec3 b_min = b->GetMin();
+		glm::vec3 a_max = a->GetMax();
+		glm::vec3 b_max = b->GetMax();
+		// Exit with no intersection if separated along an axis
+		if (a_max[0] < b_min[0] || a_min[0] > b_max[0]) return 0;
+		if (a_max[1] < b_min[1] || a_min[1] > b_max[1]) return 0;
+		if (a_max[2] < b_min[2] || a_min[2] > b_max[2]) return 0;
+		// Overlapping on all axes means AABBs are intersecting
+		return 1;
+	}
 
 	// Page 127 Chapter 5 Basic Primitive Tests
 	// Christer Ericson - Real-time Collision Detection

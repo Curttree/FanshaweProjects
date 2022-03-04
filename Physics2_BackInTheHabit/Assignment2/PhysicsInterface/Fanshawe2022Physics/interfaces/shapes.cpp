@@ -37,4 +37,18 @@ namespace gdp2022Physics
 		return dynamic_cast<PlaneShape*>(shape);
 	}
 	#pragma endregion
+
+	#pragma region AABB
+
+	AABBShape::AABBShape(const glm::vec3& minimumValues, const glm::vec3& maximumValues)
+		: iShape(eShapeType::AABB)
+		, min(minimumValues)
+		, max(maximumValues)
+	{
+	}
+	AABBShape* AABBShape::Cast(iShape* shape)
+	{
+		return dynamic_cast<AABBShape*>(shape);
+	}
+	#pragma endregion
 }

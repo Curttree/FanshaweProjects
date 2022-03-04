@@ -1,0 +1,152 @@
+{
+  "Camera": {
+	  "Position":{
+    "x": 25.0,
+    "y": 27.0,
+  "z": -80.0}},
+  "Lights":[
+	  {"Type":2,
+		"Position":{
+			"x": 10000.0,
+			"y": 5000.0,
+			"z": 0.0
+		},
+		"Direction":{
+			"x": -0.5735,
+			"y": -0.5735,
+			"z": -0.1147
+		},
+		"Diffuse":{
+			"r": 0.82745,
+			"g":  0.8235,
+			"b": 0.8156,
+			"a": 1
+		}
+	  }
+  ],
+"Props":
+[{
+"Name":"Console", "Position":{
+		"x": 0.0,
+		"y": 0.0,
+		"z": -0.0
+	  }, "Orientation":{
+		"x": 0.0,
+		"y": 180.0,
+		"z": 0.0
+	  }
+},{
+"Name":"CornerConsole2", "Position":{
+		"x": -50.0,
+		"y": 0.0,
+		"z": -50.0
+	  }, "Orientation":{
+		"x": 0.0,
+		"y": 180.0,
+		"z": 0.0
+	  }
+},{
+"Name":"CornerConsole1", "Position":{
+		"x": 100.0,
+		"y": 0.0,
+		"z": -50.0
+	  }, "Orientation":{
+		"x": 0.0,
+		"y": 180.0,
+		"z": 0.0
+	  }
+},{
+"Name":"FloorPanel", "Position":{
+		"x": 100.0,
+		"y": 0.0,
+		"z": -50.0
+	  }
+},{
+"Name":"FloorPanel", "Position":{
+		"x": 50.0,
+		"y": 0.0,
+		"z": -50.0
+	  }
+},{
+"Name":"FloorPanel", "Position":{
+		"x": 0.0,
+		"y": 0.0,
+		"z": -50.0
+	  }
+},{
+"Name":"FloorPanel", "Position":{
+		"x": 100.0,
+		"y": 0.0,
+		"z": -100.0
+	  }
+},{
+"Name":"FloorPanel", "Position":{
+		"x": 50.0,
+		"y": 0.0,
+		"z": -100.0
+	  }
+},{
+"Name":"FloorPanel", "Position":{
+		"x": 0.0,
+		"y": 0.0,
+		"z": -100.0
+	  }
+},{
+"Name":"SpaceQuad", "Position":{
+		"x": 0.0,
+		"y": 0.0,
+		"z": 500.0
+	  }
+},{
+"Name":"SpaceStation", "Position":{
+		"x": 2000.0,
+		"y": 0.0,
+		"z": -2000.0
+	  }
+},{
+"Name":"SpaceQuadBig", "Position":{
+		"x": 1000.0,
+		"y": 0.0,
+		"z": -300.0
+	  }
+},{
+"Name":"SpaceQuadBig", "Position":{
+		"x": 1000.0,
+		"y": 0.0,
+		"z": -7200.0
+	  }
+},{
+"Name":"SpaceQuadBig", "Position":{
+		"x": 4000.0,
+		"y": -500.0,
+		"z": -3500.0
+	  }, "Orientation":{
+		"x": 0.0,
+		"y": 90.0,
+		"z": 0.0
+	  }
+}
+],
+"Question3Monitors":[],
+"Question4Monitors":[{
+"Name":"FrontScreen1", "Position":{
+		"x": 0.0,
+		"y": 0.0,
+		"z": -0.0
+	  }, "Orientation":{
+		"x": 0.0,
+		"y": 180.0,
+		"z": 0.0
+	  }
+},{
+"Name":"FrontScreen2", "Position":{
+		"x": 0.0,
+		"y": 0.0,
+		"z": -0.0
+	  }, "Orientation":{
+		"x": 0.0,
+		"y": 180.0,
+		"z": 0.0
+	  }
+}]	
+}

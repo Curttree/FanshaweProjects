@@ -3,5 +3,6 @@
 enum class eShapeType
 {
 	Plane,
-	Sphere
+	Sphere,
+	AABB
 };

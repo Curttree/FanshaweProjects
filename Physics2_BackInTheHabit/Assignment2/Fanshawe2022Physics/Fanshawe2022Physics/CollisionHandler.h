@@ -29,6 +29,15 @@ namespace gdp2022Physics
 		bool CollideSpherePlane(float deltaTime, cRigidBody* sphere, SphereShape* sphereShape,
 			cRigidBody* plane, PlaneShape* planeShape);
 
+		bool CollideSphereAABB(float deltaTime, cRigidBody* sphere, SphereShape* sphereShape,
+			cRigidBody* aabb, AABBShape* aabbShape);
+
+		bool CollideAABBPlane(float deltaTime, cRigidBody* aabb, AABBShape* aabbShape,
+			cRigidBody* plane, PlaneShape* planeShape);
+
+		bool CollideAABBAABB(float deltaTime, cRigidBody* a_aabb, AABBShape* a_aabbShape,
+			cRigidBody* b_aabb, AABBShape* b_aabbShape);
+
 		void Collide(float deltaTime, std::vector<cRigidBody*>& bodies, std::vector<CollidingBodies>& collidingBodies);
 	
 	private:

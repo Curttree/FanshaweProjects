@@ -244,14 +244,12 @@ int main(void) {
     const double MAX_DELTA_TIME = 0.1;  // 100 ms
     double previousTime = glfwGetTime();
 
-    //TODO: Replace with my own implementation
     // Create the FBO (Frame Buffer Object)
     // The texture we can render to
     ::g_pFBO = new cFBO();
     // Set this off screen texture buffer to some random size
     std::string FBOerrorString;
-    //    if (::g_pFBO->init(1024, 1024, FBOerrorString))
-    if (::g_pFBO->init(8 * 1024, 8 * 1024, FBOerrorString))
+    if (::g_pFBO->init(1200, 640, FBOerrorString))
     {
         std::cout << "FBO is all set!" << std::endl;
     }
@@ -269,14 +267,10 @@ int main(void) {
     glClearColor(0.0f, 164.0f / 255.0f, 239.0f / 255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    enum eRenderPasses
-    {
-        PASS_1_G_BUFFER_PASS = 1,	// Renders only geometry to G-Buffer
-        PASS_2_LIGHT_PASS = 2,		// Apply lighting to G-Buffer
-        PASS_3_2D_EFFECTS_PASS = 3		// Optional effects (blur, whatever...)
-    };
-    //const GLint RENDER_PASS_0_ENTIRE_SCENE = 0;
-    //const GLint RENDER_PASS_1_QUAD_ONLY = 1;
+    const GLint RENDER_PASS_0_ENTIRE_SCENE = 0;
+    const GLint RENDER_PASS_1_QUAD_ONLY = 1;
+    const GLint PASS_2_MONITOR = 2;
+    const GLint PASS_3_2D_EFFECTS_PASS = 3;
     GLint renderPassNumber_LocID = glGetUniformLocation(program, "renderPassNumber");
 
 #pragma region Objects
@@ -308,7 +302,7 @@ int main(void) {
     while (!glfwWindowShouldClose(pWindow)) {
 
         // Set pass to #0
-        glUniform1ui( renderPassNumber_LocID, PASS_1_G_BUFFER_PASS );
+        glUniform1ui(renderPassNumber_LocID, RENDER_PASS_0_ENTIRE_SCENE);
 
         float ratio;
         int width, height;

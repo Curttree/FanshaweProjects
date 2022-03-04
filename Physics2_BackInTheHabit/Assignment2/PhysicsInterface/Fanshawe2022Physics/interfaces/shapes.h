@@ -41,4 +41,23 @@ namespace gdp2022Physics
 		PlaneShape(const PlaneShape&) : iShape(eShapeType::Plane) { }
 		PlaneShape& operator=(const PlaneShape&) { return *this; }
 	};
+
+
+	class AABBShape : public iShape
+	{
+	public:
+		AABBShape(const glm::vec3& minimumValues, const glm::vec3& maximumValues);
+
+		const glm::vec3& GetMin() { return min; }
+		const glm::vec3& GetMax() { return max; }
+
+		static AABBShape* Cast(iShape* shape);
+
+	private:
+		glm::vec3 min;		// Minimum values along each axis.
+		glm::vec3 max;		// Maximum values along each axis.
+
+		AABBShape(const AABBShape&) : iShape(eShapeType::AABB) { }
+		AABBShape& operator=(const AABBShape&) { return *this; }
+	};
 }
