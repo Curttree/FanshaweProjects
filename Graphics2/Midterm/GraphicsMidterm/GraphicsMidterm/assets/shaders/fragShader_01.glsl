@@ -132,6 +132,7 @@ uniform sampler2D specularMapTexture;
 
 // Effect textures
 uniform sampler2D staticTexture;
+uniform float flickerAmount;
 
 void main()
 {
@@ -156,8 +157,11 @@ void main()
 
 	if (renderPassNumber == PASS_2_MONITOR)
 	{
-		vec3 sampleColour = texture(texture_00, fUVx2.xy).rgb;
-		sampleColour.rgb *= texture(staticTexture, fUVx2.xy).rgb;
+		vec2 UVlookup;
+		UVlookup.x = fUVx2.x;
+		UVlookup.y = fUVx2.y + flickerAmount;
+		vec3 sampleColour = texture(texture_00, UVlookup.xy).rgb;
+		sampleColour.rgb *= texture(staticTexture, UVlookup.xy).rgb;
 		pixelOutputFragColour.rgb = sampleColour.rgb;
 		pixelOutputFragColour.a = 1.0f;
 		return;

@@ -493,6 +493,7 @@ int main(void) {
             }
         }
 
+        ::g_pEffectsManager->TimeStep(deltaTime);
         ::g_pFlyCamera->Update(deltaTime);
         glUniform1ui(renderPassNumber_LocID, RENDER_PASS_0_ENTIRE_SCENE);
 

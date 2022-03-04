@@ -223,13 +223,17 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         glUniform1f(bUseSpecularMap_Location, (float)GL_FALSE);
     }
 
-    GLuint staticTextureNumber = ::g_pTextureManager->getTextureIDFromName(::g_pEffectsManager->GetStaticTexture());
+    GLuint staticTextureNumber = ::g_pTextureManager->getTextureIDFromName(::g_pEffectsManager->GetStaticTexture(pCurrentMesh->getUniqueID()));
     // Picking texture unit 72 since it's not in use.
     GLuint staticTextureUnit = 72;			// Texture unit go from 0 to 79
     glActiveTexture(staticTextureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
     glBindTexture(GL_TEXTURE_2D, staticTextureNumber);
     GLint staticTexture_LocID = g_GetUniformLocation(shaderProgram, "staticTexture");
     glUniform1i(staticTexture_LocID, staticTextureUnit);
+
+    GLint flickerAmount_LodID = g_GetUniformLocation(shaderProgram, "flickerAmount");
+    // Set the flicker amount
+    glUniform1f(flickerAmount_LodID, ::g_pEffectsManager->GetFlickerAmount(pCurrentMesh->getUniqueID()));
 
 
     {
