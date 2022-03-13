@@ -63,10 +63,11 @@
 #define TRIGGER_THRESHOLD	 (0.01f)
 
 // Sound effect paths
-#define ENGINE_SOUND (".\\Gravitar\\Sounds\\Engine.wav")
-#define LASER_SOUND (".\\Gravitar\\Sounds\\Laser.wav")
+#define ENGINE_SOUND (".\\Assets\\Sounds\\Engine.wav")
+#define LASER_SOUND (".\\Assets\\Sounds\\Laser.wav")
 
 // Sprite paths
-#define SHIP_SPRITES (".\\Gravitar\\Sprites\\sprites.bmp")
+#define SHIP_SPRITES (".\\Assets\\Sprites\\player.bmp")
+#define PLAYER_BULLET_SPRITE (".\\Assets\\Sprites\\playerBullet.bmp")
 
 #endif

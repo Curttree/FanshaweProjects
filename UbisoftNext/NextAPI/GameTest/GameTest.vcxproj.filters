@@ -35,6 +35,27 @@
     <ClCompile Include="Entities\cPlanet.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Projectiles\cProjectile.cpp">
+      <Filter>Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectiles\cProjectileFactory.cpp">
+      <Filter>Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectiles\cPlayerBullet.cpp">
+      <Filter>Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectiles\cBasicWeapon.cpp">
+      <Filter>Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="cSpawner.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\cStructureFactory.cpp">
+      <Filter>Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\cFuelPickup.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\main.h" />
@@ -74,9 +95,6 @@
     <ClInclude Include="cWorldSpace.h">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Projectiles\cProjectileFactory.h">
-      <Filter>Projectiles</Filter>
-    </ClInclude>
     <ClInclude Include="Entities\cPlanet.h">
       <Filter>Entities\Header Files</Filter>
     </ClInclude>
@@ -85,6 +103,36 @@
     </ClInclude>
     <ClInclude Include="cGameStateController.h">
       <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectiles\cProjectile.h">
+      <Filter>Projectiles\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectiles\cProjectileFactory.h">
+      <Filter>Projectiles\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectiles\iProjectile.h">
+      <Filter>Projectiles\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectiles\cPlayerBullet.h">
+      <Filter>Projectiles\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectiles\iWeapon.h">
+      <Filter>Projectiles\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectiles\cBasicWeapon.h">
+      <Filter>Projectiles\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cSpawner.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="globalFunctions.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\cStructureFactory.h">
+      <Filter>Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\cFuelPickup.h">
+      <Filter>Entities\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -103,11 +151,14 @@
     <Filter Include="Helpers">
       <UniqueIdentifier>{2ea5cd9a-1348-4607-b80b-ca51d0fd5075}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Effects">
-      <UniqueIdentifier>{a35bc315-e4b9-44df-ac88-ed0cf8bfb982}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Projectiles">
       <UniqueIdentifier>{a1c098fa-0589-4544-8ef5-185332db48a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projectiles\Header Files">
+      <UniqueIdentifier>{4f6b6c33-cf91-4a20-bd46-65fb198192ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Structures">
+      <UniqueIdentifier>{f5fdadd6-286f-4333-a9ee-868f5ab5da8c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

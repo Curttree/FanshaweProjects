@@ -184,11 +184,20 @@
     <ClInclude Include="App\SimpleSprite.h" />
     <ClInclude Include="App\TextureLoader.h" />
     <ClInclude Include="cGameStateController.h" />
+    <ClInclude Include="cSpawner.h" />
     <ClInclude Include="cWorldSpace.h" />
+    <ClInclude Include="Entities\cFuelPickup.h" />
     <ClInclude Include="Entities\cGameEntity.h" />
     <ClInclude Include="Entities\cPlanet.h" />
     <ClInclude Include="Entities\cPlayer.h" />
+    <ClInclude Include="Entities\cStructureFactory.h" />
+    <ClInclude Include="globalFunctions.h" />
+    <ClInclude Include="Projectiles\cBasicWeapon.h" />
+    <ClInclude Include="Projectiles\cPlayerBullet.h" />
+    <ClInclude Include="Projectiles\cProjectile.h" />
     <ClInclude Include="Projectiles\cProjectileFactory.h" />
+    <ClInclude Include="Projectiles\iProjectile.h" />
+    <ClInclude Include="Projectiles\iWeapon.h" />
     <ClInclude Include="sSurface.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="sVec2.h" />
@@ -201,12 +210,19 @@
     <ClCompile Include="App\SimpleSound.cpp" />
     <ClCompile Include="App\SimpleSprite.cpp" />
     <ClCompile Include="App\TextureLoader.cpp" />
+    <ClCompile Include="cSpawner.cpp" />
     <ClCompile Include="cWorldSpace.cpp" />
+    <ClCompile Include="Entities\cFuelPickup.cpp" />
     <ClCompile Include="Entities\cGameEntity.cpp" />
     <ClCompile Include="Entities\cPlanet.cpp" />
     <ClCompile Include="Entities\cPlayer.cpp" />
+    <ClCompile Include="Entities\cStructureFactory.cpp" />
     <ClCompile Include="GameTest.cpp" />
     <ClCompile Include="GravitarGame.cpp" />
+    <ClCompile Include="Projectiles\cBasicWeapon.cpp" />
+    <ClCompile Include="Projectiles\cPlayerBullet.cpp" />
+    <ClCompile Include="Projectiles\cProjectile.cpp" />
+    <ClCompile Include="Projectiles\cProjectileFactory.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

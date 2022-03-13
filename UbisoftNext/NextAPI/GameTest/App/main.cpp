@@ -186,7 +186,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, 	_In_opt_ HINSTANCE hPrevInstanc
 	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
 	InitGL();                       // Our own OpenGL initialization
 
-
+	srand(time(NULL));
 
 	// Init sounds system.
 	CSimpleSound::GetInstance().Initialize(MAIN_WINDOW_HANDLE);

@@ -2,16 +2,17 @@
 #include "cPlanet.h"
 #include "..\app\app.h"
 #include "..\cWorldSpace.h"
+#include "..\globalFunctions.h"
 
 cPlanet::cPlanet(float _x, float _y, float _radius, float _mass) {
 	position.x = _x;
 	position.y = _y;
 	radius = _radius;
 	mass = _mass;
-	surfaces.push_back(new Surface{- radius, - radius, - radius, radius });
-	surfaces.push_back(new Surface{ - radius, radius, radius, radius });
-	surfaces.push_back(new Surface{ radius, radius, radius, - radius });
-	surfaces.push_back(new Surface{ radius, - radius, - radius, - radius });
+	surfaces.push_back(new Surface{- radius, - radius, - radius, radius, PI/2.f });
+	surfaces.push_back(new Surface{ - radius, radius, radius, radius, 0.f});
+	surfaces.push_back(new Surface{ radius, radius, radius, - radius, -PI / 2.f });
+	surfaces.push_back(new Surface{ radius, - radius, - radius, - radius, PI});
 }
 
 cPlanet::~cPlanet() {
@@ -106,4 +107,22 @@ bool cPlanet::CheckForCrash(Vec2 otherPos, float otherRadius) {
 		}
 	}
 	return false;
+}
+
+float cPlanet::CalculateGravity(Vec2 otherPos, float& distance) {
+	// Use simplified version of gravity function.
+	distance = sqrt(pow((otherPos.x - position.x), 2) + pow((otherPos.y - position.y), 2));
+	return gravityConstant * (mass / pow(distance, 2));
+}
+
+void cPlanet::GetSurfacePosition(Vec2& location, float& angle) {
+	int surfaceIndex = gGetRandBetween(0, (int)surfaces.size());
+	float point = gGetRandBetween(0.f, 1.f);
+	Vec2 direction;
+	direction.x = (surfaces[surfaceIndex]->eX - surfaces[surfaceIndex]->sX);
+	direction.y = (surfaces[surfaceIndex]->eY - surfaces[surfaceIndex]->sY);
+
+	location.x = position.x + surfaces[surfaceIndex]->sX + direction.x * point;
+	location.y = position.y + surfaces[surfaceIndex]->sY + direction.y * point;
+	angle = surfaces[surfaceIndex]->angle;
 }

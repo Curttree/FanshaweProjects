@@ -6,15 +6,15 @@
 // Limiting external access to some sprite functionality so the entity has more control over how/where it's sprite can be updated.
 class cGameEntity {
 public:
-	void Draw();
-	void Update(float deltaTime);
-	float GetAngle();
-	Vec2 GetPosition();
-	void GetPosition(float& x, float& y);
-	float GetScale();
-	void SetAngle(float _angle);
-	void SetPosition(float _positionX, float _positionY);
-	void SetScale(float _scale);
+	virtual void Draw();
+	virtual void Update(float deltaTime);
+	virtual float GetAngle();
+	virtual Vec2 GetPosition();
+	virtual void GetPosition(float& x, float& y);
+	virtual float GetScale();
+	virtual void SetAngle(float _angle);
+	virtual void SetPosition(float _positionX, float _positionY);
+	virtual void SetScale(float _scale);
 protected:
 	CSimpleSprite* sprite;
 	float angle;

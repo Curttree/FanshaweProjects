@@ -5,6 +5,9 @@
 
 #include "..\App\app.h"
 
+//TODO: Remove reference once we have weapons being built in factory.
+#include "..\Projectiles\cBasicWeapon.h"
+
 cPlayer::cPlayer(float posX, float posY, float scale) {
 	this->sprite = App::CreateSprite(SHIP_SPRITES, 1, 1);
 	this->SetPosition(posX, posY);
@@ -12,10 +15,18 @@ cPlayer::cPlayer(float posX, float posY, float scale) {
 
 	this->initialHeading = { 0, 1 };
 	this->heading = initialHeading;
+
+	//TODO: Move weapon references to factory if we are going to have multiple.
+	this->primaryWeapon = new cBasicWeapon(this);
 }
 
 cPlayer::~cPlayer() {
 	delete this->sprite;
+
+	if (primaryWeapon) {
+		delete this->primaryWeapon;
+		this->primaryWeapon = 0;
+	}
 }
 
 void cPlayer::Update(float deltaTime) {
@@ -24,6 +35,14 @@ void cPlayer::Update(float deltaTime) {
 	}
 	this->Dampen();
 	cGameEntity::Update(deltaTime);
+
+	if (this->primaryWeapon) {
+		primaryWeapon->Update(deltaTime);
+	}
+}
+
+Vec2 cPlayer::GetHeading() {
+	return heading;
 }
 
 void cPlayer::Thrust(float percentage) {
@@ -32,6 +51,11 @@ void cPlayer::Thrust(float percentage) {
 	//float scale = worldSpace->GetScale();
 	movement.x += heading.x * thrustSpeed * percentage;
 	movement.y += heading.y * thrustSpeed * percentage;
+}
+
+void cPlayer::Pull(Vec2 direction, float magnitude) {
+	movement.x += direction.x * magnitude;
+	movement.y += direction.y * magnitude;
 }
 
 void cPlayer::Dampen() {
@@ -59,7 +83,9 @@ void cPlayer::Dampen() {
 
 void cPlayer::Fire(float weaponNumber) {
 	//Fire the given weapon..
-
+	if (weaponNumber == 0) {
+		primaryWeapon->Fire();
+	}
 }
 
 void cPlayer::SetAngle(float _angle) {

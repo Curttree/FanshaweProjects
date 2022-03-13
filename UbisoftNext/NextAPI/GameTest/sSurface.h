@@ -5,4 +5,5 @@ struct Surface {
 	float sY;
 	float eX;
 	float eY;
+	float angle;
 };

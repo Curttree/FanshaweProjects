@@ -1,7 +1,10 @@
 #pragma once
+#include <vector>
 #include "sVec2.h"
 #include "Entities/cPlayer.h"
 #include "Entities/cPlanet.h"
+#include "Projectiles/iProjectile.h"
+#include "cSpawner.h"
 
 class cWorldSpace {
 public:
@@ -22,14 +25,18 @@ public:
 
 	cPlayer* player;
 	cPlanet* planet;
+	cSpawner* spawner;
+	std::vector <cGameEntity*> structures;
+	std::vector<iProjectile*> projectiles;
 private:
 	cWorldSpace();
 	static cWorldSpace* _instance;
 	float GetUpdatedScale();
+	void HandleCrash();
 
 	float scale = 1.f;
 
-	float minScale = 1.f;
+	float minScale = 0.5f;
 	float maxScale = 1.5f;
 
 	Vec2 cameraPosition = { 0.f,0.f };

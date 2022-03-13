@@ -13,8 +13,9 @@ void cWorldSpace::Init() {
 	cameraBounds.x = APP_VIRTUAL_WIDTH / 3.f;
 	cameraBounds.y = APP_VIRTUAL_HEIGHT / 3.f;
 
-	player = new cPlayer(0.f, 0.f, 1.f);
-	planet = new cPlanet(0.f * scale, -500.f * scale, 225.f);
+	player = new cPlayer(0.f,200.f, 1.f);
+	planet = new cPlanet(0.f * scale, -500.f * scale, 225.f,1000000.f);
+	spawner = new cSpawner(planet);
 }
 
 void cWorldSpace::Cleanup() {
@@ -25,6 +26,10 @@ void cWorldSpace::Cleanup() {
 	if (planet) {
 		delete planet;
 		planet = 0;
+	}
+	if (spawner) {
+		delete spawner;
+		spawner = 0;
 	}
 }
 
@@ -39,16 +44,56 @@ cWorldSpace* cWorldSpace::Instance() {
 void cWorldSpace::Draw() {
 	player->Draw();
 	planet->Draw();
+	for each (iProjectile* proj in projectiles)
+	{
+		proj->Draw();
+	}
+	for each (cGameEntity * structure in structures)
+	{
+		structure->Draw();
+	}
 }
 
 void cWorldSpace::Update(float deltaTime) {
+	// This could be split up into separate methods, or ideally, individually classes to handle different responsibilities. Will adjust if I have extra time.
 	player->Update(deltaTime);
+	planet->Update(deltaTime);
+	spawner->Update(deltaTime);
+	unsigned int size = projectiles.size();
+	for (unsigned int i = 0;  i < size; i++)
+	{
+		if (projectiles[i]->ShouldDestroy()) {
+			delete projectiles[i];
+			projectiles.erase(projectiles.begin() + i);
+			i--;
+			size--;
+		}
+	}
+	for each (iProjectile * proj in projectiles)
+	{
+		proj->Update(deltaTime);
+	}
+
+
+	for each (cGameEntity * structure in structures)
+	{
+		structure->Update(deltaTime);
+	}
 
 	Vec2 playerPos = player->GetPosition();
+	Vec2 planetPos = planet->GetPosition();
 
 	// Update the scale
 	scale = GetUpdatedScale();
 	player->SetScale(player->GetScale());
+
+	// Apply gravity.
+	float gravDirectionMagnitude = 0.f;
+	float gravMagnitude = planet->CalculateGravity(player->GetPosition(), gravDirectionMagnitude);
+	Vec2 gravDirection;
+	gravDirection.x = (planetPos.x - playerPos.x) / gravDirectionMagnitude;
+	gravDirection.y = (planetPos.y - playerPos.y) / gravDirectionMagnitude;
+	player->Pull(gravDirection, gravMagnitude);
 
 	// Handle world boundaries.
 	if (playerPos.x > worldUpperBounds.x *scale) {
@@ -88,7 +133,7 @@ void cWorldSpace::Update(float deltaTime) {
 
 	//Check for crash. Eventually handle in more scalable manner.
 	if (planet->CheckForCrash(player->GetPosition(), 10.f)) {
-		player->SetPosition(-cameraPosition.x, -cameraPosition.y);
+		HandleCrash();
 	}
 }
 
@@ -152,7 +197,7 @@ float cWorldSpace::GetUpdatedScale() {
 	return result;
 }
 
-void HandleCrash() {
+void cWorldSpace::HandleCrash() {
 	//TODO : Move check to mediator.
-
+	player->SetPosition(-cameraPosition.x, -cameraPosition.y);
 }
