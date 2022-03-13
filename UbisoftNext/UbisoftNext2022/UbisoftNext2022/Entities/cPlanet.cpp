@@ -4,6 +4,8 @@
 #include "..\cWorldSpace.h"
 #include "..\globalFunctions.h"
 
+float gComparePositions(Vec2 pos1, Vec2 pos2);
+
 cPlanet::cPlanet(float _x, float _y, float _radius, float _mass) {
 	position.x = _x;
 	position.y = _y;
@@ -52,9 +54,8 @@ Vec2 cPlanet::GetPosition() {
 }
 
 bool cPlanet::CheckForCrash(Vec2 otherPos, float otherRadius) {
-	cWorldSpace* worldSpace = cWorldSpace::Instance();
-	Vec2 camera = worldSpace->GetDrawPosition();
-	float scale = worldSpace->GetScale();
+	Vec2 camera = cWorldSpace::Instance()->GetDrawPosition();
+	float scale = cWorldSpace::Instance()->GetScale();
 	Vec2 startPosition;
 	Vec2 endPosition;
 	for each (Surface * surface in surfaces) {	
@@ -116,13 +117,29 @@ float cPlanet::CalculateGravity(Vec2 otherPos, float& distance) {
 }
 
 void cPlanet::GetSurfacePosition(Vec2& location, float& angle) {
-	int surfaceIndex = gGetRandBetween(0, (int)surfaces.size());
-	float point = gGetRandBetween(0.f, 1.f);
-	Vec2 direction;
-	direction.x = (surfaces[surfaceIndex]->eX - surfaces[surfaceIndex]->sX);
-	direction.y = (surfaces[surfaceIndex]->eY - surfaces[surfaceIndex]->sY);
+	bool found = false;
+	unsigned int maxIterations = 1000;
+	unsigned int numIterations = 0;
+	while (!found && numIterations < maxIterations) {
+		found = true;
+		int surfaceIndex = gGetRandBetween(0, (int)surfaces.size());
+		float point = gGetRandBetween(0.f, 1.f);
+		Vec2 direction;
+		direction.x = (surfaces[surfaceIndex]->eX - surfaces[surfaceIndex]->sX);
+		direction.y = (surfaces[surfaceIndex]->eY - surfaces[surfaceIndex]->sY);
 
-	location.x = position.x + surfaces[surfaceIndex]->sX + direction.x * point;
-	location.y = position.y + surfaces[surfaceIndex]->sY + direction.y * point;
-	angle = surfaces[surfaceIndex]->angle;
+		location.x = position.x + surfaces[surfaceIndex]->sX + direction.x * point;
+		location.y = position.y + surfaces[surfaceIndex]->sY + direction.y * point;
+
+		angle = surfaces[surfaceIndex]->angle;
+
+		for each (cStructure * structure in cWorldSpace::Instance()->structures) {
+			if (gComparePositions(location, structure->GetPosition()) < 50.f) {
+				// We are placing the new structure too close to an old one. Try again until we reach max iterations.
+				// If we bypass max iterations, the planet is likely too saturated to provide enough spacing. Risk overlapping.
+				found = false;
+				numIterations++;
+			}
+		}
+	}
 }

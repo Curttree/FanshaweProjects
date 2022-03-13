@@ -8,7 +8,7 @@ cEnemyBullet::cEnemyBullet() {
 }
 
 cEnemyBullet::cEnemyBullet(Vec2 _position, Vec2 _velocity) {
-	killTime = 3000.f;
+	killTime = 1250.f;
 	this->sprite = App::CreateSprite(PLAYER_BULLET_SPRITE, 1, 1);
 	this->velocity = _velocity;
 	this->position = _position;

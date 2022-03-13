@@ -13,8 +13,8 @@ cWorldSpace::cWorldSpace() {
 void cWorldSpace::Init() {
 	drawOffset.x = APP_VIRTUAL_WIDTH / 2.f;
 	drawOffset.y = APP_VIRTUAL_HEIGHT / 2.f;
-	cameraBounds.x = APP_VIRTUAL_WIDTH / 3.f;
-	cameraBounds.y = APP_VIRTUAL_HEIGHT / 3.f;
+	cameraBounds.x = APP_VIRTUAL_WIDTH / 5.f;
+	cameraBounds.y = APP_VIRTUAL_HEIGHT / 5.f;
 
 	gameState = new cGameStateController();
 

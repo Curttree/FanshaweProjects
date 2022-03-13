@@ -37,8 +37,8 @@ void cBunker::Update(float deltaTime) {
 
 void cBunker::Fire() {
 	Vec2 direction;
-	direction.x = (0.f* cos(angle) - 1.f * sin(angle)) * 10.f;
-	direction.y = (0.f * sin(angle) + 1.f * cos(angle)) * 10.f;
+	direction.x = (0.f* cos(angle) - 1.f * sin(angle)) * 5.f;
+	direction.y = (0.f * sin(angle) + 1.f * cos(angle)) * 5.f;
 
 	Vec2 spawn;
 	spawn.x = position.x + (0.f * cos(angle) - 1.f * sin(angle)) * 20.f;

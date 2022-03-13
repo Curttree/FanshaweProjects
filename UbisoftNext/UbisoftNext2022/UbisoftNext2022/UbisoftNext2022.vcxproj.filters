@@ -68,6 +68,7 @@
     <ClCompile Include="Projectiles\cEnemyBullet.cpp">
       <Filter>Projectiles</Filter>
     </ClCompile>
+    <ClCompile Include="GravitarGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\main.h" />
