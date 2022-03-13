@@ -12,6 +12,7 @@ public:
 	void Fire(float weaponNumber = 0);
 
 	Vec2 GetHeading();
+	float GetRadius();
 
 	//Overloaded methods
 	void SetAngle(float _angle);

@@ -98,3 +98,7 @@ void cPlayer::SetAngle(float _angle) {
 
 	heading = { newX, newY };
 }
+
+float cPlayer::GetRadius() {
+	return 10.f;
+}

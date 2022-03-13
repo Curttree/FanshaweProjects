@@ -69,5 +69,7 @@
 // Sprite paths
 #define SHIP_SPRITES (".\\Assets\\Sprites\\player.bmp")
 #define PLAYER_BULLET_SPRITE (".\\Assets\\Sprites\\playerBullet.bmp")
+#define FUEL_SPRITE (".\\Assets\\Sprites\\fuel.bmp")
+#define BUNKER_SPRITE (".\\Assets\\Sprites\\bunker.bmp")
 
 #endif

@@ -15,6 +15,7 @@ public:
 	virtual void SetAngle(float _angle);
 	virtual void SetPosition(float _positionX, float _positionY);
 	virtual void SetScale(float _scale);
+	virtual float GetRadius();
 protected:
 	CSimpleSprite* sprite;
 	float angle;

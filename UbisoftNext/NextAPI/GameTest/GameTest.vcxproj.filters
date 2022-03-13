@@ -53,8 +53,20 @@
     <ClCompile Include="Entities\cStructureFactory.cpp">
       <Filter>Structures</Filter>
     </ClCompile>
-    <ClCompile Include="Entities\cFuelPickup.cpp">
+    <ClCompile Include="Entities\cStructure.cpp">
       <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameStateController.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\cBunker.cpp">
+      <Filter>Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\cFuelPickup.cpp">
+      <Filter>Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectiles\cEnemyBullet.cpp">
+      <Filter>Projectiles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,11 +140,20 @@
     <ClInclude Include="globalFunctions.h">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\cStructureFactory.h">
-      <Filter>Structures</Filter>
+    <ClInclude Include="Entities\cBunker.h">
+      <Filter>Structures\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Entities\cFuelPickup.h">
-      <Filter>Entities\Header Files</Filter>
+      <Filter>Structures\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\cStructure.h">
+      <Filter>Structures\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\cStructureFactory.h">
+      <Filter>Structures\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectiles\cEnemyBullet.h">
+      <Filter>Projectiles\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +180,9 @@
     </Filter>
     <Filter Include="Structures">
       <UniqueIdentifier>{f5fdadd6-286f-4333-a9ee-868f5ab5da8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Structures\Header Files">
+      <UniqueIdentifier>{e3ad7861-73d5-48e3-9176-7564e6eab600}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

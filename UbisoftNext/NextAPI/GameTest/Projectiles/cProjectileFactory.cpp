@@ -3,6 +3,7 @@
 
 // Projectile Types
 #include "cPlayerBullet.h"
+#include "cEnemyBullet.h"
 
 cProjectileFactory* cProjectileFactory::_instance = 0;
 cProjectileFactory::cProjectileFactory() {
@@ -21,6 +22,9 @@ cProjectile* cProjectileFactory::CreateProjectile(int type, Vec2 position, Vec2 
 	switch (type) {
 	case(0):
 		proj = new cPlayerBullet(position, velocity);
+		break;
+	case(1):
+		proj = new cEnemyBullet(position, velocity);
 		break;
 	default:
 		// Unknown projectile. Return empty pointer.

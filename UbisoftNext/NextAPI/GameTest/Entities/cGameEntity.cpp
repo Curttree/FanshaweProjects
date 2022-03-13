@@ -44,3 +44,8 @@ void cGameEntity::SetScale(float _scale) {
 	scale = _scale;
 	this->sprite->SetScale(_scale * world->GetScale());
 }
+
+float cGameEntity::GetRadius() {
+	// Up to inherited classes to decide how they wish to define their radius.
+	return 0.f;
+}

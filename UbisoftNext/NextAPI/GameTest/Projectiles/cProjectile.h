@@ -10,11 +10,15 @@ public:
 	virtual void Destroy();
 	virtual void Draw();
 	virtual bool ShouldDestroy();
+	virtual cGameEntity* GetOwner();
+	virtual Vec2 GetPosition();
+	virtual float GetRadius();
 protected:
 
 	CSimpleSprite* sprite;
 	float killTime = -1.f;
 	float killTimer = 0.f;
+	bool externalDestruction = false;
 
 	Vec2 position;
 	Vec2 velocity;

@@ -20,10 +20,26 @@ void cProjectile::Update(float deltaTime) {
 	}
 }
 void cProjectile::Destroy() {
-
+	//Something else told us to destroy this projectile. Flag it so it will be cleaned up next update loop.
+	externalDestruction = true;
 }
 
 bool cProjectile::ShouldDestroy() {
 	//Destroy if we are past our kill time, or in the event of ininfite 
-	return killTimer >= killTime;
+	return killTimer >= killTime || externalDestruction;
+}
+
+cGameEntity* cProjectile::GetOwner() {
+	// We either don't have an owner or don't know who they are.
+	return 0;
+}
+
+float cProjectile::GetRadius() {
+	// This is declared on a per projectile basis.
+	return 0;
+}
+
+Vec2 cProjectile::GetPosition() {
+	// This is declared on a per projectile basis.
+	return position;
 }

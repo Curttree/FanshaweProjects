@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "..\App\App.h"
-#include "cPlayerBullet.h"
+#include "cEnemyBullet.h"
 #include "../cWorldSpace.h"
 
-cPlayerBullet::cPlayerBullet() {
+cEnemyBullet::cEnemyBullet() {
 
 }
 
-cPlayerBullet::cPlayerBullet(Vec2 _position, Vec2 _velocity) {
-	killTime = 3000.f;	
+cEnemyBullet::cEnemyBullet(Vec2 _position, Vec2 _velocity) {
+	killTime = 3000.f;
 	this->sprite = App::CreateSprite(PLAYER_BULLET_SPRITE, 1, 1);
 	this->velocity = _velocity;
 	this->position = _position;
@@ -17,8 +17,8 @@ cPlayerBullet::cPlayerBullet(Vec2 _position, Vec2 _velocity) {
 	this->sprite->SetPosition(position.x + camera.x, position.y + camera.y);
 }
 
-void cPlayerBullet::Update(float deltaTime) {
-	cProjectile::Update(deltaTime); 
+void cEnemyBullet::Update(float deltaTime) {
+	cProjectile::Update(deltaTime);
 
 	//Update the position
 	position.x += velocity.x;
@@ -29,10 +29,6 @@ void cPlayerBullet::Update(float deltaTime) {
 	this->sprite->SetPosition(position.x + camera.x, position.y + camera.y);
 }
 
-cGameEntity* cPlayerBullet::GetOwner() {
-	return cWorldSpace::Instance()->player;
-}
-
-float cPlayerBullet::GetRadius() {
+float cEnemyBullet::GetRadius() {
 	return 10.f;
 }

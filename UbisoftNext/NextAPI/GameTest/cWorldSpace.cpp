@@ -2,6 +2,9 @@
 #include "cWorldSpace.h"
 #include "app\app.h"
 
+//Forward declaration of global function.
+float gComparePositions(Vec2 pos1, Vec2 pos2);
+
 cWorldSpace* cWorldSpace::_instance = 0;
 cWorldSpace::cWorldSpace() {
 
@@ -13,9 +16,13 @@ void cWorldSpace::Init() {
 	cameraBounds.x = APP_VIRTUAL_WIDTH / 3.f;
 	cameraBounds.y = APP_VIRTUAL_HEIGHT / 3.f;
 
+	gameState = new cGameStateController();
+
 	player = new cPlayer(0.f,200.f, 1.f);
 	planet = new cPlanet(0.f * scale, -500.f * scale, 225.f,1000000.f);
 	spawner = new cSpawner(planet);
+
+	spawner->Init();
 }
 
 void cWorldSpace::Cleanup() {
@@ -30,6 +37,10 @@ void cWorldSpace::Cleanup() {
 	if (spawner) {
 		delete spawner;
 		spawner = 0;
+	}
+	if (gameState) {
+		delete gameState;
+		gameState = 0;
 	}
 }
 
@@ -59,26 +70,9 @@ void cWorldSpace::Update(float deltaTime) {
 	player->Update(deltaTime);
 	planet->Update(deltaTime);
 	spawner->Update(deltaTime);
-	unsigned int size = projectiles.size();
-	for (unsigned int i = 0;  i < size; i++)
-	{
-		if (projectiles[i]->ShouldDestroy()) {
-			delete projectiles[i];
-			projectiles.erase(projectiles.begin() + i);
-			i--;
-			size--;
-		}
-	}
-	for each (iProjectile * proj in projectiles)
-	{
-		proj->Update(deltaTime);
-	}
-
-
-	for each (cGameEntity * structure in structures)
-	{
-		structure->Update(deltaTime);
-	}
+	gameState->Update(deltaTime);
+	UpdateProjectiles(deltaTime);
+	UpdateStructures(deltaTime);
 
 	Vec2 playerPos = player->GetPosition();
 	Vec2 planetPos = planet->GetPosition();
@@ -132,7 +126,15 @@ void cWorldSpace::Update(float deltaTime) {
 	}
 
 	//Check for crash. Eventually handle in more scalable manner.
-	if (planet->CheckForCrash(player->GetPosition(), 10.f)) {
+	if (planet->CheckForCrash(player->GetPosition(), player->GetRadius())) {
+		HandleCrash();
+	}
+
+	HandleBulletSurfaceCollisions();
+	HandleBulletEntityCollisions();
+	HandlePlayerStructureCollisions();
+
+	if (gameState->GetFuel() <= 0.f) {
 		HandleCrash();
 	}
 }
@@ -197,7 +199,90 @@ float cWorldSpace::GetUpdatedScale() {
 	return result;
 }
 
+void cWorldSpace::UpdateStructures(float deltaTime) {
+	//Manage structures
+	{
+		unsigned int size = structures.size();
+		for (unsigned int i = 0; i < size; i++)
+		{
+			if (structures[i]->ShouldDestroy()) {
+				delete structures[i];
+				structures.erase(structures.begin() + i);
+				i--;
+				size--;
+			}
+		}
+		for each (cStructure * structure in structures)
+		{
+			structure->Update(deltaTime);
+		}
+	}
+}
+
+void cWorldSpace::UpdateProjectiles(float deltaTime) {
+	//Manage projectiles
+	{
+		unsigned int size = projectiles.size();
+		for (unsigned int i = 0; i < size; i++)
+		{
+			if (projectiles[i]->ShouldDestroy()) {
+				delete projectiles[i];
+				projectiles.erase(projectiles.begin() + i);
+				i--;
+				size--;
+			}
+		}
+		for each (iProjectile * proj in projectiles)
+		{
+			proj->Update(deltaTime);
+		}
+	}
+}
+
 void cWorldSpace::HandleCrash() {
 	//TODO : Move check to mediator.
-	player->SetPosition(-cameraPosition.x, -cameraPosition.y);
+	player->SetPosition(0.f, 200.f);
+	gameState->IncrementLives(-1);
+	gameState->ResetFuel();
+}
+
+void cWorldSpace::HandleBulletSurfaceCollisions() {
+	//First check to see if any bullets have hit the surface of our planet.
+	for each (iProjectile* proj in projectiles)
+	{
+		if (planet->CheckForCrash(proj->GetPosition(), proj->GetRadius())) {
+			proj->Destroy();
+		}
+	}
+}
+
+void cWorldSpace::HandleBulletEntityCollisions() {
+	for each (iProjectile * proj in projectiles)
+	{
+		if (proj->GetOwner() == player) {
+			//Compare with positions of buildings.
+			// Complexity is not great here. See if we can refactor to improve performance.
+			for each (cStructure * structure in structures) {
+				if (gComparePositions(structure->GetPosition(), proj->GetPosition()) <= structure->GetRadius() + proj->GetRadius()) {
+					proj->Destroy();
+					structure->Shot();
+				}
+			}
+		}
+		else {
+			//Compare with position of player.
+			if (gComparePositions(player->GetPosition(), proj->GetPosition()) <= player->GetRadius() + proj->GetRadius()) {
+				proj->Destroy();
+				HandleCrash();
+			}
+		}
+	}
+}
+
+void cWorldSpace::HandlePlayerStructureCollisions() {
+	for each (cStructure * structure in structures) {
+		if (gComparePositions(structure->GetPosition(), player->GetPosition()) <= structure->GetRadius() + player->GetRadius()) {
+			structure->Crash();
+		}
+	}
 }

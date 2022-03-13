@@ -1,11 +1,12 @@
 #pragma once
-#include "cGameEntity.h"
+#include "cStructure.h"
 
-class cFuelPickup : public cGameEntity {
+class cFuelPickup : public cStructure {
 public:
 	cFuelPickup(float posX, float posY, float angle, float scale = 1.f);
-	virtual void Update(float deltaTime);
-private:
-	Vec2 realPos;
-	float realScale;
+	virtual void Shot();
+	virtual void Crash();
+	virtual float GetRadius();
+protected:
+	float radius = 40.f;
 };

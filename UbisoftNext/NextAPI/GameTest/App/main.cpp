@@ -13,14 +13,15 @@
 #include "app.h"
 #include "SimpleSound.h"
 #include "SimpleController.h"
-
+//---------------------------------------------------------------------------------
+#include "..\cWorldSpace.h"
 //---------------------------------------------------------------------------------
 // Initial setup globals.
 //---------------------------------------------------------------------------------
 int WINDOW_WIDTH = APP_INIT_WINDOW_WIDTH;
 int WINDOW_HEIGHT = APP_INIT_WINDOW_HEIGHT;
 HWND MAIN_WINDOW_HANDLE = nullptr;
-
+cWorldSpace* gameWorld = cWorldSpace::Instance();
 //---------------------------------------------------------------------------------
 static const double UPDATE_MAX = ((1.0 / APP_MAX_FRAME_RATE)*1000.0);
 //---------------------------------------------------------------------------------
@@ -151,7 +152,7 @@ void Idle()
 			gRenderUpdateTimes = !gRenderUpdateTimes;
 		}
 
-		if (App::IsKeyPressed(APP_QUIT_KEY))
+		if (App::IsKeyPressed(APP_QUIT_KEY) || gameWorld->gameState->GetLives() <= 0)
 		{		
 			exit(0);
 		}

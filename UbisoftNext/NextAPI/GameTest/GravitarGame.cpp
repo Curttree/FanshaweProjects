@@ -9,6 +9,7 @@
 #include "app\app.h"
 //------------------------------------------------------------------------
 #include "cWorldSpace.h"
+#include <string>
 //------------------------------------------------------------------------
 // Eample data....
 //------------------------------------------------------------------------
@@ -32,11 +33,11 @@ void Update(float deltaTime)
 	worldSpace->Update(deltaTime);
 	if (App::GetController().GetLeftThumbStickX() > 0.5f)
 	{
-		worldSpace->player->SetAngle(worldSpace->player->GetAngle() - 0.1f);
+		worldSpace->player->SetAngle(worldSpace->player->GetAngle() - 0.05f);
 	}
 	if (App::GetController().GetLeftThumbStickX() < -0.5f)
 	{
-		worldSpace->player->SetAngle(worldSpace->player->GetAngle() + 0.1f);
+		worldSpace->player->SetAngle(worldSpace->player->GetAngle() + 0.05f);
 	}
 
 	if (App::GetController().GetRightTrigger() > TRIGGER_THRESHOLD)
@@ -77,11 +78,11 @@ void Render()
 	//------------------------------------------------------------------------
 	App::Print(400, 700, "SCORE");
 	App::Print(400, 650, "FUEL");
-	App::Print(550, 700, "0");
-	App::Print(550, 650, "0");
+	App::Print(550, 700, std::to_string(worldSpace->gameState->GetScore()).c_str());
+	App::Print(550, 650, std::to_string((int)worldSpace->gameState->GetFuel()).c_str());
 
 	App::Print(100, 700, "LIVES");
-	App::Print(250, 700, "3");
+	App::Print(250, 700, std::to_string(worldSpace->gameState->GetLives()).c_str());
 
 	//------------------------------------------------------------------------
 	// Example Line Drawing.

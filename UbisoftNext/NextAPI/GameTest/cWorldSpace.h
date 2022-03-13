@@ -5,6 +5,8 @@
 #include "Entities/cPlanet.h"
 #include "Projectiles/iProjectile.h"
 #include "cSpawner.h"
+#include "cGameStateController.h"
+#include "Entities/cStructure.h"
 
 class cWorldSpace {
 public:
@@ -26,13 +28,23 @@ public:
 	cPlayer* player;
 	cPlanet* planet;
 	cSpawner* spawner;
-	std::vector <cGameEntity*> structures;
+	std::vector <cStructure*> structures;
 	std::vector<iProjectile*> projectiles;
+
+	cGameStateController* gameState;
 private:
 	cWorldSpace();
 	static cWorldSpace* _instance;
 	float GetUpdatedScale();
 	void HandleCrash();
+
+	void UpdateProjectiles(float deltaTime);
+	void UpdateStructures(float deltaTime);
+
+	//To be moved to mediator.
+	void HandleBulletSurfaceCollisions();
+	void HandleBulletEntityCollisions();
+	void HandlePlayerStructureCollisions();
 
 	float scale = 1.f;
 
