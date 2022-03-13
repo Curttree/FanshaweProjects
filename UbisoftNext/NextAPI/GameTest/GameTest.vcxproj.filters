@@ -32,6 +32,9 @@
     <ClCompile Include="cWorldSpace.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="Entities\cPlanet.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\main.h" />
@@ -73,6 +76,15 @@
     </ClInclude>
     <ClInclude Include="Projectiles\cProjectileFactory.h">
       <Filter>Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\cPlanet.h">
+      <Filter>Entities\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sSurface.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameStateController.h">
+      <Filter>Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

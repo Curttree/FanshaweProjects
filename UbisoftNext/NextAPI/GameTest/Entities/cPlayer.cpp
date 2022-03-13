@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "cPlayer.h"
+#include "..\cWorldSpace.h"
 #include <math.h>  
 
 #include "..\App\app.h"
@@ -27,6 +28,8 @@ void cPlayer::Update(float deltaTime) {
 
 void cPlayer::Thrust(float percentage) {
 	//TODO: Verify this works properly with keyboard/mouse.
+	//cWorldSpace* worldSpace = cWorldSpace::Instance();
+	//float scale = worldSpace->GetScale();
 	movement.x += heading.x * thrustSpeed * percentage;
 	movement.y += heading.y * thrustSpeed * percentage;
 }

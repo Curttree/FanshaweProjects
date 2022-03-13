@@ -183,10 +183,13 @@
     <ClInclude Include="App\SimpleSound.h" />
     <ClInclude Include="App\SimpleSprite.h" />
     <ClInclude Include="App\TextureLoader.h" />
+    <ClInclude Include="cGameStateController.h" />
     <ClInclude Include="cWorldSpace.h" />
     <ClInclude Include="Entities\cGameEntity.h" />
+    <ClInclude Include="Entities\cPlanet.h" />
     <ClInclude Include="Entities\cPlayer.h" />
     <ClInclude Include="Projectiles\cProjectileFactory.h" />
+    <ClInclude Include="sSurface.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="sVec2.h" />
     <ClInclude Include="targetver.h" />
@@ -200,6 +203,7 @@
     <ClCompile Include="App\TextureLoader.cpp" />
     <ClCompile Include="cWorldSpace.cpp" />
     <ClCompile Include="Entities\cGameEntity.cpp" />
+    <ClCompile Include="Entities\cPlanet.cpp" />
     <ClCompile Include="Entities\cPlayer.cpp" />
     <ClCompile Include="GameTest.cpp" />
     <ClCompile Include="GravitarGame.cpp" />

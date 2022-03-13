@@ -4,7 +4,7 @@
 class cPlayer : public cGameEntity {
 public:
 	cPlayer(float posX, float posY, float scale);
-	~cPlayer();
+	virtual ~cPlayer();
 	void Update(float deltaTime);
 	void Thrust(float percentage);
 	void KillThrusters();
