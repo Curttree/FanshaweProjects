@@ -28,8 +28,8 @@ public:
 	rapidjson::Document _actors;
 	rapidjson::Document _objects;
 	rapidjson::Document _sceneDescription;
-	glm::vec3 _cameraStartingPosition;
-	glm::vec3 _cameraStartingOrientation;
+	std::vector<glm::vec3> _cameraStartingPositions;
+	std::vector<glm::vec3> _cameraStartingOrientations;
 	glm::vec3 _modelsFromConfigPosition = glm::vec3(0.f);
 	glm::vec3 _homeGoalLightPosition = glm::vec3(0.f);
 	glm::vec3 _awayGoalLightPosition = glm::vec3(0.f);

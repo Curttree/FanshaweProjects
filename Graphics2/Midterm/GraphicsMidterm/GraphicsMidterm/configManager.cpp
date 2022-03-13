@@ -29,25 +29,29 @@ rapidjson::Document configManager::readJSONFile(std::string fileName) {
 
 void configManager::initCamera() {
     // Determine camera's starting position.
-    if (_sceneDescription.HasMember("Camera")) {
-        if (_sceneDescription["Camera"].HasMember("Position")) {
-            float x, y, z;
-            x = _sceneDescription["Camera"]["Position"]["x"].GetFloat();
-            y = _sceneDescription["Camera"]["Position"]["y"].GetFloat();
-            z = _sceneDescription["Camera"]["Position"]["z"].GetFloat();
-            _cameraStartingPosition = glm::vec3(x, y, z);
+
+    //QUESTION_3
+    if (_sceneDescription.HasMember("Cameras")) {
+        rapidjson::GenericArray<false, rapidjson::Value> list = _sceneDescription["Cameras"].GetArray();
+        float x, y, z;
+        for (rapidjson::SizeType current = 0; current < list.Size(); current++) {
+                if (_sceneDescription["Cameras"][current].HasMember("Position")) {
+                    x = _sceneDescription["Cameras"][current]["Position"]["x"].GetFloat();
+                    y = _sceneDescription["Cameras"][current]["Position"]["y"].GetFloat();
+                    z = _sceneDescription["Cameras"][current]["Position"]["z"].GetFloat();
+                    _cameraStartingPositions.push_back(glm::vec3(x, y, z));
+                }
+                if (_sceneDescription["Cameras"][current].HasMember("Orientation")) {
+                    x = _sceneDescription["Cameras"][current]["Orientation"]["x"].GetFloat();
+                    y = _sceneDescription["Cameras"][current]["Orientation"]["y"].GetFloat();
+                    z = _sceneDescription["Cameras"][current]["Orientation"]["z"].GetFloat();
+                    _cameraStartingOrientations.push_back(glm::vec3(x, y, z));
+                }
         }
-        //if (_sceneDescription["Camera"].HasMember("Orientation")) {
-        //    float x, y, z;
-        //    x = _sceneDescription["Camera"]["Orientation"]["x"].GetFloat();
-        //    y = _sceneDescription["Camera"]["Orientation"]["y"].GetFloat();
-        //    z = _sceneDescription["Camera"]["Orientation"]["z"].GetFloat();
-        //    _cameraStartingOrientation = glm::vec3(x, y, z);
-        //}
     }
     else {
         // Fall back to default start position if no camera info has been provided.
-        _cameraStartingPosition = glm::vec3(0.f, 0.f, -4.f);
+        _cameraStartingPositions.push_back(glm::vec3(0.f, 0.f, -4.f));
     }
 }
 
@@ -70,6 +74,8 @@ void configManager::initPhysics() {
 
 
 cMesh* configManager::initMesh(std::string meshName, int source) {
+
+    //QUESTION_1 AND QUESTION_2
     cMesh* result = new cMesh();
     if (source == PROP) {
         if (_objects.HasMember(meshName.c_str())) {
@@ -254,6 +260,8 @@ void configManager::initRink() {
 }
 
 void configManager::initProps() {
+
+    //QUESTION_1 AND QUESTION_2
     if (_sceneDescription.HasMember("Props")) {
         rapidjson::GenericArray<false, rapidjson::Value> list = _sceneDescription["Props"].GetArray();
         cMesh* component = new cMesh();
@@ -275,6 +283,29 @@ void configManager::initProps() {
                 component->orientationXYZ = glm::vec3(x, y, z);
             }
             _modelsFromConfig.push_back(component);
+        }
+    }
+    if (_sceneDescription.HasMember("Question3Monitors")) {
+        rapidjson::GenericArray<false, rapidjson::Value> list = _sceneDescription["Question3Monitors"].GetArray();
+        cMesh* component = new cMesh();
+        float x, y, z;
+        for (rapidjson::SizeType current = 0; current < list.Size(); current++) {
+            // We assume the prop has a model name. If it doesn't it shouldn't be listed as a prop.
+            component = initMesh(_sceneDescription["Question3Monitors"][current]["Name"].GetString(), PROP);
+            component->friendlyName = _sceneDescription["Question3Monitors"][current]["Name"].GetString();
+            if (_sceneDescription["Question3Monitors"][current].HasMember("Position")) {
+                x = _sceneDescription["Question3Monitors"][current]["Position"]["x"].GetFloat();
+                y = _sceneDescription["Question3Monitors"][current]["Position"]["y"].GetFloat();
+                z = _sceneDescription["Question3Monitors"][current]["Position"]["z"].GetFloat();
+                component->positionXYZ = glm::vec3(x, y, z);
+            }
+            if (_sceneDescription["Question3Monitors"][current].HasMember("Orientation")) {
+                x = glm::radians(_sceneDescription["Question3Monitors"][current]["Orientation"]["x"].GetFloat());
+                y = glm::radians(_sceneDescription["Question3Monitors"][current]["Orientation"]["y"].GetFloat());
+                z = glm::radians(_sceneDescription["Question3Monitors"][current]["Orientation"]["z"].GetFloat());
+                component->orientationXYZ = glm::vec3(x, y, z);
+            }
+            ::g_vec_pMonitorsQ3.push_back(component);
         }
     }
     if (_sceneDescription.HasMember("Question4Monitors")) {

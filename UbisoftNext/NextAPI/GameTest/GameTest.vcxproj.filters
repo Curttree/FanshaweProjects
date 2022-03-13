@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="App\main.cpp" />
+    <ClCompile Include="App\app.cpp">
+      <Filter>Provided Code</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTest.cpp">
+      <Filter>Provided Code</Filter>
+    </ClCompile>
+    <ClCompile Include="App\SimpleController.cpp">
+      <Filter>Provided Code</Filter>
+    </ClCompile>
+    <ClCompile Include="App\SimpleSound.cpp">
+      <Filter>Provided Code</Filter>
+    </ClCompile>
+    <ClCompile Include="App\SimpleSprite.cpp">
+      <Filter>Provided Code</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Provided Code</Filter>
+    </ClCompile>
+    <ClCompile Include="App\TextureLoader.cpp">
+      <Filter>Provided Code</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\cPlayer.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\cGameEntity.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="cWorldSpace.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App\main.h" />
+    <ClInclude Include="App\app.h">
+      <Filter>Provided Code</Filter>
+    </ClInclude>
+    <ClInclude Include="App\AppSettings.h">
+      <Filter>Provided Code</Filter>
+    </ClInclude>
+    <ClInclude Include="App\SimpleController.h">
+      <Filter>Provided Code</Filter>
+    </ClInclude>
+    <ClInclude Include="App\SimpleSound.h">
+      <Filter>Provided Code</Filter>
+    </ClInclude>
+    <ClInclude Include="App\SimpleSprite.h">
+      <Filter>Provided Code</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Provided Code</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Provided Code</Filter>
+    </ClInclude>
+    <ClInclude Include="App\TextureLoader.h">
+      <Filter>Provided Code</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\cPlayer.h">
+      <Filter>Entities\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\cGameEntity.h">
+      <Filter>Entities\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sVec2.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="cWorldSpace.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectiles\cProjectileFactory.h">
+      <Filter>Projectiles</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Provided Code">
+      <UniqueIdentifier>{a7f3adb9-18e7-4b74-96a8-f834ee67b0f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{1a1d6e77-44b6-41f9-a2e6-4902b0ab6621}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Header Files">
+      <UniqueIdentifier>{b1ddf3f4-e716-402d-9ddd-c7827ddf28da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{2ea5cd9a-1348-4607-b80b-ca51d0fd5075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effects">
+      <UniqueIdentifier>{a35bc315-e4b9-44df-ac88-ed0cf8bfb982}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projectiles">
+      <UniqueIdentifier>{a1c098fa-0589-4544-8ef5-185332db48a7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

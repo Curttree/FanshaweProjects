@@ -5,7 +5,6 @@ bool g_StartUp(GLFWwindow* pWindow)
 
 	::g_pFlyCamera = new cFlyCamera();
 	::g_pActiveCamera = g_pFlyCamera;
-	::g_pTVCamera = new cFlyCamera();
 
 	::g_pShaderManager = new cShaderManager();
 

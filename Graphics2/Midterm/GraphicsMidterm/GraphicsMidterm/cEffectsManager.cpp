@@ -4,11 +4,56 @@
 
 cMathHelper* _mathHelper = cMathHelper::Instance();
 
+//QUESTION_3 AND QUESTION_4
+
 void cEffectsManager::TimeStep(float deltaTime) {
 	staticTimer1 += deltaTime;
 	staticTimer2 += deltaTime;
 	flickerTimer1 += deltaTime;
 	flickerTimer2 += deltaTime;
+	changeTimer1 += deltaTime;
+	changeTimer2 += deltaTime;
+	changeTimer3 += deltaTime;
+	changeTimer4 += deltaTime;
+	
+	if (changeTimer1 >= timeToChange1) {
+		changeTimer1 = 0.f;
+		showing1 = ::gGetRandBetween(0, 5);
+		while (showing1 == showing2) {
+			showing1 = ::gGetRandBetween(0, 5);
+		}
+		timeToChange1 = ::gGetRandBetween(3.f, 4.f);
+	}
+
+	if (changeTimer2 >= timeToChange2) {
+		changeTimer2 = 0.f;
+		showing2 = ::gGetRandBetween(0, 5);
+		while (showing1 == showing2) {
+			showing2 = ::gGetRandBetween(0, 5);
+		}
+		timeToChange2 = ::gGetRandBetween(3.f, 4.f);
+	}
+
+	if (changeTimer3 >= timeToChange3) {
+		changeTimer3 = 0.f;
+		showing3 = ::gGetRandBetween(0, 5);
+		while (showing3 == showing4) {
+			showing3 = ::gGetRandBetween(0, 5);
+		}
+		::g_vec_pMonitorsQ4[0]->textureNames[0] = screenTextures[showing3];
+		timeToChange3 = ::gGetRandBetween(3.f, 4.f);
+	}
+
+	if (changeTimer4 >= timeToChange4) {
+		changeTimer4 = 0.f;
+		showing4 = ::gGetRandBetween(0, 5);
+		while (showing3 == showing4) {
+			showing4 = ::gGetRandBetween(0, 5);
+		}
+		::g_vec_pMonitorsQ4[1]->textureNames[0] = screenTextures[showing4];
+		timeToChange4 = ::gGetRandBetween(3.f, 4.f);
+	}
+
 
 	if (staticTimer1 >= timeToStatic1) {
 		staticTimer1 = 0.f;
@@ -81,12 +126,34 @@ void cEffectsManager::Initialize() {
 	::g_pTextureManager->Create2DTextureFromBMPFile("0.bmp", true);
 	staticTextures = { "1.bmp", "2.bmp", "3.bmp","4.bmp" };
 
+	::g_pTextureManager->SetBasePath("assets/textures");
+	::g_pTextureManager->Create2DTextureFromBMPFile("starwars.bmp", true);
+	::g_pTextureManager->Create2DTextureFromBMPFile("sci_fi.bmp", true);
+	::g_pTextureManager->Create2DTextureFromBMPFile("sci_fi2.bmp", true);
+	::g_pTextureManager->Create2DTextureFromBMPFile("sci_fi3.bmp", true);
+	::g_pTextureManager->Create2DTextureFromBMPFile("sci_fi4.bmp", true);
+	screenTextures = { "starwars.bmp", "sci_fi.bmp", "sci_fi2.bmp","sci_fi3.bmp", "sci_fi4.bmp"};
+
 	screen1ID = ::g_vec_pMonitorsQ4[0]->getUniqueID();
 	screen2ID = ::g_vec_pMonitorsQ4[1]->getUniqueID();
+	outsideScreen1ID = ::g_vec_pMonitorsQ3[0]->getUniqueID();
+	outsideScreen2ID = ::g_vec_pMonitorsQ3[1]->getUniqueID();
+
 	timeToStatic1 = ::gGetRandBetween(3.f,4.f);
 	timeToStatic2 = ::gGetRandBetween(3.f, 4.f);
 	timeToFlicker1 = ::gGetRandBetween(3.f, 4.f);
 	timeToFlicker2 = ::gGetRandBetween(3.f, 4.f);
+
+
+	showing1 = ::gGetRandBetween(0, 5);
+	showing2 = ::gGetRandBetween(0, 5);
+	timeToChange1 = ::gGetRandBetween(3.f, 4.f);
+	timeToChange2 = ::gGetRandBetween(3.f, 4.f);
+
+	showing3 = ::gGetRandBetween(0, 5);
+	showing4 = ::gGetRandBetween(0, 5);
+	timeToChange3 = ::gGetRandBetween(3.f, 4.f);
+	timeToChange4 = ::gGetRandBetween(3.f, 4.f);
 }
 
 
@@ -109,5 +176,17 @@ float cEffectsManager::GetFlickerAmount(unsigned int screen) {
 	}
 	else {
 		return 0.f;
+	}
+}
+
+unsigned int cEffectsManager::GetCameraNumber(unsigned int screen) {
+	if (screen == outsideScreen1ID) {
+		return showing1;
+	}
+	else if (screen == outsideScreen2ID) {
+		return showing2;
+	}
+	else {
+		return 0;
 	}
 }

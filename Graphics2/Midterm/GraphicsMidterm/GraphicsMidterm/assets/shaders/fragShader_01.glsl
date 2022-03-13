@@ -91,6 +91,7 @@ uniform sampler2D texture_05;		// GL_TEXTURE_2D
 uniform sampler2D texture_06;		// GL_TEXTURE_2D
 uniform sampler2D texture_07;		// GL_TEXTURE_2D
 uniform sampler2D texture_08;		// GL_TEXTURE_2D
+uniform sampler2D texture_09;		// GL_TEXTURE_2D
 
 uniform vec4 texture2D_Ratios0to3;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
 uniform vec4 texture2D_Ratios4to7;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
@@ -133,6 +134,7 @@ uniform sampler2D specularMapTexture;
 // Effect textures
 uniform sampler2D staticTexture;
 uniform float flickerAmount;
+uniform bool secondMonitor;
 
 void main()
 {
@@ -144,12 +146,17 @@ void main()
 	
 	if ( renderPassNumber == PASS_1_QUAD_ONLY )
 	{
-		// Render the texture to the quad, and that's it
+		// Render the texture to the quad, and that's it..for some reason Quad UV's are inverted..Weird.
 		vec2 UVlookup;
-		UVlookup.x = gl_FragCoord.x / screenWidthHeight.x;	// Width
-		UVlookup.y = gl_FragCoord.y / screenWidthHeight.y;	// Height
-		vec3 sampleColour = texture( texture_07, UVlookup ).rgb;
-
+		UVlookup.x = fUVx2.y;
+		UVlookup.y = fUVx2.x;
+		vec3 sampleColour; 
+		if (secondMonitor) {
+			sampleColour = texture(texture_09, UVlookup.xy).rgb;
+		}
+		else {
+			sampleColour = texture(texture_08, UVlookup.xy).rgb;
+		}
 		pixelOutputFragColour.rgb = sampleColour.rgb;
 		pixelOutputFragColour.a = 1.0f;
 		return;
@@ -176,50 +183,7 @@ void main()
 		UVlookup.y = gl_FragCoord.y / screenWidthHeight.y;	// Height
 		vec3 sampleColour = texture(texture_07, UVlookup).rgb;
 
-		//for (float i = 1; i < 6; i++)
-		//{
-		//	float offset = i * 0.00025f;
-		//	vec2 UVlookup;
-		//	UVlookup.x = gl_FragCoord.x / screenWidthHeight.x+offset;	// Width
-		//	UVlookup.y = gl_FragCoord.y / screenWidthHeight.y+offset;	// Height
-		//	sampleColour.r += texture(texture_07, UVlookup).r;
-		//	sampleColour.g += texture(texture_07, UVlookup).g;
-		//	sampleColour.b += texture(texture_07, UVlookup).b;
-		//}
-		//for (float i = -1; i > -6; i--)
-		//{
-		//	float offset = i * 0.00025f;
-		//	vec2 UVlookup;
-		//	UVlookup.x = gl_FragCoord.x / screenWidthHeight.x + offset;	// Width
-		//	UVlookup.y = gl_FragCoord.y / screenWidthHeight.y + offset;	// Height
-		//	sampleColour.r += texture(texture_07, UVlookup).r;
-		//	sampleColour.g += texture(texture_07, UVlookup).g;
-		//	sampleColour.b += texture(texture_07, UVlookup).b;
-		//}
-		//sampleColour /= 11.f;
-
 		pixelOutputFragColour.rgb = sampleColour.rgb;
-
-		// Tint the colour blue.
-		//pixelOutputFragColour.b *= 1.25f;
-		//pixelOutputFragColour.a = 1.0f;
-
-
-		// chromatic aberration example 
-		//vec3 sampleColour;
-		//float offset = 0.01f;
-		//vec2 UVred =   vec2(fUVx2.x + offset, fUVx2.y);
-		//vec2 UVgreen = vec2(fUVx2.x,          fUVx2.y + offset);
-		//vec2 UVblue =  vec2(fUVx2.x - offset, fUVx2.y - offset);
-
-		//sampleColour.r = texture( texture_07, UVred ).r;
-		//sampleColour.g = texture( texture_07, UVgreen ).g;
-		//sampleColour.b = texture( texture_07, UVblue ).b;
-
-		//pixelOutputFragColour.rgb = sampleColour;
-		//pixelOutputFragColour.a = 1.0f;
-
-		// Early exit
 		return;
 	}
 

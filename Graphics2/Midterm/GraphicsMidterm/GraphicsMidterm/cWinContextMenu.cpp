@@ -76,7 +76,7 @@ void cWinContextMenu::showMenu(GLFWwindow* window, int x, int y)
         std::cout << "Picked \"Camera Position 1\" (ID_POSITION1)" << std::endl;
 
         ::g_pActiveCamera->setAt(glm::vec3(0.f, 0.f, 1.f));
-        ::g_pActiveCamera->setEye(::g_pConfigManager->_cameraStartingPosition);
+        ::g_pActiveCamera->setEye(::g_pConfigManager->_cameraStartingPositions[0]);
         break;
     case ID_POSITION2:
         std::cout << "Picked \"Camera Position 2\" (ID_POSITION2)" << std::endl;

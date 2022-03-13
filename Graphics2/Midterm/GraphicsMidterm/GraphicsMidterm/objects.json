@@ -30,13 +30,13 @@
   "SpaceQuad":{
   "Model":"Quad_1_sided_aligned_on_XY_plane.ply",
   "Scale":1000.0,    
-  "NonUniformScale":{"x":2.0,"y":1.0,"z":1.0},
+  "NonUniformScale":{"x":3.0,"y":1.0,"z":1.0},
   "Texture0":"space.bmp"
   },  
   "SpaceQuadBig":{
   "Model":"Quad_1_sided_aligned_on_XY_plane.ply",
   "Scale":3500.0,    
-  "NonUniformScale":{"x":2.5,"y":1.0,"z":1.0},
+  "NonUniformScale":{"x":2.5,"y":2.0,"z":1.0},
   "Texture0":"space.bmp"
   },
   "SpaceStation":{
@@ -46,7 +46,7 @@
   },
   "CornerScreen1":{
   "Model":"SM_Env_Consoles_Corner_01_screen_1_xyz_n_rgba_uv.ply",
-  "Scale":10.0,    
+  "Scale":10.0,     
   "Texture0":"starwars.bmp"
   },
   "CornerScreen2":{

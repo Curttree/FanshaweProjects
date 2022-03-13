@@ -57,7 +57,7 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
         }
         if (glfwGetKey(pWindow, GLFW_KEY_T) == GLFW_PRESS)	// "down"
         {
-            ::g_pActiveCamera = ::g_pTVCamera;
+            ::g_pActiveCamera = ::g_pTVCameras[0];
         }
 
         std::stringstream strTitle;

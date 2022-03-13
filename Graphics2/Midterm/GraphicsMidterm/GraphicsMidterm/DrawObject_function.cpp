@@ -235,6 +235,13 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
     // Set the flicker amount
     glUniform1f(flickerAmount_LodID, ::g_pEffectsManager->GetFlickerAmount(pCurrentMesh->getUniqueID()));
 
+    GLint bSecondMonitor_Location = g_GetUniformLocation(shaderProgram, "secondMonitor");
+    if (pCurrentMesh->getUniqueID() == ::g_vec_pMonitorsQ3[1]->getUniqueID()) {
+        glUniform1f(bSecondMonitor_Location, (float)GL_TRUE);
+    }
+    else {
+        glUniform1f(bSecondMonitor_Location, (float)GL_FALSE);
+    }
 
     {
         //GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);

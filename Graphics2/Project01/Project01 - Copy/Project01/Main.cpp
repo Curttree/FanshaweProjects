@@ -421,7 +421,7 @@ int main(void) {
     }
     cFBO smallFBO;
     // Set this off screen texture buffer to a smaller size since it is being rendered at a low resolution.
-    if (smallFBO.init(300, 160, FBOerrorString))
+    if (smallFBO.init(600, 320, FBOerrorString))
     {
         std::cout << "Smaller FBO is all set!" << std::endl;
     }

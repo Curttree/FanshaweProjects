@@ -1,9 +1,55 @@
 {
-  "Camera": {
+  "Cameras": [{
 	  "Position":{
     "x": 25.0,
     "y": 27.0,
-  "z": -80.0}},
+  "z": -80.0},
+	"Orientation":{
+    "x": 0.0,
+    "y": 0.0,
+  "z": 1.0}},{
+	  "Position":{
+    "x": 1612.0,
+    "y": 100.0,
+  "z": -2046.0},
+	"Orientation":{
+    "x": 0.0,
+    "y": 0.0,
+  "z": -1.0}},{
+	  "Position":{
+    "x": 2447.0,
+    "y": 720.0,
+  "z": -3730.0},
+	"Orientation":{
+    "x": -0.1,
+    "y": 0.0,
+  "z": 0.9}},{
+	  "Position":{
+    "x": 2072.0,
+    "y": 200.0,
+  "z": -4546.0},
+	"Orientation":{
+    "x": -0.5,
+    "y": 0.0,
+  "z": -1.0}},
+{
+	  "Position":{
+    "x": 869.0,
+    "y": 21.0,
+  "z": -1922.0},
+	"Orientation":{
+    "x": 1.0,
+    "y": 0.0,
+  "z": 0.0}},
+{
+	  "Position":{
+    "x": 1688.0,
+    "y": -29.0,
+  "z": -4205.0},
+	"Orientation":{
+    "x": 0.0,
+    "y": 0.0,
+  "z": 1.0}}],
   "Lights":[
 	  {"Type":2,
 		"Position":{
@@ -95,7 +141,7 @@
 "Name":"SpaceQuad", "Position":{
 		"x": 0.0,
 		"y": 0.0,
-		"z": 500.0
+		"z": 700.0
 	  }
 },{
 "Name":"SpaceStation", "Position":{
@@ -107,7 +153,7 @@
 "Name":"SpaceQuadBig", "Position":{
 		"x": 1000.0,
 		"y": 0.0,
-		"z": -300.0
+		"z": -100.0
 	  }
 },{
 "Name":"SpaceQuadBig", "Position":{
@@ -127,7 +173,27 @@
 	  }
 }
 ],
-"Question3Monitors":[],
+"Question3Monitors":[{
+"Name":"CornerScreen2", "Position":{
+		"x": -50.0,
+		"y": 0.0,
+		"z": -50.0
+	  }, "Orientation":{
+		"x": 0.0,
+		"y": -180.0,
+		"z": 0.0
+	  }
+},{
+"Name":"CornerScreen1", "Position":{
+		"x": 44.0,
+		"y": 0.0,
+		"z": 0.0
+	  }, "Orientation":{
+		"x": 0.0,
+		"y": 0.0,
+		"z": 0.0
+	  }
+}],
 "Question4Monitors":[{
 "Name":"FrontScreen1", "Position":{
 		"x": 0.0,

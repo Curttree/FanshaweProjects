@@ -34,7 +34,7 @@ bool g_ShutDown(GLFWwindow* pWindow);
 //                                 
 extern cFlyCamera* g_pActiveCamera; // = NULL;
 extern cFlyCamera* g_pFlyCamera; // = NULL;
-extern cFlyCamera* g_pTVCamera; // = NULL;
+extern std::vector<cFlyCamera*> g_pTVCameras; // = NULL;
 
 // This the keyboard based eye location
 // Like if you AREN'T using the fly camera

@@ -2,7 +2,7 @@
 
 cFlyCamera* g_pFlyCamera = NULL;
 cFlyCamera* g_pActiveCamera = NULL;
-cFlyCamera* g_pTVCamera = NULL;
+std::vector<cFlyCamera*> g_pTVCameras;
 
 cVAOManager* g_pVAOManager = NULL;
 cShaderManager* g_pShaderManager = NULL;
