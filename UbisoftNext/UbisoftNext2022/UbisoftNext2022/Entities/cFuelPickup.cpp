@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <windows.h> 
 #include "cFuelPickup.h"
 #include "..\cWorldSpace.h"
 #include "..\App\app.h"
@@ -21,6 +22,9 @@ void cFuelPickup::Crash() {
 	externalDestruction = true;
 	cWorldSpace::Instance()->gameState->IncrementFuel(500.f);
 	cWorldSpace::Instance()->gameState->IncrementScore(250);
+	if (!App::IsSoundPlaying(PICKUP_SOUND)) {
+		App::PlaySound(PICKUP_SOUND, false);
+	}
 }
 
 float cFuelPickup::GetRadius() {

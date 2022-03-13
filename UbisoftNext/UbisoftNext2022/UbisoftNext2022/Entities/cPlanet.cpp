@@ -11,9 +11,27 @@ cPlanet::cPlanet(float _x, float _y, float _radius, float _mass) {
 	position.y = _y;
 	radius = _radius;
 	mass = _mass;
+
+	//Can be dynamically generated. For now, we are hardcoding.
 	surfaces.push_back(new Surface{- radius, - radius, - radius, radius, PI/2.f });
-	surfaces.push_back(new Surface{ - radius, radius, radius, radius, 0.f});
-	surfaces.push_back(new Surface{ radius, radius, radius, - radius, -PI / 2.f });
+	surfaces.push_back(new Surface{ -radius, radius, -radius * 0.7f, radius, 0.f });
+
+	//Valley
+	surfaces.push_back(new Surface{ -radius * 0.7f, radius, -radius * 0.3f, radius*0.9f, -PI / 10.f });
+	surfaces.push_back(new Surface{ -radius * 0.3f, radius * 0.9f, radius / 7.f, radius, PI / 20.f });
+
+	//Valley
+	surfaces.push_back(new Surface{ radius / 7.f, radius, radius / 4.f, radius * 0.8f, -PI * 0.35f });
+	surfaces.push_back(new Surface{ radius / 4.f, radius * 0.8f, radius / 2.f, radius * 0.8f, 0.f });
+	surfaces.push_back(new Surface{ radius / 2.f, radius * 0.8f, radius * 0.7f, radius, PI * 0.25f });
+	
+	surfaces.push_back(new Surface{ radius * 0.7f, radius,radius, radius, 0.f });
+
+	surfaces.push_back(new Surface{ radius, radius, radius * 1.2f, radius * 0.6f,  -PI * 0.35f });
+	surfaces.push_back(new Surface{ radius * 1.2f, radius * 0.6f,radius, radius * 0.1f, -PI * 0.65f });
+
+	surfaces.push_back(new Surface{ radius, radius * 0.1f, radius, - radius, -PI / 2.f });
+
 	surfaces.push_back(new Surface{ radius, - radius, - radius, - radius, PI});
 }
 
@@ -134,7 +152,7 @@ void cPlanet::GetSurfacePosition(Vec2& location, float& angle) {
 		angle = surfaces[surfaceIndex]->angle;
 
 		for each (cStructure * structure in cWorldSpace::Instance()->structures) {
-			if (gComparePositions(location, structure->GetPosition()) < 50.f) {
+			if (gComparePositions(location, structure->GetPosition()) < 100.f) {
 				// We are placing the new structure too close to an old one. Try again until we reach max iterations.
 				// If we bypass max iterations, the planet is likely too saturated to provide enough spacing. Risk overlapping.
 				found = false;

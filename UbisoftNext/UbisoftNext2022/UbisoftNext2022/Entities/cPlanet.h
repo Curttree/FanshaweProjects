@@ -21,6 +21,7 @@ private:
 	Vec2 position;
 	float mass;
 	std::vector<Surface*> surfaces;
+	void GenerateSurfaces(Vec2 startPos, Vec2 endPos, float maxOffset, int segments);
 
 	// Through playtesting, we should determine if this is indeed a constant across planets, and should be moved to a more suitable location.
 	float gravityConstant = 0.0025f;

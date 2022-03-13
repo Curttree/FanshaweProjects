@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <windows.h> 
 #include "cWorldSpace.h"
 #include "app\app.h"
 
@@ -244,6 +245,9 @@ void cWorldSpace::HandleCrash() {
 	player->SetPosition(0.f, 200.f);
 	gameState->IncrementLives(-1);
 	gameState->ResetFuel();
+	if (!App::IsSoundPlaying(DEATH_SOUND)) {
+		App::PlaySound(DEATH_SOUND, false);
+	}
 }
 
 void cWorldSpace::HandleBulletSurfaceCollisions() {

@@ -22,8 +22,8 @@
 #define APP_PAD_EMUL_LEFT_THUMB_RIGHT	('D')
 #define APP_PAD_EMUL_LEFT_THUMB_UP		('W')
 #define APP_PAD_EMUL_LEFT_THUMB_DOWN	('S')
-#define APP_PAD_EMUL_BUTTON_ALT_A		(VK_SPACE)
-#define APP_PAD_EMUL_START				(VK_RETURN)
+#define APP_PAD_EMUL_BUTTON_ALT_A		(VK_NEXT)
+#define APP_PAD_EMUL_START				(VK_PRIOR)
 
 #define APP_PAD_EMUL_RIGHT_THUMB_LEFT	(VK_NUMPAD4)
 #define APP_PAD_EMUL_RIGHT_THUMB_RIGHT	(VK_NUMPAD6)
@@ -41,8 +41,8 @@
 #define APP_PAD_EMUL_BUTTON_X			(VK_INSERT)
 #define APP_PAD_EMUL_BUTTON_Y			(VK_HOME)
 
-#define APP_PAD_EMUL_LEFT_TRIGGER		(VK_NEXT)
-#define APP_PAD_EMUL_RIGHT_TRIGGER		(VK_PRIOR)
+#define APP_PAD_EMUL_LEFT_TRIGGER		(VK_RETURN)
+#define APP_PAD_EMUL_RIGHT_TRIGGER		(VK_SPACE)
 
 #define APP_PAD_EMUL_BUTTON_LEFT_THUMB		('1')
 #define APP_PAD_EMUL_BUTTON_RIGHT_THUMB		('2')
@@ -65,6 +65,8 @@
 // Sound effect paths
 #define ENGINE_SOUND (".\\Assets\\Sounds\\Engine.wav")
 #define LASER_SOUND (".\\Assets\\Sounds\\Laser.wav")
+#define DEATH_SOUND (".\\Assets\\Sounds\\Death.wav")
+#define PICKUP_SOUND (".\\Assets\\Sounds\\Coin.wav")
 
 // Sprite paths
 #define SHIP_SPRITES (".\\Assets\\Sprites\\player.bmp")
