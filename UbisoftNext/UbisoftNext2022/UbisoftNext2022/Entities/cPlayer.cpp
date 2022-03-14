@@ -3,7 +3,8 @@
 #include "..\cWorldSpace.h"
 #include <math.h>  
 
-#include "..\App\app.h"
+#include <windows.h> 
+#include "..\app\app.h"
 
 //TODO: Remove reference once we have weapons being built in factory.
 #include "..\Projectiles\cBasicWeapon.h"
@@ -38,6 +39,9 @@ void cPlayer::Update(float deltaTime) {
 
 	if (this->primaryWeapon) {
 		primaryWeapon->Update(deltaTime);
+	}
+	if (invincibilityTimer > 0.f) {
+		invincibilityTimer -= deltaTime;
 	}
 }
 
@@ -101,4 +105,23 @@ void cPlayer::SetAngle(float _angle) {
 
 float cPlayer::GetRadius() {
 	return 10.f;
+}
+
+void cPlayer::SwapWeapon(iWeapon* newWeapon) {
+	if (primaryWeapon) {
+		delete primaryWeapon;
+	}
+	primaryWeapon = newWeapon;
+}
+
+bool cPlayer::Respawn() {
+	if (invincibilityTimer > 0.f) {
+		return false;
+	}
+	this->SetPosition(0.f, 200.f);
+	this->SwapWeapon(new cBasicWeapon(this));
+	cWorldSpace::Instance()->gameState->IncrementLives(-1);
+	cWorldSpace::Instance()->gameState->ResetFuel();
+	invincibilityTimer = 6000.f;
+	return true;
 }

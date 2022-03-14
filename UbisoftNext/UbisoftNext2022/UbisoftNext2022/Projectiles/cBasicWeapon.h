@@ -6,10 +6,10 @@ class cPlayer;
 class cBasicWeapon : public iWeapon {
 public:
 	cBasicWeapon(cPlayer* _owner);
-	void Update(float deltaTime);
-	void Fire();
+	virtual void Update(float deltaTime);
+	virtual void Fire();
 	cPlayer* owner;
-private:
-	float coolDownTime = 180.f;
+protected:
+	float coolDownTime = 240.f;
 	float coolDownTimer = 0.f;
 };

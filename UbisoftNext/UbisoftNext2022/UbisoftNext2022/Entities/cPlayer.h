@@ -14,14 +14,19 @@ public:
 	Vec2 GetHeading();
 	float GetRadius();
 
+	void SwapWeapon(iWeapon* newWeapon);
+
 	//Overloaded methods
 	void SetAngle(float _angle);
+	bool Respawn();
 protected:
 	cPlayer();
 	void Dampen();
 
 	float thrustSpeed = 0.075f;
 	float dampenSpeed = 0.98f;
+
+	float invincibilityTimer = 0.f;
 	Vec2 initialHeading;
 	Vec2 heading;
 	Vec2 movement;

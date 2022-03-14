@@ -72,6 +72,8 @@
 #define SHIP_SPRITES (".\\Assets\\Sprites\\player.bmp")
 #define PLAYER_BULLET_SPRITE (".\\Assets\\Sprites\\playerBullet.bmp")
 #define FUEL_SPRITE (".\\Assets\\Sprites\\fuel.bmp")
+#define WEAPON_SPRITE (".\\Assets\\Sprites\\weaponpickup.bmp")
 #define BUNKER_SPRITE (".\\Assets\\Sprites\\bunker.bmp")
+#define BUNKER2_SPRITE (".\\Assets\\Sprites\\bunker2.bmp")
 
 #endif

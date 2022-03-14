@@ -25,6 +25,8 @@ public:
 	Vec2 GetDrawPosition();
 	void GetDrawPosition(float& x, float& y);
 
+	float ComparePositions(Vec2 pos1, Vec2 pos2);
+
 	cPlayer* player;
 	cPlanet* planet;
 	cSpawner* spawner;

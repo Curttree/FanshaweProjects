@@ -2,6 +2,7 @@
 #include "cSpawner.h"
 #include "Entities/cStructureFactory.h"
 #include "cWorldSpace.h"
+#include "globalFunctions.h"
 
 cSpawner::cSpawner(cPlanet* _planet) {
 	planet = _planet;
@@ -38,7 +39,12 @@ void cSpawner::SpawnCollectible() {
 	collectibleTime = 0.f;
 
 	cStructureFactory* structFactory = cStructureFactory::Instance();
-	cStructure* newStructure = structFactory->BuildStructure(0, spawnPosition, spawnAngle);
+
+	int type = 0;
+	if (cWorldSpace::Instance()->gameState->GetFuel() > 500.f) {
+		type = gGetRandBetween(0, 2);
+	}
+	cStructure* newStructure = structFactory->BuildStructure(type, spawnPosition, spawnAngle);
 
 	cWorldSpace* world = cWorldSpace::Instance();
 	world->structures.push_back(newStructure);
@@ -51,7 +57,9 @@ void cSpawner::SpawnEnemy() {
 	enemyTime = 0.f;
 
 	cStructureFactory* structFactory = cStructureFactory::Instance();
-	cStructure* newStructure = structFactory->BuildStructure(1, spawnPosition, spawnAngle);
+
+	int type = gGetRandBetween(2, 4);
+	cStructure* newStructure = structFactory->BuildStructure(type, spawnPosition, spawnAngle);
 
 	cWorldSpace* world = cWorldSpace::Instance();
 	world->structures.push_back(newStructure);

@@ -14,6 +14,10 @@ cBunker::cBunker(float posX, float posY, float angle, float scale) {
 	realScale = scale;
 }
 
+cBunker::cBunker() {
+
+}
+
 float cBunker::GetRadius() {
 	return radius;
 }

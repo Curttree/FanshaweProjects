@@ -84,6 +84,12 @@ void Render()
 	App::Print(100, 700, "LIVES");
 	App::Print(250, 700, std::to_string(worldSpace->gameState->GetLives()).c_str());
 
+
+	App::Print(700, 700, "CONTROLS");
+	App::Print(700, 670, "TURN: LEFT STICK/A & D");
+	App::Print(700, 640, "THRUSTER: RIGHT TRIGGER/SPACE");
+	App::Print(700, 610, "BLASTER: LEFT TRIGGER/ENTER");
+
 	//------------------------------------------------------------------------
 	// Example Line Drawing.
 	//------------------------------------------------------------------------

@@ -1,10 +1,8 @@
 #include "stdafx.h"
 #include <windows.h> 
 #include "cWorldSpace.h"
+#include "Projectiles/cBasicWeapon.h"
 #include "app\app.h"
-
-//Forward declaration of global function.
-float gComparePositions(Vec2 pos1, Vec2 pos2);
 
 cWorldSpace* cWorldSpace::_instance = 0;
 cWorldSpace::cWorldSpace() {
@@ -242,10 +240,7 @@ void cWorldSpace::UpdateProjectiles(float deltaTime) {
 
 void cWorldSpace::HandleCrash() {
 	//TODO : Move check to mediator.
-	player->SetPosition(0.f, 200.f);
-	gameState->IncrementLives(-1);
-	gameState->ResetFuel();
-	if (!App::IsSoundPlaying(DEATH_SOUND)) {
+	if (player->Respawn() && !App::IsSoundPlaying(DEATH_SOUND)) {
 		App::PlaySound(DEATH_SOUND, false);
 	}
 }
@@ -267,7 +262,7 @@ void cWorldSpace::HandleBulletEntityCollisions() {
 			//Compare with positions of buildings.
 			// Complexity is not great here. See if we can refactor to improve performance.
 			for each (cStructure * structure in structures) {
-				if (gComparePositions(structure->GetPosition(), proj->GetPosition()) <= structure->GetRadius() + proj->GetRadius()) {
+				if (ComparePositions(structure->GetPosition(), proj->GetPosition()) <= structure->GetRadius() + proj->GetRadius()) {
 					proj->Destroy();
 					structure->Shot();
 				}
@@ -275,7 +270,7 @@ void cWorldSpace::HandleBulletEntityCollisions() {
 		}
 		else {
 			//Compare with position of player.
-			if (gComparePositions(player->GetPosition(), proj->GetPosition()) <= player->GetRadius() + proj->GetRadius()) {
+			if (ComparePositions(player->GetPosition(), proj->GetPosition()) <= player->GetRadius() + proj->GetRadius()) {
 				proj->Destroy();
 				HandleCrash();
 			}
@@ -285,8 +280,15 @@ void cWorldSpace::HandleBulletEntityCollisions() {
 
 void cWorldSpace::HandlePlayerStructureCollisions() {
 	for each (cStructure * structure in structures) {
-		if (gComparePositions(structure->GetPosition(), player->GetPosition()) <= structure->GetRadius() + player->GetRadius()) {
+		if (ComparePositions(structure->GetPosition(), player->GetPosition()) <= structure->GetRadius() + player->GetRadius()) {
 			structure->Crash();
 		}
 	}
+}
+
+float cWorldSpace::ComparePositions(Vec2 pos1, Vec2 pos2) {
+	Vec2 resultVector;
+	resultVector.x = pos2.x - pos1.x;
+	resultVector.y = pos2.y - pos1.y;
+	return sqrt(pow(resultVector.x, 2) + pow(resultVector.y, 2));
 }

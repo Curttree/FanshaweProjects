@@ -9,6 +9,7 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void Fire();
 protected:
+	cBunker();
 	float radius = 25.f;
 
 	float shotTimer = 1000.f;

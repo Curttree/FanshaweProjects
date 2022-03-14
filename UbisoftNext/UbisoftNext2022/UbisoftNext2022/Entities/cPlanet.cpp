@@ -4,8 +4,6 @@
 #include "..\cWorldSpace.h"
 #include "..\globalFunctions.h"
 
-float gComparePositions(Vec2 pos1, Vec2 pos2);
-
 cPlanet::cPlanet(float _x, float _y, float _radius, float _mass) {
 	position.x = _x;
 	position.y = _y;
@@ -152,12 +150,21 @@ void cPlanet::GetSurfacePosition(Vec2& location, float& angle) {
 		angle = surfaces[surfaceIndex]->angle;
 
 		for each (cStructure * structure in cWorldSpace::Instance()->structures) {
-			if (gComparePositions(location, structure->GetPosition()) < 100.f) {
+			if (cWorldSpace::Instance()->ComparePositions(location, structure->GetPosition()) < 100.f) {
 				// We are placing the new structure too close to an old one. Try again until we reach max iterations.
 				// If we bypass max iterations, the planet is likely too saturated to provide enough spacing. Risk overlapping.
 				found = false;
 				numIterations++;
 			}
 		}
+	}
+}
+
+void cPlanet::GenerateSurfaces(Vec2 startPos, Vec2 endPos, float maxOffset, int segments) {
+	Vec2 segmentStart, segmentEnd;
+	segmentStart = startPos;
+	segmentEnd = endPos;
+	for (int x = 0; x < segments; x++) {
+
 	}
 }

@@ -69,6 +69,15 @@
       <Filter>Projectiles</Filter>
     </ClCompile>
     <ClCompile Include="GravitarGame.cpp" />
+    <ClCompile Include="Entities\cSplitBunker.cpp">
+      <Filter>Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\cWeaponPickup.cpp">
+      <Filter>Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectiles\cRapidWeapon.cpp">
+      <Filter>Projectiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\main.h" />
@@ -154,6 +163,15 @@
       <Filter>Structures\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Projectiles\cEnemyBullet.h">
+      <Filter>Projectiles\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\cSplitBunker.h">
+      <Filter>Structures\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\cWeaponPickup.h">
+      <Filter>Structures\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectiles\cRapidWeapon.h">
       <Filter>Projectiles\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

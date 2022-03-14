@@ -3,7 +3,9 @@
 
 // Structure Types
 #include "cFuelPickup.h"
+#include "cWeaponPickup.h"
 #include "cBunker.h"
+#include "cSplitBunker.h"
 
 cStructureFactory* cStructureFactory::_instance = 0;
 cStructureFactory::cStructureFactory() {
@@ -24,8 +26,15 @@ cStructure* cStructureFactory::BuildStructure(int type, Vec2 position, float ang
 		structure = new cFuelPickup(position.x, position.y, angle);
 		break;
 	case(1):
+		structure = new cWeaponPickup(position.x, position.y, angle);
+		break;
+	case(2):
 		structure = new cBunker(position.x, position.y, angle);
 		break;
+	case(3):
+		structure = new cSplitBunker(position.x, position.y, angle);
+		break;
+
 	default:
 		// Unknown projectile. Return empty pointer.
 		break;
