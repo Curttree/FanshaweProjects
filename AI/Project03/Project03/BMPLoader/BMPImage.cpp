@@ -165,8 +165,8 @@ bool BMPImage::LoadBMPFromFile(const std::string &filename)
 	// Load our image info header
 	BMPInfoHeader bmpInfoHeader;
 	gResourceManager.ReadData(bmpFile, &bmpInfoHeader.sizeOfHeader);
-	gResourceManager.ReadData(bmpFile, &bmpInfoHeader.imageWidth);
 	gResourceManager.ReadData(bmpFile, &bmpInfoHeader.imageHeight);
+	gResourceManager.ReadData(bmpFile, &bmpInfoHeader.imageWidth);
 	gResourceManager.ReadData(bmpFile, &bmpInfoHeader.numColorPlanes);
 	gResourceManager.ReadData(bmpFile, &bmpInfoHeader.bitsPerPixel);
 	gResourceManager.ReadData(bmpFile, &bmpInfoHeader.compressionMethod);

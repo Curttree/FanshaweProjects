@@ -39,9 +39,10 @@ std::string GetTexture(Terrain terrain) {
 
 void cMapManager::Init() {
 	currentGraph = new Graph();
-	BMPImage* bmp = new BMPImage("resourceMap.bmp");
+	BMPImage* bmp = new BMPImage("resourceMap6.bmp");
 
 	char* data = bmp->GetData();
+
 	unsigned long imageWidth = bmp->GetImageWidth();
 	unsigned long imageHeight = bmp->GetImageHeight();
 
