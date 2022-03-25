@@ -3,7 +3,7 @@
 
 Graph::Graph() {}
 
-void Graph::CreateNode(char id, Vertex position, bool bHasGoal)
+void Graph::CreateNode(char id, Vertex position, Terrain terrain, bool bHasGoal)
 {
 	Node* node = new Node;
 	node->id = id;
@@ -13,6 +13,7 @@ void Graph::CreateNode(char id, Vertex position, bool bHasGoal)
 	node->position = position;
 	node->parent = NULL;
 	node->hasGoal = bHasGoal;
+	node->terrain = terrain;
 
 	this->nodes.push_back(node);
 }

@@ -46,7 +46,16 @@
     <Filter Include="Graphics\FBO">
       <UniqueIdentifier>{cf46654b-4242-40e2-9a58-405dfa286b6d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Gatherer">
+    <Filter Include="Map">
+      <UniqueIdentifier>{b8004ef6-fa3e-4683-9c39-7114d2044038}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\BMPLoader">
+      <UniqueIdentifier>{3b9958e7-efae-46db-941d-326e5228e727}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\Graphs">
+      <UniqueIdentifier>{739751ed-c861-446f-bf5a-40343252b61f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project03Entities">
       <UniqueIdentifier>{941668dd-7a0d-42b7-bf84-726df549cdc9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -124,7 +133,25 @@
       <Filter>Graphics\FBO</Filter>
     </ClCompile>
     <ClCompile Include="cGatherer.cpp">
-      <Filter>Gatherer</Filter>
+      <Filter>Project03Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="BMPLoader\BMPImage.cpp">
+      <Filter>Map\BMPLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="BMPLoader\ResourceManager.cpp">
+      <Filter>Map\BMPLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphs\Graph.cpp">
+      <Filter>Map\Graphs</Filter>
+    </ClCompile>
+    <ClCompile Include="cMapManager.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="cBase.cpp">
+      <Filter>Project03Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="cResource.cpp">
+      <Filter>Project03Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,10 +207,37 @@
       <Filter>Graphics\FBO</Filter>
     </ClInclude>
     <ClInclude Include="GathererStates.h">
-      <Filter>Gatherer</Filter>
+      <Filter>Project03Entities</Filter>
     </ClInclude>
     <ClInclude Include="cGatherer.h">
-      <Filter>Gatherer</Filter>
+      <Filter>Project03Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="BMPLoader\BMPImage.h">
+      <Filter>Map\BMPLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="BMPLoader\ResourceManager.h">
+      <Filter>Map\BMPLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cMapManager.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphs\Graph.h">
+      <Filter>Map\Graphs</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphs\Vertex.h">
+      <Filter>Map\Graphs</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphs\sNode.h">
+      <Filter>Map\Graphs</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="cBase.h">
+      <Filter>Project03Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="cResource.h">
+      <Filter>Project03Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

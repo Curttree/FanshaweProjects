@@ -10,6 +10,12 @@
 
 #include "globals.h"
 #include "cGatherer.h"
+#include "cMapManager.h"
+#include "cBase.h"
+#include "cResource.h"
+
+std::vector<cGatherer> gatherers;
+std::vector<cResource> resources;
 
 // Function signature for DrawObject()
 void DrawObject(
@@ -189,7 +195,8 @@ int main(void) {
     vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply");
     vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
-    vecModelsToLoad.push_back("HockeyPlayer.ply");
+    vecModelsToLoad.push_back("tile.ply");
+    vecModelsToLoad.push_back("animal.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -221,18 +228,23 @@ int main(void) {
     ::g_pTextureManager->SetBasePath("assets/textures");
 
     ::g_pTextureManager->Create2DTextureFromBMPFile("BrightColouredUVMap.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("ice.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("red.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("green.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("blue.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("yellow.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("white.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("black.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;
     ::g_pTextureManager->SetBasePath("assets/textures/cubemaps");
     if (!::g_pTextureManager->CreateCubeTextureFromBMPFiles("Skybox",
-        "winterRiver_posX.bmp",    /* posX_fileName */
-        "winterRiver_negX.bmp",     /*negX_fileName */
-        "winterRiver2_negY.bmp",     /*negY_fileName*/
-        "winterRiver_posY.bmp",       /*posY_fileName*/
-        "winterRiver2_posZ.bmp",    /*posZ_fileName*/
-        "winterRiver2_negZ.bmp",      /*negZ_fileName*/
+        "Daylight Box_Right.bmp",    /* posX_fileName */
+        "Daylight Box_Left.bmp",     /*negX_fileName */
+        "Daylight Box_Bottom.bmp",     /*negY_fileName*/
+        "Daylight Box_Top.bmp",       /*posY_fileName*/
+        "Daylight Box_Front.bmp",    /*posZ_fileName*/
+        "Daylight Box_Back.bmp",      /*negZ_fileName*/
         true, errorTextString))
     {
         std::cout << "Didn't load because: " << errorTextString << std::endl;
@@ -299,9 +311,34 @@ int main(void) {
 
     pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
 
+#pragma region Project03
     //TODO: Move gatherer to scene loading so we know if there is more than one.
-    cGatherer tempPlayer(glm::vec3(0.f));
+    cMapManager mapManager;
+    mapManager.Init();
+    Vertex pos;
+    cBase* base;
+    for (unsigned int index = 0; index < mapManager.currentGraph->nodes.size(); index++) {
+        if (mapManager.currentGraph->nodes[index]->terrain == Terrain::Start) {
+            pos = mapManager.currentGraph->nodes[index]->position;
+            cGatherer tempPlayer(glm::vec3(pos.x * 1.0f + 0.5f, 0.f, pos.y * 1.0f + 0.5f));
+            gatherers.push_back(tempPlayer);
+        }
+        if (mapManager.currentGraph->nodes[index]->terrain == Terrain::Base) {
+            pos = mapManager.currentGraph->nodes[index]->position;
+            base = new cBase(glm::vec3(pos.x * 1.0f + 0.5f, 0.f, pos.y * 1.0f + 0.5f));
+        }
+        if (mapManager.currentGraph->nodes[index]->terrain == Terrain::Resource) {
+            pos = mapManager.currentGraph->nodes[index]->position;
+            cResource resource(glm::vec3(pos.x * 1.0f + 0.5f, 0.f, pos.y * 1.0f + 0.5f));
+            resources.push_back(resource);
+        }
+    }
 
+    ::g_pFlyCamera->setEye(glm::vec3(-20.f,10.f,8.f));
+    ::g_pFlyCamera->Yaw_LeftRight(45);
+    ::g_pFlyCamera->Pitch_UpDown(10);
+
+#pragma endregion
 
 #pragma endregion
     while (!glfwWindowShouldClose(pWindow)) {
@@ -367,7 +404,9 @@ int main(void) {
         ::g_pFlyCamera->Update(deltaTime);
 
         //TODO: Replace tempPlayer with actual player.
-        tempPlayer.Update(deltaTime);
+        for (unsigned int x = 0; x < gatherers.size(); x++) {
+            gatherers[x].Update(deltaTime);
+        }
 
         glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
         glm::vec3 cameraAt = ::g_pFlyCamera->getAtInWorldSpace();

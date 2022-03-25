@@ -1,9 +1,18 @@
 #include "cGatherer.h"
+#include "globals.h"
 #include <iostream>
 
 cGatherer::cGatherer(glm::vec3 _position) : position(_position){
-	//TODO: Set up mesh.
-	currentState = GathererStates::Idle;
+	currentState = GathererStates::Idle; 
+	mesh = new cMesh;
+	mesh->meshName = "animal.ply";
+	mesh->textureNames[0] = "green.bmp";
+	mesh->textureRatios[0] = 1.f;
+	mesh->friendlyName = "Gatherer";
+	mesh->positionXYZ = position;
+	mesh->scale = 5.0f;
+
+	g_vec_pMeshes.push_back(mesh);
 }
 
 void cGatherer::Update(float deltaTime) {
