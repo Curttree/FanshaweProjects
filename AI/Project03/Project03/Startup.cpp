@@ -13,5 +13,7 @@ bool g_StartUp(GLFWwindow* pWindow)
 
 	::g_pTextureManager = new cBasicTextureManager();
 
+	::mapManager.Init();
+
 	return true;
 }

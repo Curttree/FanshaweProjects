@@ -51,7 +51,6 @@ void cMapManager::Init() {
 		for (unsigned long y = 0; y < imageHeight; y++) {
 			char value = GetColourCharacter(data[index++], data[index++], data[index++]);
 			Terrain ter = GetTerrain(value);
-			printf("%c", value);
 			currentGraph->CreateNode(index/3, Vertex(x, y, 0), ter);
 			cMesh* tile = new cMesh;
 			tile->meshName = "tile.ply";

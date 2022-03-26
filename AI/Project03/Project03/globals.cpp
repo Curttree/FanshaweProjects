@@ -32,6 +32,8 @@ cFBO* g_pFBO = NULL;
 // This will be printed in the title bar
 std::string g_TitleText = "";
 
+cMapManager mapManager;
+
 //
 //bool g_FindObjectByUniqueID(unsigned int uniqueID_toFind, cMesh*& theObjectIFound);
 //

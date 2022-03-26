@@ -313,14 +313,12 @@ int main(void) {
 
 #pragma region Project03
     //TODO: Move gatherer to scene loading so we know if there is more than one.
-    cMapManager mapManager;
-    mapManager.Init();
     Vertex pos;
     cBase* base;
     for (unsigned int index = 0; index < mapManager.currentGraph->nodes.size(); index++) {
         if (mapManager.currentGraph->nodes[index]->terrain == Terrain::Start) {
             pos = mapManager.currentGraph->nodes[index]->position;
-            cGatherer tempPlayer(glm::vec3(pos.x * 1.0f + 0.5f, 0.f, pos.y * 1.0f + 0.5f));
+            cGatherer tempPlayer(glm::vec3(pos.x * 1.0f + 0.5f, 0.f, pos.y * 1.0f + 0.5f), mapManager.currentGraph->nodes[index]);
             gatherers.push_back(tempPlayer);
         }
         if (mapManager.currentGraph->nodes[index]->terrain == Terrain::Base) {

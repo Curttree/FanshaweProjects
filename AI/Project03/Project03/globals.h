@@ -12,6 +12,7 @@
 #include "cMesh.h"
 #include <vector>
 #include <map>
+#include "cMapManager.h"
 
 
 // These are all things that are "project global", 
@@ -59,7 +60,7 @@ extern unsigned int g_selectedLight;	// = 0;
 // This will be printed in the title bar
 extern std::string g_TitleText;	// = "";
 
-
+extern cMapManager mapManager;
 
 // List of objects to draw
 extern std::vector< cMesh* > g_vec_pMeshes;
