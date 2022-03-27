@@ -16,3 +16,23 @@ cResource::cResource(glm::vec3 _position) : position(_position) {
 cResource::~cResource() {
 
 }
+
+glm::vec3 cResource::GetPosition() {
+	return position;
+}
+
+void cResource::Update(float deltaTime) {
+	if (collectedBy != NULL) {
+		mesh->positionXYZ = collectedBy->GetPosition() + glm::vec3(0.f, 1.f, 0.f);
+	}
+}
+
+void cResource::Collect(cGatherer* _gatherer) {
+	collectedBy = _gatherer;
+}
+
+void cResource::Deliver() {
+	collectedBy = NULL;
+	mesh->scale = 0.f;
+	isActive = false;
+}

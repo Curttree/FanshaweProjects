@@ -2,7 +2,7 @@
 #include "globals.h"
 #include <iostream>
 
-cGatherer::cGatherer(glm::vec3 _position, Node* node) : position(_position), currentNode(node) {
+cGatherer::cGatherer(glm::vec3 _position, Node* node) : position(_position) {
 	currentState = GathererStates::Idle; 
 	mesh = new cMesh;
 	mesh->meshName = "animal.ply";
@@ -13,6 +13,25 @@ cGatherer::cGatherer(glm::vec3 _position, Node* node) : position(_position), cur
 	mesh->scale = 5.0f;
 
 	g_vec_pMeshes.push_back(mesh);
+	// Make a deep copy of the current graph.
+	localGraph = new Graph();
+	::mapManager.CopyGraph(localGraph);
+	for (unsigned int x = 0; x < localGraph->nodes.size(); x++) {
+		if (node->id == localGraph->nodes[x]->id) {
+			currentNode = localGraph->nodes[x];
+		}
+	}
+}
+
+cGatherer::~cGatherer() {
+	//if (localGraph) {
+	//	delete localGraph;
+	//	localGraph = NULL;
+	//}
+}
+
+glm::vec3 cGatherer::GetPosition() {
+	return position;
 }
 
 void cGatherer::Update(float deltaTime) {
@@ -20,13 +39,28 @@ void cGatherer::Update(float deltaTime) {
 		waitCounter += deltaTime;
 	}
 	UpdateState();
+	if (!isWaiting && (currentState == GathererStates::Search || currentState == GathererStates::Return) && targetNode != NULL) {
+		//TODO: Check position against next node before calling GetNextNode
+		if (glm::distance(position, targetPosition) < 0.05f) {
+			currentNode = nextNode;
+			nextNode = GetNextNode();
+			RecalculateVelocity();
+		}
+		else {
+			position += velocity;
+			mesh->positionXYZ = position;
+		}
+	}
+}
+
+void cGatherer::UpdateLocalTerrain(unsigned int index, Terrain newTerrain) {
+	localGraph->nodes[index]->terrain = newTerrain;
 }
 
 void cGatherer::UpdateState() {
 	switch (currentState) {
 	case GathererStates::Idle: {
 		//Initial State, transition to Search.
-		//TODO: Remove wait counter once we are actually searching. For now, fake it.
 		Node* target = Dijkstra(Terrain::Resource);
 		if (target == NULL) {
 			//All resources have been collected.
@@ -36,14 +70,14 @@ void cGatherer::UpdateState() {
 			currentState = GathererStates::Search;
 			std::cout << "State change to search" << std::endl;
 			targetNode = target;
-			waitMaxTime = 5.f;
-			isWaiting = true;
+			// Find the path to get to the resource.
+			BuildPath(Terrain::Resource);
+			RecalculateVelocity();
 		}
 		break;
 	}
 	case GathererStates::Search: {
-		//TODO: Use A* to find a path to the resource. For now, assume path has been found and use timer to simulate walking to it.
-		if (isWaiting && waitCounter >= waitMaxTime) {
+		if (currentNode == targetNode) {
 			// Once we have arrived, check to see if the resource is still here.
 			if (targetNode->terrain != Terrain::Resource) {
 				std::cout << "We have been beaten to the resource." << std::endl;
@@ -57,16 +91,13 @@ void cGatherer::UpdateState() {
 					currentState = GathererStates::Search;
 					std::cout << "Searching for another resource." << std::endl;
 					targetNode = target;
-					waitCounter = 0.f;
-					waitMaxTime = 5.f;
-					isWaiting = true;
+					BuildPath(Terrain::Resource);
+					RecalculateVelocity();
 				}
 			}
 			else {
-				isWaiting = false;
 				currentState = GathererStates::Gather;
-				targetNode->terrain = Terrain::Blank;	// Resource hasn't technically been cleared yet, but set terrain to blank so the next gatherer to arrive knows we are already gathering.
-				targetNode = NULL;
+				::mapManager.SetTerrainOnLocalGraphs(targetNode->id, Terrain::Blank);	// Resource hasn't technically been cleared yet, but set terrain to blank so the next gatherer to arrive knows we are already gathering.
 				std::cout << "State change to gather" << std::endl;
 				isWaiting = true;
 				waitCounter = 0.f;
@@ -80,18 +111,38 @@ void cGatherer::UpdateState() {
 			isWaiting = false;
 			currentState = GathererStates::Return;
 			waitCounter = 0.f;
-			//TODO: Actually use A* to return. For now, fake it.
-			std::cout << "State change to return" << std::endl;
-			waitMaxTime = 5.f;
-			isWaiting = true;
+			for (unsigned int index = 0; index < ::mapManager.resources.size(); index++) {
+				if (glm::distance(position, ::mapManager.resources[index].GetPosition()) < 0.25f) {
+					::mapManager.resources[index].Collect(this);
+				}
+			}
+			Node* target = Dijkstra(Terrain::Base);
+			if (target == NULL) {
+				//No base. Stop collecting.
+				std::cout << "No base is present. Stop gathering." << std::endl;
+				currentState = GathererStates::Done;
+			}
+			else {
+				targetNode = target;
+			}
+			BuildPath(Terrain::Base);
+			RecalculateVelocity();
 		}
 		break;
 	}
 	case GathererStates::Return: {
-		//TODO: Use A* to return. For now, use timer to simulate. Remember to account for 2 seconds wait time after returning resource.
+		if (!isWaiting && currentNode == targetNode) {
+			isWaiting = true;
+			waitCounter = 0.f;
+			waitMaxTime = 2.f;
+		}
 		if (isWaiting && waitCounter >= waitMaxTime) {
-			isWaiting = false;
-			//TODO: Check to see if there is another resource. For now, assume there is.
+			isWaiting = false; 
+			for (unsigned int index = 0; index < ::mapManager.resources.size(); index++) {
+				if (::mapManager.resources[index].collectedBy == this) {
+					::mapManager.resources[index].Deliver();
+				}
+			}
 			Node* target = Dijkstra(Terrain::Resource);
 			if (target == NULL) {
 				//All resources have been collected.
@@ -101,10 +152,9 @@ void cGatherer::UpdateState() {
 			else {
 				std::cout << "State change to search" << std::endl;
 				targetNode = target;
-				currentState = GathererStates::Search;
-				waitCounter = 0.f;
-				waitMaxTime = 5.f;
-				isWaiting = true;
+				currentState = GathererStates::Search; 
+				BuildPath(Terrain::Resource);
+				RecalculateVelocity();
 			}
 		}
 		break;
@@ -117,7 +167,7 @@ void cGatherer::UpdateState() {
 
 Node* cGatherer::Dijkstra(Terrain target)
 {
-	mapManager.currentGraph->ResetGraph();
+	localGraph->ResetGraph();
 
 	currentNode->costSoFar = 0;
 	std::list<Node*> openList;
@@ -162,7 +212,7 @@ Node* cGatherer::GetLowestCostNode(std::list<Node*> openList)
 	float minCost = FLT_MAX;
 	Node* lowestCostNode = NULL;
 	//find the node with the lowest cost from the root node
-	for (auto iter = openList.begin(); iter != openList.end(); ++iter)
+	for (std::list<Node*>::iterator iter = openList.begin(); iter != openList.end(); ++iter)
 	{
 		if ((*iter)->costSoFar < minCost)
 		{
@@ -175,10 +225,114 @@ Node* cGatherer::GetLowestCostNode(std::list<Node*> openList)
 
 bool cGatherer::IsNodeInOpenList(std::list<Node*> openList, Node* neighbour)
 {
-	for (auto iter = openList.begin(); iter != openList.end(); ++iter)
+	for (std::list<Node*>::iterator iter = openList.begin(); iter != openList.end(); ++iter)
 	{
 		if (*iter == neighbour)
 			return true;
 	}
 	return false;
+}
+
+float cGatherer::CalculateHeuristicDistances(Node* node, Node* goal)
+{
+	float D = 1;
+	float dx = abs(node->position.x - goal->position.x);
+	float dy = abs(node->position.y - goal->position.y);
+	return D * (dx + dy);
+}
+
+Node* cGatherer::GetLowestFCostNode(std::list<Node*> openList)
+{
+	float minCost = FLT_MAX;
+	Node* lowestCostNode = NULL;
+	//find the node with the lowest f cost
+	for (std::list<Node*>::iterator iter = openList.begin(); iter != openList.end(); ++iter)
+	{
+		if ((*iter)->costSoFar + (*iter)->hDistance < minCost)
+		{
+			minCost = (*iter)->costSoFar + (*iter)->hDistance;
+			lowestCostNode = *iter;
+		}
+	}
+	return lowestCostNode;
+}
+
+Node* cGatherer::AStar(Terrain target)
+{
+	currentNode->costSoFar = 0;
+	currentNode->hDistance = CalculateHeuristicDistances(currentNode, targetNode);
+
+	std::list<Node*> openList;
+	std::list<Node*> closeList;
+	openList.push_back(currentNode);
+
+	while (!openList.empty())
+	{
+		//remove the current node from the open list with the lowest f cost
+		Node* currNode = GetLowestFCostNode(openList);
+		openList.remove(currNode);
+		closeList.push_back(currNode);
+
+		currNode->visited = true;
+		if (currNode->terrain == target)
+		{
+			//Could possibly find another resource along the way if they are moving, 
+			return currNode;
+		}
+
+		//Go through each neighbouring node of current node
+		for (std::pair <Node*, float> neighbour : currNode->edges)
+		{
+			if (neighbour.first->visited == false)
+			{
+				float weightSoFar = currNode->costSoFar + neighbour.second;
+				if (weightSoFar < neighbour.first->costSoFar)
+				{
+					neighbour.first->costSoFar = weightSoFar;
+					neighbour.first->parent = currNode;
+					if (!IsNodeInOpenList(openList, neighbour.first))
+					{
+						neighbour.first->hDistance = CalculateHeuristicDistances(neighbour.first, targetNode);
+						openList.push_back(neighbour.first);
+					}
+				}
+			}
+		}
+	}
+	return NULL;
+}
+
+Node* cGatherer::GetNextNode() {
+	nodesTraversed++;
+	if (nodesTraversed >= pathLength) {
+		return NULL;
+	}
+	Node* result = targetNode;
+	for (int x = 1; x < pathLength - nodesTraversed; x++) {
+		result = result->parent;
+
+		if (result == NULL) {
+			std::cout << "Math is off." << std::endl;
+			return NULL;
+		}
+	}
+	targetPosition = glm::vec3(result->position.x, 0.f, result->position.y);
+	return result;
+}
+
+void cGatherer::BuildPath(Terrain t) {
+	AStar(t);
+	Node* checkingNode = targetNode;
+	pathLength = 0;
+	nodesTraversed = 0;
+	do
+	{
+		pathLength++;
+		checkingNode = checkingNode->parent;
+	} while (checkingNode->parent != NULL);
+	nextNode = GetNextNode();
+}
+
+void cGatherer::RecalculateVelocity() {
+	velocity = glm::normalize(targetPosition - position) * 0.1f;
 }

@@ -14,8 +14,6 @@
 #include "cBase.h"
 #include "cResource.h"
 
-std::vector<cGatherer> gatherers;
-std::vector<cResource> resources;
 
 // Function signature for DrawObject()
 void DrawObject(
@@ -318,17 +316,17 @@ int main(void) {
     for (unsigned int index = 0; index < mapManager.currentGraph->nodes.size(); index++) {
         if (mapManager.currentGraph->nodes[index]->terrain == Terrain::Start) {
             pos = mapManager.currentGraph->nodes[index]->position;
-            cGatherer tempPlayer(glm::vec3(pos.x * 1.0f + 0.5f, 0.f, pos.y * 1.0f + 0.5f), mapManager.currentGraph->nodes[index]);
-            gatherers.push_back(tempPlayer);
+            cGatherer tempPlayer(glm::vec3(pos.x, 0.f, pos.y), mapManager.currentGraph->nodes[index]);
+            mapManager.gatherers.push_back(tempPlayer);
         }
         if (mapManager.currentGraph->nodes[index]->terrain == Terrain::Base) {
             pos = mapManager.currentGraph->nodes[index]->position;
-            base = new cBase(glm::vec3(pos.x * 1.0f + 0.5f, 0.f, pos.y * 1.0f + 0.5f));
+            base = new cBase(glm::vec3(pos.x, 0.f, pos.y));
         }
         if (mapManager.currentGraph->nodes[index]->terrain == Terrain::Resource) {
             pos = mapManager.currentGraph->nodes[index]->position;
-            cResource resource(glm::vec3(pos.x * 1.0f + 0.5f, 0.f, pos.y * 1.0f + 0.5f));
-            resources.push_back(resource);
+            cResource resource(glm::vec3(pos.x, 0.f, pos.y));
+            mapManager.resources.push_back(resource);
         }
     }
 
@@ -402,8 +400,11 @@ int main(void) {
         ::g_pFlyCamera->Update(deltaTime);
 
         //TODO: Replace tempPlayer with actual player.
-        for (unsigned int x = 0; x < gatherers.size(); x++) {
-            gatherers[x].Update(deltaTime);
+        for (unsigned int x = 0; x < mapManager.gatherers.size(); x++) {
+            mapManager.gatherers[x].Update(deltaTime);
+        }
+        for (unsigned int x = 0; x < mapManager.resources.size(); x++) {
+            mapManager.resources[x].Update(deltaTime);
         }
 
         glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
