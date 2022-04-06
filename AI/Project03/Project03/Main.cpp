@@ -465,7 +465,7 @@ int main(void) {
         glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_FALSE);
 
 
-        DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
+        //DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
 
         //TODO: Replace with own implementation
         // 2nd pass of the render, where we do something bizzare

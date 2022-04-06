@@ -2,6 +2,8 @@
 #define _cMusicGenerator_HG_
 
 #include "cSong.h"
+#include "cCurtArray.h"
+#include "cExistenceMap.h"
 
 class cMusicGenerator
 {
@@ -17,6 +19,8 @@ public:
 	// This must be an EXACT MATCH for what's in the billboard100 file. 
 	// So case sensitive, etc. 
 	cSong* findSong(std::string songName, std::string artist);
+private:
+	cCurtArray<cSong*> songs;
 };
 
 #endif

@@ -2,19 +2,47 @@
 //
 
 #include <iostream>
+#include "cPersonGenerator.h"
+#include "cMusicGenerator.h"
+#include "cCurtMap.h"
+#include "cCurtLinkedList.h"
+#include "cExistenceMap.h"
+#include "cSongLibraryMap.h"
+#include "cSnotify.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	std::string errorString;
+	cPersonGenerator personGenerator;
+	personGenerator.LoadCensusFiles("baby.csv","surname.csv","Street_Names.csv",errorString);
+
+	cMusicGenerator music;
+	music.LoadMusicInformation("hot_stuff_2.csv", errorString);
+	cSong* test = music.findSong("Sign Of The Times", "Harry Styles");
+	if (test != 0) {
+		std::cout << "Found song with ID: " << test->getUniqueID() << std::endl;
+	}
+	else {
+		std::cout << "Couldn't find song." << std::endl;
+	}
+
+	cPerson* person;
+	for (unsigned int test = 0; test < 10; test++) {
+		person = personGenerator.generateRandomPerson();
+		std::cout << "(" << person->getGenderAsString() << ") " << person->first << " " << person->middle << " " << person->last << std::endl;
+	}
+
+	//cSongLibraryMap testMap;
+	//testMap.insertAtIndex(test->getUniqueID(), test);
+	//cCurtLinkedList <cPair<unsigned int, cSong*>>* test2 = testMap.getAtIndex(test->getUniqueID());
+	//std::cout << test2->current->data.Second->name << std::endl;
+	cSnotify snotify;
+	snotify.AddSong(test, errorString);
+	snotify.DeleteSong(test->getUniqueID(), errorString);
+	if (errorString.empty()) {
+		std::cout << "All operations completed successfully!" << std::endl;
+	}
+	else {
+		std::cout << errorString << std::endl;
+	}
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

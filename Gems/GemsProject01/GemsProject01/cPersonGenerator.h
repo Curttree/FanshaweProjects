@@ -3,6 +3,7 @@
 
 #include <string>
 #include "cPerson.h"
+#include "cCurtArray.h"
 
 class cPersonGenerator
 {
@@ -38,6 +39,22 @@ public:
 	// Randomly generates a person from the data
 	// Returns 0, NULL, or nullptr if it can't do this. 
 	cPerson* generateRandomPerson(void);
+
+	//My additions
+private:
+	bool readCSVFile();
+	bool readCSVFile(std::string fileName, unsigned int& numberLoaded, cCurtArray<std::string>& output, std::string& errorString, unsigned int tokenOfInterest = 0);
+	bool readGenderCodes(std::string fileName, unsigned int& numberLoaded, cCurtArray<int>& outputMale, cCurtArray<int>& outputFemale, std::string& errorString, unsigned int tokenOfInterest);
+	cCurtArray<cPerson> people;
+	cCurtArray<std::string> babyNames;
+	cCurtArray<std::string> babyNameGenders;
+	cCurtArray<std::string> surNames;
+	cCurtArray<std::string> streetNames;
+	cCurtArray<int> maleNameCodes;
+	cCurtArray<int> femaleNameCodes;
+	unsigned int numNames = 0;
+	unsigned int numSurnames = 0;
+	unsigned int numStreets = 0;
 };
 
 

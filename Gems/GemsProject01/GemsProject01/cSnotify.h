@@ -3,6 +3,9 @@
 
 #include "cPerson.h"
 #include "cSong.h"
+#include "cCurtArray.h"
+#include "cCurtMap.h"
+#include "cSongLibraryMap.h"
 
 
 class cSnotify
@@ -78,8 +81,8 @@ public:
 	bool FindUsersLastName(std::string lastName, cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray);
 	// Sorted ascending by last name THEN first name.
 	bool FindUsersFirstLastNames(std::string firstName, std::string lastName, cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray);
-
-
+private:
+	cSongLibraryMap songList;
 };
 
 #endif // !_cSnotify_HG_

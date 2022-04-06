@@ -36,13 +36,16 @@
     <ClCompile Include="cSnotify.cpp">
       <Filter>Provided Files</Filter>
     </ClCompile>
-    <ClCompile Include="Surnames\read_Names_2010Census.cpp">
-      <Filter>Provided Files</Filter>
+    <ClCompile Include="cMusicGenerator.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cCurtArray.cpp">
+    <ClCompile Include="cExistenceMap.cpp">
       <Filter>Custom Containers</Filter>
     </ClCompile>
-    <ClCompile Include="cCurtMap.cpp">
+    <ClCompile Include="cSong.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cSongLibraryMap.cpp">
       <Filter>Custom Containers</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,7 +71,16 @@
     <ClInclude Include="cCurtLinkedList.h">
       <Filter>Custom Containers\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cCurtMap.h">
+    <ClInclude Include="cSongLibraryMap.h">
+      <Filter>Custom Containers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cExistenceMap.h">
+      <Filter>Custom Containers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cUserMap.h">
+      <Filter>Custom Containers\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cPair.h">
       <Filter>Custom Containers\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

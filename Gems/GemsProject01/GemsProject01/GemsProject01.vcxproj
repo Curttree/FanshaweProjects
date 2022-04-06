@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -139,23 +139,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cCurtArray.cpp" />
-    <ClCompile Include="cCurtMap.cpp" />
+    <ClCompile Include="cExistenceMap.cpp" />
+    <ClCompile Include="cMusicGenerator.cpp" />
     <ClCompile Include="cPerson.cpp" />
     <ClCompile Include="cPersonGenerator.cpp" />
     <ClCompile Include="cSnotify.cpp" />
+    <ClCompile Include="cSong.cpp" />
+    <ClCompile Include="cSongLibraryMap.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Surnames\read_Names_2010Census.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cCurtArray.h" />
-    <ClInclude Include="cCurtMap.h" />
     <ClInclude Include="cCurtLinkedList.h" />
+    <ClInclude Include="cExistenceMap.h" />
     <ClInclude Include="cMusicGenerator.h" />
+    <ClInclude Include="cPair.h" />
     <ClInclude Include="cPerson.h" />
     <ClInclude Include="cPersonGenerator.h" />
     <ClInclude Include="cSnotify.h" />
     <ClInclude Include="cSong.h" />
+    <ClInclude Include="cSongLibraryMap.h" />
+    <ClInclude Include="cUserMap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

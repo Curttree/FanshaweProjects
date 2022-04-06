@@ -51,3 +51,7 @@ std::string cPerson::getGenderAsString(void)
 //	return "RATHER_NOT_SAY_UNKNOWN";
 	return "OMG! CALL THE DEV TEAM!! SOMEONE SCREWED UP!!!";
 }
+
+unsigned int cPerson::getSnotifyUniqueUserID(void) {
+	return m_Snotify_UniqueUserID;
+}

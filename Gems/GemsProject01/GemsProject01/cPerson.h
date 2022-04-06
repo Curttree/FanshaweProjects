@@ -52,7 +52,7 @@ public:
 	std::string city;
 	std::string province;
 	// N5Y 5R6  is Fanshawe's postal code
-	char postalCode[6];		// Canadian postal codes are 6 characters
+	char postalCode[7];		// Canadian postal codes are 6 characters (plus terminating null character).
 
 	// Social Insurance Number (Candian "... is a 9 digit number...")
 	unsigned int SIN;	// = 0
