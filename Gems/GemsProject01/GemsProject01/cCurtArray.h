@@ -23,8 +23,8 @@ public:
 	}
 
 	T getAtIndex(unsigned int index) {
-		if (index >= capacity) {
-			return 0;
+		if (index >= size) {
+			return T();
 		}
 
 		T result = *(this->data[index]);

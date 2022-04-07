@@ -146,6 +146,7 @@
     <ClCompile Include="cSnotify.cpp" />
     <ClCompile Include="cSong.cpp" />
     <ClCompile Include="cSongLibraryMap.cpp" />
+    <ClCompile Include="cUserMap.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +161,8 @@
     <ClInclude Include="cSong.h" />
     <ClInclude Include="cSongLibraryMap.h" />
     <ClInclude Include="cUserMap.h" />
+    <ClInclude Include="eLibrarySort.h" />
+    <ClInclude Include="sAddress.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

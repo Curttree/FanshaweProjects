@@ -9,6 +9,7 @@ class cSong
 {
 public:
 	cSong();
+	cSong(std::string name, std::string artist, unsigned int idOverride);
 	std::string name;
 	std::string artist;
 	// These are used for user play statistics
@@ -20,6 +21,7 @@ public:
 	// The cPerson has a common method for generating unique IDs, if you 
 	//	want to use that. 
 	unsigned int getUniqueID(void) { return this->uniqueID; }
+
 
 private:
 	unsigned int uniqueID;

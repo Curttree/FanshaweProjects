@@ -4,8 +4,8 @@
 #include "cPerson.h"
 #include "cSong.h"
 #include "cCurtArray.h"
-#include "cCurtMap.h"
 #include "cSongLibraryMap.h"
+#include "cUserMap.h"
 
 
 class cSnotify
@@ -83,6 +83,20 @@ public:
 	bool FindUsersFirstLastNames(std::string firstName, std::string lastName, cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray);
 private:
 	cSongLibraryMap songList;
+	cSongLibraryMap userSongLibrary;
+	cSongLibraryMap userSongLibraryByArtist;
+	cSongLibraryMap userSongLibraryByName;
+	cUserMap userList;
+	cUserMap userListBySIN;
+	cUserMap songsByUser;
+	cCurtLinkedList<cPerson*> userByFirst;
+	cCurtLinkedList<cPerson*> userByLast;
+
+	void InsertIntoFirstNameSortedList(cPerson* pPerson);
+	void InsertIntoLastNameSortedList(cPerson* pPerson);
+	void RemoveFromFirstNameSortedList(cPerson* pPerson);
+	void RemoveFromLastNameSortedList(cPerson* pPerson);
+
 };
 
 #endif // !_cSnotify_HG_

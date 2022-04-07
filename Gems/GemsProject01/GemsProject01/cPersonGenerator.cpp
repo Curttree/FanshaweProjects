@@ -67,8 +67,11 @@ cPerson* cPersonGenerator::generateRandomPerson(void) {
 	result->province = "Ontario";
 	strncpy_s(result->postalCode, "N5Y5R6", 6);
 
-	// TODO: Populate remaining street data.
 	result->streetNumber = rand() % 1000;
+	sAddress street = streetNames[rand() % numStreets];
+	result->streetName = street.streetName;
+	result->streetDirection = street.streetDirection;
+	result->streetType = street.streetType;
 
 	//People will be stored in Snotify app. No need to store within the person generator, just return a value.
 
@@ -92,7 +95,7 @@ bool cPersonGenerator::LoadCensusFiles(
 	if (!readCSVFile(surnameFile, numSurnames, surNames, errorString)) {
 		return false;
 	}
-	if (!readCSVFile(streetNameFile, numStreets, streetNames, errorString)) {
+	if (!readStreets(streetNameFile, numStreets, streetNames, errorString)) {
 		return false;
 	}
 
@@ -141,6 +144,68 @@ bool cPersonGenerator::readCSVFile(std::string fileName, unsigned int& numberLoa
 			// Ignore the other parts of the line
 			tokenCount++;
 		}
+	}
+
+	std::cout << "Lines read = " << lineCount << std::endl;
+
+	numberLoaded = lineCount;
+
+	return true;
+}
+
+bool cPersonGenerator::readStreets(std::string fileName, unsigned int& numberLoaded, cCurtArray<sAddress>& output, std::string& errorString)
+{
+	// Open the file
+	std::ifstream namesFile(fileName);
+	if (!namesFile.is_open())
+	{
+		errorString = "Didn't open file";
+		std::cout << errorString << std::endl;
+		return false;
+	}
+
+	// name,rank,count,prop100k,cum_prop100k,pctwhite,pctblack,pctapi,pctaian,pct2prace,pcthispanic
+	// SMITH,1,2442977,828.19,828.19,70.9,23.11,0.5,0.89,2.19,2.4
+	//
+	// - rank is how popular the last name is, like 1st, 2nd, etc.
+	// - count is how many people have that last name, so 2,442,977 people have last name "Smith"
+	// - prop100k is the ratio per 100,000 people. Smith is 828.19, 
+	//            meaning that there's a 828.19 out of 100,000 chance (0.82819% chance)
+	//            that someone is named "Smith"
+
+	std::string theLine;
+
+	unsigned int lineCount = 0;
+	while (std::getline(namesFile, theLine))
+	{
+		lineCount++;
+		std::stringstream ssLine(theLine);
+
+		std::string token;
+		unsigned int tokenCount = 0;
+		sAddress street;
+		while (std::getline(ssLine, token, ','))
+		{
+			if (tokenCount == 0)
+			{
+				street.fullAddress = token;
+			}
+			if (tokenCount == 1)
+			{
+				street.streetName = token;
+			}
+			if (tokenCount == 2)
+			{
+				street.streetType = token;
+			}
+			if (tokenCount == 3)
+			{
+				street.streetDirection = token;
+			}
+			// Ignore the other parts of the line
+			tokenCount++;
+		}
+		output.push_back(street);
 	}
 
 	std::cout << "Lines read = " << lineCount << std::endl;
@@ -225,7 +290,6 @@ bool cPersonGenerator::readGenderCodes(std::string fileName, unsigned int& numbe
 				if (token == "F" || token == "f") {
 					outputFemale.push_back(lineCount-1);
 				}
-				//TODO: determine if we should handle other genders.
 			}
 			// Ignore the other parts of the line
 			tokenCount++;

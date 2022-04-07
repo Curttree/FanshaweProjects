@@ -4,7 +4,6 @@
 #include <iostream>
 #include "cPersonGenerator.h"
 #include "cMusicGenerator.h"
-#include "cCurtMap.h"
 #include "cCurtLinkedList.h"
 #include "cExistenceMap.h"
 #include "cSongLibraryMap.h"
@@ -12,6 +11,7 @@
 
 int main()
 {
+	srand(time(NULL));
 	std::string errorString;
 	cPersonGenerator personGenerator;
 	personGenerator.LoadCensusFiles("baby.csv","surname.csv","Street_Names.csv",errorString);
@@ -27,18 +27,66 @@ int main()
 	}
 
 	cPerson* person;
-	for (unsigned int test = 0; test < 10; test++) {
-		person = personGenerator.generateRandomPerson();
-		std::cout << "(" << person->getGenderAsString() << ") " << person->first << " " << person->middle << " " << person->last << std::endl;
-	}
+	person = personGenerator.generateRandomPerson();
 
-	//cSongLibraryMap testMap;
-	//testMap.insertAtIndex(test->getUniqueID(), test);
-	//cCurtLinkedList <cPair<unsigned int, cSong*>>* test2 = testMap.getAtIndex(test->getUniqueID());
-	//std::cout << test2->current->data.Second->name << std::endl;
 	cSnotify snotify;
 	snotify.AddSong(test, errorString);
-	snotify.DeleteSong(test->getUniqueID(), errorString);
+	snotify.AddSongToUserLibrary(person->getSnotifyUniqueUserID(), test, errorString);
+
+	for (unsigned int counter = 0; counter < 25; counter++) {
+		cSong* test2 = music.getRandomSong();
+		snotify.AddSong(test2, errorString);
+		snotify.AddSongToUserLibrary(person->getSnotifyUniqueUserID(), test2, errorString);
+	}
+
+	cSong* libraryResult;
+	unsigned int libraryLength;
+	snotify.GetUsersSongLibraryAscendingByTitle(person->getSnotifyUniqueUserID(), libraryResult, libraryLength);
+
+	std::cout << "Library length of " << libraryLength << "|| Songs are: ";
+	for (unsigned int x = 0; x < libraryLength; x++) {
+		std::cout << libraryResult[x].artist << " - " << libraryResult[x].name << std::endl;
+	}
+	std::cout << std::endl;
+
+	cSong* libraryResult2;
+	unsigned int libraryLength2;
+	snotify.GetUsersSongLibraryAscendingByArtist(person->getSnotifyUniqueUserID(), libraryResult2, libraryLength2);
+
+	std::cout << "Library by artist length of " << libraryLength2 << "|| Artists are: ";
+	for (unsigned int x = 0; x < libraryLength2; x++) {
+		std::cout << libraryResult2[x].artist << " - " << libraryResult2[x].name << std::endl;
+	}
+	std::cout << std::endl;
+
+	cPerson* person2;
+	for (unsigned int test = 0; test < 1000; test++) {
+		person2 = personGenerator.generateRandomPerson();
+		snotify.AddUser(person2,errorString);
+	}
+
+	cPerson* sinSearch = snotify.FindUserBySnotifyID(person2->getSnotifyUniqueUserID());
+	std::cout << "Searched for user with ID of " << person2->SIN << " | Found: " << sinSearch->last << " , " << sinSearch->first << std::endl;
+
+	cPerson* firstList;
+	unsigned int firstLength;
+	snotify.FindUsersLastName(person2->last, firstList, firstLength);
+	std::cout << "Users with the last name of " << person2->last << ": ";
+	for (unsigned int x = 0; x < firstLength; x++) {
+		std::cout << firstList[x].last << " , " << firstList[x].first << " (" << firstList[x].SIN << ")" << std::endl;
+	}
+	std::cout << std::endl;
+
+	cPerson* userList;
+	unsigned int userLength;
+	snotify.GetUsers(userList, userLength);
+	std::cout << "User list length of " << userLength << "|| Users are: ";
+	for (unsigned int x = 0; x < userLength; x++) {
+		std::cout << userList[x].last << " , " << userList[x].first  << " (" << userList[x].SIN << ")" << std::endl;
+	}
+	std::cout << std::endl;
+
+	//snotify.DeleteSong(test->getUniqueID(), errorString);
 	if (errorString.empty()) {
 		std::cout << "All operations completed successfully!" << std::endl;
 	}

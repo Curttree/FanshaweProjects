@@ -4,11 +4,16 @@ cSongLibraryMap::cSongLibraryMap() {
 	this->allocateSpace();
 }
 
-cSongLibraryMap::cSongLibraryMap(unsigned int arraySize, unsigned int hashStart, unsigned int hashDenominator) {
+cSongLibraryMap::cSongLibraryMap(LibrarySort sortType) : sortBy(sortType) {
+	this->allocateSpace();
+}
+
+cSongLibraryMap::cSongLibraryMap(unsigned int arraySize, unsigned int hashStart, unsigned int hashDenominator, LibrarySort sortType) {
 	this->size = arraySize;
 	this->startValue = hashStart;
 	this->denominator = hashDenominator;
 	this->allocateSpace();
+	this->sortBy = sortType;
 }
 cSongLibraryMap::~cSongLibraryMap() {
 
@@ -16,7 +21,7 @@ cSongLibraryMap::~cSongLibraryMap() {
 
 bool cSongLibraryMap::insertAtIndex(unsigned int keyValue, cSong* song) {
 	unsigned int hash = calcHashValue(keyValue);
-	if (hash >= data.get_capacity()) {
+	if (hash >= data.get_size()) {
 		//Our set is too small. Reallocate space and try again.
 		unsigned int factor = (hash * 2) / data.get_capacity();
 		reallocateSpace(factor);
@@ -38,11 +43,59 @@ bool cSongLibraryMap::insertAtIndex(unsigned int keyValue, cSong* song) {
 			}
 		}
 		else {
-			if (result->get_size() == 0) {
+			if (result->get_size() == 0 || sortBy == LibrarySort::UNSORTED) {
+				//Either inserting into an empty list, or we don't care about the sort order.
 				result->insert(cPair<unsigned int, cSong*>(keyValue, song));
 			}
 			else {
-				//TODO: Iterate through the list to see where we can add.
+				switch (sortBy) {
+				case LibrarySort::ARTIST: {
+					std::string newValue = song->artist;
+					bool found = false;
+					result->moveToHead();
+					do {
+						if (newValue.compare(result->current->data.Second->artist) <= 0) {
+							//We are in the right spot.
+							result->insert(cPair<unsigned int, cSong*>(keyValue, song));
+							found = true;
+						}
+						else {
+							result->moveForward();
+						}
+					} while (result->current != result->tail && !found);
+					
+					if (!found) {
+						//We made it to the end and couldn't find an appropriate spot. Insert at tail since it is after everything currently in the list.
+						result->insertAtTail(cPair<unsigned int, cSong*>(keyValue, song));
+					}
+					break;
+				}
+				case LibrarySort::SONG: {
+					std::string newValue = song->name;
+					bool found = false;
+					result->moveToHead();
+					do {
+						if (newValue.compare(result->current->data.Second->name) <= 0) {
+							//We are in the right spot.
+							result->insert(cPair<unsigned int, cSong*>(keyValue, song));
+							found = true;
+						}
+						else {
+							result->moveForward();
+						}
+					} while (result->current != result->tail && !found);
+
+					if (!found) {
+						//We made it to the end and couldn't find an appropriate spot. Insert at tail since it is after everything currently in the list.
+						result->insertAtTail(cPair<unsigned int, cSong*>(keyValue, song));
+					}
+					break;
+				}
+				default:
+					// Some other sorting we didn't plan for. Just insert.
+					result->insert(cPair<unsigned int, cSong*>(keyValue, song));
+					break;
+				}
 			}
 		}
 	}
@@ -88,4 +141,14 @@ unsigned int cSongLibraryMap::calcHashValue(unsigned int keyValue) {
 	//Simple hash function. Could be optimized to limit conflicts, however since we are mostly using for IDs, there should really only be conflicts if our hash size is too small.
 	//If we want to offer better performance and cannot decrease our increment for IDs, we could also swap this for a better optimized hash function.
 	return (keyValue - this->startValue) / denominator;
+}
+
+cSong* cSongLibraryMap::findSong(std::string title, std::string artist) {
+	// Could store in a tree if we want a performance increase here. Right now just do basic linear search.
+	for (unsigned int count = 0; count < data.get_size(); count++) {
+		if (data[count]->current->data.Second->artist == artist && data[count]->current->data.Second->name == title) {
+			return data[count]->current->data.Second;
+		}
+	}
+	return 0;
 }

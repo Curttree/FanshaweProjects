@@ -42,6 +42,9 @@ public:
 	}
 
 	T getCurrent() {
+		if (this->current == nullptr) {
+			return T();
+		}
 		T result = this->current->data;
 		return result;
 	}
@@ -77,6 +80,24 @@ public:
 			}
 
 			//Don't bother checking tail. Since we shift down, old node should still be the tail.
+		}
+		size++;
+		return;
+	}
+
+	//Inserts at the tail, but do not update current.
+	void insertAtTail(T _data) {
+		cCurtNode* newNode = new cCurtNode(_data);
+		if (this->tail == nullptr) {
+			//inserting into empty list.
+			this->head = newNode;
+			this->current = newNode;
+			this->tail = newNode;
+		}
+		else {
+			this->tail->next = newNode;
+			newNode->previous = this->tail;
+			this->tail = newNode;
 		}
 		size++;
 		return;

@@ -4,6 +4,7 @@
 #include <string>
 #include "cPerson.h"
 #include "cCurtArray.h"
+#include "sAddress.h"
 
 class cPersonGenerator
 {
@@ -44,12 +45,13 @@ public:
 private:
 	bool readCSVFile();
 	bool readCSVFile(std::string fileName, unsigned int& numberLoaded, cCurtArray<std::string>& output, std::string& errorString, unsigned int tokenOfInterest = 0);
+	bool readStreets(std::string fileName, unsigned int& numberLoaded, cCurtArray<sAddress>& output, std::string& errorString);
 	bool readGenderCodes(std::string fileName, unsigned int& numberLoaded, cCurtArray<int>& outputMale, cCurtArray<int>& outputFemale, std::string& errorString, unsigned int tokenOfInterest);
 	cCurtArray<cPerson> people;
 	cCurtArray<std::string> babyNames;
 	cCurtArray<std::string> babyNameGenders;
 	cCurtArray<std::string> surNames;
-	cCurtArray<std::string> streetNames;
+	cCurtArray<sAddress> streetNames;
 	cCurtArray<int> maleNameCodes;
 	cCurtArray<int> femaleNameCodes;
 	unsigned int numNames = 0;
