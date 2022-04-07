@@ -168,10 +168,10 @@ public:
 		return this->current;
 	}
 	cCurtNode* moveBackwards() {
-		if (this->current == nullptr || this->current->next == nullptr) {
+		if (this->current == nullptr || this->current->previous == nullptr) {
 			return nullptr;
 		}
-		this->current = this->current->next;
+		this->current = this->current->previous;
 		return this->current;
 	}
 	cCurtNode* moveToHead() {

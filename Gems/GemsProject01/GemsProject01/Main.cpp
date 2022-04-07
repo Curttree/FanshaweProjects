@@ -60,7 +60,7 @@ int main()
 	std::cout << std::endl;
 
 	cPerson* person2;
-	for (unsigned int test = 0; test < 1000; test++) {
+	for (unsigned int test = 0; test < 10; test++) {
 		person2 = personGenerator.generateRandomPerson();
 		snotify.AddUser(person2,errorString);
 	}
@@ -86,7 +86,51 @@ int main()
 	}
 	std::cout << std::endl;
 
-	//snotify.DeleteSong(test->getUniqueID(), errorString);
+	snotify.AddSongToUserLibrary(userList[0].getSnotifyUniqueUserID(), &libraryResult[5], errorString);
+	snotify.AddSongToUserLibrary(userList[1].getSnotifyUniqueUserID(), &libraryResult[5], errorString);
+	snotify.AddSongToUserLibrary(userList[1].getSnotifyUniqueUserID(), &libraryResult[6], errorString);
+	snotify.AddSongToUserLibrary(userList[2].getSnotifyUniqueUserID(), &libraryResult[5], errorString);
+
+	snotify.UpdateRatingOnSong(userList[0].getSnotifyUniqueUserID(), libraryResult[5].getUniqueID(), 5);
+	snotify.UpdateRatingOnSong(userList[1].getSnotifyUniqueUserID(), libraryResult[5].getUniqueID(), 4);
+
+	unsigned int rating;
+	snotify.GetCurrentSongRating(userList[0].getSnotifyUniqueUserID(), libraryResult[5].getUniqueID(), rating);
+
+	std::cout << userList[0].first << " " << userList[0].last << " rated " << libraryResult[5].name << " " << rating << std::endl;
+
+	snotify.GetCurrentSongRating(userList[1].getSnotifyUniqueUserID(), libraryResult[5].getUniqueID(), rating);
+
+	std::cout << userList[1].first << " " << userList[1].last << " rated " << libraryResult[5].name << " " << rating << std::endl;
+
+	snotify.GetCurrentSongRating(userList[2].getSnotifyUniqueUserID(), libraryResult[5].getUniqueID(), rating);
+
+	std::cout << userList[2].first << " " << userList[2].last << " rated " << libraryResult[5].name << " " << rating << std::endl;
+
+	cSong* librarySecond;
+	unsigned int librarySecondLength;
+	snotify.GetUsersSongLibrary(userList[1].getSnotifyUniqueUserID(), librarySecond, librarySecondLength);
+	std::cout << "Library for " << userList[1].first <<" "<< userList[1].last << "|| Songs are: ";
+	for (unsigned int x = 0; x < librarySecondLength; x++) {
+		std::cout << librarySecond[x].artist << " - " << librarySecond[x].name << std::endl;
+	}
+
+	snotify.DeleteSong(libraryResult[5].getUniqueID(), errorString);
+
+	snotify.GetUsersSongLibrary(userList[1].getSnotifyUniqueUserID(), librarySecond, librarySecondLength);
+	std::cout << "Deleted a song. Library for " << userList[1].first << " " << userList[1].last << "|| Songs are: ";
+	for (unsigned int x = 0; x < librarySecondLength; x++) {
+		std::cout << librarySecond[x].artist << " - " << librarySecond[x].name << std::endl;
+	}
+
+	snotify.DeleteUser(userList[1].getSnotifyUniqueUserID(), errorString);
+	snotify.GetUsers(userList, userLength);
+	std::cout << "Deleted someone. User list length of " << userLength << "|| Users are: ";
+	for (unsigned int x = 0; x < userLength; x++) {
+		std::cout << userList[x].last << " , " << userList[x].first << " (" << userList[x].SIN << ")" << std::endl;
+	}
+	std::cout << std::endl;
+
 	if (errorString.empty()) {
 		std::cout << "All operations completed successfully!" << std::endl;
 	}

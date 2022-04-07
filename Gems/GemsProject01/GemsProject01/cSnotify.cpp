@@ -172,8 +172,8 @@ bool cSnotify::UpdateSong(cSong* pSong, std::string& errorString) {
 // ************************************************************************
 bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString) {
 	cCurtLinkedList <cPair<unsigned int, cSong*>>* result = songList.getAtIndex(UniqueSongID);
+	bool found = false;
 	if (result != 0 && result->get_size() > 0) {
-		result->empty();
 		cCurtLinkedList <cPair<unsigned int, cPerson*>>* usersWithSong = songsByUser.getAtIndex(UniqueSongID); 
 		if (usersWithSong->get_size() > 0) {
 			usersWithSong->moveToHead();
@@ -190,12 +190,14 @@ bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString) {
 				}
 				// We are either at the tail, or have found our result. Double check which one.
 				if (usersLibrary->current->data.Second->getUniqueID() == UniqueSongID) {
+					found = true;
 					delete usersLibrary->getCurrent().Second;
 					usersLibrary->deleteNode();
 				}
 				usersWithSong->moveForward();
 			}
 			//Also handle tail
+			if (!found)
 			{
 				cCurtLinkedList <cPair<unsigned int, cSong*>>* usersLibrary = userSongLibrary.getAtIndex(usersWithSong->getCurrent().Second->getSnotifyUniqueUserID());
 				if (usersLibrary->get_size() == 0) {
@@ -216,6 +218,7 @@ bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString) {
 			}
 		}
 
+		result->empty();
 		return true;
 	}
 	//We mustn't have been able to find the song.
