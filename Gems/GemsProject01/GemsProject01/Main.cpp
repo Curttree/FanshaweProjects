@@ -14,7 +14,7 @@ int main()
 	srand(time(NULL));
 	std::string errorString;
 	cPersonGenerator personGenerator;
-	personGenerator.LoadCensusFiles("baby.csv","surname.csv","Street_Names.csv",errorString);
+	personGenerator.LoadCensusFiles("yob1992.csv","Names_2010Census.csv","Street_Names.csv",errorString);
 
 	cMusicGenerator music;
 	music.LoadMusicInformation("hot_stuff_2.csv", errorString);

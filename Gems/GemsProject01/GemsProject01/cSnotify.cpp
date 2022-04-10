@@ -264,6 +264,41 @@ bool cSnotify::RemoveSongFromUserLibrary(unsigned int snotifyUserID, unsigned in
 	while (usersLibrary->current != usersLibrary->tail && usersLibrary->current->data.Second->getUniqueID() != SnotifySongID) {
 		usersLibrary->moveForward();
 	}
+
+	//Remove from the sorted versions of the library.
+	cCurtLinkedList <cPair<unsigned int, cSong*>>* byArtist = userSongLibraryByArtist.getAtIndex(snotifyUserID);
+	if (byArtist->get_size() == 0) {
+		errorString = "ERROR: User does not have this song in their library.";
+		return false;
+	}
+
+	byArtist->moveToHead();
+	while (byArtist->current != byArtist->tail && byArtist->current->data.Second->getUniqueID() != SnotifySongID) {
+		byArtist->moveForward();
+	}
+
+	if (byArtist->current->data.Second->getUniqueID() == SnotifySongID) {
+		//Don't delete the object, that'll come later. Just remove the node.
+		byArtist->deleteNode();
+	}
+
+	cCurtLinkedList <cPair<unsigned int, cSong*>>* byName = userSongLibraryByName.getAtIndex(snotifyUserID);
+	if (byName->get_size() == 0) {
+		errorString = "ERROR: User does not have this song in their library.";
+		return false;
+	}
+
+	byName->moveToHead();
+	while (byName->current != byName->tail && byName->current->data.Second->getUniqueID() != SnotifySongID) {
+		byName->moveForward();
+	}
+
+	if (byName->current->data.Second->getUniqueID() == SnotifySongID) {
+		//Don't delete the object, that'll come later. Just remove the node.
+		byName->deleteNode();
+	}
+
+	// We have removed nodes from the other libraries. Now handle our initial list.
 	// We are either at the tail, or have found our result. Double check which one.
 	if (usersLibrary->current->data.Second->getUniqueID() == SnotifySongID) {
 		//Since this is a copy, we can delete the object.
