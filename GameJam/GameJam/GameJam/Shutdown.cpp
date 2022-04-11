@@ -2,6 +2,9 @@
 
 bool g_ShutDown(GLFWwindow* pWindow)
 {
+	::g_pGameEngine->Destroy();
+
+	delete ::g_pGameEngine;
 
 	delete ::g_pShaderManager;
 

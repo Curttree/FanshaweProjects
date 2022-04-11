@@ -176,7 +176,7 @@ int main(void) {
     ::g_pDebugSphere->bUseObjectDebugColour = true;
     ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     ::g_pDebugSphere->bDontLight = true;
-    ::g_pDebugSphere->scale = 1.0f;
+    ::g_pDebugSphere->scale = glm::vec3(1.0f);
     ::g_pDebugSphere->positionXYZ = ::g_pTheLights->theLights[0].position;
     // Give this a friendly name
     ::g_pDebugSphere->friendlyName = "Debug Sphere";
@@ -294,7 +294,7 @@ int main(void) {
 
     // Mimics a skybox
     pSkybox->meshName = "Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply";
-    pSkybox->scale = 5'000'000.0f;
+    pSkybox->scale = glm::vec3(5'000'000.0f);
 
     pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
 
@@ -433,7 +433,7 @@ int main(void) {
 
             // For now, place quad on the right side
             ::g_pFullScreenQuad->positionXYZ = glm::vec3( 0.0f, 0.0f, 500.0f);
-            ::g_pFullScreenQuad->scale = 100.0f;
+            ::g_pFullScreenQuad->scale = glm::vec3(100.0f);
             //            ::g_pFullScreenQuad->bIsWireframe = true;
             ::g_pFullScreenQuad->bIsWireframe = false;
             ::g_pFullScreenQuad->bDontLight = true;
@@ -555,7 +555,7 @@ void DrawDebugObjects(
         // Draw the sphere
 
         ::g_pDebugSphere->positionXYZ = sphereLocation;
-        ::g_pDebugSphere->scale = 5.0f;
+        ::g_pDebugSphere->scale = glm::vec3(5.0f);
         ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
 
         DrawObject(::g_pDebugSphere,
@@ -579,7 +579,7 @@ void DrawDebugObjects(
 
         ::g_pDebugSphere->positionXYZ = currentLight.position;
 
-        ::g_pDebugSphere->scale = 0.1f;
+        ::g_pDebugSphere->scale = glm::vec3(0.1f);
         ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
         DrawObject(::g_pDebugSphere,
             matModelDS,
@@ -613,10 +613,10 @@ void DrawDebugObjects(
             currentLight.atten.z, /*quadratic atten*/
             cLightHelper::DEFAULTMAXITERATIONS);
         // Draw a red sphere at 95%
-        ::g_pDebugSphere->scale = distTo95Percent;
+        ::g_pDebugSphere->scale = glm::vec3(distTo95Percent);
         ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
-        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
+        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale.x < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
 
         DrawObject(::g_pDebugSphere,
             matModelDS,
@@ -634,9 +634,9 @@ void DrawDebugObjects(
             currentLight.atten.z, /*quadratic atten*/
             cLightHelper::DEFAULTMAXITERATIONS);
         // Draw a red sphere at 50%
-        ::g_pDebugSphere->scale = distTo50Percent;
+        ::g_pDebugSphere->scale = glm::vec3(distTo50Percent);
         ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
-        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
+        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale.x < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
         DrawObject(::g_pDebugSphere,
             matModelDS,
             matModel_Location,
@@ -653,9 +653,9 @@ void DrawDebugObjects(
             currentLight.atten.z, /*quadratic atten*/
             cLightHelper::DEFAULTMAXITERATIONS);
         // Draw a red sphere at 25%
-        ::g_pDebugSphere->scale = distTo25Percent;
+        ::g_pDebugSphere->scale = glm::vec3(distTo25Percent);
         ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
+        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale.x < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
         DrawObject(::g_pDebugSphere,
             matModelDS,
             matModel_Location,
@@ -672,9 +672,9 @@ void DrawDebugObjects(
             currentLight.atten.z, /*quadratic atten*/
             cLightHelper::DEFAULTMAXITERATIONS);
         // Draw a red sphere at 5%
-        ::g_pDebugSphere->scale = distTo5Percent;
+        ::g_pDebugSphere->scale = glm::vec3(distTo5Percent);
         ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
+        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale.x < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
         DrawObject(::g_pDebugSphere,
             matModelDS,
             matModel_Location,

@@ -265,9 +265,7 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
     // *****************************************************
     // Scale the model
     glm::mat4 matScale = glm::scale(glm::mat4(1.0f),
-        glm::vec3(pCurrentMesh->scale,  // Scale in X
-            pCurrentMesh->scale,  // Scale in Y
-            pCurrentMesh->scale));// Scale in Z
+        pCurrentMesh->scale);// Scale
 //matModel = matModel * matScale;
 // *****************************************************
 

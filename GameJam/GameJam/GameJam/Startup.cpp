@@ -2,6 +2,7 @@
 
 bool g_StartUp(GLFWwindow* pWindow)
 {
+	::g_pGameEngine = new cGameEngine();
 
 	::g_pFlyCamera = new cFlyCamera();
 

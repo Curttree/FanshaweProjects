@@ -58,6 +58,18 @@
     <Filter Include="Graphics\FBO">
       <UniqueIdentifier>{cf46654b-4242-40e2-9a58-405dfa286b6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{fad7f8fb-50e9-4638-b277-ae530fff8693}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation\Commands">
+      <UniqueIdentifier>{29f3481e-1219-49af-aeee-8f2966f7399c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Managers">
+      <UniqueIdentifier>{c0ad0868-b17f-4281-9f95-ccfe60372241}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enums">
+      <UniqueIdentifier>{0da35024-a0d7-4067-8f02-a51d687d098d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -95,9 +107,6 @@
     </ClCompile>
     <ClCompile Include="globals.cpp">
       <Filter>Global</Filter>
-    </ClCompile>
-    <ClCompile Include="cMesh.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="GLFW_error_callback.cpp">
       <Filter>Input</Filter>
@@ -162,6 +171,45 @@
     <ClCompile Include="cFBO\cFBO.cpp">
       <Filter>Graphics\FBO</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\include\Graphics\AssimpModel.cpp">
+      <Filter>Graphics\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Animation\AnimationSequence.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Animation\AnimationSystem.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Animation\BoneSystem.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Animation\cBone.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Animation\cCommand_ConsoleOutput.cpp">
+      <Filter>Animation\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Animation\cCommand_PlaySound.cpp">
+      <Filter>Animation\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\cEntity.cpp">
+      <Filter>GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Graphics\MeshData.cpp">
+      <Filter>Graphics\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Conversion.cpp">
+      <Filter>GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\cMesh.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Animation\AudioManager.cpp">
+      <Filter>GameEngine\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>GameEngine\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -193,9 +241,6 @@
     </ClInclude>
     <ClInclude Include="cWinContextMenu.h">
       <Filter>Win32</Filter>
-    </ClInclude>
-    <ClInclude Include="cMesh.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="TextureMapping\C24BitBMPpixel.h">
       <Filter>Graphics\Textures\Headers</Filter>
@@ -257,6 +302,66 @@
     <ClInclude Include="cFBO\cFBO.h">
       <Filter>Graphics\FBO</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\AssimpModel.h">
+      <Filter>Graphics\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\MeshData.h">
+      <Filter>Graphics\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Animation\Animation.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Animation\AnimationSequence.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Animation\AnimationSystem.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Animation\BoneSystem.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Animation\cBone.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Animation\cBoneHierarchy.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Animation\cCommand_ConsoleOutput.h">
+      <Filter>Animation\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Animation\cCommand_PlaySound.h">
+      <Filter>Animation\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\System.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\cEntity.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Animation\Component.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Animation\iCommand.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Animation\KeyFrame.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Conversion.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\cMesh.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Animation\AudioManager.h">
+      <Filter>GameEngine\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>GameEngine\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Animation\EasingType.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\fragShader_01.glsl">
@@ -264,6 +369,18 @@
     </None>
     <None Include="assets\shaders\vertShader_01.glsl">
       <Filter>Graphics\ShaderManager\Shaders</Filter>
+    </None>
+    <None Include="assimp-vc142-md.dll">
+      <Filter>Graphics\Models</Filter>
+    </None>
+    <None Include="assimp-vc142-mdd.dll">
+      <Filter>Graphics\Models</Filter>
+    </None>
+    <None Include="assimp-vc142-mt.dll">
+      <Filter>Graphics\Models</Filter>
+    </None>
+    <None Include="assimp-vc142-mtd.dll">
+      <Filter>Graphics\Models</Filter>
     </None>
   </ItemGroup>
 </Project>

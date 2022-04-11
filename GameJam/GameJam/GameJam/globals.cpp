@@ -1,5 +1,7 @@
 #include "globals.h"
 
+cGameEngine* g_pGameEngine = NULL;
+
 cFlyCamera* g_pFlyCamera = NULL;
 
 //glm::vec3 g_cameraEye = glm::vec3(0.0f, 0.0f, +4.0f);

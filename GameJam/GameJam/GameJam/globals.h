@@ -12,6 +12,7 @@
 #include "cMesh.h"
 #include <vector>
 #include <map>
+#include "cGameEngine.h"
 
 
 // These are all things that are "project global", 
@@ -23,6 +24,7 @@ bool g_StartUp(GLFWwindow* pWindow);
 // Deletes global things, etc. 
 bool g_ShutDown(GLFWwindow* pWindow);
 
+extern cGameEngine* g_pGameEngine;
 
 // ************************************************
 //     ___                         

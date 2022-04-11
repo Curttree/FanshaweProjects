@@ -6,6 +6,8 @@
 #include <string>
 #include <map>
 #include "sVertex_types.h"
+#include <assimp/Importer.hpp>
+#include "MeshData.h"
 
 struct sModelDrawInfo
 {
@@ -41,6 +43,8 @@ public:
 	bool LoadModelIntoVAO(std::string fileName, 
 						  unsigned int shaderProgramID);
 
+	bool LoadMeshWithAssimp(const std::string& filename);
+
 	bool FindDrawInfoByModelName(std::string filename,
 								 sModelDrawInfo &drawInfo);
 
@@ -59,6 +63,13 @@ private:
 	std::string m_FilePath;
 
 	std::string m_lastError;
+	Assimp::Importer m_AssimpImporter;
+	unsigned int nextID = 1;
+
+	typedef std::map<unsigned int, MeshData*>::iterator id_mesh_iterator;
+	typedef std::map<std::string, unsigned int>::iterator name_id_iterator;
+	std::map<unsigned int, MeshData*> m_map_pMeshes;
+	std::map<std::string/*name*/, unsigned int/*id*/> m_map_NameToId;
 };
 
 #endif	// _cVAOManager_HG_

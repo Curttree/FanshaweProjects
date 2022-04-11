@@ -5,11 +5,99 @@
 #include <extern/glm/vec3.hpp>
 #include <extern/glm/vec4.hpp>
 
+#include "../Graphics/AssimpModel.h"
+
 #include <vector>
 #include <sstream>
 #include <fstream>
+#include <glm/ext/matrix_float4x4.hpp>
+#include <glm/ext/quaternion_float.hpp>
+#include <Graphics/MeshData.h>
+#include <Conversion.h>
+#include <glm/gtx/matrix_decompose.hpp>
 
 bool LoadPLYModelFromFile(std::string fileName, sModelDrawInfo& drawInfo);
+
+typedef struct sFloat4
+{
+	float x, y, z, w;
+} sFloat4;
+
+typedef struct sUint4
+{
+	unsigned int x, y, z, w;
+} sUint4;
+
+typedef struct sInt4
+{
+	int x, y, z, w;
+} sInt4;
+
+typedef struct sVertex_p4t4n4
+{
+	sFloat4 Pos;
+	sFloat4 TexUVx2;
+	sFloat4 Normal;
+} sVertex_p4t4n4;
+
+typedef struct sVertex_p4t4n4b4
+{
+	sFloat4 Pos;
+	sFloat4 TexUVx2;
+	sFloat4 Normal;
+	sFloat4 BoneWeights;
+} sVertex_p4t4n4b4;
+
+typedef struct sVertex_p4t4n4b4i4
+{
+	sFloat4 Pos;
+	sFloat4 TexUVx2;
+	sFloat4 Normal;
+	sFloat4 BoneWeights;
+	sUint4  BoneIDs;
+} sVertex_p4t4n4b4i4;
+
+void MapBoneHierarchy(aiNode* node, cBoneHierarchy& boneHierarchy, const std::map<aiNode*, unsigned int>& aiNodePtrToBoneIdx, int depth = 0)
+{
+	// Create a recursive Function for this
+	cBone* bone = nullptr;
+	if (node->mParent != nullptr)
+	{
+		auto nodeIt = aiNodePtrToBoneIdx.find(node);
+		if (nodeIt != aiNodePtrToBoneIdx.end())
+		{
+			bone = boneHierarchy.bones[nodeIt->second];
+			if (boneHierarchy.rootBone == nullptr)
+				boneHierarchy.rootBone = bone;
+		}
+	}
+
+	printf("\n");
+	for (int i = 0; i < depth; i++)
+		printf("  ");
+
+	if (bone != nullptr)
+		printf("[b] ");
+
+	printf("%s", node->mName.C_Str());
+
+	for (int nodeIdx = 0; nodeIdx < node->mNumChildren; nodeIdx++)
+	{
+		aiNode* child = node->mChildren[nodeIdx];
+
+		if (node->mParent != nullptr && bone != nullptr)
+		{
+			auto childIt = aiNodePtrToBoneIdx.find(child);
+			if (childIt != aiNodePtrToBoneIdx.end())
+			{
+				cBone* childBone = boneHierarchy.bones[childIt->second];
+				childBone->SetParent(bone);
+				bone->AddChild(childBone);
+			}
+		}
+		MapBoneHierarchy(child, boneHierarchy, aiNodePtrToBoneIdx, depth + 1);
+	}
+}
 
 sModelDrawInfo::sModelDrawInfo()
 {
@@ -334,6 +422,386 @@ bool LoadPLYModelFromFile(std::string fileName, sModelDrawInfo& drawInfo)
 
     return true;
 }
+
+bool cVAOManager::LoadMeshWithAssimp(const std::string& filename)
+{
+	const aiScene* scene = m_AssimpImporter.ReadFile(m_FilePath + filename,
+		aiProcess_Triangulate |
+		aiProcess_GenSmoothNormals |
+		aiProcess_PopulateArmatureData |
+		aiProcess_FixInfacingNormals |
+		aiProcess_LimitBoneWeights);
+
+
+	if (scene == nullptr)
+	{
+		printf("MeshManager::LoadMeshWithAssimp: ERROR: Failed to load file %s\n", filename.c_str());
+		return false;
+	}
+
+	if (!scene->HasMeshes())
+	{
+		printf("MeshManager::LoadMeshWithAssimp: ERROR: Model file does not contain any meshes %s\n", filename.c_str());
+		return false;
+	}
+
+	MeshData* meshData = new MeshData();
+	aiMesh* mesh = scene->mMeshes[0];
+	meshData->mGlobalInvereseTransformation = Convert(scene->mRootNode->mTransformation);
+	meshData->mGlobalInvereseTransformation = glm::inverse(meshData->mGlobalInvereseTransformation);
+
+	meshData->LoadBones(mesh);
+	meshData->LoadNodes(scene->mRootNode, true);
+
+	aiNode* rootNode;
+	{
+		std::map<unsigned int, std::vector<std::pair<unsigned int, float>>> map_BoneWeights;
+		//----------------------------------------------------
+		//-- Iterate through all of the Bones
+		unsigned int NumBones = mesh->mNumBones;
+		for (unsigned int BoneIndex = 0; BoneIndex != NumBones; BoneIndex++)
+		{
+			aiBone* CurrentBone = mesh->mBones[BoneIndex];
+
+			aiString BoneName = CurrentBone->mName;
+			aiMatrix4x4 offsetMatrix = CurrentBone->mOffsetMatrix;
+
+			unsigned int NumWeights = CurrentBone->mNumWeights;
+			for (unsigned int WeightIndex = 0; WeightIndex != NumWeights; WeightIndex++)
+			{
+				aiVertexWeight VertexWeight = CurrentBone->mWeights[WeightIndex];
+
+				unsigned int VertexID = VertexWeight.mVertexId;
+				float Weight = VertexWeight.mWeight;
+
+				map_BoneWeights[VertexID].push_back(std::pair<unsigned int, float>(BoneIndex, Weight));
+				//printf("%d, %.2f\n", BoneIndex, Weight);
+			}
+		}
+
+		for (unsigned int VertexIndex = 0; VertexIndex != mesh->mNumVertices; VertexIndex++)
+		{
+			for (unsigned int x = map_BoneWeights[VertexIndex].size(); x < 4; x++)
+			{
+				map_BoneWeights[VertexIndex].push_back(std::pair<unsigned int, float>(0, 0.0f));
+			}
+		}
+
+		unsigned int numVerticesInVertArray = mesh->mNumVertices;
+		unsigned int numIndicesInIndexArray = mesh->mNumFaces * 3;
+		sVertex_p4t4n4b4i4* pTempVertArray = new sVertex_p4t4n4b4i4[numIndicesInIndexArray * 2];
+		GLuint* pIndexArrayLocal = new GLuint[numIndicesInIndexArray * 2];
+		int count = 0;
+		int index = 0;
+
+		//printf("\n\nfaces:\n");
+		unsigned int vertArrayIndex = 0;
+		for (unsigned int faceIdx = 0; faceIdx != mesh->mNumFaces; faceIdx++)
+		{
+			aiFace face = mesh->mFaces[faceIdx];
+
+			for (int idx = 0; idx != 3; idx++)
+			{
+				unsigned int index = face.mIndices[idx];
+				//printf("%d ", index);
+
+				aiVector3D position = mesh->mVertices[face.mIndices[idx]];
+				pTempVertArray[vertArrayIndex].Pos.x = position.x;
+				pTempVertArray[vertArrayIndex].Pos.y = position.y;
+				pTempVertArray[vertArrayIndex].Pos.z = position.z;
+				pTempVertArray[vertArrayIndex].Pos.w = 1.0f;
+
+				if (mesh->HasTextureCoords(0)) {
+					aiVector3D textureCoord = mesh->mTextureCoords[0][face.mIndices[idx]];
+					pTempVertArray[vertArrayIndex].TexUVx2.x = textureCoord.x;
+					pTempVertArray[vertArrayIndex].TexUVx2.y = textureCoord.y;
+					pTempVertArray[vertArrayIndex].TexUVx2.z = textureCoord.z;
+					pTempVertArray[vertArrayIndex].TexUVx2.w = 0.0f;
+				}
+				else
+				{
+					pTempVertArray[vertArrayIndex].TexUVx2.x = 0.0f;
+					pTempVertArray[vertArrayIndex].TexUVx2.y = 0.0f;
+					pTempVertArray[vertArrayIndex].TexUVx2.z = 0.0f;
+					pTempVertArray[vertArrayIndex].TexUVx2.w = 0.0f;
+				}
+
+				aiVector3D normal = mesh->mNormals[face.mIndices[idx]];
+				pTempVertArray[vertArrayIndex].Normal.x = normal.x;
+				pTempVertArray[vertArrayIndex].Normal.y = normal.y;
+				pTempVertArray[vertArrayIndex].Normal.z = normal.z;
+				pTempVertArray[vertArrayIndex].Normal.w = 0.0f;
+
+				pTempVertArray[vertArrayIndex].BoneIDs.x = meshData->mVertexBoneData[index].IDs[0];;
+				pTempVertArray[vertArrayIndex].BoneIDs.y = meshData->mVertexBoneData[index].IDs[1];;
+				pTempVertArray[vertArrayIndex].BoneIDs.z = meshData->mVertexBoneData[index].IDs[2];;
+				pTempVertArray[vertArrayIndex].BoneIDs.w = meshData->mVertexBoneData[index].IDs[3];;
+
+				// We will come back to this!!
+				// Smoothing the bone transforms.
+				pTempVertArray[vertArrayIndex].BoneWeights.x = meshData->mVertexBoneData[index].weights[0];;
+				pTempVertArray[vertArrayIndex].BoneWeights.y = meshData->mVertexBoneData[index].weights[1];;
+				pTempVertArray[vertArrayIndex].BoneWeights.z = meshData->mVertexBoneData[index].weights[2];;
+				pTempVertArray[vertArrayIndex].BoneWeights.w = meshData->mVertexBoneData[index].weights[3];;
+
+				pIndexArrayLocal[vertArrayIndex] = vertArrayIndex;
+
+				vertArrayIndex++;
+			}
+		}
+
+		struct BoneInfo
+		{
+			glm::mat4 BoneOffset;
+		};
+
+		unsigned int numBones = 0;
+		std::vector<int> Bones;
+		std::vector<BoneInfo> boneInfo;
+		std::map<std::string, unsigned int> boneMapping;
+		for (unsigned int i = 0; i < mesh->mNumBones; ++i)
+		{
+			unsigned int boneIndex = 0;
+			std::string boneName(mesh->mBones[i]->mName.data);
+
+			if (boneMapping.find(boneName) == boneMapping.end())
+			{
+				boneIndex = numBones;
+				numBones++;
+				BoneInfo bi;
+				boneInfo.push_back(bi);
+			}
+			else
+			{
+				boneIndex = boneMapping[boneName];
+			}
+
+			boneMapping[boneName] = boneIndex;
+			Convert(mesh->mBones[i]->mOffsetMatrix, boneInfo[boneIndex].BoneOffset);
+
+			for (unsigned int j = 0; j < mesh->mBones[i]->mNumWeights; ++j)
+			{
+				unsigned int vertexId = mesh->mBones[i]->mWeights[j].mVertexId;
+				float weight = mesh->mBones[i]->mWeights[j].mWeight;
+
+			}
+		}
+
+		if (mesh->HasBones())
+		{
+			// Create bone hierarchy
+			aiNode* rootNode = nullptr;
+			std::map<aiNode*, unsigned int> aiNodePtrToBoneIdx;
+			meshData->boneHierarchy.currentTransforms.resize(mesh->mNumBones);
+
+			for (int boneIdx = 0; boneIdx < mesh->mNumBones; ++boneIdx)
+			{
+				aiBone* assimpBone = mesh->mBones[boneIdx];
+				aiNode* assimpNode = assimpBone->mNode;
+
+				//printf("\n%d: ", boneIdx);
+				for (int i = 0; i < assimpBone->mNumWeights; ++i)
+				{
+					//printf(" %d", assimpBone->mWeights[i].mVertexId);
+					//if (pTempVertArray[assimpBone->mWeights[i].mVertexId].BoneIDs.x == 0)
+					pTempVertArray[assimpBone->mWeights[i].mVertexId].BoneIDs.x = boneIdx;
+					//pTempVertArray[assimpBone->mWeights[i].mVertexId].BoneWeights.x = assimpBone->mWeights[i].mWeight;
+				}
+				//printf("\n");
+
+				// Convert aiMatrix to glm Matrix
+				aiVector3D assimpScale;
+				aiVector3D assimpRotation;
+				aiVector3D assimpPosition;
+
+				glm::vec3 glmScale;
+				glm::quat glmOrientation;
+				glm::vec3 glmTranslation;
+				glm::vec3 glmSkew;
+				glm::vec4 glmPerspective;
+
+				//assimpBone->mOffsetMatrix.Decompose(assimpScale, assimpRotation, assimpPosition);
+
+				//Convert(assimpScale, glmScale);
+				//Convert(assimpRotation, glmEulerRotation);
+				//Convert(assimpPosition, glmPosition);
+
+				glm::mat4 glmOffsetMatrix;
+				glm::mat4 glmTransformMatrix;
+				Convert(assimpBone->mOffsetMatrix, glmOffsetMatrix);
+				Convert(assimpNode->mTransformation, glmTransformMatrix);
+
+				glm::decompose(glmOffsetMatrix, glmScale, glmOrientation, glmTranslation, glmSkew, glmPerspective);
+
+				cBone* bone = new cBone();
+				bone->SetRotation(glmOrientation);
+				bone->SetScale(glmScale);
+
+				glm::decompose(glmTransformMatrix, glmScale, glmOrientation, glmTranslation, glmSkew, glmPerspective);
+
+				bone->SetPosition(glmTranslation);
+
+				glm::mat4 BoneTranslationMatrix = glm::translate(glm::mat4(1.0f), glmTranslation);
+				glm::mat4 BoneRotationMatrix = glm::mat4_cast(glmOrientation);
+				glm::mat4 BoneScaleMatrix = glm::scale(glm::mat4(1.0f), glmScale);
+				glm::mat4 BoneModelMatrix = BoneTranslationMatrix * BoneRotationMatrix * BoneScaleMatrix;
+
+				meshData->boneHierarchy.currentTransforms[boneIdx].value = BoneModelMatrix;
+
+				//bone->SetModelMatrix(meshData->boneHierarchy.currentTransforms[boneIdx].value);
+
+				bone->name = assimpBone->mName.C_Str();
+
+				aiNodePtrToBoneIdx[assimpNode] = meshData->boneHierarchy.bones.size();
+				meshData->boneHierarchy.bones.push_back(bone);
+
+				//printf("[%d] %s\n", boneIdx, bone->name.c_str());
+			}
+
+			rootNode = mesh->mBones[0]->mNode;
+			while (rootNode->mParent != nullptr)
+				rootNode = rootNode->mParent;
+
+			MapBoneHierarchy(rootNode, meshData->boneHierarchy, aiNodePtrToBoneIdx);
+		}
+
+		if (scene->HasAnimations())
+		{
+			unsigned int numAnimations = scene->mNumAnimations;
+
+			for (int animIdx = 0; animIdx < 1; ++animIdx)
+			{
+				aiAnimation* aiAnim = scene->mAnimations[animIdx];
+
+				Animation* animation = new Animation();
+				animation->ticksPerSecond = aiAnim->mTicksPerSecond;
+				animation->numTicks = aiAnim->mDuration;
+				animation->name = aiAnim->mName.C_Str();
+
+				printf("Animation:\n");
+				printf(" Name: %s\n", animation->name.c_str());
+				printf(" TicksPerSecond: %d\n", animation->ticksPerSecond);
+				printf(" NumTicks: %d\n", animation->numTicks);
+
+				unsigned int numChannels = aiAnim->mNumChannels;
+
+				for (int channelIdx = 0; channelIdx < numChannels; ++channelIdx)
+				{
+					aiNodeAnim* aiNode = aiAnim->mChannels[channelIdx];
+
+					AnimationNode* node = new AnimationNode();
+					node->name = aiNode->mNodeName.C_Str();
+
+					animation->animationNodes.push_back(node);
+
+					printf("  [%d] %s\n", channelIdx, node->name.c_str());
+
+					unsigned int numPositionKeys = aiNode->mNumPositionKeys;
+					printf("   Positions (%d):\n", numPositionKeys);
+					for (int positionKeyIdx = 0; positionKeyIdx < numPositionKeys; ++positionKeyIdx)
+					{
+						aiVectorKey aiKeyframe = aiNode->mPositionKeys[positionKeyIdx];
+						KeyFramePosition keyframe;
+						keyframe.time = aiKeyframe.mTime / animation->ticksPerSecond;
+						Convert(aiKeyframe.mValue, keyframe.position);
+
+						node->keyFramePositions.push_back(keyframe);
+					}
+
+					unsigned int numScaleKeys = aiNode->mNumScalingKeys;
+					//printf("   Scales (%d):\n", numScaleKeys);
+					for (int scaleKeyIdx = 0; scaleKeyIdx < numScaleKeys; ++scaleKeyIdx)
+					{
+						aiVectorKey aiKeyframe = aiNode->mScalingKeys[scaleKeyIdx];
+
+						KeyFrameScale keyframe;
+						keyframe.time = aiKeyframe.mTime / animation->ticksPerSecond;
+						Convert(aiKeyframe.mValue, keyframe.scale);
+
+						node->keyFrameScales.push_back(keyframe);
+					}
+
+					unsigned int numRotationKeys = aiNode->mNumRotationKeys;
+					//printf("   Rotations (%d):\n", numRotationKeys);
+					for (int rotationKeyIdx = 0; rotationKeyIdx < numRotationKeys; ++rotationKeyIdx)
+					{
+						aiQuatKey aiKeyframe = aiNode->mRotationKeys[rotationKeyIdx];
+
+						KeyFrameRotation keyframe;
+						keyframe.time = aiKeyframe.mTime / animation->ticksPerSecond;
+						Convert(aiKeyframe.mValue, keyframe.rotation);
+
+						node->keyFrameRotations.push_back(keyframe);
+					}
+				}
+
+				meshData->animations.push_back(animation);
+			}
+		}
+
+		meshData->filename = filename;
+		//meshData->objFile = model;
+		meshData->numTriangles = mesh->mNumFaces;
+
+		glGenVertexArrays(1, &meshData->GL_VBO_ID);
+		glBindVertexArray(meshData->GL_VBO_ID);
+		//CheckGLError();
+
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
+		glEnableVertexAttribArray(3);
+		glEnableVertexAttribArray(4);
+		//CheckGLError();
+
+		glGenBuffers(1, &meshData->GL_VertexBuffer_ID);
+		glGenBuffers(1, &meshData->GL_IndexBuffer_ID);
+		//CheckGLError();
+
+		glBindBuffer(GL_ARRAY_BUFFER, meshData->GL_VertexBuffer_ID);
+		//CheckGLError();
+
+		unsigned int totalVertBufferSizeBYTES = numIndicesInIndexArray * sizeof(sVertex_p4t4n4b4i4); ;
+		glBufferData(GL_ARRAY_BUFFER, totalVertBufferSizeBYTES, pTempVertArray, GL_DYNAMIC_DRAW);
+		//CheckGLError();
+
+		unsigned int bytesInOneVertex = sizeof(sVertex_p4t4n4b4i4);
+		unsigned int byteOffsetToPosition = offsetof(sVertex_p4t4n4b4i4, Pos);
+		unsigned int byteOffsetToNormal = offsetof(sVertex_p4t4n4b4i4, Normal);
+		unsigned int byteOffsetToUVCoords = offsetof(sVertex_p4t4n4b4i4, TexUVx2);
+		unsigned int byteOffsetToBoneWeights = offsetof(sVertex_p4t4n4b4i4, BoneWeights);
+		unsigned int byteOffsetToBoneIDs = offsetof(sVertex_p4t4n4b4i4, BoneIDs);
+
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToPosition);
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToUVCoords);
+		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToNormal);
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToBoneWeights);
+		glVertexAttribPointer(4, 4, GL_INT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToBoneIDs);
+		//CheckGLError();
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshData->GL_IndexBuffer_ID);
+		//CheckGLError();
+
+		unsigned int sizeOfIndexArrayInBytes = numIndicesInIndexArray * sizeof(GLuint);
+
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeOfIndexArrayInBytes, pIndexArrayLocal, GL_DYNAMIC_DRAW);
+		//CheckGLError();
+
+		glBindVertexArray(0);
+		//CheckGLError();
+
+		delete[] pTempVertArray;
+		delete[] pIndexArrayLocal;
+
+		meshData->meshId = nextID;
+		m_map_NameToId[filename] = nextID;
+		m_map_pMeshes[nextID] = meshData;
+		nextID++;
+	}
+
+	return false;
+}
+
 
 std::string cVAOManager::getLastError(bool bAndClear /*=true*/)
 {
