@@ -190,6 +190,7 @@
     <ClCompile Include="cWinContextMenu.cpp" />
     <ClCompile Include="DrawObject_function.cpp" />
     <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="GameplayManager.cpp" />
     <ClCompile Include="GLFW_error_callback.cpp" />
     <ClCompile Include="GLFW_key_callback.cpp" />
     <ClCompile Include="globals.cpp" />
@@ -248,6 +249,7 @@
     <ClInclude Include="cGameEngine.h" />
     <ClInclude Include="cWinContextMenu.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="GameplayManager.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="TextureMapping\C24BitBMPpixel.h" />
     <ClInclude Include="TextureMapping\cBasicTextureManager.h" />

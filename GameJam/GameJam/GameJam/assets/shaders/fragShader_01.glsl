@@ -92,6 +92,9 @@ uniform sampler2D texture_06;		// GL_TEXTURE_2D
 uniform sampler2D texture_07;		// GL_TEXTURE_2D
 uniform sampler2D texture_08;		// GL_TEXTURE_2D
 
+uniform bool bShowCrosshair;
+uniform sampler2D crosshair;		// GL_TEXTURE_2D
+
 uniform vec4 texture2D_Ratios0to3;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
 uniform vec4 texture2D_Ratios4to7;		//  = vec4( 1.0f, 0.0f, 0.0f, 0.0f );
 
@@ -199,7 +202,15 @@ void main()
 		// Tint the colour blue.
 		pixelOutputFragColour.b *= 1.25f;
 		pixelOutputFragColour.a = 1.0f;
-
+		
+		if (bShowCrosshair){
+			vec2 UVlookupCrosshair;
+			UVlookupCrosshair.x = gl_FragCoord.x / screenWidthHeight.x;	// Width
+			UVlookupCrosshair.y = gl_FragCoord.y / screenWidthHeight.y;	// Height
+			pixelOutputFragColour.r += texture(crosshair, UVlookupCrosshair).r;
+			pixelOutputFragColour.g += texture(crosshair, UVlookupCrosshair).g;
+			pixelOutputFragColour.b += texture(crosshair, UVlookupCrosshair).b;
+		}
 
 		// chromatic aberration example 
 		//vec3 sampleColour;

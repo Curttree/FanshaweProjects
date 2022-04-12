@@ -210,6 +210,9 @@
     <ClCompile Include="EntityManager.cpp">
       <Filter>GameEngine\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="GameplayManager.cpp">
+      <Filter>GameEngine\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -361,6 +364,9 @@
     </ClInclude>
     <ClInclude Include="..\common\include\Animation\EasingType.h">
       <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="GameplayManager.h">
+      <Filter>GameEngine\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

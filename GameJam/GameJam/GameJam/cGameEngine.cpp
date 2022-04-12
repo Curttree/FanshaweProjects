@@ -29,6 +29,8 @@ bool cGameEngine::Initialize(void)
 
 	g_pTextureManager = new cBasicTextureManager();
 
+	g_pGameplayManager = new GameplayManager();
+
 	return true;
 }
 
@@ -44,6 +46,8 @@ void cGameEngine::Destroy(void)
 	delete g_pTheLights;
 
 	delete g_pTextureManager;
+
+	delete g_pGameplayManager;
 }
 
 void cGameEngine::Update(float dt)

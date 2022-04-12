@@ -170,6 +170,23 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
     }
 
     {
+        //Crosshairs
+        GLint bShowCrossHair_LodID = g_GetUniformLocation(shaderProgram, "bShowCrosshair");
+        if (::g_pGameEngine->g_pGameplayManager->GetAiming()) {
+            glUniform1f(bShowCrossHair_LodID, (GLfloat)GL_TRUE);
+        }
+        else {
+            glUniform1f(bShowCrossHair_LodID, (GLfloat)GL_FALSE);
+        }
+        GLuint crosshairTextureNumber = ::g_pTextureManager->getTextureIDFromName("crosshair.bmp"); 
+        GLuint crosshairTextureUnit = 31;			// Texture unit go from 0 to 79
+        glActiveTexture(crosshairTextureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, crosshairTextureNumber);
+        GLint crosshairTexture_LocID = g_GetUniformLocation(shaderProgram, "crosshair");
+        glUniform1i(crosshairTexture_LocID, crosshairTextureUnit);
+    }
+
+    {
         //GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[3]);
         GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Skybox");
 

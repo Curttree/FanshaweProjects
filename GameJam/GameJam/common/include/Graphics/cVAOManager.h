@@ -29,6 +29,7 @@ struct sModelDrawInfo
 	// The "local" (i.e. "CPU side" temporary array)
 	sVertex_XYZW_RGBA_N_UV_T_B* pVertices;	//  = 0;
 	unsigned int* pIndices;
+
 };
 
 class cVAOManager

@@ -11,6 +11,8 @@ public:
 	void StartUp(void);
 	void ShutDown(void);
 
+	bool GetCollision(glm::vec3 initialPosition, glm::vec3 heading, float magnitude, glm::vec3& location);
+
 	void TimeStep(float deltaTime);
 
 	const std::vector<cEntity*>& GetEntities(void);

@@ -69,7 +69,7 @@ int main(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    pWindow = glfwCreateWindow(1200, 640, "Curtis Tremblay - Game Development Sandbox", NULL, NULL);
+    pWindow = glfwCreateWindow(1200, 640, "Curtis Tremblay - Game Jam Project", NULL, NULL);
 
     if (!pWindow)
     {
@@ -114,6 +114,7 @@ int main(void) {
 
     ::g_StartUp(pWindow);
 
+    ::g_pGameEngine->Initialize();
 
     cShaderManager::cShader vertShader;
     cShaderManager::cShader fragShader;
@@ -188,7 +189,7 @@ int main(void) {
     vecModelsToLoad.push_back("ISO_Shphere_flat_3div_xyz_n_rgba_uv.ply");
     vecModelsToLoad.push_back("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply");
     vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
-    vecModelsToLoad.push_back("HockeyPlayer.ply");
+    vecModelsToLoad.push_back("can.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -220,18 +221,19 @@ int main(void) {
     ::g_pTextureManager->SetBasePath("assets/textures");
 
     ::g_pTextureManager->Create2DTextureFromBMPFile("BrightColouredUVMap.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("ice.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("BrainNerve.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("crosshair.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;
     ::g_pTextureManager->SetBasePath("assets/textures/cubemaps");
     if (!::g_pTextureManager->CreateCubeTextureFromBMPFiles("Skybox",
-        "winterRiver_posX.bmp",    /* posX_fileName */
-        "winterRiver_negX.bmp",     /*negX_fileName */
-        "winterRiver2_negY.bmp",     /*negY_fileName*/
-        "winterRiver_posY.bmp",       /*posY_fileName*/
-        "winterRiver2_posZ.bmp",    /*posZ_fileName*/
-        "winterRiver2_negZ.bmp",      /*negZ_fileName*/
+        "uw_lf.bmp",    /* posX_fileName */
+        "uw_rt.bmp",     /*negX_fileName */
+        "uw_dn.bmp",     /*negY_fileName*/
+        "uw_up.bmp",       /*posY_fileName*/
+        "uw_ft.bmp",    /*posZ_fileName*/
+        "uw_bk.bmp",      /*negZ_fileName*/
         true, errorTextString))
     {
         std::cout << "Didn't load because: " << errorTextString << std::endl;
@@ -275,6 +277,9 @@ int main(void) {
 
 #pragma region Objects
 
+    // Place cans
+    ::g_pGameEngine->g_pGameplayManager->SetupScene();
+
     // TODO: If this has a large performance impact as scene grows, refactor.
     // Move objects with transparency to their own vector.
     for (cMesh* mesh : ::g_vec_pMeshes) {
@@ -297,6 +302,8 @@ int main(void) {
     pSkybox->scale = glm::vec3(5'000'000.0f);
 
     pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
+
+    ::g_pVAOManager->LoadMeshWithAssimp("Blobby.fbx");
 
 #pragma endregion
     while (!glfwWindowShouldClose(pWindow)) {
@@ -379,6 +386,7 @@ int main(void) {
 
         glUniformMatrix4fv(matProjection_Location, 1, GL_FALSE, glm::value_ptr(matProjection));
 
+        ::g_pGameEngine->g_pGameplayManager->GameStart();
 
         // **********************************************************************
         // Draw the "scene" of all objects.
@@ -419,7 +427,7 @@ int main(void) {
         glUniform1f(bIsSkyBox_LocID, (GLfloat)GL_FALSE);
 
 
-        DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
+        //DrawDebugObjects(matModel_Location, matModelInverseTranspose_Location, program, ::g_pVAOManager);
 
         //TODO: Replace with own implementation
         // 2nd pass of the render, where we do something bizzare
@@ -528,6 +536,7 @@ int main(void) {
         handleAsyncMouse(pWindow, deltaTime);
 
     }
+    ::g_pGameEngine->Destroy();
 
     Shutdown(pWindow);
 }

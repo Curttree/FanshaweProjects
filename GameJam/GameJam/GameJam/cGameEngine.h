@@ -7,6 +7,7 @@
 #include <Animation/AudioManager.h>
 #include <Animation/AnimationSystem.h>
 #include <Animation/BoneSystem.h>
+#include "GameplayManager.h"
 
 class cGameEngine {
 
@@ -35,6 +36,8 @@ public:
 
 	AnimationSystem animationSystem;
 	BoneSystem boneSystem;
+
+	GameplayManager* g_pGameplayManager;
 
 	bool keys[348];
 	bool showColourChanges;

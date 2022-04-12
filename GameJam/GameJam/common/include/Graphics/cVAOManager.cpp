@@ -793,6 +793,18 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename)
 		delete[] pTempVertArray;
 		delete[] pIndexArrayLocal;
 
+		//Potentially heavier than needed, but log to legacy .ply method of loading models.
+		sModelDrawInfo drawInfo;
+		drawInfo.meshName = meshData->filename;
+		drawInfo.VertexBufferID = meshData->GL_VBO_ID;
+		drawInfo.VertexBuffer_Start_Index = meshData->mBaseVertex;
+
+		drawInfo.IndexBufferID = meshData->GL_IndexBuffer_ID;
+		drawInfo.IndexBuffer_Start_Index = meshData->mBaseIndex;
+		drawInfo.numberOfIndices = meshData->mNumIndices;
+		drawInfo.numberOfTriangles = meshData->numTriangles;
+
+		this->m_map_ModelName_to_VAOID[meshData->filename] = drawInfo;
 		meshData->meshId = nextID;
 		m_map_NameToId[filename] = nextID;
 		m_map_pMeshes[nextID] = meshData;

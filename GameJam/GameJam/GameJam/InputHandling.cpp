@@ -183,15 +183,25 @@ void handleAsyncMouse(GLFWwindow* window, double deltaTime)
 
     // Mouse left (primary?) button pressed? 
     // AND the mouse is inside the window...
-    if ( (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+    if ( (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
         && ::g_MouseIsInsideWindow )
     {
         // Mouse button is down so turn the camera
-        ::g_pFlyCamera->Yaw_LeftRight( ::g_pFlyCamera->getDeltaMouseX() * MOUSE_SENSITIVITY, deltaTime );
+        ::g_pFlyCamera->Yaw_LeftRight(::g_pFlyCamera->getDeltaMouseX() * MOUSE_SENSITIVITY, deltaTime);
 
-        ::g_pFlyCamera->Pitch_UpDown( -::g_pFlyCamera->getDeltaMouseY() * MOUSE_SENSITIVITY, deltaTime );
-
+        ::g_pFlyCamera->Pitch_UpDown(-::g_pFlyCamera->getDeltaMouseY() * MOUSE_SENSITIVITY, deltaTime);
+        ::g_pGameEngine->g_pGameplayManager->SetAiming(true);
     }
+    else if ((glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE) && ::g_pGameEngine->g_pGameplayManager->GetAiming()) {
+        ::g_pGameEngine->g_pGameplayManager->SetAiming(false);
+    }
+    // Mouse button is down so turn the camera
+    //if (::g_MouseIsInsideWindow) {
+
+    //    ::g_pFlyCamera->Yaw_LeftRight(-::g_pFlyCamera->getDeltaMouseX() * MOUSE_SENSITIVITY, deltaTime);
+
+    //    ::g_pFlyCamera->Pitch_UpDown(-::g_pFlyCamera->getDeltaMouseY() * MOUSE_SENSITIVITY, deltaTime);
+    //}
 
     // Adjust the mouse speed
     if ( ::g_MouseIsInsideWindow )
