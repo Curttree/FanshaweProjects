@@ -17,7 +17,8 @@ in vec4 vNormal;				// Vertex normal X,Y,Z (W ignored)
 in vec4 vUVx2;					// 2 x Texture coords (vec4) UV0, UV1
 in vec4 vTangent;				// For bump mapping X,Y,Z (W ignored)
 in vec4 vBiNormal;				// For bump mapping X,Y,Z (W ignored)
-
+in vec4 vBoneWeights;
+in vec4 vBoneIDs;
 
 out vec4 gVertexColour;			// used to be "out vec3 color"
 out vec4 gVertWorldLocation;
@@ -30,15 +31,23 @@ uniform bool bUseHeightMap;
 uniform vec3 heightMapUVOffsetRotation;
 uniform float heightMapScale;
 
+uniform mat4 BoneMatrices[4];
+uniform bool bUseBones;
+
 void main()
 {
 	// Order of these is important
 	//mvp = p * v * matModel; from C++ code
 	
 	mat4 MVP = matProjection * matView * matModel;
-			
 	
-	vec4 vertPosition = vPosition;
+	vec4 vertPosition = vec4(0.f, 0.f, 0.f, 0.f);
+	if (bUseBones){
+		vertPosition = BoneMatrices[int(vBoneIDs[0])] * vPosition;
+	}
+	else {
+		vertPosition = vPosition;
+	}	
 	
 	if (bUseHeightMap)
 	{

@@ -388,5 +388,8 @@
     <None Include="assimp-vc142-mtd.dll">
       <Filter>Graphics\Models</Filter>
     </None>
+    <None Include="assets\shaders\geomShader_01.glsl">
+      <Filter>Graphics\ShaderManager\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

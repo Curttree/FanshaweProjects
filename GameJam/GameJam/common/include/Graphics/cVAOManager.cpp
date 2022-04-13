@@ -224,6 +224,22 @@ bool cVAOManager::LoadModelIntoVAO(
                            sizeof(sVertex_XYZW_RGBA_N_UV_T_B),    
 						   ( void* ) offsetof(sVertex_XYZW_RGBA_N_UV_T_B, bx));
 
+	//in vec4 vBoneWeights;				// X,Y,Z (W ignored)
+	GLint vBoneWeight_location = glGetAttribLocation(shaderProgramID, "vBoneWeights");	// program;
+	glEnableVertexAttribArray(vBoneWeight_location);	        // vBiNormal
+	glVertexAttribPointer(vBoneWeight_location, 4,		    // vBiNormal
+		GL_FLOAT, GL_FALSE,
+		sizeof(sVertex_XYZW_RGBA_N_UV_T_B),
+		(void*)offsetof(sVertex_XYZW_RGBA_N_UV_T_B, bWx));
+
+	//in vec4 vBoneIDs;				// X,Y,Z (W ignored)
+	GLint vBoneIDs_location = glGetAttribLocation(shaderProgramID, "vBoneIDs");	// program;
+	glEnableVertexAttribArray(vBoneIDs_location);	        // vBiNormal
+	glVertexAttribPointer(vBoneIDs_location, 4,		    // vBiNormal
+		GL_FLOAT, GL_FALSE,
+		sizeof(sVertex_XYZW_RGBA_N_UV_T_B),
+		(void*)offsetof(sVertex_XYZW_RGBA_N_UV_T_B, bIx));
+
 
     // ****************************************************************
 
@@ -240,6 +256,8 @@ bool cVAOManager::LoadModelIntoVAO(
     glDisableVertexAttribArray(vUVx2_location);	        // vUVx2
     glDisableVertexAttribArray(vTangent_location);	    // vTangent
     glDisableVertexAttribArray(vBiNormal_location);	        // vBiNormal
+	glDisableVertexAttribArray(vBoneWeight_location);	        // vBiNormal
+	glDisableVertexAttribArray(vBoneIDs_location);	        // vBiNormal
 
 	// Store the draw information into the map
 	this->m_map_ModelName_to_VAOID[ drawInfo.meshName ] = drawInfo;
@@ -279,6 +297,8 @@ bool LoadPLYModelFromFile(std::string fileName, sModelDrawInfo& drawInfo)
         float nx, ny, nz;
         float red, green, blue, alpha;  // (Note the file is in HTML style, so 0 to 255, but the shader wants 0.0 to 1.0)
         float u, v;
+		float boneId;
+		float boneWeight;
     };
     struct sTriangle
     {
@@ -408,6 +428,9 @@ bool LoadPLYModelFromFile(std::string fileName, sModelDrawInfo& drawInfo)
         drawInfo.pVertices[index].v0 = vecVertexArray[index].v;
         drawInfo.pVertices[index].u1 = 0.0f;
         drawInfo.pVertices[index].v1 = 0.0f;
+
+		drawInfo.pVertices[index].bIx = vecVertexArray[index].boneId;
+		drawInfo.pVertices[index].bWx = vecVertexArray[index].boneWeight;
        }
 
     // Copy the triangle ("index") values to the index (element) array

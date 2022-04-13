@@ -260,6 +260,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\fragShader_01.glsl" />
+    <None Include="assets\shaders\geomShader_01.glsl" />
     <None Include="assets\shaders\vertShader_01.glsl" />
     <None Include="assimp-vc142-md.dll" />
     <None Include="assimp-vc142-mdd.dll" />

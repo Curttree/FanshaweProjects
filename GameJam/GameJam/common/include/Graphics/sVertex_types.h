@@ -32,5 +32,7 @@ struct sVertex_XYZW_RGBA_N_UV_T_B
     float nx, ny, nz, nw;   // in vec4 vNormal;	Vertex normal X,Y,Z (W ignored)
     float u0, v0, u1, v1;   //in vec4 vUVx2;					// 2 x Texture coords (vec4) UV0, UV1
     float tx, ty, tz, tw;   //in vec4 vTangent;				// For bump mapping X,Y,Z (W ignored)
-    float bx, by, bz, bw;   //in vec4 vBiNormal;				// For bump mapping X,Y,Z (W ignored)
+    float bx, by, bz, bw;   //in vec4 vBiNormal;				// For bump mapping X,Y,Z (W ignored)    
+    float bWx, bWy, BWz, bWw;   //in vec4 vBoneWeights;				// For bone weights X,Y,Z (W ignored?)
+    float bIx, bIy, bIz, bIw;   //in vec4 vBoneIDs;				// For bone IDs X,Y,Z (W ignored?)
 };
