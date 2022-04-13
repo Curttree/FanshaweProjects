@@ -4,6 +4,40 @@
 
 namespace gdp2022Physics
 {
+	#pragma region Box
+	BoxShape::BoxShape(const glm::vec3& halfExtents)
+		: iShape(eShapeType::Box)
+		, m_HalfExtents(halfExtents)
+	{
+	}
+
+	BoxShape::~BoxShape()
+	{}
+
+	BoxShape* BoxShape::Cast(iShape* shape)
+	{
+		return dynamic_cast<BoxShape*>(shape);
+	}
+	#pragma endregion
+
+	#pragma region Cylinder
+
+	CylinderShape::CylinderShape(const glm::vec3& halfExtents)
+		: iShape(eShapeType::Cylinder)
+		, m_HalfExtents(halfExtents)
+	{
+	}
+
+	CylinderShape::~CylinderShape()
+	{}
+
+	CylinderShape* CylinderShape::Cast(iShape* shape)
+	{
+		return dynamic_cast<CylinderShape*>(shape);
+	}
+
+	#pragma endregion
+
 	#pragma region Sphere
 	SphereShape::SphereShape(float radius)
 		: iShape(eShapeType::Sphere)

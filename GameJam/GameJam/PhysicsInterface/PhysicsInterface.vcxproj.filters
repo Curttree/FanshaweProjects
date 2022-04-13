@@ -47,5 +47,17 @@
     <ClInclude Include="Fanshawe2022Physics\interfaces\shapes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Fanshawe2022Physics\interfaces\cSoftBodyDesc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Fanshawe2022Physics\interfaces\eBodyType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Fanshawe2022Physics\interfaces\iCollisionBody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Fanshawe2022Physics\interfaces\iSoftBody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

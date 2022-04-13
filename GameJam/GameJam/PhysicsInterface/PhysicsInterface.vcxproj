@@ -24,12 +24,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Fanshawe2022Physics\interfaces\cRigidBodyDesc.h" />
+    <ClInclude Include="Fanshawe2022Physics\interfaces\cSoftBodyDesc.h" />
+    <ClInclude Include="Fanshawe2022Physics\interfaces\eBodyType.h" />
     <ClInclude Include="Fanshawe2022Physics\interfaces\eShapeType.h" />
+    <ClInclude Include="Fanshawe2022Physics\interfaces\iCollisionBody.h" />
     <ClInclude Include="Fanshawe2022Physics\interfaces\iCollisionListener.h" />
     <ClInclude Include="Fanshawe2022Physics\interfaces\iPhysicsFactory.h" />
     <ClInclude Include="Fanshawe2022Physics\interfaces\iPhysicsWorld.h" />
     <ClInclude Include="Fanshawe2022Physics\interfaces\iRigidBody.h" />
     <ClInclude Include="Fanshawe2022Physics\interfaces\iShape.h" />
+    <ClInclude Include="Fanshawe2022Physics\interfaces\iSoftBody.h" />
     <ClInclude Include="Fanshawe2022Physics\interfaces\shapes.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

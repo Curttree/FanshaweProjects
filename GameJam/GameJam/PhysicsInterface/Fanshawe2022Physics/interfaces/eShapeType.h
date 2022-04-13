@@ -3,5 +3,7 @@
 enum class eShapeType
 {
 	Plane,
-	Sphere
+	Sphere,
+	Cylinder,
+	Box
 };

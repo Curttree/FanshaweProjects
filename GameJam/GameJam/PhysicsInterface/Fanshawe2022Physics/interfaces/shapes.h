@@ -5,6 +5,39 @@
 
 namespace gdp2022Physics
 {
+	class BoxShape : public iShape
+	{
+	public:
+		BoxShape(const glm::vec3& halfExtents);
+		virtual ~BoxShape();
+
+		const glm::vec3& GetHalfExtents() const { return m_HalfExtents; }
+
+		static BoxShape* Cast(iShape* shape);
+
+	private:
+		glm::vec3 m_HalfExtents;
+
+		BoxShape(const BoxShape&) : iShape(eShapeType::Box) { }
+		BoxShape& operator=(const BoxShape&) { return *this; }
+	};
+
+	class CylinderShape : public iShape
+	{
+	public:
+		CylinderShape(const glm::vec3& halfExtents);
+		virtual ~CylinderShape();
+
+		const glm::vec3& GetHalfExtents() const { return m_HalfExtents; }
+
+		static CylinderShape* Cast(iShape* shape);
+
+	private:
+		glm::vec3 m_HalfExtents;
+
+		CylinderShape(const CylinderShape&) : iShape(eShapeType::Cylinder) { }
+		CylinderShape& operator=(const CylinderShape&) { return *this; }
+	};
 	class SphereShape : public iShape
 	{
 	public:

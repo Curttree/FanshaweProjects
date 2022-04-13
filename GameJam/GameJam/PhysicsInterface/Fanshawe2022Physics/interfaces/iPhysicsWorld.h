@@ -1,8 +1,8 @@
 #pragma once
 
 #include <extern/glm/glm.hpp>
-#include "iRigidBody.h"
 #include "iCollisionListener.h"
+#include "iCollisionBody.h"
 
 namespace gdp2022Physics
 {
@@ -13,8 +13,8 @@ namespace gdp2022Physics
 
 		virtual void SetGravity(const glm::vec3& gravity) = 0;
 		virtual void RegisterCollisionListener(iCollisionListener* listener) = 0;
-		virtual void AddRigidBody(iRigidBody* body) = 0;
-		virtual void RemoveRigidBody(iRigidBody* body) = 0;
+		virtual void AddBody(iCollisionBody* body) = 0;
+		virtual void RemoveBody(iCollisionBody* body) = 0;
 		virtual void TimeStep(float dt) = 0;
 
 	protected:
