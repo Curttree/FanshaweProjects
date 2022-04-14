@@ -408,8 +408,6 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
 
 
     sModelDrawInfo modelInfo;
-    //        if (gVAOManager.FindDrawInfoByModelName("bun_zipper_res2 (justXYZ).ply", modelInfo))
-    //        if (gVAOManager.FindDrawInfoByModelName("Assembled_ISS.ply", modelInfo))
 
     if (pVAOManager->FindDrawInfoByModelName(pCurrentMesh->meshName, modelInfo))
     {

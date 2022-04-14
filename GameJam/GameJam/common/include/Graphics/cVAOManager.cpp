@@ -50,9 +50,12 @@ typedef struct sVertex_p4t4n4b4
 
 typedef struct sVertex_p4t4n4b4i4
 {
+	sFloat4 Colour;
 	sFloat4 Pos;
-	sFloat4 TexUVx2;
 	sFloat4 Normal;
+	sFloat4 TexUVx2;
+	sFloat4 Tangent;
+	sFloat4 BiNormal;
 	sFloat4 BoneWeights;
 	sUint4  BoneIDs;
 } sVertex_p4t4n4b4i4;
@@ -135,7 +138,6 @@ bool cVAOManager::LoadModelIntoVAO(
 
     // Add the path 
     std::string fileNameWithPath = this->m_FilePath + fileName;
-
 
     LoadPLYModelFromFile(fileNameWithPath, drawInfo);
 
@@ -236,7 +238,7 @@ bool cVAOManager::LoadModelIntoVAO(
 	GLint vBoneIDs_location = glGetAttribLocation(shaderProgramID, "vBoneIDs");	// program;
 	glEnableVertexAttribArray(vBoneIDs_location);	        // vBiNormal
 	glVertexAttribPointer(vBoneIDs_location, 4,		    // vBiNormal
-		GL_FLOAT, GL_FALSE,
+		GL_INT, GL_FALSE,
 		sizeof(sVertex_XYZW_RGBA_N_UV_T_B),
 		(void*)offsetof(sVertex_XYZW_RGBA_N_UV_T_B, bIx));
 
@@ -285,6 +287,27 @@ bool cVAOManager::FindDrawInfoByModelName(
 	// Else we found the thing to draw
 	// ...so 'return' that information
 	drawInfo = itDrawInfo->second;
+	return true;
+}
+
+bool cVAOManager::FindBonesByModelName(
+	std::string filename,
+	cBoneHierarchy& boneHierarchy)
+{
+	std::map< std::string /*model name*/,
+		cBoneHierarchy /* info needed to draw*/ >::iterator
+		bones = this->m_map_ModelName_to_Bones.find(filename);
+
+	// Find it? 
+	if (bones == this->m_map_ModelName_to_Bones.end())
+	{
+		// Nope
+		return false;
+	}
+
+	// Else we found the thing to draw
+	// ...so 'return' that information
+	boneHierarchy = bones->second;
 	return true;
 }
 
@@ -446,7 +469,8 @@ bool LoadPLYModelFromFile(std::string fileName, sModelDrawInfo& drawInfo)
     return true;
 }
 
-bool cVAOManager::LoadMeshWithAssimp(const std::string& filename)
+bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
+	unsigned int shaderProgramID)
 {
 	const aiScene* scene = m_AssimpImporter.ReadFile(m_FilePath + filename,
 		aiProcess_Triangulate |
@@ -566,6 +590,23 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename)
 				pTempVertArray[vertArrayIndex].BoneWeights.y = meshData->mVertexBoneData[index].weights[1];;
 				pTempVertArray[vertArrayIndex].BoneWeights.z = meshData->mVertexBoneData[index].weights[2];;
 				pTempVertArray[vertArrayIndex].BoneWeights.w = meshData->mVertexBoneData[index].weights[3];;
+
+				//Garbage data.
+				pTempVertArray[vertArrayIndex].Colour.x = 1.f;
+				pTempVertArray[vertArrayIndex].Colour.y = 1.f;
+				pTempVertArray[vertArrayIndex].Colour.z = 1.f;
+				pTempVertArray[vertArrayIndex].Colour.w = 1.f;
+
+				pTempVertArray[vertArrayIndex].Tangent.x = 0.f;
+				pTempVertArray[vertArrayIndex].Tangent.y = 0.f;
+				pTempVertArray[vertArrayIndex].Tangent.z = 0.f;
+				pTempVertArray[vertArrayIndex].Tangent.w = 0.f;
+
+				pTempVertArray[vertArrayIndex].BiNormal.x = 0.f;
+				pTempVertArray[vertArrayIndex].BiNormal.y = 0.f;
+				pTempVertArray[vertArrayIndex].BiNormal.z = 0.f;
+				pTempVertArray[vertArrayIndex].BiNormal.w = 0.f;
+
 
 				pIndexArrayLocal[vertArrayIndex] = vertArrayIndex;
 
@@ -770,11 +811,23 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename)
 		glBindVertexArray(meshData->GL_VBO_ID);
 		//CheckGLError();
 
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
-		glEnableVertexAttribArray(3);
-		glEnableVertexAttribArray(4);
+		GLint vpos_location = glGetAttribLocation(shaderProgramID, "vPosition");	    // program
+		GLint vcol_location = glGetAttribLocation(shaderProgramID, "vColour");	// program;
+		GLint vNormal_location = glGetAttribLocation(shaderProgramID, "vNormal");	// program;
+		GLint vUVx2_location = glGetAttribLocation(shaderProgramID, "vUVx2");	// program;
+		GLint vTangent_location = glGetAttribLocation(shaderProgramID, "vTangent");	// program;
+		GLint vBiNormal_location = glGetAttribLocation(shaderProgramID, "vBiNormal");	// program;
+		GLint vBoneWeight_location = glGetAttribLocation(shaderProgramID, "vBoneWeights");	// program;
+		GLint vBoneIDs_location = glGetAttribLocation(shaderProgramID, "vBoneIDs");	// program;
+
+		glEnableVertexAttribArray(vpos_location);
+		glEnableVertexAttribArray(vcol_location);
+		glEnableVertexAttribArray(vNormal_location);
+		glEnableVertexAttribArray(vUVx2_location);
+		glEnableVertexAttribArray(vTangent_location);
+		glEnableVertexAttribArray(vBiNormal_location);
+		glEnableVertexAttribArray(vBoneWeight_location);
+		glEnableVertexAttribArray(vBoneIDs_location);
 		//CheckGLError();
 
 		glGenBuffers(1, &meshData->GL_VertexBuffer_ID);
@@ -784,22 +837,28 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename)
 		glBindBuffer(GL_ARRAY_BUFFER, meshData->GL_VertexBuffer_ID);
 		//CheckGLError();
 
-		unsigned int totalVertBufferSizeBYTES = numIndicesInIndexArray * sizeof(sVertex_p4t4n4b4i4); ;
+		unsigned int totalVertBufferSizeBYTES = numVerticesInVertArray * sizeof(sVertex_p4t4n4b4i4); ;
 		glBufferData(GL_ARRAY_BUFFER, totalVertBufferSizeBYTES, pTempVertArray, GL_DYNAMIC_DRAW);
 		//CheckGLError();
 
 		unsigned int bytesInOneVertex = sizeof(sVertex_p4t4n4b4i4);
+		unsigned int byteOffsetToColour = offsetof(sVertex_p4t4n4b4i4, Colour);
 		unsigned int byteOffsetToPosition = offsetof(sVertex_p4t4n4b4i4, Pos);
 		unsigned int byteOffsetToNormal = offsetof(sVertex_p4t4n4b4i4, Normal);
 		unsigned int byteOffsetToUVCoords = offsetof(sVertex_p4t4n4b4i4, TexUVx2);
+		unsigned int byteOffsetToTangent = offsetof(sVertex_p4t4n4b4i4, Tangent);
+		unsigned int byteOffsetToBiNormal = offsetof(sVertex_p4t4n4b4i4, BiNormal);
 		unsigned int byteOffsetToBoneWeights = offsetof(sVertex_p4t4n4b4i4, BoneWeights);
 		unsigned int byteOffsetToBoneIDs = offsetof(sVertex_p4t4n4b4i4, BoneIDs);
 
-		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToPosition);
-		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToUVCoords);
-		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToNormal);
-		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToBoneWeights);
-		glVertexAttribPointer(4, 4, GL_INT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToBoneIDs);
+		glVertexAttribPointer(vpos_location, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToColour);
+		glVertexAttribPointer(vcol_location, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToPosition);
+		glVertexAttribPointer(vNormal_location, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToNormal);
+		glVertexAttribPointer(vUVx2_location, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToUVCoords);
+		glVertexAttribPointer(vTangent_location, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToTangent);
+		glVertexAttribPointer(vBiNormal_location, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToBiNormal);
+		glVertexAttribPointer(vBoneWeight_location, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToBoneWeights);
+		glVertexAttribPointer(vBoneIDs_location, 4, GL_INT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToBoneIDs);
 		//CheckGLError();
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshData->GL_IndexBuffer_ID);
@@ -813,19 +872,27 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename)
 		glBindVertexArray(0);
 		//CheckGLError();
 
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		glDisableVertexAttribArray(vpos_location);
+		glDisableVertexAttribArray(vcol_location);
+		// And the newer ones:
+		glDisableVertexAttribArray(vNormal_location);	    // vNormal
+		glDisableVertexAttribArray(vUVx2_location);	        // vUVx2
+		glDisableVertexAttribArray(vTangent_location);	    // vTangent
+		glDisableVertexAttribArray(vBiNormal_location);	        // vBiNormal
+		glDisableVertexAttribArray(vBoneWeight_location);	        // vBiNormal
+		glDisableVertexAttribArray(vBoneIDs_location);	        // vBiNormal
+
 		delete[] pTempVertArray;
 		delete[] pIndexArrayLocal;
 
-		//Potentially heavier than needed, but log to legacy .ply method of loading models.
 		sModelDrawInfo drawInfo;
-		drawInfo.meshName = meshData->filename;
-		drawInfo.VertexBufferID = meshData->GL_VBO_ID;
-		drawInfo.VertexBuffer_Start_Index = meshData->mBaseVertex;
+		drawInfo.numberOfIndices = mesh->mNumFaces * 3;
+		drawInfo.VAO_ID = meshData->GL_VBO_ID;
+		//Potentially heavier than needed, but log to legacy .ply method of loading models.
 
-		drawInfo.IndexBufferID = meshData->GL_IndexBuffer_ID;
-		drawInfo.IndexBuffer_Start_Index = meshData->mBaseIndex;
-		drawInfo.numberOfIndices = meshData->mNumIndices;
-		drawInfo.numberOfTriangles = meshData->numTriangles;
 
 		this->m_map_ModelName_to_VAOID[meshData->filename] = drawInfo;
 		meshData->meshId = nextID;
@@ -856,4 +923,8 @@ void cVAOManager::setFilePath(std::string filePath)
 std::string cVAOManager::getFilePath(void)
 {
     return this->m_FilePath;
+}
+
+void cVAOManager::convertMeshData(MeshData* mesh, sModelDrawInfo& drawInfo) {
+
 }

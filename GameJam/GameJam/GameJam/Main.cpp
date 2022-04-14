@@ -303,7 +303,7 @@ int main(void) {
 
     pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
 
-    ::g_pVAOManager->LoadMeshWithAssimp("Blobby.fbx");
+    ::g_pVAOManager->LoadMeshWithAssimp("can.fbx", program);
 
 #pragma endregion
     while (!glfwWindowShouldClose(pWindow)) {
@@ -487,7 +487,7 @@ int main(void) {
 
         glm::mat4x4 matModelFullScreenQuad = glm::mat4(1.0f);   // identity matrix
 
-        glCullFace(GL_FRONT);
+        //glCullFace(GL_FRONT);
 
         // Place the camera in front of the quad (the "full screen" quad)
         // Quad location is ::g_pFullScreenQuad->positionXYZ = glm::vec3( 0.0f, 0.0f, 500.0f);

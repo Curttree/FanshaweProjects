@@ -13,9 +13,10 @@ GameplayManager::~GameplayManager() {
 void GameplayManager::SetupScene(void) {
     cEntity* can = ::g_pGameEngine->entityManager.CreateEntity();
     cMesh* can_mesh = new cMesh();
-    can_mesh->meshName = "Blobby.fbx";
+    can_mesh->meshName = "can.fbx";
+    //can_mesh->meshName = "can.ply";
     can_mesh->scale = glm::vec3(1.0f);
-    can_mesh->positionXYZ = glm::vec3(0.f, 0.f, 10.f);
+    can_mesh->positionXYZ = glm::vec3(0.f, -3.f, 30.f);
     can_mesh->textureNames[0] = "BrainNerve.bmp";
     can_mesh->textureRatios[0] = 1.f;
     can->mesh = can_mesh;

@@ -34,5 +34,5 @@ struct sVertex_XYZW_RGBA_N_UV_T_B
     float tx, ty, tz, tw;   //in vec4 vTangent;				// For bump mapping X,Y,Z (W ignored)
     float bx, by, bz, bw;   //in vec4 vBiNormal;				// For bump mapping X,Y,Z (W ignored)    
     float bWx, bWy, BWz, bWw;   //in vec4 vBoneWeights;				// For bone weights X,Y,Z (W ignored?)
-    float bIx, bIy, bIz, bIw;   //in vec4 vBoneIDs;				// For bone IDs X,Y,Z (W ignored?)
+    unsigned int bIx, bIy, bIz, bIw;   //in vec4 vBoneIDs;				// For bone IDs X,Y,Z (W ignored?)
 };
