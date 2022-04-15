@@ -136,10 +136,18 @@ uniform sampler2D specularMapTexture;
 // Effect textures
 uniform sampler2D staticTexture;
 
+uniform vec3 maxDepthColour;
+uniform vec3 depthColourMultiplier;
+
 void main()
 {
 	// This is the pixel colour on the screen.
 	// Just ONE pixel, though.
+	
+	vec3 maxDepthColour = vec3(1.0f, 0.f, 0.f);
+	vec3 depthColourMultiplier = vec3(1.0f, 1.0f, 2.f);
+	float maxDepth = 50.f;
+	float minDepth = 10.f;
 	
 	// HACK: See if the UV coordinates are actually being passed in
 	pixelOutputFragColour.rgba = vec4(0.0f, 0.0f, 0.0, 1.0f); 
@@ -371,12 +379,14 @@ void main()
 	pixelOutputFragColour = outColour;
 	pixelOutputFragColour.a = wholeObjectAlphaTransparency;
 	
-	if (length(fVertWorldLocation - eyeLocation) > 50.f){
-		pixelOutputFragColour.r = 1.f;
-		pixelOutputFragColour.g = 0.f;
-		pixelOutputFragColour.b = 0.f;
+	if (length(fVertWorldLocation - eyeLocation) > maxDepth){
+		pixelOutputFragColour.r *= depthColourMultiplier.r;
+		pixelOutputFragColour.g *= depthColourMultiplier.g;
+		pixelOutputFragColour.b *= depthColourMultiplier.b;
 	}
-	
+	else if (length(fVertWorldLocation - eyeLocation) > minDepth && length(fVertWorldLocation - eyeLocation)/maxDepth * depthColourMultiplier.b >1.f){
+		pixelOutputFragColour.b *= length(fVertWorldLocation - eyeLocation)/maxDepth * depthColourMultiplier.b;
+	}
 	
 	// Output the other things for the G-Buffer:
 	pixelOutputNormal = vec4(fNormal.xyz, 1.0f);
