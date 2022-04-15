@@ -416,6 +416,13 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
         glUniform1f(useBones_LocID, (float)GL_FALSE);
     }
 
+    GLint eye_Location = g_GetUniformLocation(program, "eyeLocation");
+    glUniform4f(eye_Location,
+        ::g_pFlyCamera->getEye().x,
+        ::g_pFlyCamera->getEye().y,
+        ::g_pFlyCamera->getEye().z,
+        1.f);
+
 
     sModelDrawInfo modelInfo;
 

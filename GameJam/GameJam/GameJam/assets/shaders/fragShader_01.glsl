@@ -371,6 +371,13 @@ void main()
 	pixelOutputFragColour = outColour;
 	pixelOutputFragColour.a = wholeObjectAlphaTransparency;
 	
+	if (length(fVertWorldLocation - eyeLocation) > 50.f){
+		pixelOutputFragColour.r = 1.f;
+		pixelOutputFragColour.g = 0.f;
+		pixelOutputFragColour.b = 0.f;
+	}
+	
+	
 	// Output the other things for the G-Buffer:
 	pixelOutputNormal = vec4(fNormal.xyz, 1.0f);
 	pixelOutputMaterialColour = vec4(vertexDiffuseColour.rgb, 1.0f);
