@@ -227,6 +227,7 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("BrainNerve.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("crosshair.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("PolygonCity_Texture.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("city_imposter.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;
