@@ -390,11 +390,11 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
     if (pCurrentMesh->bIsWireframe)                // GL_POINT, GL_LINE, and GL_FILL)
     {
         // Draw everything with only lines
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glPolygonMode(GL_FRONT, GL_LINE);
     }
     else
     {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glPolygonMode(GL_FRONT, GL_FILL);
     }
 
     GLint useBones_LocID = glGetUniformLocation(program, "bUseBones");

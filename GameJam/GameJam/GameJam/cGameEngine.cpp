@@ -38,16 +38,6 @@ void cGameEngine::Destroy(void)
 {
 	entityManager.ShutDown();
 	audioManager.ShutDown();
-
-	delete g_pShaderManager;
-
-	delete g_pVAOManager;
-
-	delete g_pTheLights;
-
-	delete g_pTextureManager;
-
-	delete g_pGameplayManager;
 }
 
 void cGameEngine::Update(float dt)

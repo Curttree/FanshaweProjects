@@ -146,8 +146,8 @@ void main()
 	
 	vec3 maxDepthColour = vec3(1.0f, 0.f, 0.f);
 	vec3 depthColourMultiplier = vec3(1.0f, 1.0f, 2.f);
-	float maxDepth = 50.f;
-	float minDepth = 10.f;
+	float maxDepth = 70.f;
+	float minDepth = 20.f;
 	
 	// HACK: See if the UV coordinates are actually being passed in
 	pixelOutputFragColour.rgba = vec4(0.0f, 0.0f, 0.0, 1.0f); 
