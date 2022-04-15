@@ -26,31 +26,33 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
 
     if ( cGFLWKeyboardModifiers::areAllModsUp(pWindow) )
     {
-        // Use "fly" camera (keyboard for movement, mouse for aim)
-        if ( glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS )
-        {
-            ::g_pFlyCamera->MoveForward_Z(+cameraMoveSpeed);
+        if (!::g_pGameEngine->g_pGameplayManager->GetAiming()) {
+            // Use "fly" camera (keyboard for movement, mouse for aim)
+            if (glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS)
+            {
+                ::g_pFlyCamera->MoveForward_Z(+cameraMoveSpeed);
+            }
+            if (glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_PRESS)	// "backwards"
+            {
+                ::g_pFlyCamera->MoveForward_Z(-cameraMoveSpeed);
+            }
         }
-        if ( glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_PRESS )	// "backwards"
-        {
-            ::g_pFlyCamera->MoveForward_Z(-cameraMoveSpeed);
-        }
-        if ( glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS )	// "left"
-        {
-            ::g_pFlyCamera->MoveLeftRight_X(-cameraMoveSpeed);
-        }
-        if ( glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_PRESS )	// "right"
-        {
-            ::g_pFlyCamera->MoveLeftRight_X(+cameraMoveSpeed);
-        }
-        if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS )	// "up"
-        {
-            ::g_pFlyCamera->MoveUpDown_Y(-cameraMoveSpeed);
-        }
-        if ( glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS )	// "down"
-        {
-            ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
-        }
+        //if ( glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS )	// "left"
+        //{
+        //    ::g_pFlyCamera->MoveLeftRight_X(-cameraMoveSpeed);
+        //}
+        //if ( glfwGetKey(pWindow, GLFW_KEY_D) == GLFW_PRESS )	// "right"
+        //{
+        //    ::g_pFlyCamera->MoveLeftRight_X(+cameraMoveSpeed);
+        //}
+        //if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS )	// "up"
+        //{
+        //    ::g_pFlyCamera->MoveUpDown_Y(-cameraMoveSpeed);
+        //}
+        //if ( glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS )	// "down"
+        //{
+        //    ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
+        //}
 
         std::stringstream strTitle;
         // std::cout << 
@@ -253,6 +255,9 @@ void GLFW_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 void GLFW_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
 
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && ::g_pGameEngine->g_pGameplayManager->GetAiming()) {
+        ::g_pGameEngine->g_pGameplayManager->Fire();
+    }
 #ifdef YO_NERDS_WE_USING_WINDOWS_CONTEXT_MENUS_IN_THIS_THANG
     // Right button is pop-up
     if ( button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS )

@@ -32,6 +32,8 @@ public:
 
 	virtual glm::vec3 getData(std::string command);
 
+	virtual glm::vec3 getAtDirection(void);
+
 	// **************************************
 
 	// These are used for the perspective projection 
@@ -113,6 +115,7 @@ public:
 	void setMinimumDeltaTimeStep(double newMinDeltaTimeStep);
 	double getMinimumDeltaTimeStep(void);
 
+	void Reset();
 
 	glm::quat getQOrientation(void) { return this->qOrientation; };
 	void setMeshOrientationEulerAngles(glm::vec3 newAnglesEuler, bool bIsDegrees = false);

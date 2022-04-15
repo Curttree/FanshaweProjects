@@ -226,6 +226,16 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
     return;
 }
 
+std::string GetAppropriateModel(cMesh* pCurrentMesh) {
+    float distance = glm::distance(pCurrentMesh->positionXYZ, ::g_pFlyCamera->getEye());
+    if (distance > 500.f) {
+        return pCurrentMesh->lowDetailMeshName;
+    }
+    else if (distance > 200.f) {
+        return pCurrentMesh->midDetailMeshName;
+    }
+    return pCurrentMesh->meshName;
+}
 
 void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
     GLint matModel_Location,
@@ -409,7 +419,7 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
 
     sModelDrawInfo modelInfo;
 
-    if (pVAOManager->FindDrawInfoByModelName(pCurrentMesh->meshName, modelInfo))
+    if (pVAOManager->FindDrawInfoByModelName(GetAppropriateModel(pCurrentMesh), modelInfo))
     {
         glBindVertexArray(modelInfo.VAO_ID);
 

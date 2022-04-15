@@ -877,7 +877,6 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 
 		glDisableVertexAttribArray(vpos_location);
 		glDisableVertexAttribArray(vcol_location);
-		// And the newer ones:
 		glDisableVertexAttribArray(vNormal_location);	    // vNormal
 		glDisableVertexAttribArray(vUVx2_location);	        // vUVx2
 		glDisableVertexAttribArray(vTangent_location);	    // vTangent

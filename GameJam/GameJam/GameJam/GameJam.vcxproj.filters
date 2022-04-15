@@ -58,6 +58,12 @@
     <Filter Include="Enums">
       <UniqueIdentifier>{0da35024-a0d7-4067-8f02-a51d687d098d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameJam">
+      <UniqueIdentifier>{082fc5a2-54e9-440d-836c-a642b577b9de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\FrustumCulling">
+      <UniqueIdentifier>{f2cedfdc-e3a6-4656-afa2-caa113670643}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -171,6 +177,15 @@
     <ClCompile Include="GameplayManager.cpp">
       <Filter>GameEngine\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="cPropFactory.cpp">
+      <Filter>GameJam</Filter>
+    </ClCompile>
+    <ClCompile Include="cProp.cpp">
+      <Filter>GameJam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\include\Graphics\cFrustumCullingHandler.cpp">
+      <Filter>Graphics\FrustumCulling</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -283,6 +298,24 @@
     </ClInclude>
     <ClInclude Include="GameplayManager.h">
       <Filter>GameEngine\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="cProp.h">
+      <Filter>GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="cPropFactory.h">
+      <Filter>GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="propDefs.h">
+      <Filter>GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\sFrustum.h">
+      <Filter>Graphics\FrustumCulling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\Graphics\cFrustumCullingHandler.h">
+      <Filter>Graphics\FrustumCulling</Filter>
+    </ClInclude>
+    <ClInclude Include="soundDefs.h">
+      <Filter>GameJam</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -14,7 +14,7 @@ public:
 	void GameOver();
 	void SetAiming(bool _aiming);
 	bool GetAiming();
-	//void Fire();
+	void Fire();
 	
 private:
 	int cansRemaining = 1;

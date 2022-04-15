@@ -12,7 +12,10 @@ class cMesh
 {
 public:
 	cMesh();
-	std::string meshName;		// The 3D Mesh model we are drawing
+	std::string meshName;		// The 3D Mesh model we are drawing. Should be made private if I think it will be abused. Really should use settter instead of calling directly.
+	std::string midDetailMeshName;
+	std::string lowDetailMeshName;
+	void setAllMeshNames(std::string name);
 
 	// Use these values to search for this specific instance of the object
 	// We would set these ourselves...
@@ -61,6 +64,8 @@ public:
 	bool bUseBones;
 
 	cBoneHierarchy* bones;
+
+	float boundingRadius = -1.f;
 
 private:
 	unsigned int m_UniqueID;

@@ -8,6 +8,8 @@
 #include <extern/glm/gtc/matrix_transform.hpp>  // glm::translate, glm::rotate, glm::scale, glm::perspective
 #include <extern/glm/gtc/type_ptr.hpp> // glm::value_ptr
 
+#include <Graphics/cFrustumCullingHandler.h>
+
 #include "globals.h"
 
 // Function signature for DrawObject()
@@ -172,7 +174,7 @@ int main(void) {
 
     // Set up the debug sphere object
     ::g_pDebugSphere = new cMesh();
-    ::g_pDebugSphere->meshName = "Sphere_xyz_n_rgba_uv.ply";
+    ::g_pDebugSphere->setAllMeshNames("Sphere_xyz_n_rgba_uv.ply");
     ::g_pDebugSphere->bIsWireframe = true;
     ::g_pDebugSphere->bUseObjectDebugColour = true;
     ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -190,6 +192,7 @@ int main(void) {
     vecModelsToLoad.push_back("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply");
     vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
     vecModelsToLoad.push_back("can.ply");
+    vecModelsToLoad.push_back("SM_Prop_CarboardBox_01.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -223,6 +226,7 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("BrightColouredUVMap.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("BrainNerve.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("crosshair.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("PolygonCity_Texture.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;
@@ -298,12 +302,14 @@ int main(void) {
     cMesh* pSkybox = new cMesh();
 
     // Mimics a skybox
-    pSkybox->meshName = "Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply";
+    pSkybox->setAllMeshNames("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
     pSkybox->scale = glm::vec3(5'000'000.0f);
 
     pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
 
     ::g_pVAOManager->LoadMeshWithAssimp("can.fbx", program);
+
+    ::g_pGameEngine->g_pGameplayManager->GameStart();
 
 #pragma endregion
     while (!glfwWindowShouldClose(pWindow)) {
@@ -386,7 +392,7 @@ int main(void) {
 
         glUniformMatrix4fv(matProjection_Location, 1, GL_FALSE, glm::value_ptr(matProjection));
 
-        ::g_pGameEngine->g_pGameplayManager->GameStart();
+        sFrustum frustum = cFrustumCullingHandler::Instance()->createFromMatricies(matView, matProjection);
 
         // **********************************************************************
         // Draw the "scene" of all objects.
@@ -396,6 +402,11 @@ int main(void) {
         {
             // So the code is a little easier...
             cMesh* pCurrentMesh = ::g_vec_pMeshes[index];
+
+            //if (!cFrustumCullingHandler::Instance()->isWithinFrustum(frustum, pCurrentMesh)) {
+            //    //Object isn't in view. Don't bother drawing.
+            //    continue;
+            //}
 
             matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
             //mat4x4_identity(m);
@@ -409,6 +420,30 @@ int main(void) {
 
 
         }//for (unsigned int index
+        std::vector<cEntity*> entities = ::g_pGameEngine->entityManager.GetEntities();
+        for (unsigned int index = 0; index != entities.size(); index++)
+        {
+            // So the code is a little easier...
+            cMesh* pCurrentMesh = entities[index]->mesh;
+
+            //if (!cFrustumCullingHandler::Instance()->isWithinFrustum(frustum, pCurrentMesh)) {
+            //    //Object isn't in view. Don't bother drawing.
+            //    continue;
+            //}
+
+            matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
+            //mat4x4_identity(m);
+
+            DrawObject(pCurrentMesh,
+                matModel,
+                matModel_Location,
+                matModelInverseTranspose_Location,
+                program,
+                ::g_pVAOManager);
+
+
+        }
+
         // Scene is drawn
         // **********************************************************************   
 
@@ -435,7 +470,7 @@ int main(void) {
         {
             ::g_pFullScreenQuad = new cMesh;
             //            ::g_pFullScreenQuad->meshName = "Imposter_Shapes/Quad_2_sided_aligned_on_XY_plane.ply";
-            ::g_pFullScreenQuad->meshName = "Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply";
+            ::g_pFullScreenQuad->setAllMeshNames("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply");
             //            ::g_pFullScreenQuad->meshName = "bun_zipper_xyz_rgba_uv.ply";
             ::g_pFullScreenQuad->friendlyName = "Full_Screen_Quad";
 
@@ -625,7 +660,7 @@ void DrawDebugObjects(
         ::g_pDebugSphere->scale = glm::vec3(distTo95Percent);
         ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
-        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale.x < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
+        ::g_pDebugSphere->setAllMeshNames(::g_pDebugSphere->scale.x < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
 
         DrawObject(::g_pDebugSphere,
             matModelDS,
@@ -645,7 +680,7 @@ void DrawDebugObjects(
         // Draw a red sphere at 50%
         ::g_pDebugSphere->scale = glm::vec3(distTo50Percent);
         ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
-        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale.x < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
+        ::g_pDebugSphere->setAllMeshNames(::g_pDebugSphere->scale.x < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
         DrawObject(::g_pDebugSphere,
             matModelDS,
             matModel_Location,
@@ -664,7 +699,7 @@ void DrawDebugObjects(
         // Draw a red sphere at 25%
         ::g_pDebugSphere->scale = glm::vec3(distTo25Percent);
         ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale.x < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
+        ::g_pDebugSphere->setAllMeshNames(::g_pDebugSphere->scale.x < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
         DrawObject(::g_pDebugSphere,
             matModelDS,
             matModel_Location,
@@ -683,7 +718,7 @@ void DrawDebugObjects(
         // Draw a red sphere at 5%
         ::g_pDebugSphere->scale = glm::vec3(distTo5Percent);
         ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-        ::g_pDebugSphere->meshName = (::g_pDebugSphere->scale.x < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
+        ::g_pDebugSphere->setAllMeshNames(::g_pDebugSphere->scale.x < LOW_RES_SPHERE_DISTANCE ? LOW_RES_SPHERE_MODEL : HIGH_RES_SPHERE_MODEL);
         DrawObject(::g_pDebugSphere,
             matModelDS,
             matModel_Location,
@@ -692,7 +727,7 @@ void DrawDebugObjects(
             ::g_pVAOManager);
 
 
-        ::g_pDebugSphere->meshName = oldDebugSphereModel;
+        ::g_pDebugSphere->setAllMeshNames( oldDebugSphereModel);
 
     }//if ( ::g_bShowDebugShere )
 

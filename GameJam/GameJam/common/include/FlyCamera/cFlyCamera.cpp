@@ -18,7 +18,7 @@ cFlyCamera::cFlyCamera()
 	this->m_upIsYVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
 
-	this->movementSpeed = 5.0f;
+	this->movementSpeed = 0.5f;
 
 
 	// Set initial orientation (all zero on Euler axes)
@@ -326,6 +326,10 @@ void cFlyCamera::setEye(glm::vec3 newEye)
 	return;
 }
 
+glm::vec3 cFlyCamera::getAtDirection(void)
+{
+	return this->m_at;
+}
 
 glm::vec3 cFlyCamera::getAt(void)
 {
@@ -540,7 +544,6 @@ void cFlyCamera::Pitch_UpDown(float angleDegrees, double deltaTime)		// around X
 	angleDegrees = angleDegrees * (float)deltaTime;
 
 	this->Pitch_UpDown(-angleDegrees);
-
 	return;
 }
 
@@ -552,7 +555,6 @@ void cFlyCamera::Yaw_LeftRight(float angleDegrees, double deltaTime)	// around y
 	angleDegrees = angleDegrees * (float)deltaTime;
 
 	this->Yaw_LeftRight(-angleDegrees);
-
 	return;
 }
 
@@ -564,7 +566,6 @@ void cFlyCamera::Roll_CW_CCW(float angleDegrees, double deltaTime)		// around z
 	angleDegrees = angleDegrees * (float)deltaTime;
 
 	this->Roll_CW_CCW(-angleDegrees);
-
 	return;
 }
 
@@ -603,3 +604,8 @@ void cFlyCamera::m_tokenizeString(std::string theString, std::vector<std::string
 	return;
 }
 
+void cFlyCamera::Reset() {
+	this->qOrientation = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
+	this->m_UpdateAtFromOrientation();
+	this->m_UpdateUpFromOrientation();
+}

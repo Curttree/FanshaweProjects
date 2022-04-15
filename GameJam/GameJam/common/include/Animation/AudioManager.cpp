@@ -1,6 +1,7 @@
 #include "AudioManager.h"
 #include "../../../GameJam/globals.h"
 #include <string>
+#include "../../../GameJam/soundDefs.h"
 
 AudioManager::AudioManager(void)
 {
@@ -27,10 +28,10 @@ void AudioManager::StartUp(void)
     }
 
     //Create a sample.	
-    _result = _system->createSound("assets\\sounds\\crash-bandicoot-sounds-woah.mp3", FMOD_LOOP_OFF, 0, &_sounds[0]);
-    _result = _system->createSound("assets\\sounds\\among-us-death-animation-4.mp3", FMOD_LOOP_OFF, 0, &_sounds[1]);
-    _result = _system->createSound("assets\\sounds\\tindeck_1.mp3", FMOD_LOOP_OFF, 0, &_sounds[2]); 
-    _result = _system->createSound("assets\\sounds\\morganpurkis-rustling-grass-2.wav", FMOD_LOOP_OFF, 0, &_sounds[3]);
+    _result = _system->createSound("assets\\sounds\\cans.mp3", FMOD_LOOP_OFF, 0, &_sounds[SOUND_CANS_GUY]);
+    _result = _system->createSound("assets\\sounds\\gun.wav", FMOD_LOOP_OFF, 0, &_sounds[SOUND_GUN]);
+    _result = _system->createStream("assets\\sounds\\ambience.wav", FMOD_LOOP_NORMAL, 0, &_sounds[SOUND_AMBIENCE]);
+    _result = _system->createSound("assets\\sounds\\ping.mp3", FMOD_LOOP_OFF, 0, &_sounds[SOUND_PING]);
     if (_result != FMOD_OK) {
         fprintf(stderr, "Unable to create sound");
         return;

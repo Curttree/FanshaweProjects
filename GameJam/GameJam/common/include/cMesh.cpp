@@ -47,3 +47,8 @@ unsigned int cMesh::getUniqueID(void)
 //static 
 unsigned int cMesh::m_NextID = cMesh::INITIAL_UNIQUE_ID;
 
+void cMesh::setAllMeshNames(std::string name) {
+	meshName = name;
+	lowDetailMeshName = name;
+	midDetailMeshName = name;
+}

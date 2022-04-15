@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "cEntity.h"
+#include "cProp.h"
 
 class EntityManager {
 public:
@@ -17,6 +18,9 @@ public:
 
 	const std::vector<cEntity*>& GetEntities(void);
 	cEntity* CreateEntity(void);
+
+	void DeleteEntity(cEntity* entity);
+	cProp* CreateProp(std::string name, std::string texture, glm::vec3 position, glm::vec3 scale = glm::vec3(1.f));
 private:
 	std::vector<cEntity*> entities;
 };
