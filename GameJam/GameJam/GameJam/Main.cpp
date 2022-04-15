@@ -495,6 +495,9 @@ int main(void) {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glfwGetFramebufferSize(pWindow, &width, &height);
+        if (height <= 0.f || width <= 0.f) {
+            height = 1.f;
+        }
         ratio = width / (float)height;
 
         matProjection = glm::perspective <float> (
