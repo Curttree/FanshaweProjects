@@ -43,19 +43,27 @@ sFrustum cFrustumCullingHandler::createFromMatricies(glm::mat4 view, glm::mat4 p
 
 sFrustum cFrustumCullingHandler::createFromCamera(cFlyCamera* camera) {
     //Adapted from: https://learnopengl.com/Guest-Articles/2021/Scene/Frustum-Culling
+    // Approximate culling since the math wasn't working out. Viewport is based on angle values rather than trig.
+    float viewPortAngle = 40.f;
 	sFrustum result;
     const float aspectRatio = ::g_pFBO->width / (float)::g_pFBO->height;
     const float halfVSide = 1000.f * tanf(camera->FOV * .5f);
     const float halfHSide = halfVSide * aspectRatio;
     const glm::vec3 frontMultFar = 1000.f * camera->getAtDirection();
     const glm::vec3 cameraRight = glm::cross(camera->getAtDirection(), camera->getUp());
+    const glm::vec3 cameraUp = glm::cross(cameraRight, camera->getAtDirection());
 
     result.nearFace = { camera->getEye() + camera->nearPlane * camera->getAtDirection(), camera->getAtDirection() };
     result.farFace = { camera->getEye() + frontMultFar, -camera->getAtDirection() };
-    result.rightFace = { camera->getEye(), glm::cross(camera->getUp(), frontMultFar + cameraRight * halfHSide) };
+    result.leftFace = { camera->getEye(), glm::rotate(glm::quat(glm::vec3(0.f, glm::radians(viewPortAngle), 0.f)), cameraRight) };
+    result.rightFace = { camera->getEye(), glm::rotate(glm::quat(glm::vec3(0.f, glm::radians(-viewPortAngle), 0.f)), -cameraRight) };
+    result.topFace = { camera->getEye(), glm::rotate(glm::quat(glm::vec3(glm::radians(viewPortAngle), 0.f, 0.f)), cameraUp) };
+    result.bottomFace = { camera->getEye(), glm::rotate(glm::quat(glm::vec3(glm::radians(-viewPortAngle), 0.f, 0.f)), -cameraUp) };
+
+    /*result.rightFace = { camera->getEye(), glm::cross(camera->getUp(), frontMultFar + cameraRight * halfHSide) };
     result.leftFace = { camera->getEye(), glm::cross(frontMultFar - cameraRight * halfHSide, camera->getUp()) };
     result.bottomFace = { camera->getEye(), glm::cross(cameraRight, frontMultFar - camera->getUp() * halfVSide) };
-    result.topFace = { camera->getEye(), glm::cross(frontMultFar + camera->getUp() * halfVSide, cameraRight) };
+    result.topFace = { camera->getEye(), glm::cross(frontMultFar + camera->getUp() * halfVSide, cameraRight) };*/
 	return result;
 }
 
@@ -65,16 +73,12 @@ bool cFrustumCullingHandler::isWithinFrustum(const sFrustum cameraFrustum, const
         return true;
     }
 
-    bool close = isWithinPlaneBounds(cameraFrustum.nearFace, mesh, true);
-    bool away = isWithinPlaneBounds(cameraFrustum.farFace, mesh, true);
-    return (close && away);
-
-    //return (isWithinPlaneBounds(cameraFrustum.nearFace, mesh) &&
-   //     isWithinPlaneBounds(cameraFrustum.farFace, mesh) &&
-   //     isWithinPlaneBounds(cameraFrustum.rightFace, mesh) &&
-   //     isWithinPlaneBounds(cameraFrustum.leftFace, mesh) &&
-   //     isWithinPlaneBounds(cameraFrustum.topFace, mesh) &&
-   //     isWithinPlaneBounds(cameraFrustum.bottomFace, mesh));
+    return (isWithinPlaneBounds(cameraFrustum.nearFace, mesh) &&
+        isWithinPlaneBounds(cameraFrustum.farFace, mesh) &&
+        isWithinPlaneBounds(cameraFrustum.rightFace, mesh) &&
+        isWithinPlaneBounds(cameraFrustum.leftFace, mesh) &&
+        isWithinPlaneBounds(cameraFrustum.topFace, mesh) &&
+        isWithinPlaneBounds(cameraFrustum.bottomFace, mesh));
 }
 
 bool cFrustumCullingHandler::isWithinPlaneBounds(const sPlane plane, const cMesh * mesh, bool greaterThan) {
@@ -85,5 +89,5 @@ bool cFrustumCullingHandler::isWithinPlaneBounds(const sPlane plane, const cMesh
     if (greaterThan) {
        return distance >= mesh->boundingRadius;
     }
-    return distance <= mesh->boundingRadius;
+    return distance < mesh->boundingRadius;
 }

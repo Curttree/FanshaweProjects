@@ -427,10 +427,10 @@ int main(void) {
             // So the code is a little easier...
             cMesh* pCurrentMesh = entities[index]->mesh;
 
-            if (!cFrustumCullingHandler::Instance()->isWithinFrustum(frustum, pCurrentMesh)) {
-                //Object isn't in view. Don't bother drawing.
-                continue;
-            }
+            //if (!cFrustumCullingHandler::Instance()->isWithinFrustum(frustum, pCurrentMesh)) {
+            //    //Object isn't in view. Don't bother drawing.
+            //    continue;
+            //}
 
             matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
             //mat4x4_identity(m);

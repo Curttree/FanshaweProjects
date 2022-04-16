@@ -18,7 +18,7 @@ void GameplayManager::SetupScene(void) {
     cProp* can2 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(-10.f, -3.f, 30.f));
     cProp* can3 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(-20.f, -3.f, 30.f));
     cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(20.f, -10.f, 40.f));
-    cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(200.f, -10.f, 40.f));
+    cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(2.f, -10.f, 40.f));
     cPropFactory::Instance()->createProp(PROP_CITY_IMPOSTER, glm::vec3(0.f, 0.f, 200.f));
 
     canList.push_back((cEntity*)can1);
