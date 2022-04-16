@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "Conversion.h"
+#include "PhysicsConversion.h"
 
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>

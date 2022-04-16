@@ -32,7 +32,7 @@ cProp* cPropFactory::createProp(int type, glm::vec3 position, glm::vec3 velocity
 		result = ::g_pGameEngine->entityManager.CreateProp("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply", "city_imposter.bmp", position, glm::vec3(10.f)); 
 		result->mesh->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
 		result->rotation = result->mesh->orientationXYZ;
-		result->mesh->meshName = "";
+		//result->mesh->meshName = "";
 		result->mesh->boundingRadius = 10.f;
 		break;
 	default:

@@ -28,7 +28,7 @@ bool cGameEngine::Initialize(void)
 
 	g_pTextureManager = new cBasicTextureManager();
 
-	// Physics Initialization, Useing our Factory to create
+	// Physics Initialization, Using our Factory to create
 	m_PhysicsFactory = new gdp2022Physics::PhysicsFactory();
 	m_PhysicsWorld = m_PhysicsFactory->CreateWorld();
 	m_PhysicsWorld->RegisterCollisionListener(new gdp2022Physics::CollisionListener());

@@ -2,6 +2,7 @@
 #include "globals.h"
 
 #include <Animation/cBone.h>
+#include <PhysicsFactory.h>
 
 // If I am going to continue to add commands, I should switch to a factory.
 #include <Animation/cCommand_ConsoleOutput.h>
@@ -30,6 +31,11 @@ bool cGameEngine::Initialize(void)
 	g_pTextureManager = new cBasicTextureManager();
 
 	g_pGameplayManager = new GameplayManager();
+
+	// Physics Initialization, Using our Factory to create
+	//m_PhysicsFactory = new gdp2022Physics::PhysicsFactory();
+	//m_PhysicsWorld = m_PhysicsFactory->CreateWorld();
+	//m_PhysicsWorld->SetGravity(glm::vec3(0.f, -9.81f, 0.f));
 
 	return true;
 }

@@ -13,5 +13,5 @@ public:
 private:
 	cFrustumCullingHandler();
 	static cFrustumCullingHandler* _instance;
-	bool isWithinPlaneBounds(const sPlane plane, const cMesh* mesh);
+	bool isWithinPlaneBounds(const sPlane plane, const cMesh* mesh, bool greaterThan);
 };

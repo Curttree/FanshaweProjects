@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Conversion.cpp">
+    <ClCompile Include="PhysicsConversion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsFactory.cpp">
@@ -32,7 +32,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Conversion.h">
+    <ClInclude Include="PhysicsConversion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsFactory.h">

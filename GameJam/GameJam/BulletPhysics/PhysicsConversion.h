@@ -12,14 +12,14 @@
 #include <extern/glm/glm.hpp>
 #include <extern/glm/gtx/quaternion.hpp>
 
-struct Transform
-{
-	glm::vec3 position;
-	glm::quat rotation;
-};
-
 namespace gdp2022Physics
 {
+	struct Transform
+	{
+		glm::vec3 position;
+		glm::quat rotation;
+	};
+
 	// GLM -> Bullet
 	void CastBulletQuaternion(const glm::quat& in, btQuaternion* out);
 	void CastBulletVector3(const glm::vec3& in, btVector3* out);

@@ -21,10 +21,10 @@ namespace gdp2022Physics
 		virtual void RemoveRigidBody(iRigidBody* body);
 		virtual void TimeStep(float dt);
 	private:
-		glm::vec3 m_Gravity;
+		glm::vec3 m_Gravity = glm::vec3(0.f);
 		std::vector<cRigidBody*> m_RigidBodies;
-		CollisionHandler* m_CollisionHandler;
-		iCollisionListener* m_CollisionListener;
+		CollisionHandler* m_CollisionHandler = 0;
+		iCollisionListener* m_CollisionListener = 0;
 
 		PhysicsWorld(const PhysicsWorld&) {}
 		PhysicsWorld& operator=(const PhysicsWorld&) { return *this; }

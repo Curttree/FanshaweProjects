@@ -78,12 +78,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)common/include/extern/BulletSource;$(SolutionDir)common/include;$(SolutionDir)PhysicsInterface;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)common/include/extern;$(SolutionDir)common/include/extern/BulletSource;$(SolutionDir)common/include;$(SolutionDir)PhysicsInterface;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <SourcePath>$(SolutionDir)common/include/extern/BulletSource;$(SolutionDir)PhysicsInterface;$(VC_SourcePath);</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)common/include/extern/BulletSource;$(SolutionDir)common/include;$(SolutionDir)PhysicsInterface;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)common/include/extern;$(SolutionDir)common/include/extern/BulletSource;$(SolutionDir)common/include;$(SolutionDir)PhysicsInterface;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <SourcePath>$(SolutionDir)common/include/extern/BulletSource;$(SolutionDir)PhysicsInterface;$(VC_SourcePath);</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -143,14 +143,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Conversion.cpp" />
+    <ClCompile Include="PhysicsConversion.cpp" />
     <ClCompile Include="PhysicsFactory.cpp" />
     <ClCompile Include="PhysicsWorld.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="SoftBody.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Conversion.h" />
+    <ClInclude Include="PhysicsConversion.h" />
     <ClInclude Include="PhysicsFactory.h" />
     <ClInclude Include="PhysicsWorld.h" />
     <ClInclude Include="RigidBody.h" />

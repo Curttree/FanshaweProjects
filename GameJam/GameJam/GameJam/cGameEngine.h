@@ -8,6 +8,7 @@
 #include <Animation/AnimationSystem.h>
 #include <Animation/BoneSystem.h>
 #include "GameplayManager.h"
+#include "../PhysicsInterface/Fanshawe2022Physics/interfaces/iPhysicsFactory.h"
 
 class cGameEngine {
 
@@ -53,4 +54,7 @@ private:
 	int activeSequenceIndex;
 
 	void HandlePlayerInput();
+
+	gdp2022Physics::iPhysicsFactory* m_PhysicsFactory;
+	gdp2022Physics::iPhysicsWorld* m_PhysicsWorld;
 };
