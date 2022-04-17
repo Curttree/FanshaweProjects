@@ -33,17 +33,17 @@ namespace gdp2022Physics
 		virtual const std::string& GetVersion();
 
 	private:
-		btBroadphaseInterface* mBroadphase;
-		btDefaultCollisionConfiguration* mCollisionConfiguration;
-		btCollisionDispatcher* mDispatcher;
-		btSequentialImpulseConstraintSolver* mSolver;
+		btBroadphaseInterface* mBroadphase = 0;
+		btDefaultCollisionConfiguration* mCollisionConfiguration = 0;
+		btCollisionDispatcher* mDispatcher = 0;
+		btSequentialImpulseConstraintSolver* mSolver = 0;
 
-		btSoftBodySolver* mSoftBodySolver;
+		btSoftBodySolver* mSoftBodySolver = 0;
 
 #ifdef USE_SOFT_BODY_WORLD
 		btSoftRigidDynamicsWorld* mSoftRigidWorld;
 #else
-		btDiscreteDynamicsWorld* mDynamicsWorld;
+		btDiscreteDynamicsWorld* mDynamicsWorld = 0;
 #endif
 
 		std::vector<iCollisionBody*> mBodies;
