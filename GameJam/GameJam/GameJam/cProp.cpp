@@ -9,7 +9,7 @@ cProp::cProp(std::string name, std::string texture, glm::vec3 position, glm::vec
     prop_mesh->textureNames[0] = texture;
     prop_mesh->textureRatios[0] = 1.f;
     mesh = prop_mesh;
-    position = prop_mesh->positionXYZ;
-    scale = prop_mesh->scale;
+    this->position = prop_mesh->positionXYZ;
+    this->scale = prop_mesh->scale;
     rotation = prop_mesh->orientationXYZ;
 }

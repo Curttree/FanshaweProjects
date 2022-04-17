@@ -186,6 +186,9 @@
     <ClCompile Include="..\common\include\Graphics\cFrustumCullingHandler.cpp">
       <Filter>Graphics\FrustumCulling</Filter>
     </ClCompile>
+    <ClCompile Include="cParticle.cpp">
+      <Filter>GameJam</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -315,6 +318,9 @@
       <Filter>Graphics\FrustumCulling</Filter>
     </ClInclude>
     <ClInclude Include="soundDefs.h">
+      <Filter>GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="cParticle.h">
       <Filter>GameJam</Filter>
     </ClInclude>
   </ItemGroup>

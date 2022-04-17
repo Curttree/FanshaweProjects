@@ -374,6 +374,7 @@ int main(void) {
         //    1'000'000.0f);   // Far plane (as small as possible)
 
         ::g_pFlyCamera->Update(deltaTime);
+        ::g_pGameEngine->entityManager.TimeStep(deltaTime);
 
         glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
         glm::vec3 cameraAt = ::g_pFlyCamera->getAtInWorldSpace();

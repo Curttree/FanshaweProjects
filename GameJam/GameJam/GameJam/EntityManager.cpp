@@ -40,6 +40,24 @@ void EntityManager::DeleteEntity(cEntity* entity)
 	delete entity;
 }
 
+const std::vector<cParticle*>& EntityManager::GetParticles(void) {
+	return particles;
+}
+cParticle* EntityManager::CreateParticle(float lifeSpan) {
+	cParticle* newParticle = new cParticle(lifeSpan);
+	particles.push_back(newParticle);
+	return newParticle;
+}
+
+void EntityManager::DeleteParticle(cParticle* particle) {
+	//Could choose better data structure to optimize. For now take brute force approach.
+	for (unsigned int index = 0; index < particles.size(); index++) {
+		if (particles[index] == particle) {
+			particles.erase(particles.begin() + index);
+		}
+	}
+	delete particle;
+}
 
 cProp* EntityManager::CreateProp(std::string name, std::string texture, glm::vec3 position, glm::vec3 scale)
 {
@@ -53,5 +71,8 @@ void EntityManager::TimeStep(float deltaTime) {
 		if (entity->mesh) {
 			entity->TimeStep(deltaTime);
 		}
+	}
+	for (cParticle* particle : particles) {
+		particle->TimeStep(deltaTime);
 	}
 }

@@ -3,6 +3,7 @@
 
 #include "cEntity.h"
 #include "cProp.h"
+#include "cParticle.h"
 
 class EntityManager {
 public:
@@ -18,9 +19,14 @@ public:
 
 	const std::vector<cEntity*>& GetEntities(void);
 	cEntity* CreateEntity(void);
-
 	void DeleteEntity(cEntity* entity);
+
+	const std::vector<cParticle*>& GetParticles(void);
+	cParticle* CreateParticle(float lifeSpan = 5.f);
+	void DeleteParticle(cParticle* particle);
+
 	cProp* CreateProp(std::string name, std::string texture, glm::vec3 position, glm::vec3 scale = glm::vec3(1.f));
 private:
 	std::vector<cEntity*> entities;
+	std::vector<cParticle*> particles;
 };

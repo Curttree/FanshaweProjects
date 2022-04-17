@@ -180,6 +180,7 @@
     <ClCompile Include="cFBO\cFBO.cpp" />
     <ClCompile Include="cGameEngine.cpp" />
     <ClCompile Include="cGFLWKeyboardModifiers.cpp" />
+    <ClCompile Include="cParticle.cpp" />
     <ClCompile Include="cProp.cpp" />
     <ClCompile Include="cPropFactory.cpp" />
     <ClCompile Include="cWinContextMenu.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="..\common\include\System.h" />
     <ClInclude Include="cFBO\cFBO.h" />
     <ClInclude Include="cGameEngine.h" />
+    <ClInclude Include="cParticle.h" />
     <ClInclude Include="cProp.h" />
     <ClInclude Include="cPropFactory.h" />
     <ClInclude Include="cWinContextMenu.h" />

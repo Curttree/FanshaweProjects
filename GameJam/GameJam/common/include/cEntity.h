@@ -12,7 +12,7 @@ public:
 	cEntity();
 	virtual ~cEntity();
 
-	void TimeStep(float deltaTime);
+	virtual void TimeStep(float deltaTime);
 
 	cMesh* mesh;
 
