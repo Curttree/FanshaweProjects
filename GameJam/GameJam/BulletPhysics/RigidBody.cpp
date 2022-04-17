@@ -6,6 +6,7 @@
 
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
+#include <iostream>
 
 namespace gdp2022Physics
 {
@@ -14,9 +15,11 @@ namespace gdp2022Physics
 	{
 		btQuaternion ori;
 		btVector3 pos;
+		btVector3 velo;
 
 		CastBulletQuaternion(desc.rotation, &ori);
 		CastBulletVector3(desc.position, &pos);
+		CastBulletVector3(desc.linearVelocity, &velo);
 
 		btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(ori, pos));
 		btVector3 inertia(0, 0, 0);
@@ -31,6 +34,10 @@ namespace gdp2022Physics
 		mBulletBody = new btRigidBody(bodyCI);
 
 		mBulletBody->setActivationState(DISABLE_DEACTIVATION);
+
+		if (glm::length(desc.linearVelocity) > 0.1f) {
+			mBulletBody->applyImpulse(velo, btVector3(0, 0, 0));
+		}
 	}
 
 	RigidBody::~RigidBody() {}

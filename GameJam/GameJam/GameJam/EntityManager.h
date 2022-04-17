@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <Fanshawe2022Physics/interfaces/eShapeType.h>
 
 #include "cEntity.h"
 #include "cProp.h"
@@ -25,7 +26,7 @@ public:
 	cParticle* CreateParticle(float lifeSpan = 5.f);
 	void DeleteParticle(cParticle* particle);
 
-	cProp* CreateProp(std::string name, std::string texture, glm::vec3 position, glm::vec3 scale = glm::vec3(1.f));
+	cProp* CreateProp(std::string name, std::string texture, glm::vec3 position, eShapeType physicsShape, glm::vec3 scale = glm::vec3(1.f), glm::vec3 physicsScale = glm::vec3(1.f), float mass = 1.f, glm::vec3 orientation = glm::vec3(0.f), glm::vec3 velocity = glm::vec3(0.f));
 private:
 	std::vector<cEntity*> entities;
 	std::vector<cParticle*> particles;

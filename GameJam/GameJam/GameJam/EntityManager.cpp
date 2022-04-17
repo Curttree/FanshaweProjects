@@ -59,9 +59,9 @@ void EntityManager::DeleteParticle(cParticle* particle) {
 	delete particle;
 }
 
-cProp* EntityManager::CreateProp(std::string name, std::string texture, glm::vec3 position, glm::vec3 scale)
+cProp* EntityManager::CreateProp(std::string name, std::string texture, glm::vec3 position, eShapeType physicsShape, glm::vec3 scale, glm::vec3 physicsScale, float mass, glm::vec3 orientation, glm::vec3 velocity)
 {
-	cProp* newProp = new cProp(name, texture, position, scale);
+	cProp* newProp = new cProp(name, texture, position, physicsShape, scale, physicsScale, mass, orientation, velocity);
 	entities.push_back((cEntity*)newProp);
 	return newProp;
 }

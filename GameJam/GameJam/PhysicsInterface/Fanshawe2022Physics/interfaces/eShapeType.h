@@ -5,5 +5,6 @@ enum class eShapeType
 	Plane,
 	Sphere,
 	Cylinder,
-	Box
+	Box,
+	None
 };

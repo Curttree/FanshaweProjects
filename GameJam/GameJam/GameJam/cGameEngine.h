@@ -44,6 +44,10 @@ public:
 	bool showColourChanges;
 	bool isMuted;
 
+	//TODO: Make private but have getters.
+	gdp2022Physics::iPhysicsFactory* m_PhysicsFactory;
+	gdp2022Physics::iPhysicsWorld* m_PhysicsWorld;
+
 private:
 	//void LoadScene();
 
@@ -54,7 +58,4 @@ private:
 	int activeSequenceIndex;
 
 	void HandlePlayerInput();
-
-	gdp2022Physics::iPhysicsFactory* m_PhysicsFactory;
-	gdp2022Physics::iPhysicsWorld* m_PhysicsWorld;
 };

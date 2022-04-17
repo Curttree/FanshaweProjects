@@ -16,7 +16,7 @@ namespace gdp2022Physics
 
 		iShape* GetShape();
 
-		bool IsStatic() const;
+		virtual bool IsStatic() const;
 
 		virtual void GetPosition(glm::vec3& positionOut);
 		virtual glm::vec3 GetPosition();

@@ -103,17 +103,7 @@ namespace gdp2022Physics
 
 	void PhysicsWorld::TimeStep(float dt)
 	{
-		for (int i = 0; i < mVehicles.size(); ++i)
-		{
-			mVehicles[i]->updateVehicle(dt);
-		}
-
-#ifdef USE_SOFT_BODY_WORLD
-		mSoftRigidWorld->stepSimulation(dt, 10);
-#else
 		mDynamicsWorld->stepSimulation(dt, 10);
-#endif
-
 	}
 
 	const std::string& PhysicsWorld::GetVersion()

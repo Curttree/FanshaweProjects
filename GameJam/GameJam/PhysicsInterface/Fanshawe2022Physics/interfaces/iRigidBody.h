@@ -2,10 +2,12 @@
 
 #include <extern/glm/glm.hpp>
 #include <extern/glm/gtx/quaternion.hpp>
+#include "eBodyType.h"
+#include "iCollisionBody.h"
 
 namespace gdp2022Physics
 {
-	class iRigidBody
+	class iRigidBody : public iCollisionBody
 	{
 	public:
 		virtual ~iRigidBody() {}
@@ -20,11 +22,13 @@ namespace gdp2022Physics
 
 		virtual void ApplyForce(const glm::vec3& force) = 0;
 
+		virtual bool IsStatic() const = 0;
+
 	protected:
-		iRigidBody() {}
+		iRigidBody() :  iCollisionBody(RIGID_BODY) {}
 
 	private:
-		iRigidBody(const iRigidBody&) {}
+		iRigidBody(const iRigidBody&) : iCollisionBody(RIGID_BODY) {}
 		iRigidBody& operator=(const iRigidBody&) { return *this; }
 	};
 }

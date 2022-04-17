@@ -192,7 +192,7 @@ int main(void) {
     vecModelsToLoad.push_back("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply");
     vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
     vecModelsToLoad.push_back("can.ply");
-    vecModelsToLoad.push_back("SM_Prop_CarboardBox_01.ply");
+    vecModelsToLoad.push_back("SM_Prop_CarboardBox_02.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -328,6 +328,8 @@ int main(void) {
         double deltaTime = currentTime - previousTime;
         deltaTime = (deltaTime > MAX_DELTA_TIME ? MAX_DELTA_TIME : deltaTime);
         previousTime = currentTime;
+
+        ::g_pGameEngine->Update(deltaTime);
 
         // Set the output of the renderer to the screen (default FBO)
         GLuint FBO_ID = ::g_pFBO->ID;

@@ -3,6 +3,7 @@
 
 #include <Animation/cBone.h>
 #include <PhysicsFactory.h>
+#include <Fanshawe2022Physics/interfaces/shapes.h>
 
 // If I am going to continue to add commands, I should switch to a factory.
 #include <Animation/cCommand_ConsoleOutput.h>
@@ -34,7 +35,7 @@ bool cGameEngine::Initialize(void)
 
 	//Physics Initialization, Using our Factory to create
 	m_PhysicsFactory = new gdp2022Physics::PhysicsFactory();
-	m_PhysicsWorld = m_PhysicsFactory->CreateWorld();
+	m_PhysicsWorld = m_PhysicsFactory->CreateWorld();	
 	m_PhysicsWorld->SetGravity(glm::vec3(0.f, -9.81f, 0.f));
 
 	return true;
@@ -50,6 +51,9 @@ void cGameEngine::Update(float dt)
 {
 	//animationSystem.Process(entityManager.GetEntities(), dt * gameSpeed);
 	boneSystem.Process(entityManager.GetEntities(), dt * gameSpeed);
+	if (m_PhysicsWorld) {
+		m_PhysicsWorld->TimeStep(dt);
+	}
 	entityManager.TimeStep(dt);
 	HandlePlayerInput();
 }
