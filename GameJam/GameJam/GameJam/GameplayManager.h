@@ -1,14 +1,14 @@
 #pragma once
 
 #include <vector>
-#include <cEntity.h>
+#include "cProp.h"
 
 
 class GameplayManager {
 public:
 	GameplayManager();
 	virtual ~GameplayManager();
-	std::vector<cEntity*> canList;
+	std::vector<cProp*> canList;
 	void SetupScene(void);
 	void GameStart();
 	void GameOver();

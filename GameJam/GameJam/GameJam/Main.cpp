@@ -193,6 +193,7 @@ int main(void) {
     vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
     vecModelsToLoad.push_back("can.ply");
     vecModelsToLoad.push_back("SM_Prop_CarboardBox_02.ply");
+    vecModelsToLoad.push_back("billiardball.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -228,6 +229,8 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("crosshair.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("PolygonCity_Texture.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("city_imposter.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("15.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Concrete_012.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;

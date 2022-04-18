@@ -15,14 +15,8 @@ namespace gdp2022Physics
 		mCollisionConfiguration = new btDefaultCollisionConfiguration();
 		mDispatcher = new btCollisionDispatcher(mCollisionConfiguration);
 		mSolver = new btSequentialImpulseConstraintSolver();
-
-#ifdef USE_SOFT_BODY_WORLD
-		mSoftBodySolver = new btDefaultSoftBodySolver();
-		mSoftRigidWorld = new btSoftRigidDynamicsWorld(mDispatcher, mBroadphase, mSolver, mCollisionConfiguration, mSoftBodySolver);
-		mVehicleRaycaster = new VehicleRaycaster(new btDefaultVehicleRaycaster(mSoftRigidWorld));
-#else
+		
 		mDynamicsWorld = new btDiscreteDynamicsWorld(mDispatcher, mBroadphase, mSolver, mCollisionConfiguration);
-#endif
 
 		mVersion = "Bullet";
 		printf("Bullet Physics World\n");
@@ -33,18 +27,11 @@ namespace gdp2022Physics
 	{
 		// TODO:
 		// Remove rigid bodies from the dynamics world
-		// remove soft bodies from the soft rigid world
-		// delete soft bodies
 		// delete motion states
 		// delete rigid bodies
 		// Delete shapes.
 
-#ifdef USE_SOFT_BODY_WORLD
-		delete mSoftRigidWorld;
-		delete mSoftBodySolver;
-#else
 		delete mDynamicsWorld;
-#endif
 		delete mSolver;
 		delete mCollisionConfiguration;
 		delete mDispatcher;
@@ -55,16 +42,7 @@ namespace gdp2022Physics
 	{
 		btVector3 btGravity;
 		CastBulletVector3(gravity, &btGravity);
-#ifdef USE_SOFT_BODY_WORLD
-		mSoftRigidWorld->setGravity(btGravity);
-#else
 		mDynamicsWorld->setGravity(btGravity);
-#endif
-	}
-
-	void PhysicsWorld::RegisterCollisionListener(iCollisionListener* listener)
-	{
-		// TODO:
 	}
 
 	void PhysicsWorld::AddBody(iCollisionBody* body)
@@ -74,31 +52,26 @@ namespace gdp2022Physics
 
 		if (body->GetBodyType() == gdp2022Physics::eBodyType::SOFT_BODY)
 		{
-#ifdef USE_SOFT_BODY_WORLD
-			printf("PhysicsWorld.AddBody: [Warning] Unimplemented adding soft body to mSoftRigidWorld!\n");
-			mSoftRigidWorld->addSoftBody(CastBulletSoftBody(body));
-#else
 			printf("PhysicsWorld.AddBody: [Error] Unable to add a soft body to a dynamics world!\n");
 			return;
-#endif
 		}
 
-		// TODO:
-		// May want to add 2 more vectors
-		// vector<SoftBody*> mSoftBodies;
-		// vector<RigidBody*> mRigidBodies;
 		mBodies.push_back(body);
 
-#ifdef USE_SOFT_BODY_WORLD
-		mSoftRigidWorld->addRigidBody(CastBulletRigidBody(body));
-#else
 		mDynamicsWorld->addRigidBody(CastBulletRigidBody(body));
-#endif
 	}
 
 	void PhysicsWorld::RemoveBody(iCollisionBody* body)
 	{
-		// TODO:
+		if (std::find(mBodies.begin(), mBodies.end(), body) == mBodies.end())
+			return;
+
+		mBodies.erase(std::find(mBodies.begin(), mBodies.end(), body));
+
+		mDynamicsWorld->removeRigidBody(CastBulletRigidBody(body));
+
+		delete body;
+		body = 0;
 	}
 
 	void PhysicsWorld::TimeStep(float dt)

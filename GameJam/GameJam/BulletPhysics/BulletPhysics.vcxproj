@@ -147,14 +147,12 @@
     <ClCompile Include="PhysicsFactory.cpp" />
     <ClCompile Include="PhysicsWorld.cpp" />
     <ClCompile Include="RigidBody.cpp" />
-    <ClCompile Include="SoftBody.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PhysicsConversion.h" />
     <ClInclude Include="PhysicsFactory.h" />
     <ClInclude Include="PhysicsWorld.h" />
     <ClInclude Include="RigidBody.h" />
-    <ClInclude Include="SoftBody.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

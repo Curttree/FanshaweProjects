@@ -10,10 +10,6 @@
 #include <BulletSoftBody/btSoftRigidDynamicsWorld.h>
 #include <BulletSoftBody/btDefaultSoftBodySolver.h>
 
-
-//#define USE_SOFT_BODY_WORLD
-
-
 namespace gdp2022Physics
 {
 	class PhysicsWorld : public iPhysicsWorld
@@ -25,7 +21,6 @@ namespace gdp2022Physics
 		virtual void TimeStep(float dt);
 
 		virtual void SetGravity(const glm::vec3& gravity);
-		virtual void RegisterCollisionListener(iCollisionListener* listener);
 
 		virtual void AddBody(iCollisionBody* body);
 		virtual void RemoveBody(iCollisionBody* body);
@@ -38,13 +33,7 @@ namespace gdp2022Physics
 		btCollisionDispatcher* mDispatcher = 0;
 		btSequentialImpulseConstraintSolver* mSolver = 0;
 
-		btSoftBodySolver* mSoftBodySolver = 0;
-
-#ifdef USE_SOFT_BODY_WORLD
-		btSoftRigidDynamicsWorld* mSoftRigidWorld;
-#else
 		btDiscreteDynamicsWorld* mDynamicsWorld = 0;
-#endif
 
 		std::vector<iCollisionBody*> mBodies;
 		std::vector<btRaycastVehicle*> mVehicles;

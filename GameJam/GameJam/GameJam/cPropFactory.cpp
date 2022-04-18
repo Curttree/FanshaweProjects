@@ -36,13 +36,13 @@ cProp* cPropFactory::createProp(int type, glm::vec3 position, glm::vec3 velocity
 		result->mesh->boundingRadius = 10.f;
 		break;	
 	case(PROP_TEST_GROUND):
-			result = ::g_pGameEngine->entityManager.CreateProp("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply", "city_imposter.bmp", position, eShapeType::Plane, glm::vec3(100.f));
+			result = ::g_pGameEngine->entityManager.CreateProp("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply", "Concrete_012.bmp", position, eShapeType::Plane, glm::vec3(100.f));
 			result->mesh->orientationXYZ = glm::vec3(-glm::pi<float>()/2.f, 0.f, 0.f);
 			result->rotation = result->mesh->orientationXYZ;
 			result->mesh->boundingRadius = 10.f;
 			break;
 	case(PROP_BULLET):
-		result = ::g_pGameEngine->entityManager.CreateProp("Sphere_xyz_n_rgba_uv.ply", "BrainNerve.bmp", position, eShapeType::Sphere,glm::vec3(1.f),glm::vec3(1.0f),0.5f,glm::vec3(0.f),::g_pFlyCamera->getAtDirection()*50.f);
+		result = ::g_pGameEngine->entityManager.CreateProp("billiardball.ply", "15.bmp", position, eShapeType::Sphere,glm::vec3(0.5f),glm::vec3(0.5f),0.2f,glm::vec3(0.f),::g_pFlyCamera->getAtDirection()*30.f);
 		break;
 	default:
 		break;

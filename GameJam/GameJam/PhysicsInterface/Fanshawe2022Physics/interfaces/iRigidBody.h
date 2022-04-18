@@ -20,6 +20,9 @@ namespace gdp2022Physics
 		virtual glm::quat GetOrientation() = 0;
 		virtual void SetOrientation(const glm::quat& orientationIn) = 0;
 
+		virtual void ApplyImpulse(const glm::vec3& impulse) = 0;
+		virtual void ApplyImpulseAtPoint(const glm::vec3& impulse, const glm::vec3& relativePoint) = 0;
+
 		virtual void ApplyForce(const glm::vec3& force) = 0;
 
 		virtual bool IsStatic() const = 0;

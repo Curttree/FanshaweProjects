@@ -25,6 +25,13 @@ void cProp::TimeStep(float deltaTime) {
 		rotation = rigidBody->GetOrientation();
 	}
 	cEntity::TimeStep(deltaTime);
+	if (dying) {
+		deathTimer += deltaTime;
+		if (deathTimer >= deathMaxTime) {
+			::g_pGameEngine->m_PhysicsWorld->RemoveBody(rigidBody);
+			::g_pGameEngine->entityManager.DeleteEntity(this);
+		}
+	}
 }
 
 void cProp::InitializePhysics(eShapeType shape, float mass, glm::vec3 scale, glm::vec3 orientation, glm::vec3 velocity) {
@@ -94,4 +101,9 @@ void cProp::InitializePhysics(eShapeType shape, float mass, glm::vec3 scale, glm
 	if (rigidBody != 0 && ::g_pGameEngine->m_PhysicsWorld) {
 		::g_pGameEngine->m_PhysicsWorld->AddBody(rigidBody);
 	}
+}
+
+void cProp::Destroy(float inTime) {
+	deathMaxTime = inTime;
+	dying = true;
 }

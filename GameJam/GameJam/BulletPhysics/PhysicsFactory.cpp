@@ -34,6 +34,7 @@ namespace gdp2022Physics
 
 	iSoftBody* PhysicsFactory::CreateSoftBody(const cSoftBodyDesc& desc)
 	{
-		return 0;// new SoftBody(desc);
+		// Not supporting soft bodies quite yet.
+		return 0;
 	}
 }

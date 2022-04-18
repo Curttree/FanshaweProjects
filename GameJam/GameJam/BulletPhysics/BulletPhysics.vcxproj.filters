@@ -27,9 +27,6 @@
     <ClCompile Include="RigidBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SoftBody.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PhysicsConversion.h">
@@ -42,9 +39,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RigidBody.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SoftBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
