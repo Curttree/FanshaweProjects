@@ -6,6 +6,7 @@
 #include <extern/glm/mat4x4.hpp> // glm::mat4
 #include <extern/glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 #include <sstream>
+#include <iostream>
 
 
 cFlyCamera::cFlyCamera()
@@ -34,17 +35,23 @@ cFlyCamera::cFlyCamera()
 	this->setMouseXY(0.0, 0.0);
 	this->m_MouseWheel = 0.0f;
 
-	this->m_Mouse_Initial_State_Is_Set = false;
+this->m_Mouse_Initial_State_Is_Set = false;
 
-	this->bKeepCameraFacingUp = true;
+this->bKeepCameraFacingUp = true;
 
-	this->nearPlane = 5.0f;
-	this->farPlane = 10'000'000.0f;
-	this->FOV = 0.6f;			// Field of view
+this->nearPlane = 2.0f;
+this->farPlane = 10'000'000.0f;
+this->FOV = 0.6f;			// Field of view
 
-	this->m_CurrentState = cFlyCamera::DEFAULT_OR_UNSPECIFIED;
+this->m_CurrentState = cFlyCamera::DEFAULT_OR_UNSPECIFIED;
 
-	return;
+this->maxPitchDegrees = 80.f;
+this->minPitchDegrees = -80.f;
+
+this->maxYawDegrees = 80.f;
+this->minYawDegrees = -80.f;
+
+return;
 }
 
 //static 
@@ -119,6 +126,11 @@ void cFlyCamera::MoveLeftRight_X(float amount)
 
 void cFlyCamera::Pitch_UpDown(float angleDegrees)	// around X
 {
+	//This approach can lead to issues due to the conversion between quat and euler degrees. Consider alternative approach in the future.
+	if (glm::degrees(glm::eulerAngles(this->qOrientation).x) + angleDegrees > maxPitchDegrees||
+		glm::degrees(glm::eulerAngles(this->qOrientation).x) + angleDegrees < minPitchDegrees){
+		return;
+	}
 	// Adjust the orientation of the camera by the number of degrees
 	this->adjMeshOrientationEulerAngles(glm::vec3(angleDegrees, 0.0f, 0.0f), true);
 

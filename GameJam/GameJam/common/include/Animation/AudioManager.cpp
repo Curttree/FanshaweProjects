@@ -2,6 +2,7 @@
 #include "../../../GameJam/globals.h"
 #include <string>
 #include "../../../GameJam/soundDefs.h"
+#include <iostream>
 
 AudioManager::AudioManager(void)
 {
@@ -11,6 +12,24 @@ AudioManager::AudioManager(void)
 
 AudioManager::~AudioManager(void)
 {
+    //for (FMOD::Sound* sound : _sounds) {
+    for (unsigned int index = 0; index < _sounds.size(); index++) {
+        _result = _sounds[index]->release();
+        if (_result != FMOD_OK) {
+            std::string output = "Unable to release sound";
+            fprintf(stderr, output.c_str());
+            std::cout << std::endl;
+        }
+    }
+    _result = _system->close();
+    if (_result != FMOD_OK) {
+        fprintf(stderr, "Unable to close system");
+    }
+
+    _result = _system->release();
+    if (_result != FMOD_OK) {
+        fprintf(stderr, "Unable to release system");
+    }
 }
 
 void AudioManager::StartUp(void)
@@ -28,10 +47,10 @@ void AudioManager::StartUp(void)
     }
 
     //Create a sample.	
-    _result = _system->createSound("assets\\sounds\\cans.mp3", FMOD_LOOP_OFF, 0, &_sounds[SOUND_CANS_GUY]);
-    _result = _system->createSound("assets\\sounds\\gun.wav", FMOD_LOOP_OFF, 0, &_sounds[SOUND_GUN]);
-    _result = _system->createStream("assets\\sounds\\ambience.wav", FMOD_LOOP_NORMAL, 0, &_sounds[SOUND_AMBIENCE]);
-    _result = _system->createSound("assets\\sounds\\ping.mp3", FMOD_LOOP_OFF, 0, &_sounds[SOUND_PING]);
+    _result = _system->createSound("assets\\sounds\\cans.mp3", FMOD_LOOP_OFF, 0, &_sounds[0]);
+    _result = _system->createSound("assets\\sounds\\gun.wav", FMOD_LOOP_OFF, 0, &_sounds[1]);
+    _result = _system->createStream("assets\\sounds\\ambience.wav", FMOD_LOOP_NORMAL, 0, &_sounds[2]);
+    _result = _system->createSound("assets\\sounds\\ping.mp3", FMOD_LOOP_OFF, 0, &_sounds[3]);
     if (_result != FMOD_OK) {
         fprintf(stderr, "Unable to create sound");
         return;
@@ -43,22 +62,6 @@ void AudioManager::StartUp(void)
 
 void AudioManager::ShutDown(void)
 {
-    for (FMOD::Sound* sound : _sounds) {
-        _result = sound->release();
-        if (_result != FMOD_OK) {
-            std::string output = "Unable to release sound 1";
-            fprintf(stderr, output.c_str());
-        }
-    }
-    _result = _system->close();
-    if (_result != FMOD_OK) {
-        fprintf(stderr, "Unable to close system");
-    }
-
-    _result = _system->release();
-    if (_result != FMOD_OK) {
-        fprintf(stderr, "Unable to release system");
-    }
 }
 
 void AudioManager::TimeStep(float deltaTime) {

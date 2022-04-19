@@ -90,7 +90,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
 //        GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName("Broc_tree_house.bmp");
         GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[4]);
 
-        GLuint textureUnit = 10;			// Texture unit go from 0 to 79. 10-20 are being used for masks.
+        GLuint textureUnit = 20;			// Texture unit go from 0 to 79. 20-30 are being used for masks.
         glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
         glBindTexture(GL_TEXTURE_2D, TextureNumber);
 
@@ -99,7 +99,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
 
         GLuint TextureNumber2 = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[6]);
 
-        GLuint textureUnit2 = 20;			// Texture unit go from 0 to 79. 20-30 are being used for textures to be used with masks.
+        GLuint textureUnit2 = 21;			// Texture unit go from 0 to 79. 20-30 are being used for textures to be used with masks.
         glActiveTexture(textureUnit2 + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
         glBindTexture(GL_TEXTURE_2D, TextureNumber2);
 
@@ -112,7 +112,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         // uniform sampler2D maskTexture_01;
         GLuint TextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[5]);
 
-        GLuint textureUnit = 11;			// Texture unit go from 0 to 79. 10-19 are being used for masks.
+        GLuint textureUnit = 22;			// Texture unit go from 0 to 79. 10-19 are being used for masks.
         glActiveTexture(textureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
         glBindTexture(GL_TEXTURE_2D, TextureNumber);
 
@@ -121,7 +121,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
 
         GLuint TextureNumber2 = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[6]);
 
-        GLuint textureUnit2 = 20;			// Texture unit go from 0 to 79. 20-30 are being used for textures to be used with masks.
+        GLuint textureUnit2 = 23;			// Texture unit go from 0 to 79. 20-30 are being used for textures to be used with masks.
         glActiveTexture(textureUnit2 + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
         glBindTexture(GL_TEXTURE_2D, TextureNumber2);
 
@@ -155,7 +155,6 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
 
         if (pCurrentMesh->bUseDiscardTransparency)
         {
-            //                GLuint discardTextureNumber = ::g_pTextureManager->getTextureIDFromName("Lisse_mobile_shipyard-mal1.bmp");
             GLuint discardTextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->textureNames[8]);
             // Picking texture unit 30 since it's not in use.
             GLuint discardTextureUnit = 30;			// Texture unit go from 0 to 79
@@ -184,6 +183,14 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         glBindTexture(GL_TEXTURE_2D, crosshairTextureNumber);
         GLint crosshairTexture_LocID = g_GetUniformLocation(shaderProgram, "crosshair");
         glUniform1i(crosshairTexture_LocID, crosshairTextureUnit);
+    }
+    {
+        GLuint waterTextureNumber = ::g_pTextureManager->getTextureIDFromName("UnderwaterNormals.bmp");
+        GLuint waterTextureUnit = 32;			// Texture unit go from 0 to 79
+        glActiveTexture(waterTextureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, waterTextureNumber);
+        GLint crosshairTexture_LocID = g_GetUniformLocation(shaderProgram, "waterTexture");
+        glUniform1i(crosshairTexture_LocID, waterTextureUnit);
     }
 
     {
@@ -423,6 +430,11 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
         ::g_pFlyCamera->getEye().z,
         1.f);
 
+    GLint delta_Location = g_GetUniformLocation(program, "deltaTime");
+    glUniform1f(delta_Location, ::g_deltaTime);
+
+    GLint runTime_Location = g_GetUniformLocation(program, "totalTime");
+    glUniform1f(runTime_Location, ::g_runTime);
 
     sModelDrawInfo modelInfo;
 

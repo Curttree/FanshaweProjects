@@ -14,7 +14,8 @@ namespace gdp2022Physics
 		virtual void SetGravity(const glm::vec3& gravity) = 0;
 		virtual void AddBody(iCollisionBody* body) = 0;
 		virtual void RemoveBody(iCollisionBody* body) = 0;
-		virtual void TimeStep(float dt) = 0;
+		virtual void TimeStep(float dt) = 0; 
+		virtual iCollisionBody* RayHit(glm::vec3 start, glm::vec3 end) = 0;
 
 	protected:
 		iPhysicsWorld() { }

@@ -43,8 +43,8 @@ void EntityManager::DeleteEntity(cEntity* entity)
 const std::vector<cParticle*>& EntityManager::GetParticles(void) {
 	return particles;
 }
-cParticle* EntityManager::CreateParticle(float lifeSpan) {
-	cParticle* newParticle = new cParticle(lifeSpan);
+cParticle* EntityManager::CreateParticle(std::string texture, float _lifeSpan, glm::vec3 _position, bool followCameraPosition, glm::vec3 _scale) {
+	cParticle* newParticle = new cParticle(texture, _lifeSpan, _position, followCameraPosition, _scale);
 	particles.push_back(newParticle);
 	return newParticle;
 }

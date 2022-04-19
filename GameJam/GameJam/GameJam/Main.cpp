@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <limits>
 #include <extern/glm/glm.hpp>
 #include <extern/glm/vec3.hpp> // glm::vec3
 #include <extern/glm/vec4.hpp> // glm::vec4
@@ -78,7 +79,7 @@ int main(void) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
-
+    glfwSetInputMode(pWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
     glfwSetKeyCallback(pWindow, GLFW_key_callback);
     glfwSetCursorEnterCallback(pWindow, GLFW_cursor_enter_callback);
     glfwSetCursorPosCallback(pWindow, GLFW_cursor_position_callback);
@@ -231,6 +232,7 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("city_imposter.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("15.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Concrete_012.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("UnderwaterNormals.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;
@@ -280,7 +282,8 @@ int main(void) {
     const GLint RENDER_PASS_0_ENTIRE_SCENE = 0;
     const GLint RENDER_PASS_1_QUAD_ONLY = 1;
     const GLint PASS_2_MONITOR = 2;
-    const GLint PASS_3_2D_EFFECTS_PASS = 3;
+    const GLint PASS_3_2D_EFFECTS_PASS = 3; 
+    const GLint PASS_4_UI_PASS = 4;
     GLint renderPassNumber_LocID = glGetUniformLocation(program, "renderPassNumber");
 
 #pragma region Objects
@@ -331,6 +334,10 @@ int main(void) {
         double deltaTime = currentTime - previousTime;
         deltaTime = (deltaTime > MAX_DELTA_TIME ? MAX_DELTA_TIME : deltaTime);
         previousTime = currentTime;
+        ::g_deltaTime = deltaTime;
+        if (::g_runTime + deltaTime < FLT_MAX) {
+            ::g_runTime += deltaTime;
+        }
 
         ::g_pGameEngine->Update(deltaTime);
 
@@ -343,7 +350,7 @@ int main(void) {
         ratio = ::g_pFBO->width / (float)::g_pFBO->height;
 
         // Turn on the depth buffer
-        glEnable(GL_DEPTH);         // Turns on the depth buffer
+        //glEnable(GL_DEPTH);         // Turns on the depth buffer
         glEnable(GL_DEPTH_TEST);    // Check if the pixel is already closer
 
         //glViewport(0, 0, width, height);
@@ -405,6 +412,8 @@ int main(void) {
         // Draw the "scene" of all objects.
         // i.e. go through the vector and draw each one...
         // **********************************************************************
+
+        matModel = glm::mat4(1.0f);
         for (unsigned int index = 0; index != ::g_vec_pMeshes.size(); index++)
         {
             // So the code is a little easier...
@@ -415,17 +424,12 @@ int main(void) {
             //    continue;
             //}
 
-            matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
-            //mat4x4_identity(m);
-
             DrawObject(pCurrentMesh,
                 matModel,
                 matModel_Location,
                 matModelInverseTranspose_Location,
                 program,
                 ::g_pVAOManager);
-
-
         }//for (unsigned int index
         std::vector<cEntity*> entities = ::g_pGameEngine->entityManager.GetEntities();
         for (unsigned int index = 0; index != entities.size(); index++)
@@ -438,19 +442,33 @@ int main(void) {
             //    continue;
             //}
 
-            matModel = glm::mat4(1.0f);  // "Identity" ("do nothing", like x1)
-            //mat4x4_identity(m);
-
             DrawObject(pCurrentMesh,
                 matModel,
                 matModel_Location,
                 matModelInverseTranspose_Location,
                 program,
                 ::g_pVAOManager);
-
-
         }
+        //std::vector<cParticle*> particles = ::g_pGameEngine->entityManager.GetParticles();
+        //for (unsigned int index = 0; index != particles.size(); index++)
+        //{
+        //    cMesh* pCurrentMesh = particles[index]->mesh;
 
+        //    //if (!cFrustumCullingHandler::Instance()->isWithinFrustum(frustum, pCurrentMesh)) {
+        //    //    //Object isn't in view. Don't bother drawing.
+        //    //    continue;
+        //    //}
+
+        //    //TODO: After they are culled, update sorting so we aren't overdrawing particles as regularly.
+
+
+        //    DrawObject(pCurrentMesh,
+        //        matModel,
+        //        matModel_Location,
+        //        matModelInverseTranspose_Location,
+        //        program,
+        //        ::g_pVAOManager);
+        //}
         // Scene is drawn
         // **********************************************************************   
 
@@ -519,16 +537,37 @@ int main(void) {
 
         glUniform1ui(renderPassNumber_LocID, PASS_3_2D_EFFECTS_PASS);
 
-        // Set the FBO colour texture to be the texture source for this quad
+        // Set the FBO colour and depth textures to be the texture source for this quad
+        {       
+            GLuint FSQ_textureUnit = 7;	    // We picked 7 just because yolo (i.e. it doesn't matter, we just had to pick one)
+            glActiveTexture(FSQ_textureUnit + GL_TEXTURE0);
+            GLuint TextureNumber = ::g_pFBO->colourTexture_0_ID;
+            glBindTexture(GL_TEXTURE_2D, TextureNumber);
 
-        GLuint FSQ_textureUnit = 7;	    // We picked 7 just because yolo (i.e. it doesn't matter, we just had to pick one)
-        glActiveTexture(FSQ_textureUnit + GL_TEXTURE0);
-        GLuint TextureNumber = ::g_pFBO->colourTexture_0_ID;
-        glBindTexture(GL_TEXTURE_2D, TextureNumber);
+            // uniform sampler2D texture_07;
+            GLint FSQ_textureSamplerID = glGetUniformLocation(program, "texture_07");
+            glUniform1i(FSQ_textureSamplerID, FSQ_textureUnit);
+        }
 
-        // uniform sampler2D texture_07;
-        GLint FSQ_textureSamplerID = glGetUniformLocation(program, "texture_07");
-        glUniform1i(FSQ_textureSamplerID, FSQ_textureUnit);
+        {
+            GLuint FSQ_textureUnit = 8;	    // We picked 8 because it is next to 7.
+            glActiveTexture(FSQ_textureUnit + GL_TEXTURE0);
+            GLuint TextureNumber = ::g_pFBO->depthTexture_ID;
+            glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+            GLint FSQ_textureSamplerID = glGetUniformLocation(program, "texture_08");
+            glUniform1i(FSQ_textureSamplerID, FSQ_textureUnit);
+        }
+
+        {
+            GLuint FSQ_textureUnit = 9;	    // We picked 9 because it is next to 8.
+            glActiveTexture(FSQ_textureUnit + GL_TEXTURE0);
+            GLuint TextureNumber = ::g_pFBO->vertexNormal_2_ID;
+            glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+            GLint FSQ_textureSamplerID = glGetUniformLocation(program, "texture_09");
+            glUniform1i(FSQ_textureSamplerID, FSQ_textureUnit);
+        }
 
         glm::mat4x4 matModelFullScreenQuad = glm::mat4(1.0f);   // identity matrix
 
@@ -569,6 +608,19 @@ int main(void) {
             matModelInverseTranspose_Location,
             program,
             ::g_pVAOManager);
+
+        matView = glm::ortho(
+            -1.f / (float)width / 5.f,   // Left
+            -5.f / (float)width / 100.f,  // Right
+            0.f,   // Top
+            1.0f / (float)height/ 40.f, // Bottom
+            30.0f, // zNear  Eye is at 450, quad is at 500, so 50 units away
+            70.0f); // zFar
+
+        glUniformMatrix4fv(pShaderProc->getUniformID_From_Name("matView"),
+            1, GL_FALSE, glm::value_ptr(matView));
+
+        glUniform1ui(renderPassNumber_LocID, PASS_4_UI_PASS);
 
         // "Present" what we've drawn.
         glfwSwapBuffers(pWindow);        // Show what we've drawn

@@ -85,6 +85,8 @@ extern cMesh* g_pFullScreenQuad; // = NULL
 // The FBO that the full screen quad is going to use
 extern cFBO* g_pFBO;    // = NULL
 
+extern float g_runTime;
+extern float g_deltaTime;
 
 // ************************************************
 //    _  __         _                      _                 _ _  __ _            

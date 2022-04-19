@@ -44,6 +44,10 @@ public:
 	// Use these to allow us to use the LookAt() transform
 	glm::vec3 eye;
 	bool bKeepCameraFacingUp;
+	float maxPitchDegrees;
+	float minPitchDegrees;
+	float maxYawDegrees;
+	float minYawDegrees;
 private:
 	glm::vec3 m_at;			// A direction, not a location
 	glm::vec3 m_up;

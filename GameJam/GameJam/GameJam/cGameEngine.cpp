@@ -36,7 +36,7 @@ bool cGameEngine::Initialize(void)
 	//Physics Initialization, Using our Factory to create
 	m_PhysicsFactory = new gdp2022Physics::PhysicsFactory();
 	m_PhysicsWorld = m_PhysicsFactory->CreateWorld();	
-	m_PhysicsWorld->SetGravity(glm::vec3(0.f, -9.81f, 0.f));
+	m_PhysicsWorld->SetGravity(glm::vec3(0.f, -4.905f, 0.f));
 
 	return true;
 }

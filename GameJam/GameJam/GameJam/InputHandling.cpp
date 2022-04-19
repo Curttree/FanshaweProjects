@@ -188,6 +188,7 @@ void handleAsyncMouse(GLFWwindow* window, double deltaTime)
     if ( (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
         && ::g_MouseIsInsideWindow )
     {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         // Mouse button is down so turn the camera
         ::g_pFlyCamera->Yaw_LeftRight(::g_pFlyCamera->getDeltaMouseX() * MOUSE_SENSITIVITY, deltaTime);
 
@@ -196,6 +197,7 @@ void handleAsyncMouse(GLFWwindow* window, double deltaTime)
     }
     else if ((glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE) && ::g_pGameEngine->g_pGameplayManager->GetAiming()) {
         ::g_pGameEngine->g_pGameplayManager->SetAiming(false);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
     }
     // Mouse button is down so turn the camera
     //if (::g_MouseIsInsideWindow) {
@@ -231,12 +233,10 @@ void GLFW_cursor_enter_callback(GLFWwindow* window, int entered)
 {
     if ( entered )
     {
-        std::cout << "Mouse cursor is over the window" << std::endl;
         ::g_MouseIsInsideWindow = true;
     }
     else
     {
-        std::cout << "Mouse cursor is no longer over the window" << std::endl;
         ::g_MouseIsInsideWindow = false;
     }
     return;

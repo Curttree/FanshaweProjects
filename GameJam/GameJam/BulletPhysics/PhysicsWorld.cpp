@@ -1,6 +1,7 @@
 #include "PhysicsWorld.h"
 
 #include "PhysicsConversion.h"
+#include <iostream>
 
 // BULLET
 
@@ -82,5 +83,25 @@ namespace gdp2022Physics
 	const std::string& PhysicsWorld::GetVersion()
 	{
 		return mVersion;
+	}
+
+	iCollisionBody* PhysicsWorld::RayHit(glm::vec3 start, glm::vec3 end) {
+		btVector3 b_start;
+		btVector3 b_end;
+		CastBulletVector3(start, &b_start);
+		CastBulletVector3(end, &b_end);
+		btCollisionWorld::ClosestRayResultCallback RayCallback(b_start, b_end);
+		mDynamicsWorld->rayTest(b_start, b_end, RayCallback);
+		if (RayCallback.hasHit()) {
+			const btCollisionObject* hit = RayCallback.m_collisionObject; 
+			gdp2022Physics::iRigidBody* rigid;
+			for (iCollisionBody* body : mBodies) {
+				if (body->GetBodyType() == RIGID_BODY && CastBulletRigidBody(body) == btRigidBody::upcast(hit)) {
+					return body;
+				}
+				//Ignore other body types..just like the fashion industry for decades.
+			}
+		}
+		return 0;
 	}
 }

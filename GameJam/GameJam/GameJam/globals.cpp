@@ -34,6 +34,9 @@ cFBO* g_pFBO = NULL;
 // This will be printed in the title bar
 std::string g_TitleText = "";
 
+float g_runTime = 0.f;
+float g_deltaTime = 0.f;
+
 //
 //bool g_FindObjectByUniqueID(unsigned int uniqueID_toFind, cMesh*& theObjectIFound);
 //

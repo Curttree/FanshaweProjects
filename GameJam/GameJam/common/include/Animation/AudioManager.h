@@ -19,7 +19,6 @@ private:
 	FMOD::System* _system = NULL;
 	FMOD_RESULT _result = FMOD_OK;
 
-	// Right now only set to play one sound. Need to scale up later.
 	std::vector<FMOD::Sound*> _sounds;
 	std::vector < FMOD::Channel*> _channels;
 };

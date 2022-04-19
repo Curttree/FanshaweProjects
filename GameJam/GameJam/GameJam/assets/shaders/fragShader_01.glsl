@@ -47,6 +47,7 @@ const uint PASS_0_ENTIRE_SCENE = 0;
 const uint PASS_1_QUAD_ONLY = 1;
 const uint PASS_2_MONITOR = 2;
 const uint PASS_3_2D_EFFECTS_PASS = 3;
+const uint PASS_4_UI_PASS = 3;
 uniform uint renderPassNumber;
 
 
@@ -91,6 +92,7 @@ uniform sampler2D texture_05;		// GL_TEXTURE_2D
 uniform sampler2D texture_06;		// GL_TEXTURE_2D
 uniform sampler2D texture_07;		// GL_TEXTURE_2D
 uniform sampler2D texture_08;		// GL_TEXTURE_2D
+uniform sampler2D texture_09;		// GL_TEXTURE_2D
 
 uniform bool bShowCrosshair;
 uniform sampler2D crosshair;		// GL_TEXTURE_2D
@@ -135,9 +137,13 @@ uniform sampler2D specularMapTexture;
 
 // Effect textures
 uniform sampler2D staticTexture;
+uniform sampler2D waterTexture;
 
 uniform vec3 maxDepthColour;
 uniform vec3 depthColourMultiplier;
+
+uniform float deltaTime;
+uniform float totalTime;
 
 void main()
 {
@@ -146,8 +152,8 @@ void main()
 	
 	vec3 maxDepthColour = vec3(1.0f, 0.f, 0.f);
 	vec3 depthColourMultiplier = vec3(1.0f, 1.0f, 2.f);
-	float maxDepth = 70.f;
-	float minDepth = 20.f;
+	float maxDepth = 50.f;
+	float minDepth = 5.f;
 	
 	// HACK: See if the UV coordinates are actually being passed in
 	pixelOutputFragColour.rgba = vec4(0.0f, 0.0f, 0.0, 1.0f); 
@@ -167,10 +173,10 @@ void main()
 
 	if (renderPassNumber == PASS_2_MONITOR)
 	{
-		vec3 sampleColour = texture(texture_08, fUVx2.xy).rgb;
-		sampleColour.rgb *= texture(staticTexture, fUVx2.xy).rgb;
-		pixelOutputFragColour.rgb = sampleColour.rgb;
-		pixelOutputFragColour.a = 1.0f;
+		//vec3 sampleColour = texture(texture_08, fUVx2.xy).rgb;
+		//sampleColour.rgb *= texture(staticTexture, fUVx2.xy).rgb;
+		//pixelOutputFragColour.rgb = sampleColour.rgb;
+		//pixelOutputFragColour.a = 1.0f;
 		return;
 	}
 
@@ -181,60 +187,80 @@ void main()
 		vec2 UVlookup;
 		UVlookup.x = gl_FragCoord.x / screenWidthHeight.x;	// Width
 		UVlookup.y = gl_FragCoord.y / screenWidthHeight.y;	// Height
-		vec3 sampleColour = texture(texture_07, UVlookup).rgb;
 
+		//Let's try the water effect.
+		vec2 timeUV;
+		timeUV.x = mod((UVlookup.x + totalTime),1.0f);
+		timeUV.y = 0.f;
+		vec4 bumpTex = texture( waterTexture, timeUV);
+		vec2 normal = bumpTex.xy * 2.f - 1.f;
+		UVlookup += normal * 0.0025f;
+		vec3 sampleColour = texture(texture_07, UVlookup).rgb;
+		
+		vec3 blurColour = sampleColour;
 		for (float i = 1; i < 6; i++)
 		{
-			float offset = i * 0.00025f;
+			float offset = i * 0.001f;
 			vec2 UVlookup;
 			UVlookup.x = gl_FragCoord.x / screenWidthHeight.x+offset;	// Width
 			UVlookup.y = gl_FragCoord.y / screenWidthHeight.y+offset;	// Height
-			sampleColour.r += texture(texture_07, UVlookup).r;
-			sampleColour.g += texture(texture_07, UVlookup).g;
-			sampleColour.b += texture(texture_07, UVlookup).b;
+			blurColour.r += texture(texture_07, UVlookup).r;
+			blurColour.g += texture(texture_07, UVlookup).g;
+			blurColour.b += texture(texture_07, UVlookup).b;
 		}
 		for (float i = -1; i > -6; i--)
 		{
-			float offset = i * 0.00025f;
+			float offset = i * 0.001f;
 			vec2 UVlookup;
 			UVlookup.x = gl_FragCoord.x / screenWidthHeight.x + offset;	// Width
 			UVlookup.y = gl_FragCoord.y / screenWidthHeight.y + offset;	// Height
-			sampleColour.r += texture(texture_07, UVlookup).r;
-			sampleColour.g += texture(texture_07, UVlookup).g;
-			sampleColour.b += texture(texture_07, UVlookup).b;
+			blurColour.r += texture(texture_07, UVlookup).r;
+			blurColour.g += texture(texture_07, UVlookup).g;
+			blurColour.b += texture(texture_07, UVlookup).b;
 		}
-		sampleColour /= 11.f;
-
-		pixelOutputFragColour.rgb = sampleColour.rgb;
+		blurColour /= 11.f;
+		//For a funky effect, enable this line.
+		//sampleColour += (blurColour - sampleColour) * texture(texture_07, UVlookup).r * 10.f;
+		if (texture(texture_08, UVlookup).r - 0.42f > 0.f){
+		
+		sampleColour += (blurColour - sampleColour) * (texture(texture_08, UVlookup).r - 0.42f);
+		}
+		
+		if (totalTime < 4.2f){
+		sampleColour.rgb *= totalTime / 4.2f;
+		}
 
 		// Tint the colour blue.
-		pixelOutputFragColour.b *= 1.25f;
-		pixelOutputFragColour.a = 1.0f;
+		sampleColour.b *= 1.25f;
 		
 		if (bShowCrosshair){
 			vec2 UVlookupCrosshair;
 			UVlookupCrosshair.x = gl_FragCoord.x / screenWidthHeight.x;	// Width
 			UVlookupCrosshair.y = gl_FragCoord.y / screenWidthHeight.y;	// Height
-			pixelOutputFragColour.r += texture(crosshair, UVlookupCrosshair).r;
-			pixelOutputFragColour.g += texture(crosshair, UVlookupCrosshair).g;
-			pixelOutputFragColour.b += texture(crosshair, UVlookupCrosshair).b;
+			sampleColour.r += texture(crosshair, UVlookupCrosshair).r;
+			sampleColour.g += texture(crosshair, UVlookupCrosshair).g;
+			sampleColour.b += texture(crosshair, UVlookupCrosshair).b;
 		}
-
-		// chromatic aberration example 
-		//vec3 sampleColour;
-		//float offset = 0.01f;
-		//vec2 UVred =   vec2(fUVx2.x + offset, fUVx2.y);
-		//vec2 UVgreen = vec2(fUVx2.x,          fUVx2.y + offset);
-		//vec2 UVblue =  vec2(fUVx2.x - offset, fUVx2.y - offset);
-
-		//sampleColour.r = texture( texture_07, UVred ).r;
-		//sampleColour.g = texture( texture_07, UVgreen ).g;
-		//sampleColour.b = texture( texture_07, UVblue ).b;
-
-		//pixelOutputFragColour.rgb = sampleColour;
-		//pixelOutputFragColour.a = 1.0f;
-
-		// Early exit
+		
+		pixelOutputFragColour.rgb = sampleColour.rgb;
+		//Does this need to be 100%? TODO: See if I can turn down alpha.
+		pixelOutputFragColour.a = 1.0f;
+		
+		return;
+	}
+	if (renderPassNumber == PASS_4_UI_PASS){
+		// Don't do lighting, but do respect discard transparency.
+		//vec4 vertexDiffuseColour = fVertexColour;
+		//vertexDiffuseColour.rgb *= 0.0001f;
+		pixelOutputFragColour.rgba = vec4(0.0f, 0.0f, 0.0, 1.0f); 
+		//pixelOutputFragColour.a = wholeObjectAlphaTransparency;
+		
+		vec2 UVlookup;
+		UVlookup.x = gl_FragCoord.x / screenWidthHeight.x;	// Width
+		UVlookup.y = gl_FragCoord.y / screenWidthHeight.y;	// Height
+		vec3 sampleColour = texture(texture_07, UVlookup).rgb;
+		
+		pixelOutputFragColour.rgb = normalize(sampleColour);
 		return;
 	}
 
@@ -393,7 +419,6 @@ void main()
 	pixelOutputMaterialColour = vec4(vertexDiffuseColour.rgb, 1.0f);
 	pixelOutputWorldPos = vec4(fVertWorldLocation.xyz, 1.0f);
 	pixelOutputSpecular = wholeObjectSpecularColour.rgba;			// = 4;	
-
 };
 
 

@@ -64,6 +64,12 @@
     <Filter Include="Graphics\FrustumCulling">
       <UniqueIdentifier>{f2cedfdc-e3a6-4656-afa2-caa113670643}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameJam\Events">
+      <UniqueIdentifier>{d5b92016-d5d5-40c1-93cf-1ec5385b9145}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameJam\States">
+      <UniqueIdentifier>{869b0e94-4f43-4503-8137-ae0e9d49dfdb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\glad.c">
@@ -188,6 +194,15 @@
     </ClCompile>
     <ClCompile Include="cParticle.cpp">
       <Filter>GameJam</Filter>
+    </ClCompile>
+    <ClCompile Include="cParticleFactory.cpp">
+      <Filter>GameJam</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEvents.cpp">
+      <Filter>GameJam\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationStateMachine.cpp">
+      <Filter>GameJam\States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -322,6 +337,24 @@
     </ClInclude>
     <ClInclude Include="cParticle.h">
       <Filter>GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="cParticleFactory.h">
+      <Filter>GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="particleDefs.h">
+      <Filter>GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="cCharacter.h">
+      <Filter>GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEvents.h">
+      <Filter>GameJam\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationStates.h">
+      <Filter>GameJam\States</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationStateMachine.h">
+      <Filter>GameJam\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

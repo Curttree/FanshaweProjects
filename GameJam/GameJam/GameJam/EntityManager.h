@@ -23,7 +23,7 @@ public:
 	void DeleteEntity(cEntity* entity);
 
 	const std::vector<cParticle*>& GetParticles(void);
-	cParticle* CreateParticle(float lifeSpan = 5.f);
+	cParticle* CreateParticle(std::string texture, float _lifeSpan, glm::vec3 _position, bool followCameraPosition, glm::vec3 _scale);
 	void DeleteParticle(cParticle* particle);
 
 	cProp* CreateProp(std::string name, std::string texture, glm::vec3 position, eShapeType physicsShape, glm::vec3 scale = glm::vec3(1.f), glm::vec3 physicsScale = glm::vec3(1.f), float mass = 1.f, glm::vec3 orientation = glm::vec3(0.f), glm::vec3 velocity = glm::vec3(0.f));
