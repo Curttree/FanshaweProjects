@@ -59,5 +59,8 @@
     <ClInclude Include="Fanshawe2022Physics\interfaces\iSoftBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Fanshawe2022Physics\interfaces\iCharacter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

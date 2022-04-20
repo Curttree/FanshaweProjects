@@ -27,6 +27,7 @@
     <ClInclude Include="Fanshawe2022Physics\interfaces\cSoftBodyDesc.h" />
     <ClInclude Include="Fanshawe2022Physics\interfaces\eBodyType.h" />
     <ClInclude Include="Fanshawe2022Physics\interfaces\eShapeType.h" />
+    <ClInclude Include="Fanshawe2022Physics\interfaces\iCharacter.h" />
     <ClInclude Include="Fanshawe2022Physics\interfaces\iCollisionBody.h" />
     <ClInclude Include="Fanshawe2022Physics\interfaces\iCollisionListener.h" />
     <ClInclude Include="Fanshawe2022Physics\interfaces\iPhysicsFactory.h" />

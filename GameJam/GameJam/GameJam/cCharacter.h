@@ -2,10 +2,7 @@
 #include <cEntity.h>
 #include "GameEvents.h"
 #include "AnimationStateMachine.h"
-
-//Forward declaration of Bullet classes. Only pointers are used in the header, so no need to reference actual classes quite yet.
-class btPairCachingGhostObject;
-class btKinematicCharacterController;
+#include <Fanshawe2022Physics/interfaces/iCharacter.h>
 
 
 class cCharacter : public cEntity, public iGameEventListener {
@@ -21,8 +18,7 @@ public:
 	virtual AnimationState GetAnimationState(void);
 	virtual std::string GetAnimationStateAsString(void);
 private:
-	btPairCachingGhostObject* ghostObject;
-	btKinematicCharacterController* bulletController;
+	iCharacter* physicsCharacter;
 	AnimationStateMachine animationStateMachine;
 
 	float height = 1.f;

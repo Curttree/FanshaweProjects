@@ -53,7 +53,7 @@ void GameplayManager::Fire() {
                 float distance = glm::distance(canList[index]->mesh->positionXYZ, point);
                 if (distance < 1.f) {
                     ::g_pGameEngine->audioManager.PlayAudio(SOUND_PING);
-                    canList[index]->rigidBody->ApplyImpulseAtPoint((point - canList[index]->mesh->positionXYZ) * 0.5f, point);
+                    canList[index]->rigidBody->ApplyImpulseAtPoint((canList[index]->mesh->positionXYZ - point) * 0.5f, point);
                     canList[index]->Destroy(3.f);
                     canList.erase(canList.begin() + index);
                     if (canList.size() == 0) {

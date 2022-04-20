@@ -1,5 +1,6 @@
 #include "cCharacter.h"
 #include <GLFW/glfw3.h>
+#include <Character.h>
 
 cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     cMesh* character_mesh = new cMesh();
@@ -14,6 +15,8 @@ cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     this->rotation = glm::quat(character_mesh->orientationXYZ);
     this->scale = character_mesh->scale;
     BuildAnimationTransitions();
+    physicsCharacter = new gdp2022Physics::Character();
+    physicsCharacter->Initialize();
 }
 
 //via cEntity
