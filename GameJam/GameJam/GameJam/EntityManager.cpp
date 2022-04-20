@@ -10,11 +10,17 @@ EntityManager::~EntityManager(void)
 
 void EntityManager::StartUp(void)
 {
-
+	//Create the player character.
+	//TODO: Move this to globals/configurable values.
+	player = new cCharacter(glm::vec3(0.f, -3.f, 15.f), glm::vec3(0.f, 0.f, 0.f));
 }
 
 void EntityManager::ShutDown(void)
 {
+	if (player) {
+		delete player;
+		player = 0;
+	}
 }
 
 const std::vector<cEntity*>&EntityManager::GetEntities(void)
@@ -67,6 +73,7 @@ cProp* EntityManager::CreateProp(std::string name, std::string texture, glm::vec
 }
 
 void EntityManager::TimeStep(float deltaTime) {
+	player->TimeStep(deltaTime);
 	for (cEntity* entity : entities) {
 		if (entity->mesh) {
 			entity->TimeStep(deltaTime);
@@ -75,4 +82,8 @@ void EntityManager::TimeStep(float deltaTime) {
 	for (cParticle* particle : particles) {
 		particle->TimeStep(deltaTime);
 	}
+}
+
+cCharacter* EntityManager::GetPlayer(void) {
+	return player;
 }

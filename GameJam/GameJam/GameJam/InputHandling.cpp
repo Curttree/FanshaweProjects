@@ -257,6 +257,7 @@ void GLFW_mouse_button_callback(GLFWwindow* window, int button, int action, int 
 
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && ::g_pGameEngine->g_pGameplayManager->GetAiming()) {
         ::g_pGameEngine->g_pGameplayManager->Fire();
+
     }
 #ifdef YO_NERDS_WE_USING_WINDOWS_CONTEXT_MENUS_IN_THIS_THANG
     // Right button is pop-up
@@ -266,6 +267,18 @@ void GLFW_mouse_button_callback(GLFWwindow* window, int button, int action, int 
     }
 #endif
 
+    // Send a notification to the character that a key was pressed.
+    // Could use pub/sub model if we were broadcasting to more entities, but for now, we only have one that cares.
+    if (action == GLFW_PRESS) {
+        GameEvent_MousePress* g_event = new GameEvent_MousePress(button);
+        ::g_pGameEngine->entityManager.GetPlayer()->Notify(GameEventType::MOUSE_PRESS, g_event);
+        delete g_event;
+    }
+    else if (action == GLFW_RELEASE) {
+        GameEvent_MouseRelease* g_event = new GameEvent_MouseRelease(button);
+        ::g_pGameEngine->entityManager.GetPlayer()->Notify(GameEventType::MOUSE_RELEASE, g_event);
+        delete g_event;
+    }
     return;
 }
 

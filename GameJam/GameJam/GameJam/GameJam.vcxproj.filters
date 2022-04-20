@@ -204,6 +204,9 @@
     <ClCompile Include="AnimationStateMachine.cpp">
       <Filter>GameJam\States</Filter>
     </ClCompile>
+    <ClCompile Include="cCharacter.cpp">
+      <Filter>GameJam</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">

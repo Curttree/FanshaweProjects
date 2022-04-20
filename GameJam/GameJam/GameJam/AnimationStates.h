@@ -5,10 +5,10 @@ enum class AnimationState
 {
 	Shoot,
 	Idle,
-	Swim,
 	Run,
 	Walk,
-	Waiting
+	Waiting,
+	Aim
 };
 
 enum class TransitionType

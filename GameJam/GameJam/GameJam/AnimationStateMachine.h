@@ -10,6 +10,8 @@ public:
 	AnimationStateMachine();
 	~AnimationStateMachine();
 
+	AnimationState GetCurrentState();
+
 	void AddTransition(GameEvent* gameEvent, AnimationState from, AnimationState to,
 		float duration, TransitionType type = TransitionType::Linear);
 

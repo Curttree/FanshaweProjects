@@ -195,6 +195,7 @@ int main(void) {
     vecModelsToLoad.push_back("can.ply");
     vecModelsToLoad.push_back("SM_Prop_CarboardBox_02.ply");
     vecModelsToLoad.push_back("billiardball.ply");
+    vecModelsToLoad.push_back("debugMan.ply");
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -233,6 +234,7 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("15.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Concrete_012.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("UnderwaterNormals.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("cue.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;
@@ -318,9 +320,17 @@ int main(void) {
 
     ::g_pGameEngine->g_pGameplayManager->GameStart();
 
+    //For debugging animation state transitions.
+    std::string oldState = ::g_pGameEngine->entityManager.GetPlayer()->GetAnimationStateAsString();
+    std::cout << oldState << std::endl;
+    std::string currentState;
 #pragma endregion
     while (!glfwWindowShouldClose(pWindow)) {
-
+        currentState = ::g_pGameEngine->entityManager.GetPlayer()->GetAnimationStateAsString();
+        if (oldState != currentState) {
+            std::cout << currentState << std::endl;
+            oldState = currentState;
+        }
         // Set pass to #0
         glUniform1ui(renderPassNumber_LocID, RENDER_PASS_0_ENTIRE_SCENE);
 
@@ -449,6 +459,14 @@ int main(void) {
                 program,
                 ::g_pVAOManager);
         }
+        cMesh* playerMesh = ::g_pGameEngine->entityManager.GetPlayer()->mesh;
+        DrawObject(playerMesh,
+            matModel,
+            matModel_Location,
+            matModelInverseTranspose_Location,
+            program,
+            ::g_pVAOManager);
+
         //std::vector<cParticle*> particles = ::g_pGameEngine->entityManager.GetParticles();
         //for (unsigned int index = 0; index != particles.size(); index++)
         //{

@@ -13,6 +13,10 @@ AnimationStateMachine::~AnimationStateMachine()
 	stateTransitions.clear();
 }
 
+AnimationState AnimationStateMachine::GetCurrentState() {
+	return currentState;
+}
+
 void AnimationStateMachine::Update(float dt)
 {
 	if (transitionInProgress)

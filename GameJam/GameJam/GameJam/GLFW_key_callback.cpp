@@ -188,9 +188,22 @@
         //<< std::endl;
         ::g_TitleText = strTitle.str();
 
- 
+
 
     }//if ( bShiftDown && ( ! bControlDown ) && ( ! bAltDown ) )
+
+    // Send a notification to the character that a key was pressed.
+    // Could use pub/sub model if we were broadcasting to more entities, but for now, we only have one that cares.
+    if (action == GLFW_PRESS) {
+        GameEvent_KeyPress* g_event = new GameEvent_KeyPress(key, bShiftDown);
+        ::g_pGameEngine->entityManager.GetPlayer()->Notify(GameEventType::KEY_PRESS, g_event);
+        delete g_event;
+    }
+    else if (action == GLFW_RELEASE) {
+        GameEvent_KeyRelease* g_event = new GameEvent_KeyRelease(key);
+        ::g_pGameEngine->entityManager.GetPlayer()->Notify(GameEventType::KEY_RELEASE, g_event);
+        delete g_event;
+    }
 
     return;
 }

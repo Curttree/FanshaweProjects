@@ -5,6 +5,7 @@
 #include "cEntity.h"
 #include "cProp.h"
 #include "cParticle.h"
+#include "cCharacter.h"
 
 class EntityManager {
 public:
@@ -14,9 +15,9 @@ public:
 	void StartUp(void);
 	void ShutDown(void);
 
-	bool GetCollision(glm::vec3 initialPosition, glm::vec3 heading, float magnitude, glm::vec3& location);
-
 	void TimeStep(float deltaTime);
+
+	cCharacter* GetPlayer(void);
 
 	const std::vector<cEntity*>& GetEntities(void);
 	cEntity* CreateEntity(void);
@@ -30,4 +31,5 @@ public:
 private:
 	std::vector<cEntity*> entities;
 	std::vector<cParticle*> particles;
+	cCharacter* player;
 };
