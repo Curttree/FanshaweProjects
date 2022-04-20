@@ -324,6 +324,8 @@ int main(void) {
     std::string oldState = ::g_pGameEngine->entityManager.GetPlayer()->GetAnimationStateAsString();
     std::cout << oldState << std::endl;
     std::string currentState;
+
+    ::g_pFlyCamera->MoveUpDown_Y(2.f);
 #pragma endregion
     while (!glfwWindowShouldClose(pWindow)) {
         currentState = ::g_pGameEngine->entityManager.GetPlayer()->GetAnimationStateAsString();

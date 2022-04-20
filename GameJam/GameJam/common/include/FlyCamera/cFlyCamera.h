@@ -58,6 +58,10 @@ private:
 	// This is used by the update to tokenize or parse the command string
 	void m_tokenizeString(std::string theString, std::vector<std::string>& vecTokens);
 
+	//TODO: Remove temp hack for camera position. Replace with proper event system.
+	bool aimCam;
+	glm::vec3 aimCamOffset;
+	glm::vec3 normalCamOffset;
 public:
 	glm::vec3 getAtInWorldSpace(void);
 	glm::vec3 getCameraDirection(void);
