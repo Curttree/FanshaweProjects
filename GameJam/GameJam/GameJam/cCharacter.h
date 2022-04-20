@@ -17,6 +17,8 @@ public:
 
 	virtual AnimationState GetAnimationState(void);
 	virtual std::string GetAnimationStateAsString(void);
+	virtual void SetNeutralOrientation();
+	virtual void ResetToNeutralOrientation();
 private:
 	iCharacter* physicsCharacter;
 	AnimationStateMachine animationStateMachine;
@@ -27,6 +29,7 @@ private:
 	float idleTimer = 0.f;
 	float maxIdleTime = 10.f;
 	bool isIdle;
+	glm::quat neutralOrientation;
 
 	void BuildAnimationTransitions(void);
 

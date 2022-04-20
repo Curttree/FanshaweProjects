@@ -4,11 +4,11 @@
 
 cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     cMesh* character_mesh = new cMesh();
-    character_mesh->setAllMeshNames("debugMan.ply");
-    character_mesh->scale = glm::vec3(0.01f);
+    character_mesh->setAllMeshNames("Neutral.fbx");
+    character_mesh->scale = glm::vec3(0.025f);
     character_mesh->positionXYZ = startPosition;
     character_mesh->orientationXYZ = startOrientation;
-    character_mesh->textureNames[0] = "cue.bmp";
+    character_mesh->textureNames[0] = "Fish_BaseColor.bmp";
     character_mesh->textureRatios[0] = 1.f;
     mesh = character_mesh;
     this->position = character_mesh->positionXYZ;
@@ -31,6 +31,7 @@ void cCharacter::TimeStep(float deltaTime) {
             delete g_event;
         }
     }
+    cEntity::TimeStep(deltaTime);
 }
 
 std::string  cCharacter::GetAnimationStateAsString(void) {
@@ -53,6 +54,14 @@ void cCharacter::Notify(GameEventType type, void* data) {
         delete g_event;
     }
     //Also let the animation state machine know about this event.
+}
+
+void cCharacter::SetNeutralOrientation() {
+    neutralOrientation = rotation;
+}
+
+void cCharacter::ResetToNeutralOrientation() {
+    rotation = neutralOrientation;
 }
 
 void cCharacter::BuildAnimationTransitions(void) {

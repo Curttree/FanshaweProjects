@@ -450,6 +450,23 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
         glBindVertexArray(0);
     }
 
+    // Now draw all the "child" objects.
+    for (std::vector< cMesh* >::iterator itChildMesh = pCurrentMesh->vec_pChildMeshes.begin();
+        itChildMesh != pCurrentMesh->vec_pChildMeshes.end(); itChildMesh++)
+    {
+
+        cMesh* pChildMesh = *itChildMesh;
+
+        // Call DrawObject again, but I pass the PARENT's final model matrix value
+        // Which will make the child's "origin" at the final location of the parent. 
+        DrawObject(pChildMesh,
+            matModel,           // The parent's final mat model, not an identity mat4
+            matModel_Location,
+            matModelInverseTranspose_Location,
+            program,
+            pVAOManager);
+
+    }//for (cMesh*::iterator itChildMesh...
 
     return;
 }

@@ -5,3 +5,6 @@
 #define PROP_CITY_IMPOSTER 3
 #define PROP_TEST_GROUND 4
 #define PROP_BULLET 5
+#define PROP_BUILDING_1 6
+#define PROP_BUILDING_2 7
+#define PROP_BUILDING_3 8

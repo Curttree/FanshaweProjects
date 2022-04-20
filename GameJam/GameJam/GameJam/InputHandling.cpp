@@ -188,16 +188,21 @@ void handleAsyncMouse(GLFWwindow* window, double deltaTime)
     if ( (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
         && ::g_MouseIsInsideWindow )
     {
+        if (!::g_pGameEngine->g_pGameplayManager->GetAiming()) {
+            ::g_pGameEngine->entityManager.GetPlayer()->SetNeutralOrientation();
+        }
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         // Mouse button is down so turn the camera
         ::g_pFlyCamera->Yaw_LeftRight(::g_pFlyCamera->getDeltaMouseX() * MOUSE_SENSITIVITY, deltaTime);
 
         ::g_pFlyCamera->Pitch_UpDown(-::g_pFlyCamera->getDeltaMouseY() * MOUSE_SENSITIVITY, deltaTime);
         ::g_pGameEngine->g_pGameplayManager->SetAiming(true);
+        ::g_pGameEngine->entityManager.GetPlayer()->rotation = ::g_pFlyCamera->getQOrientation();
     }
     else if ((glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE) && ::g_pGameEngine->g_pGameplayManager->GetAiming()) {
         ::g_pGameEngine->g_pGameplayManager->SetAiming(false);
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        ::g_pGameEngine->entityManager.GetPlayer()->ResetToNeutralOrientation();
     }
     // Mouse button is down so turn the camera
     //if (::g_MouseIsInsideWindow) {

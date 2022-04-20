@@ -235,7 +235,9 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("Concrete_012.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("UnderwaterNormals.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("cue.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Fish_BaseColor.bmp", true);
 
+   
     // Add a skybox texture
     std::string errorTextString;
     ::g_pTextureManager->SetBasePath("assets/textures/cubemaps");
@@ -316,7 +318,18 @@ int main(void) {
 
     pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
 
-    ::g_pVAOManager->LoadMeshWithAssimp("can.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Stack_01.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Stack_02.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Stack_03.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Roof_01.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Roof_02.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Roof_03.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Door_01.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Door_02.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("blobby.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("detective_noRig2.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("Neutral.fbx", program);
+    //::g_pVAOManager->LoadMeshWithAssimp("oldMan.fbx", program);
 
     ::g_pGameEngine->g_pGameplayManager->GameStart();
 
@@ -591,7 +604,7 @@ int main(void) {
 
         glm::mat4x4 matModelFullScreenQuad = glm::mat4(1.0f);   // identity matrix
 
-        //glCullFace(GL_FRONT);
+        glCullFace(GL_FRONT);
 
         // Place the camera in front of the quad (the "full screen" quad)
         // Quad location is ::g_pFullScreenQuad->positionXYZ = glm::vec3( 0.0f, 0.0f, 500.0f);

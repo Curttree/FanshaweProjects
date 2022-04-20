@@ -851,8 +851,8 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 		unsigned int byteOffsetToBoneWeights = offsetof(sVertex_p4t4n4b4i4, BoneWeights);
 		unsigned int byteOffsetToBoneIDs = offsetof(sVertex_p4t4n4b4i4, BoneIDs);
 
-		glVertexAttribPointer(vpos_location, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToColour);
-		glVertexAttribPointer(vcol_location, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToPosition);
+		glVertexAttribPointer(vpos_location, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToPosition);
+		glVertexAttribPointer(vcol_location, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToColour);
 		glVertexAttribPointer(vNormal_location, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToNormal);
 		glVertexAttribPointer(vUVx2_location, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToUVCoords);
 		glVertexAttribPointer(vTangent_location, 4, GL_FLOAT, GL_FALSE, bytesInOneVertex, (GLvoid*)byteOffsetToTangent);

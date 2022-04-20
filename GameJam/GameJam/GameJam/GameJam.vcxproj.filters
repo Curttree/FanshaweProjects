@@ -359,6 +359,9 @@
     <ClInclude Include="AnimationStateMachine.h">
       <Filter>GameJam\States</Filter>
     </ClInclude>
+    <ClInclude Include="DecorationManager.h">
+      <Filter>GameEngine\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\fragShader_01.glsl">

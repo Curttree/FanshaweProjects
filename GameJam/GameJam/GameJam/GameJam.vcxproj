@@ -243,6 +243,7 @@
     <ClInclude Include="cProp.h" />
     <ClInclude Include="cPropFactory.h" />
     <ClInclude Include="cWinContextMenu.h" />
+    <ClInclude Include="DecorationManager.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="GameplayManager.h" />
     <ClInclude Include="GameEvents.h" />
