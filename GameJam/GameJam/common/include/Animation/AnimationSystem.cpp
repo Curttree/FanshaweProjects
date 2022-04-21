@@ -54,8 +54,7 @@ void AnimationSystem::SingleAnimationUpdate(cEntity* pEntity, float dt)
 
 	// Test a specific time
 
-	//mesh->UpdateTransforms(animationPtr->currentTime, animationPtr, transforms, globals, offsets);
-	//pEntity->mesh->UpdateTransforms(animationPtr->currentTime, animationPtr, transforms, globals, offsets);
+	pEntity->mesh->meshData->UpdateTransforms(animationPtr->currentTime, animationPtr, transforms, globals, offsets);
 
 	return;
 }

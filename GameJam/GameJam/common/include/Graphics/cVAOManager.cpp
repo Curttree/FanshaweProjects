@@ -760,7 +760,7 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 				animation->ticksPerSecond = aiAnim->mTicksPerSecond;
 				animation->numTicks = aiAnim->mDuration;
 				animation->name = aiAnim->mName.C_Str();
-				animation->duration = animation->ticksPerSecond * animation->numTicks;
+				animation->duration = animation->numTicks / animation->ticksPerSecond;
 
 				printf("Animation:\n");
 				printf(" Name: %s\n", animation->name.c_str());

@@ -40,7 +40,14 @@ void AnimationStateMachine::Update(float dt)
 
 void AnimationStateMachine::Notify(GameEventType type, void* data)
 {
-	Transition transition;
+	Transition transition; 
+	if (transitionInProgress && FindTransitionToState(transitioningState, (GameEvent*)data, transition)) {
+		//A valid transition interrupt was found. Interrupt the transition.
+		currentState = transitioningState;
+		transitionInProgress = false;
+		currentTime = 0.f;
+		factor = 0.f;
+	}
 	if (FindTransitionToState(currentState, (GameEvent*)data, transition)) {
 		TransitionToState(transition);
 	}

@@ -335,8 +335,9 @@ int main(void) {
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Env_Sidewalk_Corner_01.fbx", program);
     
    // ::g_pVAOManager->LoadMeshWithAssimp("blobby.fbx", program);
-    ::g_pVAOManager->LoadMeshWithAssimp("Adventurer Aland@Walk.FBX", program);
+    //::g_pVAOManager->LoadMeshWithAssimp("Adventurer Aland@Walk.FBX", program);
     ::g_pVAOManager->LoadMeshWithAssimp("detective@idle.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("detective@aim.fbx", program);
     //::g_pVAOManager->LoadMeshWithAssimp("oldMan.fbx", program);
     
 

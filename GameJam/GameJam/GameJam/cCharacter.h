@@ -36,7 +36,10 @@ private:
 	Animation* current_animation;
 	cBoneHierarchy* current_bones;
 
+	std::map<AnimationState, std::string> map_animations;
+
 	void BuildAnimationTransitions(void);
+	void BuildAnimationMap(void);
 
 	//Temp map for debugging.
 	std::map<AnimationState, std::string> states;

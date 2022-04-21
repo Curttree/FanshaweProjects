@@ -49,7 +49,7 @@ void cGameEngine::Destroy(void)
 
 void cGameEngine::Update(float dt)
 {
-	//animationSystem.Process(entityManager.GetEntities(), dt * gameSpeed);
+	animationSystem.Process(std::vector<cEntity*>{(cEntity*)entityManager.GetPlayer()}, dt* gameSpeed);
 	boneSystem.Process(entityManager.GetEntities(), dt * gameSpeed);
 	if (m_PhysicsWorld) {
 		m_PhysicsWorld->TimeStep(dt);

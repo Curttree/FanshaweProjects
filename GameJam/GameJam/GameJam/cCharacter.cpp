@@ -4,7 +4,7 @@
 
 cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     //Mesh
-    cMesh* character_mesh = new cMesh("detective@idle.fbx");
+    cMesh* character_mesh = new cMesh("detective@aim.fbx");
     character_mesh->scale = glm::vec3(0.00025f);
     //character_mesh->scale = glm::vec3(0.05f);
     character_mesh->positionXYZ = startPosition;
@@ -19,7 +19,8 @@ cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
 
 
     //Animations
-    BuildAnimationTransitions();
+    BuildAnimationTransitions(); 
+    BuildAnimationMap();
 
     //Physics
     physicsCharacter = new gdp2022Physics::Character();
@@ -29,16 +30,18 @@ cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
 }
 
 void cCharacter::LoadBones() {
-    ::g_pVAOManager->FindBonesByModelName("detective@idle.fbx", mesh->bones);
+    ::g_pVAOManager->FindBonesByModelName("detective@aim.fbx", mesh->bones);
     if (mesh->bones->bones.size()>0) {
         mesh->bUseBones = true;
     }
 }
 
 void cCharacter::LoadAnimation() {
-    ::g_pVAOManager->FindAnimationByName("detective@idle.fbx", this->current_animation);
+    ::g_pVAOManager->FindAnimationByName(map_animations.find(animationStateMachine.GetCurrentState())!=map_animations.end() ? map_animations[animationStateMachine.GetCurrentState()]: "detective@idle.fbx", this->current_animation);
     if (this->current_animation) {
         animation = *current_animation;
+        animation.shouldPlay = true;
+        animation.speed = 1.f;
     }
 }
 
@@ -85,6 +88,11 @@ void cCharacter::SetNeutralOrientation() {
 
 void cCharacter::ResetToNeutralOrientation() {
     rotation = neutralOrientation;
+}
+
+void cCharacter::BuildAnimationMap(void) {
+    map_animations.insert(std::make_pair(AnimationState::Idle, "detective@idle.fbx"));
+    map_animations.insert(std::make_pair(AnimationState::Aim, "detective@aim.fbx"));
 }
 
 void cCharacter::BuildAnimationTransitions(void) {
