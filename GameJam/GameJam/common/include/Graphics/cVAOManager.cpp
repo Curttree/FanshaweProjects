@@ -292,10 +292,10 @@ bool cVAOManager::FindDrawInfoByModelName(
 
 bool cVAOManager::FindBonesByModelName(
 	std::string filename,
-	cBoneHierarchy& boneHierarchy)
+	cBoneHierarchy*& boneHierarchy)
 {
 	std::map< std::string /*model name*/,
-		cBoneHierarchy /* info needed to draw*/ >::iterator
+		cBoneHierarchy* /* info needed to draw*/ >::iterator
 		bones = this->m_map_ModelName_to_Bones.find(filename);
 
 	// Find it? 
@@ -308,6 +308,27 @@ bool cVAOManager::FindBonesByModelName(
 	// Else we found the thing to draw
 	// ...so 'return' that information
 	boneHierarchy = bones->second;
+	return true;
+}
+
+bool cVAOManager::FindAnimationByName(
+	std::string filename,
+	Animation*& animation)
+{
+	std::map< std::string /*model name*/,
+		Animation* /* info needed to draw*/ >::iterator
+		anim = this->m_map_ModelName_to_Animation.find(filename);
+
+	// Find it? 
+	if (anim == this->m_map_ModelName_to_Animation.end())
+	{
+		// Nope
+		return false;
+	}
+
+	// Else we found the thing to draw
+	// ...so 'return' that information
+	animation = anim->second;
 	return true;
 }
 
@@ -477,6 +498,7 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 		aiProcess_GenSmoothNormals |
 		aiProcess_PopulateArmatureData |
 		aiProcess_FixInfacingNormals |
+		aiProcess_MakeLeftHanded |
 		aiProcess_LimitBoneWeights);
 
 
@@ -656,6 +678,7 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 			// Create bone hierarchy
 			aiNode* rootNode = nullptr;
 			std::map<aiNode*, unsigned int> aiNodePtrToBoneIdx;
+			cBoneHierarchy* boneH = new cBoneHierarchy();
 			meshData->boneHierarchy.currentTransforms.resize(mesh->mNumBones);
 
 			for (int boneIdx = 0; boneIdx < mesh->mNumBones; ++boneIdx)
@@ -715,6 +738,7 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 				//bone->SetModelMatrix(meshData->boneHierarchy.currentTransforms[boneIdx].value);
 
 				bone->name = assimpBone->mName.C_Str();
+				bone->SetModelMatrix(BoneModelMatrix);
 
 				aiNodePtrToBoneIdx[assimpNode] = meshData->boneHierarchy.bones.size();
 				meshData->boneHierarchy.bones.push_back(bone);
@@ -727,6 +751,8 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 				rootNode = rootNode->mParent;
 
 			MapBoneHierarchy(rootNode, meshData->boneHierarchy, aiNodePtrToBoneIdx);
+			(*boneH) = meshData->boneHierarchy;
+			m_map_ModelName_to_Bones.insert(std::pair<std::string,cBoneHierarchy*>(filename, boneH));
 		}
 
 		if (scene->HasAnimations())
@@ -741,6 +767,7 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 				animation->ticksPerSecond = aiAnim->mTicksPerSecond;
 				animation->numTicks = aiAnim->mDuration;
 				animation->name = aiAnim->mName.C_Str();
+				animation->duration = animation->ticksPerSecond * animation->numTicks;
 
 				printf("Animation:\n");
 				printf(" Name: %s\n", animation->name.c_str());
@@ -800,6 +827,10 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 				}
 
 				meshData->animations.push_back(animation);
+
+				// Right now we are only storing one animation per file. This could have problems if attempting to load models with multiple animations.
+				// May wish to refactor to store a vector of animations, or change the key.
+				m_map_ModelName_to_Animation.insert(std::pair<std::string, Animation*>(filename, animation));
 			}
 		}
 
@@ -890,7 +921,6 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 		sModelDrawInfo drawInfo;
 		drawInfo.numberOfIndices = mesh->mNumFaces * 3;
 		drawInfo.VAO_ID = meshData->GL_VBO_ID;
-		//Potentially heavier than needed, but log to legacy .ply method of loading models.
 
 
 		this->m_map_ModelName_to_VAOID[meshData->filename] = drawInfo;

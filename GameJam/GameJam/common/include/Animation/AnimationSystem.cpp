@@ -5,7 +5,61 @@
 #include <extern/glm/gtx/easing.hpp>
 #include <iostream>
 
-void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt)
+void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt) {
+	cEntity* currentEntityPtr = 0;
+	Animation* animationPtr = 0;
+	AnimationBlend* animationBlendPtr = 0;
+
+	for (int i = 0; i < entities.size(); ++i)
+	{
+		currentEntityPtr = entities[i];
+
+		if (currentEntityPtr->animationBlend.anim1 != nullptr && currentEntityPtr->animationBlend.anim2 != nullptr) {
+			//BlendAnimationUpdate(currentEntityPtr, dt);
+		}
+		else {
+			SingleAnimationUpdate(currentEntityPtr, dt);
+		}
+	}
+}
+
+void AnimationSystem::UpdateAnimationTime(Animation* animation, float dt) {
+	if (!animation->shouldPlay)
+		return;
+
+	animation->currentTime += dt * animation->speed;
+
+	while (animation->currentTime > animation->duration)
+		animation->currentTime -= animation->duration;
+}
+
+void AnimationSystem::SingleAnimationUpdate(cEntity* pEntity, float dt)
+{
+	Animation* animationPtr = &pEntity->animation;
+
+	if (!animationPtr->shouldPlay)
+		return;
+
+	UpdateAnimationTime(animationPtr, dt);
+
+	std::vector<glm::mat4> transforms;
+	std::vector<glm::mat4> globals;
+	std::vector<glm::mat4> offsets;
+
+
+	// Since we only have a single animated character using this animation
+	// We don't need to do anything with the transforms, globals, and offsets.
+	// Since we are grabbing the data directly from the MeshData in RenderSystem
+	// as-well.
+
+	// Test a specific time
+
+	//mesh->UpdateTransforms(animationPtr->currentTime, animationPtr, transforms, globals, offsets);
+	//pEntity->mesh->UpdateTransforms(animationPtr->currentTime, animationPtr, transforms, globals, offsets);
+
+	return;
+}
+void AnimationSystem::Process_Old(const std::vector<cEntity*>& entities, float dt)
 {
 	Animation* animPtr;
 	AnimationSequence* animSequencePtr;

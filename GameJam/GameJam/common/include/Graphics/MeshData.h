@@ -91,7 +91,7 @@ public:
 	std::vector<NodeData*> mNodeData;
 	//std::map<std::string, unsigned int> mNodeMap;
 
-	std::vector<MeshData> mVecMeshData;
+	std::vector<MeshData*> mVecMeshData;
 
 	unsigned int mBaseVertex;
 	unsigned int mNumIndices;

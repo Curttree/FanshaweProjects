@@ -7,6 +7,7 @@
 #include <extern/glm/vec3.hpp>
 #include <vector>
 #include "Animation/cBoneHierarchy.h"
+#include <Animation/Animation.h>
 
 class cMesh
 {
@@ -66,6 +67,10 @@ public:
 	cBoneHierarchy* bones;
 
 	float boundingRadius = -1.f;
+
+	void UpdateTransforms(float time1, Animation* animation1, float time2,
+		Animation* animation2, float factor, std::vector<glm::mat4>& transforms,
+		std::vector<glm::mat4>& globals, std::vector<glm::mat4>& offsets);
 
 private:
 	unsigned int m_UniqueID;

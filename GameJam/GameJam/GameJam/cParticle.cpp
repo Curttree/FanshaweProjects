@@ -43,15 +43,15 @@ void cParticle::OrientToCamera() {
 	//result.y = atan2(camDirection.x, camDirection.z);
 	//result.z = mesh->orientationXYZ.z;
 
-	glm::vec3 v1 = glm::normalize(glm::vec3(0.f, 0.f, -1.f));
-	glm::vec3 v2 = -glm::normalize(::g_pFlyCamera->getAtDirection());
-	glm::vec3 a = glm::cross(v1, v2);
-	glm::quat rotate;
-	rotate.x = a.x;
-	rotate.y = a.y;
-	rotate.z = a.z;
-	rotate.w = sqrt((glm::length(v1) * glm::length(v1)) * (glm::length(v2) * glm::length(v2)) + glm::dot(v1, v2));
+	//glm::vec3 v1 = glm::normalize(glm::vec3(0.f, 0.f, -1.f));
+	//glm::vec3 v2 = -glm::normalize(::g_pFlyCamera->getAtDirection());
+	//glm::vec3 a = glm::cross(v1, v2);
+	//glm::quat rotate;
+	//rotate.x = a.x;
+	//rotate.y = a.y;
+	//rotate.z = a.z;
+	//rotate.w = sqrt((glm::length(v1) * glm::length(v1)) * (glm::length(v2) * glm::length(v2)) + glm::dot(v1, v2));
 
-	this->rotation = rotate;
-	mesh->orientationXYZ = glm::eulerAngles(rotate);
+	rotation == ::g_pFlyCamera->getQOrientation();
+	mesh->orientationXYZ = glm::eulerAngles(rotation);
 }

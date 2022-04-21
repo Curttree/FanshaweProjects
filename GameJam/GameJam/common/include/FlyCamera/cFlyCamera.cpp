@@ -55,7 +55,7 @@ this->maxYawDegrees = 80.f;
 this->minYawDegrees = -80.f;
 
 this->aimCamOffset = glm::vec3(1.5f, 5.5f, -5.f);
-this->normalCamOffset = glm::vec3(0.f, 5.f, -15.f);
+this->normalCamOffset = glm::vec3(0.f, 0.f, -15.f);
 
 return;
 }
@@ -133,10 +133,10 @@ void cFlyCamera::MoveLeftRight_X(float amount)
 void cFlyCamera::Pitch_UpDown(float angleDegrees)	// around X
 {
 	//This approach can lead to issues due to the conversion between quat and euler degrees. Consider alternative approach in the future.
-	if (glm::degrees(glm::eulerAngles(this->qOrientation).x) + angleDegrees > maxPitchDegrees||
-		glm::degrees(glm::eulerAngles(this->qOrientation).x) + angleDegrees < minPitchDegrees){
-		return;
-	}
+	//if (glm::degrees(glm::eulerAngles(this->qOrientation).x) + angleDegrees > maxPitchDegrees||
+	//	glm::degrees(glm::eulerAngles(this->qOrientation).x) + angleDegrees < minPitchDegrees){
+	//	return;
+	//}
 	// Adjust the orientation of the camera by the number of degrees
 	this->adjMeshOrientationEulerAngles(glm::vec3(angleDegrees, 0.0f, 0.0f), true);
 
@@ -497,13 +497,13 @@ bool cFlyCamera::Update(std::string command, glm::vec3 data)
 bool cFlyCamera::Update(double deltaTime)
 {
 	if (!aimCam && ::g_pGameEngine->g_pGameplayManager->GetAiming()) {
-		this->setEye(::g_pGameEngine->entityManager.GetPlayer()->position + aimCamOffset);
+		//this->setEye(::g_pGameEngine->entityManager.GetPlayer()->position + aimCamOffset);
 		aimCam = true;
 		return true;
 	}
 	else if (aimCam && !::g_pGameEngine->g_pGameplayManager->GetAiming()) {
 		aimCam = false;
-		this->setEye(::g_pGameEngine->entityManager.GetPlayer()->position + normalCamOffset);
+		//this->setEye(::g_pGameEngine->entityManager.GetPlayer()->position + normalCamOffset);
 	}
 	//TODO: Once physics movement is in place and proper bounds are set, uncomment this for the third person cam.
 	//this->setEye(::g_pGameEngine->entityManager.GetPlayer()->position + normalCamOffset);

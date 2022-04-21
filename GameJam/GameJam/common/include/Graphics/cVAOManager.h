@@ -40,10 +40,6 @@ public:
 						  sModelDrawInfo &drawInfo, 
 						  unsigned int shaderProgramID);
 
-	// You could write this is you didn't want the sModelDrawInfo to return by ref
-	bool LoadModelIntoVAO(std::string fileName, 
-						  unsigned int shaderProgramID);
-
 	bool LoadMeshWithAssimp(const std::string& filename,
 		unsigned int shaderProgramID);
 
@@ -51,7 +47,7 @@ public:
 								 sModelDrawInfo &drawInfo);
 
 	bool FindBonesByModelName(std::string filename,
-		cBoneHierarchy& boneHierarchy);
+		cBoneHierarchy*& boneHierarchy);
 
 	bool FindAnimationByName(std::string name,
 		Animation*& animation);
@@ -68,7 +64,7 @@ private:
 		m_map_ModelName_to_VAOID;
 
 	std::map< std::string /*model name*/,
-		cBoneHierarchy /* info needed to draw*/ >
+		cBoneHierarchy* /* info needed to draw*/ >
 		m_map_ModelName_to_Bones;
 
 	std::map< std::string /*model name*/,

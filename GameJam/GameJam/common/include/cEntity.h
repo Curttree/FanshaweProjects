@@ -22,7 +22,7 @@ public:
 	glm::vec3 scale;
 
 	Animation animation;
+	AnimationBlend animationBlend;
 
 	AnimationSequence animations;
-
 };

@@ -236,6 +236,8 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("UnderwaterNormals.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("cue.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Fish_BaseColor.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Adventurer Aland-Blue.bmp", true);
+    
 
    
     // Add a skybox texture
@@ -326,8 +328,8 @@ int main(void) {
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Roof_03.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Door_01.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Door_02.fbx", program);
-    ::g_pVAOManager->LoadMeshWithAssimp("blobby.fbx", program);
-    ::g_pVAOManager->LoadMeshWithAssimp("detective_noRig2.fbx", program);
+   // ::g_pVAOManager->LoadMeshWithAssimp("blobby.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("Adventurer Aland@Walk.FBX", program);
     ::g_pVAOManager->LoadMeshWithAssimp("Neutral.fbx", program);
     //::g_pVAOManager->LoadMeshWithAssimp("oldMan.fbx", program);
 
@@ -335,6 +337,8 @@ int main(void) {
 
     //For debugging animation state transitions.
     std::string oldState = ::g_pGameEngine->entityManager.GetPlayer()->GetAnimationStateAsString();
+    ::g_pGameEngine->entityManager.GetPlayer()->LoadAnimation();
+    ::g_pGameEngine->entityManager.GetPlayer()->LoadBones();
     std::cout << oldState << std::endl;
     std::string currentState;
 
@@ -344,6 +348,7 @@ int main(void) {
         currentState = ::g_pGameEngine->entityManager.GetPlayer()->GetAnimationStateAsString();
         if (oldState != currentState) {
             std::cout << currentState << std::endl;
+            ::g_pGameEngine->entityManager.GetPlayer()->LoadAnimation();
             oldState = currentState;
         }
         // Set pass to #0

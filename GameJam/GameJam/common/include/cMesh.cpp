@@ -52,3 +52,31 @@ void cMesh::setAllMeshNames(std::string name) {
 	lowDetailMeshName = name;
 	midDetailMeshName = name;
 }
+
+void cMesh::UpdateTransforms(float time1, Animation* animation1, float time2,
+	Animation* animation2, float factor, std::vector<glm::mat4>& transforms,
+	std::vector<glm::mat4>& globals, std::vector<glm::mat4>& offsets)
+{
+	//if (gDebugPrint)
+	//	printf("\n===============================================\n\n");
+
+	//// Update the node hierarchy, starting from the root node
+	//// Update node hierarchy..
+	//glm::mat4 identity(1.f);
+	////AnimationNode* rootNode = animation->animationNodes[it->second];
+	//UpdateHierarchy(time1, animation1, time2, animation2, factor, mRootNode, identity);
+
+	//// Acquire all the matrix information
+	//// Set all transforms, globals, and offsets
+	//unsigned int numBones = mBoneData.size();
+	//transforms.resize(numBones);
+	//globals.resize(numBones);
+	//offsets.resize(numBones);
+
+	//for (unsigned int boneIdx = 0; boneIdx < numBones; ++boneIdx)
+	//{
+	//	transforms[boneIdx] = mBoneData[boneIdx].LocalTransformation;
+	//	globals[boneIdx] = mBoneData[boneIdx].GlobalTransformation;
+	//	offsets[boneIdx] = mBoneData[boneIdx].BoneOffset;
+	//}
+}

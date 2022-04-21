@@ -197,7 +197,8 @@ void handleAsyncMouse(GLFWwindow* window, double deltaTime)
 
         ::g_pFlyCamera->Pitch_UpDown(-::g_pFlyCamera->getDeltaMouseY() * MOUSE_SENSITIVITY, deltaTime);
         ::g_pGameEngine->g_pGameplayManager->SetAiming(true);
-        ::g_pGameEngine->entityManager.GetPlayer()->rotation = ::g_pFlyCamera->getQOrientation();
+        //TODO: Restore player rotation
+        //::g_pGameEngine->entityManager.GetPlayer()->rotation = ::g_pFlyCamera->getQOrientation();
     }
     else if ((glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE) && ::g_pGameEngine->g_pGameplayManager->GetAiming()) {
         ::g_pGameEngine->g_pGameplayManager->SetAiming(false);

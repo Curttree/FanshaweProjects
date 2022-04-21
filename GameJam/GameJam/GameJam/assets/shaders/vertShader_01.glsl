@@ -31,7 +31,7 @@ uniform bool bUseHeightMap;
 uniform vec3 heightMapUVOffsetRotation;
 uniform float heightMapScale;
 
-uniform mat4 BoneMatrices[4];
+uniform mat4 BoneMatrices[48];
 uniform bool bUseBones;
 
 void main()
@@ -43,7 +43,10 @@ void main()
 	
 	vec4 vertPosition = vec4(0.f, 0.f, 0.f, 0.f);
 	if (bUseBones){
-		vertPosition = BoneMatrices[int(vBoneIDs[0])] * vPosition;
+		vertPosition += BoneMatrices[int(vBoneIDs[0])] * vPosition * vBoneWeights[0];
+		vertPosition += BoneMatrices[int(vBoneIDs[1])] * vPosition * vBoneWeights[1];
+		vertPosition += BoneMatrices[int(vBoneIDs[2])] * vPosition * vBoneWeights[2];
+		vertPosition += BoneMatrices[int(vBoneIDs[3])] * vPosition * vBoneWeights[3];
 	}
 	else {
 		vertPosition = vPosition;
@@ -106,7 +109,18 @@ void main()
 	// Calculate the normal based on any rotation we've applied.
 	// This inverse transpose removes scaling and tranlation (movement) 
 	// 	from the matrix.
-	gNormal = matModelInverseTranspose * normalize(vNormal);
+	
+	vec4 normal = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+	if (bUseBones){
+		normal += BoneMatrices[int(vBoneIDs[0])] * vNormal * vBoneWeights[0];
+		normal += BoneMatrices[int(vBoneIDs[1])] * vNormal * vBoneWeights[1];
+		normal += BoneMatrices[int(vBoneIDs[2])] * vNormal * vBoneWeights[2];
+		normal += BoneMatrices[int(vBoneIDs[3])] * vNormal * vBoneWeights[3];
+	}
+	else {
+		normal = vNormal;
+	}	
+	gNormal = matModelInverseTranspose * normalize(normal);
 	gNormal = normalize(gNormal);
 	
 	// Copy the rest of the vertex values:
