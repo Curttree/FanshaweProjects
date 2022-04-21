@@ -6,3 +6,4 @@
 #define PROP_TEST_GROUND 4
 #define PROP_BULLET 5
 #define PROP_HOTDOG_STAND 6
+#define PROP_BARRIER 7

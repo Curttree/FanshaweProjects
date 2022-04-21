@@ -3,8 +3,7 @@
 #include <RigidBody.h>
 
 cProp::cProp(std::string name, std::string texture, glm::vec3 position, eShapeType physicsShape, glm::vec3 scale, glm::vec3 physicsScale, float mass, glm::vec3 orientation, glm::vec3 velocity) {
-    cMesh* prop_mesh = new cMesh();
-    prop_mesh->setAllMeshNames(name);
+    cMesh* prop_mesh = new cMesh(name);
     prop_mesh->scale = scale;
     prop_mesh->positionXYZ = position;
 	prop_mesh->orientationXYZ = orientation;

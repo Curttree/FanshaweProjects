@@ -32,6 +32,7 @@ uniform vec3 heightMapUVOffsetRotation;
 uniform float heightMapScale;
 
 uniform mat4 BoneMatrices[48];
+uniform mat4 BoneRotationMatrices[48];
 uniform bool bUseBones;
 
 void main()
@@ -115,10 +116,10 @@ void main()
 	
 	vec4 normal2 = vec4(0.0f, 0.0f, 0.0f, 0.0f);
 	if (bUseBones){
-		normal2 += BoneMatrices[int(vBoneIDs[0])] * normal * vBoneWeights[0];
-		normal2 += BoneMatrices[int(vBoneIDs[1])] * normal * vBoneWeights[1];
-		normal2 += BoneMatrices[int(vBoneIDs[2])] * normal * vBoneWeights[2];
-		normal2 += BoneMatrices[int(vBoneIDs[3])] * normal * vBoneWeights[3];
+		normal2 += BoneRotationMatrices[int(vBoneIDs[0])] * normal * vBoneWeights[0];
+		normal2 += BoneRotationMatrices[int(vBoneIDs[1])] * normal * vBoneWeights[1];
+		normal2 += BoneRotationMatrices[int(vBoneIDs[2])] * normal * vBoneWeights[2];
+		normal2 += BoneRotationMatrices[int(vBoneIDs[3])] * normal * vBoneWeights[3];
 	}
 	else {
 		normal2 = normal;

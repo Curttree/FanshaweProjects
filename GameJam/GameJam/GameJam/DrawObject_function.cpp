@@ -410,12 +410,19 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
         glUniform1f(useBones_LocID, (float)GL_TRUE);
         // Send Bone values
         std::vector<GLuint> BoneMatrixLocations;
+        std::vector<GLuint> BoneRotationMatrixLocations;
         std::string location = "";
+        std::string rotationLocation = "";
         for (int i = 0; i < 40; i++)
         {
             location = "BoneMatrices[" + std::to_string(i) + "]";
             BoneMatrixLocations.push_back(glGetUniformLocation(program, location.c_str()));
-            glUniformMatrix4fv(BoneMatrixLocations[i], 1, GL_FALSE, glm::value_ptr(pCurrentMesh->bones->bones[i]->GetModelMatrix()));
+            rotationLocation = "BoneRotationMatrices[" + std::to_string(i) + "]";
+            BoneRotationMatrixLocations.push_back(glGetUniformLocation(program, rotationLocation.c_str()));
+            glUniformMatrix4fv(BoneMatrixLocations[i], 1, GL_FALSE, glm::value_ptr(pCurrentMesh->meshData->mBoneData[i].FinalTransformation));
+
+            glm::mat4 rotation = glm::mat4(glm::quat(pCurrentMesh->meshData->mBoneData[i].FinalTransformation));
+            glUniformMatrix4fv(BoneRotationMatrixLocations[i], 1, GL_FALSE, glm::value_ptr(rotation));
         }
     }
     else {

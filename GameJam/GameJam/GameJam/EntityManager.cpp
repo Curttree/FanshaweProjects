@@ -10,8 +10,9 @@ EntityManager::~EntityManager(void)
 
 void EntityManager::StartUp(void)
 {
-	//Create the player character.
-	//TODO: Move this to globals/configurable values.
+}
+
+void EntityManager::InitCharacter(void) {
 	player = new cCharacter(glm::vec3(0.f, -3.f, 15.f), glm::vec3(0.f, 0.f, 0.f));
 }
 

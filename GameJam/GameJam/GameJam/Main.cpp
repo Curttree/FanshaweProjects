@@ -177,8 +177,7 @@ int main(void) {
     ::g_pTheLights->SetUpUniformLocations(program);
 
     // Set up the debug sphere object
-    ::g_pDebugSphere = new cMesh();
-    ::g_pDebugSphere->setAllMeshNames("Sphere_xyz_n_rgba_uv.ply");
+    ::g_pDebugSphere = new cMesh("Sphere_xyz_n_rgba_uv.ply");
     ::g_pDebugSphere->bIsWireframe = true;
     ::g_pDebugSphere->bUseObjectDebugColour = true;
     ::g_pDebugSphere->objectDebugColourRGBA = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -241,8 +240,6 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("cue.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Fish_BaseColor.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Adventurer Aland-Blue.bmp", true);
-    
-
    
     // Add a skybox texture
     std::string errorTextString;
@@ -316,10 +313,9 @@ int main(void) {
             ::g_vec_pMeshes.erase(location);
         }
     }
-    cMesh* pSkybox = new cMesh();
+    cMesh* pSkybox = new cMesh("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
 
     // Mimics a skybox
-    pSkybox->setAllMeshNames("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
     pSkybox->scale = glm::vec3(5'000'000.0f);
 
     pSkybox->positionXYZ = ::g_pFlyCamera->getEye();
@@ -335,6 +331,8 @@ int main(void) {
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Env_Sidewalk_Straight_01.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Env_Road_YellowLines_02.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Prop_HotdogStand_01.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Prop_Barrier_01.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Env_Sidewalk_Corner_01.fbx", program);
     
    // ::g_pVAOManager->LoadMeshWithAssimp("blobby.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("Adventurer Aland@Walk.FBX", program);
@@ -344,6 +342,7 @@ int main(void) {
 
     ::g_pGameEngine->g_pGameplayManager->GameStart();
     DecorationManager::Instance()->DecorateScene();
+    ::g_pGameEngine->entityManager.InitCharacter();
 
     //For debugging animation state transitions.
     std::string oldState = ::g_pGameEngine->entityManager.GetPlayer()->GetAnimationStateAsString();
@@ -543,9 +542,8 @@ int main(void) {
         // 2nd pass of the render, where we do something bizzare
         if (::g_pFullScreenQuad == NULL)
         {
-            ::g_pFullScreenQuad = new cMesh;
+            ::g_pFullScreenQuad = new cMesh("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply");
             //            ::g_pFullScreenQuad->meshName = "Imposter_Shapes/Quad_2_sided_aligned_on_XY_plane.ply";
-            ::g_pFullScreenQuad->setAllMeshNames("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply");
             //            ::g_pFullScreenQuad->meshName = "bun_zipper_xyz_rgba_uv.ply";
             ::g_pFullScreenQuad->friendlyName = "Full_Screen_Quad";
 

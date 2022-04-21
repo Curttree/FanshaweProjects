@@ -2,8 +2,7 @@
 #include "globals.h"
 
 cParticle::cParticle(std::string texture, float _lifeSpan, glm::vec3 _position, bool followCameraPosition, glm::vec3 _scale) : lifeSpan(_lifeSpan), followCamPos(followCameraPosition) {
-	cMesh* prop_mesh = new cMesh();
-	prop_mesh->setAllMeshNames("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply");
+	cMesh* prop_mesh = new cMesh("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply");
 	prop_mesh->scale = _scale;
 	prop_mesh->positionXYZ = _position;
 	prop_mesh->textureNames[0] = texture;

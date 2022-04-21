@@ -44,7 +44,7 @@ sFrustum cFrustumCullingHandler::createFromMatricies(glm::mat4 view, glm::mat4 p
 sFrustum cFrustumCullingHandler::createFromCamera(cFlyCamera* camera) {
     //Adapted from: https://learnopengl.com/Guest-Articles/2021/Scene/Frustum-Culling
     // Approximate culling since the math wasn't working out. Viewport is based on angle values rather than trig.
-    float viewPortAngle = 40.f;
+    float viewPortAngle = 50.f;
 	sFrustum result;
     const float aspectRatio = ::g_pFBO->width / (float)::g_pFBO->height;
     const float halfVSide = 1000.f * tanf(camera->FOV * .5f);
@@ -86,8 +86,5 @@ bool cFrustumCullingHandler::isWithinPlaneBounds(const sPlane plane, const cMesh
     //float test = glm::dot(plane.normal, mesh->positionXYZ) + plane.distance + mesh->boundingRadius;
     //return test > 0;
     float distance = glm::dot(plane.normal, mesh->positionXYZ) - plane.distance;
-    if (greaterThan) {
-       return distance >= mesh->boundingRadius;
-    }
-    return distance < mesh->boundingRadius;
+    return distance >= mesh->boundingRadius;
 }

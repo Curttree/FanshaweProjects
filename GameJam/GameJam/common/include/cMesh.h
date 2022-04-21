@@ -8,11 +8,12 @@
 #include <vector>
 #include "Animation/cBoneHierarchy.h"
 #include <Animation/Animation.h>
+#include <Graphics/MeshData.h>
 
 class cMesh
 {
 public:
-	cMesh();
+	cMesh(std::string _name);
 	std::string meshName;		// The 3D Mesh model we are drawing. Should be made private if I think it will be abused. Really should use settter instead of calling directly.
 	std::string midDetailMeshName;
 	std::string lowDetailMeshName;
@@ -67,6 +68,8 @@ public:
 	cBoneHierarchy* bones;
 
 	float boundingRadius = -1.f;
+
+	MeshData* meshData;
 
 	void UpdateTransforms(float time1, Animation* animation1, float time2,
 		Animation* animation2, float factor, std::vector<glm::mat4>& transforms,

@@ -706,12 +706,6 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 				glm::vec3 glmSkew;
 				glm::vec4 glmPerspective;
 
-				//assimpBone->mOffsetMatrix.Decompose(assimpScale, assimpRotation, assimpPosition);
-
-				//Convert(assimpScale, glmScale);
-				//Convert(assimpRotation, glmEulerRotation);
-				//Convert(assimpPosition, glmPosition);
-
 				glm::mat4 glmOffsetMatrix;
 				glm::mat4 glmTransformMatrix;
 				Convert(assimpBone->mOffsetMatrix, glmOffsetMatrix);
@@ -955,4 +949,49 @@ std::string cVAOManager::getFilePath(void)
 
 void cVAOManager::convertMeshData(MeshData* mesh, sModelDrawInfo& drawInfo) {
 
+}
+unsigned int cVAOManager::GetMeshIdByName(const std::string& name)
+{
+	name_id_iterator it = this->m_map_NameToId.find(name);
+
+	if (it == this->m_map_NameToId.end())
+	{
+		return 0;
+	}
+
+	return it->second;
+}
+
+bool cVAOManager::GetMeshDataByName(const std::string& name, MeshData** mesh)
+{
+	unsigned int meshID = this->GetMeshIdByName(name);
+	if (meshID == 0)	// not set
+	{
+		return false;
+	}
+
+	id_mesh_iterator it = m_map_pMeshes.find(meshID);
+
+	if (it == m_map_pMeshes.end())
+	{
+		return false;
+	}
+
+	*mesh = it->second;
+
+	return true;
+}
+
+bool cVAOManager::GetMeshDataById(unsigned int id, MeshData** mesh)
+{
+	id_mesh_iterator it = m_map_pMeshes.find(id);
+
+	if (it == m_map_pMeshes.end())
+	{
+		return false;
+	}
+
+	*mesh = it->second;
+
+	return true;
 }

@@ -4,8 +4,7 @@
 
 cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     //Mesh
-    cMesh* character_mesh = new cMesh();
-    character_mesh->setAllMeshNames("detective@idle.fbx");
+    cMesh* character_mesh = new cMesh("detective@idle.fbx");
     character_mesh->scale = glm::vec3(0.00025f);
     //character_mesh->scale = glm::vec3(0.05f);
     character_mesh->positionXYZ = startPosition;
@@ -32,7 +31,7 @@ cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
 void cCharacter::LoadBones() {
     ::g_pVAOManager->FindBonesByModelName("detective@idle.fbx", mesh->bones);
     if (mesh->bones->bones.size()>0) {
-        mesh->bUseBones = false;
+        mesh->bUseBones = true;
     }
 }
 

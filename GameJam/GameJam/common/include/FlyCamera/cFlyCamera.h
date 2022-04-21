@@ -135,6 +135,10 @@ private:
 	// This will lead to direction, etc.
 	glm::quat qOrientation;
 
+	float pitch = 0.f;
+	float roll = 0.f;
+	float yaw = 0.f;
+
 	void m_UpdateAtFromOrientation(void);
 	void m_UpdateUpFromOrientation(void);
 

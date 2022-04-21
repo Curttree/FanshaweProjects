@@ -49,11 +49,11 @@ this->FOV = 0.6f;			// Field of view
 
 this->m_CurrentState = cFlyCamera::DEFAULT_OR_UNSPECIFIED;
 
-this->maxPitchDegrees = 20.f;
-this->minPitchDegrees = -20.f;
+this->maxPitchDegrees = 10.f;
+this->minPitchDegrees = -10.f;
 
-this->maxYawDegrees = 80.f;
-this->minYawDegrees = -80.f;
+this->maxYawDegrees = 30.f;
+this->minYawDegrees = -30.f;
 
 this->aimCamOffset = glm::vec3(1.5f, 5.5f, -5.f);
 this->normalCamOffset = glm::vec3(0.f, 5.f, -15.f);
@@ -133,11 +133,11 @@ void cFlyCamera::MoveLeftRight_X(float amount)
 
 void cFlyCamera::Pitch_UpDown(float angleDegrees)	// around X
 {
-	//This approach can lead to issues due to the conversion between quat and euler degrees. Consider alternative approach in the future.
-	//if (glm::degrees(glm::eulerAngles(this->qOrientation).x) + angleDegrees > maxPitchDegrees||
-	//	glm::degrees(glm::eulerAngles(this->qOrientation).x) + angleDegrees < minPitchDegrees){
-	//	return;
-	//}
+	if (pitch + angleDegrees > maxPitchDegrees||
+		pitch + angleDegrees < minPitchDegrees){
+		return;
+	}
+	pitch += angleDegrees;
 	// Adjust the orientation of the camera by the number of degrees
 	this->adjMeshOrientationEulerAngles(glm::vec3(angleDegrees, 0.0f, 0.0f), true);
 
@@ -149,6 +149,11 @@ void cFlyCamera::Pitch_UpDown(float angleDegrees)	// around X
 
 void cFlyCamera::Yaw_LeftRight(float angleDegrees)	// around y
 {
+	if (yaw + angleDegrees > maxYawDegrees ||
+		yaw + angleDegrees < minYawDegrees) {
+		return;
+	}
+	yaw += angleDegrees;
 	// Adjust the orientation of the camera by the number of degrees
 	this->adjMeshOrientationEulerAngles(glm::vec3(0.0f, angleDegrees, 0.0f), true);
 
@@ -160,6 +165,7 @@ void cFlyCamera::Yaw_LeftRight(float angleDegrees)	// around y
 
 void cFlyCamera::Roll_CW_CCW(float angleDegrees)	// around z
 {
+	roll += angleDegrees;
 	// Adjust the orientation of the camera by the number of degrees
 	this->adjMeshOrientationEulerAngles(glm::vec3(0.0f, 0.0f, angleDegrees), true);
 
@@ -504,6 +510,9 @@ bool cFlyCamera::Update(double deltaTime)
 	}
 	else if (aimCam && !::g_pGameEngine->g_pGameplayManager->GetAiming()) {
 		aimCam = false;
+		pitch = 0.f;
+		yaw = 0.f;
+		roll = 0.f;
 		this->setEye(::g_pGameEngine->entityManager.GetPlayer()->position + normalCamOffset);
 	}
 	//TODO: Once physics movement is in place and proper bounds are set, uncomment this for the third person cam.

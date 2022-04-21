@@ -1,7 +1,7 @@
 #include "cMesh.h"
+#include "../../GameJam/globals.h"
 
-
-cMesh::cMesh()
+cMesh::cMesh(std::string _meshName) : meshName(_meshName), lowDetailMeshName(_meshName), midDetailMeshName(_meshName)
 {
 	this->positionXYZ = glm::vec3(0.0f, 0.0f, 0.0f);
 	this->orientationXYZ = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -33,6 +33,15 @@ cMesh::cMesh()
 
 	this->bUseBones = false;
 
+	::g_pVAOManager->GetMeshDataByName(meshName, &this->meshData);
+
+	std::vector<glm::mat4> transforms;
+	std::vector<glm::mat4> globals;
+	std::vector<glm::mat4> offsets;
+	Animation* temp;
+	if (::g_pVAOManager->FindAnimationByName(_meshName, temp)) {
+		meshData->UpdateTransforms(0.f, temp, transforms, globals, offsets);
+	}
 	// Assign a unique ID
 	this->m_UniqueID = cMesh::m_NextID;
 	cMesh::m_NextID++;

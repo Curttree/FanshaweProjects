@@ -50,7 +50,11 @@ public:
 		cBoneHierarchy*& boneHierarchy);
 
 	bool FindAnimationByName(std::string name,
-		Animation*& animation);
+		Animation*& animation);	
+	
+	bool GetMeshDataByName(const std::string& name, MeshData** mesh);
+	bool GetMeshDataById(unsigned int id, MeshData** mesh);
+	unsigned int GetMeshIdByName(const std::string& name);
 
 	std::string getLastError(bool bAndClear = true);
 
