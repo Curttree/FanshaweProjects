@@ -111,17 +111,20 @@ void main()
 	// 	from the matrix.
 	
 	vec4 normal = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+	normal = matModelInverseTranspose * normalize(vNormal);
+	
+	vec4 normal2 = vec4(0.0f, 0.0f, 0.0f, 0.0f);
 	if (bUseBones){
-		normal += BoneMatrices[int(vBoneIDs[0])] * vNormal * vBoneWeights[0];
-		normal += BoneMatrices[int(vBoneIDs[1])] * vNormal * vBoneWeights[1];
-		normal += BoneMatrices[int(vBoneIDs[2])] * vNormal * vBoneWeights[2];
-		normal += BoneMatrices[int(vBoneIDs[3])] * vNormal * vBoneWeights[3];
+		normal2 += BoneMatrices[int(vBoneIDs[0])] * normal * vBoneWeights[0];
+		normal2 += BoneMatrices[int(vBoneIDs[1])] * normal * vBoneWeights[1];
+		normal2 += BoneMatrices[int(vBoneIDs[2])] * normal * vBoneWeights[2];
+		normal2 += BoneMatrices[int(vBoneIDs[3])] * normal * vBoneWeights[3];
 	}
 	else {
-		normal = vNormal;
+		normal2 = normal;
 	}	
-	gNormal = matModelInverseTranspose * normalize(normal);
-	gNormal = normalize(gNormal);
+	
+	gNormal = normalize(normal2);
 	
 	// Copy the rest of the vertex values:
 	gUVx2 = vUVx2;

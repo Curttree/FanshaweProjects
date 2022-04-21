@@ -12,6 +12,7 @@ public:
 	gdp2022Physics::iRigidBody* rigidBody = 0;
 	void TimeStep(float deltaTime);
 	void Destroy(float inTime);
+	glm::vec3 positionOffset;
 private:
 	bool dying = false;
 	float deathMaxTime = 0.f;

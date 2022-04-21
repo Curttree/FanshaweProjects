@@ -21,7 +21,7 @@ cProp::cProp(std::string name, std::string texture, glm::vec3 position, eShapeTy
 
 void cProp::TimeStep(float deltaTime) {
 	if (mesh && rigidBody && !rigidBody->IsStatic()) {
-		position = rigidBody->GetPosition();
+		position = rigidBody->GetPosition()+positionOffset;
 		rotation = rigidBody->GetOrientation();
 	}
 	cEntity::TimeStep(deltaTime);
@@ -59,6 +59,7 @@ void cProp::InitializePhysics(eShapeType shape, float mass, glm::vec3 scale, glm
 		boxDesc.position = position;
 		boxDesc.linearVelocity = velocity;
 		boxDesc.restitution = 0.8f;
+		boxDesc.rotation = glm::quat(orientation);
 
 		rigidBody = ::g_pGameEngine->m_PhysicsFactory->CreateRigidBody(boxDesc, boxShape);
 		break;
@@ -87,6 +88,7 @@ void cProp::InitializePhysics(eShapeType shape, float mass, glm::vec3 scale, glm
 		cylinderDesc.position = position;
 		cylinderDesc.linearVelocity = velocity;
 		cylinderDesc.restitution = 0.8f;
+		cylinderDesc.rotation = glm::quat(orientation);
 
 		rigidBody = ::g_pGameEngine->m_PhysicsFactory->CreateRigidBody(cylinderDesc, cylinderShape);
 		break;

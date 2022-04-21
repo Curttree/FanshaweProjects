@@ -207,6 +207,9 @@
     <ClCompile Include="cCharacter.cpp">
       <Filter>GameJam</Filter>
     </ClCompile>
+    <ClCompile Include="DecorationManager.cpp">
+      <Filter>GameEngine\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">

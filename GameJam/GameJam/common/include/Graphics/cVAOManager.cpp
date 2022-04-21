@@ -228,16 +228,16 @@ bool cVAOManager::LoadModelIntoVAO(
 
 	//in vec4 vBoneWeights;				// X,Y,Z (W ignored)
 	GLint vBoneWeight_location = glGetAttribLocation(shaderProgramID, "vBoneWeights");	// program;
-	glEnableVertexAttribArray(vBoneWeight_location);	        // vBiNormal
-	glVertexAttribPointer(vBoneWeight_location, 4,		    // vBiNormal
+	glEnableVertexAttribArray(vBoneWeight_location);	        // vBoneWeights
+	glVertexAttribPointer(vBoneWeight_location, 4,		    // vBoneWeights
 		GL_FLOAT, GL_FALSE,
 		sizeof(sVertex_XYZW_RGBA_N_UV_T_B),
 		(void*)offsetof(sVertex_XYZW_RGBA_N_UV_T_B, bWx));
 
 	//in vec4 vBoneIDs;				// X,Y,Z (W ignored)
 	GLint vBoneIDs_location = glGetAttribLocation(shaderProgramID, "vBoneIDs");	// program;
-	glEnableVertexAttribArray(vBoneIDs_location);	        // vBiNormal
-	glVertexAttribPointer(vBoneIDs_location, 4,		    // vBiNormal
+	glEnableVertexAttribArray(vBoneIDs_location);	        // vBoneIDs
+	glVertexAttribPointer(vBoneIDs_location, 4,		    // vBoneIDs
 		GL_INT, GL_FALSE,
 		sizeof(sVertex_XYZW_RGBA_N_UV_T_B),
 		(void*)offsetof(sVertex_XYZW_RGBA_N_UV_T_B, bIx));
@@ -498,7 +498,6 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 		aiProcess_GenSmoothNormals |
 		aiProcess_PopulateArmatureData |
 		aiProcess_FixInfacingNormals |
-		aiProcess_MakeLeftHanded |
 		aiProcess_LimitBoneWeights);
 
 

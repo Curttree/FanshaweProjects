@@ -22,7 +22,8 @@ cFlyCamera::cFlyCamera()
 	this->m_upIsYVector = glm::vec3(0.0f, 1.0f, 0.0f);
 
 
-	this->movementSpeed = 0.5f;
+	//this->movementSpeed = 0.5f;
+	this->movementSpeed = 2.5f;
 
 
 	// Set initial orientation (all zero on Euler axes)
@@ -55,7 +56,7 @@ this->maxYawDegrees = 80.f;
 this->minYawDegrees = -80.f;
 
 this->aimCamOffset = glm::vec3(1.5f, 5.5f, -5.f);
-this->normalCamOffset = glm::vec3(0.f, 0.f, -15.f);
+this->normalCamOffset = glm::vec3(0.f, 5.f, -15.f);
 
 return;
 }
@@ -497,13 +498,13 @@ bool cFlyCamera::Update(std::string command, glm::vec3 data)
 bool cFlyCamera::Update(double deltaTime)
 {
 	if (!aimCam && ::g_pGameEngine->g_pGameplayManager->GetAiming()) {
-		//this->setEye(::g_pGameEngine->entityManager.GetPlayer()->position + aimCamOffset);
+		this->setEye(::g_pGameEngine->entityManager.GetPlayer()->position + aimCamOffset);
 		aimCam = true;
 		return true;
 	}
 	else if (aimCam && !::g_pGameEngine->g_pGameplayManager->GetAiming()) {
 		aimCam = false;
-		//this->setEye(::g_pGameEngine->entityManager.GetPlayer()->position + normalCamOffset);
+		this->setEye(::g_pGameEngine->entityManager.GetPlayer()->position + normalCamOffset);
 	}
 	//TODO: Once physics movement is in place and proper bounds are set, uncomment this for the third person cam.
 	//this->setEye(::g_pGameEngine->entityManager.GetPlayer()->position + normalCamOffset);

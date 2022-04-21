@@ -411,7 +411,7 @@ void DrawObject(cMesh* pCurrentMesh, glm::mat4 matModel,
         // Send Bone values
         std::vector<GLuint> BoneMatrixLocations;
         std::string location = "";
-        for (int i = 0; i < 48; i++)
+        for (int i = 0; i < 40; i++)
         {
             location = "BoneMatrices[" + std::to_string(i) + "]";
             BoneMatrixLocations.push_back(glGetUniformLocation(program, location.c_str()));

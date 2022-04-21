@@ -12,6 +12,7 @@
 #include <Graphics/cFrustumCullingHandler.h>
 
 #include "globals.h"
+#include "DecorationManager.h"
 
 // Function signature for DrawObject()
 void DrawObject(
@@ -58,6 +59,8 @@ void Shutdown(GLFWwindow* pWindow){
 }
 
 int main(void) {
+    //Seed rand.
+    srand(time(NULL));
     // Initialize the window.
     GLFWwindow* pWindow;
     GLuint program = 0;     // 0 means "no shader program"
@@ -229,7 +232,8 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("BrightColouredUVMap.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("BrainNerve.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("crosshair.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("PolygonCity_Texture.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("PolygonCity_Texture2.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("PolygonCity_Road_01.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("city_imposter.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("15.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Concrete_012.bmp", true);
@@ -328,12 +332,18 @@ int main(void) {
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Roof_03.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Door_01.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Door_02.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Env_Sidewalk_Straight_01.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Env_Road_YellowLines_02.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Prop_HotdogStand_01.fbx", program);
+    
    // ::g_pVAOManager->LoadMeshWithAssimp("blobby.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("Adventurer Aland@Walk.FBX", program);
-    ::g_pVAOManager->LoadMeshWithAssimp("Neutral.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("detective@idle.fbx", program);
     //::g_pVAOManager->LoadMeshWithAssimp("oldMan.fbx", program);
+    
 
     ::g_pGameEngine->g_pGameplayManager->GameStart();
+    DecorationManager::Instance()->DecorateScene();
 
     //For debugging animation state transitions.
     std::string oldState = ::g_pGameEngine->entityManager.GetPlayer()->GetAnimationStateAsString();
@@ -343,6 +353,8 @@ int main(void) {
     std::string currentState;
 
     ::g_pFlyCamera->MoveUpDown_Y(2.f);
+
+
 #pragma endregion
     while (!glfwWindowShouldClose(pWindow)) {
         currentState = ::g_pGameEngine->entityManager.GetPlayer()->GetAnimationStateAsString();
@@ -449,10 +461,10 @@ int main(void) {
             // So the code is a little easier...
             cMesh* pCurrentMesh = ::g_vec_pMeshes[index];
 
-            //if (!cFrustumCullingHandler::Instance()->isWithinFrustum(frustum, pCurrentMesh)) {
-            //    //Object isn't in view. Don't bother drawing.
-            //    continue;
-            //}
+            if (!cFrustumCullingHandler::Instance()->isWithinFrustum(frustum, pCurrentMesh)) {
+                //Object isn't in view. Don't bother drawing.
+                continue;
+            }
 
             DrawObject(pCurrentMesh,
                 matModel,
@@ -467,10 +479,10 @@ int main(void) {
             // So the code is a little easier...
             cMesh* pCurrentMesh = entities[index]->mesh;
 
-            //if (!cFrustumCullingHandler::Instance()->isWithinFrustum(frustum, pCurrentMesh)) {
-            //    //Object isn't in view. Don't bother drawing.
-            //    continue;
-            //}
+            if (!cFrustumCullingHandler::Instance()->isWithinFrustum(frustum, pCurrentMesh)) {
+                //Object isn't in view. Don't bother drawing.
+                continue;
+            }
 
             DrawObject(pCurrentMesh,
                 matModel,

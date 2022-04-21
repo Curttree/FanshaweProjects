@@ -16,21 +16,21 @@ cPropFactory* cPropFactory::Instance() {
 	return _instance;
 }
 
-cProp* cPropFactory::createProp(int type, glm::vec3 position, glm::vec3 velocity) {
+cProp* cPropFactory::createProp(int type, glm::vec3 position, glm::vec3 orientation, glm::vec3 velocity) {
 	cProp* result = 0;
 	switch (type) {
 	case(PROP_CAN):
-		result = ::g_pGameEngine->entityManager.CreateProp("can.ply", "BrainNerve.bmp", position, eShapeType::Cylinder,glm::vec3(0.5f));
+		result = ::g_pGameEngine->entityManager.CreateProp("can.ply", "BrainNerve.bmp", position, eShapeType::Cylinder,glm::vec3(0.5f),glm::vec3(1.f),1.f, orientation);
 		result->mesh->lowDetailMeshName = "";
 		result->mesh->boundingRadius = 1.f;
 		break;
 	case(PROP_BOX):
-		result = ::g_pGameEngine->entityManager.CreateProp("SM_Prop_CarboardBox_02.ply", "PolygonCity_Texture.bmp", position, eShapeType::Box, glm::vec3(10.f), glm::vec3(2.5f,2.5f,2.5f),5.f);
+		result = ::g_pGameEngine->entityManager.CreateProp("SM_Prop_CarboardBox_02.ply", "PolygonCity_Texture2.bmp", position, eShapeType::Box, glm::vec3(6.f), glm::vec3(1.f,1.f,1.f),5.f, orientation);
 		result->mesh->lowDetailMeshName = "";
 		result->mesh->boundingRadius = 1.f;
 		break;
 	case(PROP_CITY_IMPOSTER):
-		result = ::g_pGameEngine->entityManager.CreateProp("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply", "city_imposter.bmp", position, eShapeType::None, glm::vec3(10.f));
+		result = ::g_pGameEngine->entityManager.CreateProp("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply", "city_imposter.bmp", position, eShapeType::None, glm::vec3(50.f));
 		result->mesh->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
 		result->rotation = result->mesh->orientationXYZ;
 		result->mesh->meshName = "";
@@ -42,9 +42,10 @@ cProp* cPropFactory::createProp(int type, glm::vec3 position, glm::vec3 velocity
 		result->rotation = result->mesh->orientationXYZ;
 		result->mesh->boundingRadius = 10.f;
 		break;	
-	case(PROP_BUILDING_1):
-		result = ::g_pGameEngine->entityManager.CreateProp("City/SM_Bld_Apartment_Door_01.fbx", "PolygonCity_Texture.bmp", position, eShapeType::Box, glm::vec3(10.f), glm::vec3(2.5f, 2.5f, 2.5f), 5.f);
+	case(PROP_HOTDOG_STAND):
+		result = ::g_pGameEngine->entityManager.CreateProp("City/SM_Prop_HotdogStand_01.fbx", "PolygonCity_Texture2.bmp", position, eShapeType::Box, glm::vec3(2.5f), glm::vec3(1.5f, 1.4f, 1.5f), 5.f, orientation);
 		result->mesh->lowDetailMeshName = "";
+		result->positionOffset = glm::vec3(0.f, -1.f, 0.f);
 		result->mesh->boundingRadius = 1.f;
 		break;
 	case(PROP_BULLET):

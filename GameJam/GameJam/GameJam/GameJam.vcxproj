@@ -187,6 +187,7 @@
     <ClCompile Include="cProp.cpp" />
     <ClCompile Include="cPropFactory.cpp" />
     <ClCompile Include="cWinContextMenu.cpp" />
+    <ClCompile Include="DecorationManager.cpp" />
     <ClCompile Include="DrawObject_function.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="GameEvents.cpp" />

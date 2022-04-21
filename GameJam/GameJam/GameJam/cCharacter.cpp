@@ -5,13 +5,13 @@
 cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     //Mesh
     cMesh* character_mesh = new cMesh();
-    character_mesh->setAllMeshNames("Adventurer Aland@Walk.FBX");
-    //character_mesh->scale = glm::vec3(0.025f);
-    character_mesh->scale = glm::vec3(0.05f);
+    character_mesh->setAllMeshNames("detective@idle.fbx");
+    character_mesh->scale = glm::vec3(0.00025f);
+    //character_mesh->scale = glm::vec3(0.05f);
     character_mesh->positionXYZ = startPosition;
     character_mesh->orientationXYZ = startOrientation;
-    //character_mesh->textureNames[0] = "Fish_BaseColor.bmp";
-    character_mesh->textureNames[0] = "Adventurer Aland-Blue.bmp";
+    character_mesh->textureNames[0] = "Fish_BaseColor.bmp";
+    //character_mesh->textureNames[0] = "Adventurer Aland-Blue.bmp";
     character_mesh->textureRatios[0] = 1.f;
     mesh = character_mesh;
     this->position = character_mesh->positionXYZ;
@@ -30,14 +30,14 @@ cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
 }
 
 void cCharacter::LoadBones() {
-    ::g_pVAOManager->FindBonesByModelName("Adventurer Aland@Walk.FBX", mesh->bones);
+    ::g_pVAOManager->FindBonesByModelName("detective@idle.fbx", mesh->bones);
     if (mesh->bones->bones.size()>0) {
-        mesh->bUseBones = true;
+        mesh->bUseBones = false;
     }
 }
 
 void cCharacter::LoadAnimation() {
-    ::g_pVAOManager->FindAnimationByName("Adventurer Aland@Walk.FBX", this->current_animation);
+    ::g_pVAOManager->FindAnimationByName("detective@idle.fbx", this->current_animation);
     if (this->current_animation) {
         animation = *current_animation;
     }

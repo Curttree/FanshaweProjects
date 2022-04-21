@@ -151,9 +151,9 @@ void main()
 	// Just ONE pixel, though.
 	
 	vec3 maxDepthColour = vec3(1.0f, 0.f, 0.f);
-	vec3 depthColourMultiplier = vec3(1.0f, 1.0f, 2.f);
-	float maxDepth = 50.f;
-	float minDepth = 5.f;
+	vec3 depthColourMultiplier = vec3(1.0f, 1.0f, 2.5f);
+	float maxDepth = 100.f;
+	float minDepth = 30.f;
 	
 	// HACK: See if the UV coordinates are actually being passed in
 	pixelOutputFragColour.rgba = vec4(0.0f, 0.0f, 0.0, 1.0f); 
@@ -200,7 +200,7 @@ void main()
 		vec3 blurColour = sampleColour;
 		for (float i = 1; i < 6; i++)
 		{
-			float offset = i * 0.001f;
+			float offset = i * 0.002f;
 			vec2 UVlookup;
 			UVlookup.x = gl_FragCoord.x / screenWidthHeight.x+offset;	// Width
 			UVlookup.y = gl_FragCoord.y / screenWidthHeight.y+offset;	// Height
@@ -210,7 +210,7 @@ void main()
 		}
 		for (float i = -1; i > -6; i--)
 		{
-			float offset = i * 0.001f;
+			float offset = i * 0.002f;
 			vec2 UVlookup;
 			UVlookup.x = gl_FragCoord.x / screenWidthHeight.x + offset;	// Width
 			UVlookup.y = gl_FragCoord.y / screenWidthHeight.y + offset;	// Height
