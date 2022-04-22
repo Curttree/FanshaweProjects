@@ -7,8 +7,6 @@
 
 #include <glm/gtx/matrix_decompose.hpp>
 
-bool gDebugPrint = false;
-
 NodeData::NodeData(aiNode* assimpNode)
 {
 	name = std::string(assimpNode->mName.data);
@@ -21,7 +19,6 @@ NodeData::~NodeData()
 
 void VertexBoneData::AddBoneData(unsigned int boneId, float weight)
 {
-	// 4 * sizeof(unsigned int) / (sizeof(unsigned int)) = 4
 	for (unsigned int i = 0; i < sizeof(IDs) / sizeof(IDs[0]); ++i)
 	{
 		if (weights[i] == 0.0) {
@@ -42,8 +39,8 @@ void MeshData::LoadBones(aiMesh* mesh)
 	{
 		unsigned int boneIdx = 0;
 		std::string boneName(mesh->mBones[i]->mName.data);
-
-		if (auto it = mBoneMap.find(boneName) == mBoneMap.end())
+		std::map<std::string, unsigned int>::const_iterator it = mBoneMap.find(boneName);
+		if (it == mBoneMap.end())
 		{
 			boneIdx = mNumBones;
 			mNumBones++;
@@ -75,8 +72,6 @@ NodeData* MeshData::LoadNodes(aiNode* assimpNode, const bool isRoot)
 	NodeData* newNode = new NodeData(assimpNode);
 	mNodeData.push_back(newNode);
 
-	printf("%s\n", newNode->name.c_str());
-
 	if (isRoot)
 		mRootNode = newNode;
 
@@ -96,24 +91,9 @@ void MeshData::UpdateTransforms(float time,
 	std::vector<glm::mat4>& globals,
 	std::vector<glm::mat4>& offsets)
 {
-	// Get animation information
-	//float animationTime = time / animation->duration * animation->numTicks;
-
-	// Get the root node
-	//auto it = animation->animationNodeMap.find(mRootNode->name);
-	//if (it == animation->animationNodeMap.end())
-	//{
-	//	printf("MeshData::UpdateTransforms: [Error] AnimationRootNode not found in AnimationNodeMap.");
-	//	return;
-	//}
-
-	if (gDebugPrint)
-		printf("\n===============================================\n\n");
-
 	// Update the node hierarchy, starting from the root node
 	// Update node hierarchy..
 	glm::mat4 identity(1.f);
-	//AnimationNode* rootNode = animation->animationNodes[it->second];
 	UpdateHierarchy(time, animation, mRootNode, identity);
 
 	// Acquire all the matrix information
@@ -150,21 +130,9 @@ void MeshData::UpdateHierarchy(float time, Animation* animation, NodeData* node,
 	glm::mat4 transformation;
 
 	AnimationNode* animNode = FindAnimationNode(animation, nodeName);
-
-	bool isPelvis = nodeName.compare("RigPelvis") == 0;
-
-	if (gDebugPrint)
-		printf("\n=========================\nNode: %s\n", nodeName.c_str());
-
 	transformation = node->transformation;
 	if (animNode)
 	{
-		if (gDebugPrint)
-		{
-			printf("Animation Info:\n");
-			printf("Time: %2.3f\n", time);
-		}
-
 		glm::vec3 scaling;
 		CalculateScaling(scaling, time, animNode);
 		glm::mat4 scalingMatrix = glm::scale(glm::mat4(1.0f), scaling);
@@ -178,38 +146,11 @@ void MeshData::UpdateHierarchy(float time, Animation* animation, NodeData* node,
 		glm::mat4 translationMatrix = glm::translate(glm::mat4(1.f), translation);
 
 		transformation = translationMatrix * rotationMatrix * scalingMatrix;
-
-		if (gDebugPrint)
-		{
-			printf("\nAnimatedTransformation:\n");
-			printf("Scale: %2.3f, %2.3f, %2.3f\n", scaling.x, scaling.y, scaling.z);
-			printf("rotation: %2.3f, %2.3f, %2.3f, %2.3f\n", rotation.x, rotation.y, rotation.z, rotation.w);
-			printf("translation: %2.3f, %2.3f, %2.3f\n", translation.x, translation.y, translation.z);
-			printf("\n");
-		}
-	}
-
-	if (gDebugPrint)
-	{
-		glm::vec3 skew;
-		glm::vec4 perspective;
-
-		glm::vec3 translation;
-		glm::vec3 scaling;
-		glm::quat rotation;
-
-		glm::decompose(transformation, scaling, rotation, translation, skew, perspective);
-
-		printf("\nLocalTransformation:\n");
-		printf("Scale: %2.3f, %2.3f, %2.3f\n", scaling.x, scaling.y, scaling.z);
-		printf("rotation: %2.3f, %2.3f, %2.3f, %2.3f\n", rotation.x, rotation.y, rotation.z, rotation.w);
-		printf("translation: %2.3f, %2.3f, %2.3f\n", translation.x, translation.y, translation.z);
-		printf("\n");
 	}
 
 	glm::mat4 globalTransformation = parentMatrix * transformation;
 	glm::mat4 finalTransformation;
-	auto itBoneMap = mBoneMap.find(nodeName);
+	std::map<std::string, unsigned int>::const_iterator itBoneMap = mBoneMap.find(nodeName);
 	if (itBoneMap != mBoneMap.end())
 	{
 		unsigned int boneIdx = itBoneMap->second;
@@ -218,41 +159,6 @@ void MeshData::UpdateHierarchy(float time, Animation* animation, NodeData* node,
 		finalTransformation = mGlobalInvereseTransformation *
 			globalTransformation * mBoneData[boneIdx].BoneOffset;
 		mBoneData[boneIdx].FinalTransformation = finalTransformation;
-	}
-	if (gDebugPrint)
-	{
-		glm::vec3 skew;
-		glm::vec4 perspective;
-
-		glm::vec3 translation;
-		glm::vec3 scaling;
-		glm::quat rotation;
-
-		glm::decompose(globalTransformation, scaling, rotation, translation, skew, perspective);
-
-		printf("\nGlobalTransformation:\n");
-		printf("Scale: %2.3f, %2.3f, %2.3f\n", scaling.x, scaling.y, scaling.z);
-		printf("rotation: %2.3f, %2.3f, %2.3f, %2.3f\n", rotation.x, rotation.y, rotation.z, rotation.w);
-		printf("translation: %2.3f, %2.3f, %2.3f\n", translation.x, translation.y, translation.z);
-		printf("\n");
-	}
-
-	if (itBoneMap != mBoneMap.end() && gDebugPrint)
-	{
-		glm::vec3 skew;
-		glm::vec4 perspective;
-
-		glm::vec3 translation;
-		glm::vec3 scaling;
-		glm::quat rotation;
-
-		glm::decompose(finalTransformation, scaling, rotation, translation, skew, perspective);
-
-		printf("\nFinalTransformation:\n");
-		printf("Scale: %2.3f, %2.3f, %2.3f\n", scaling.x, scaling.y, scaling.z);
-		printf("rotation: %2.3f, %2.3f, %2.3f, %2.3f\n", rotation.x, rotation.y, rotation.z, rotation.w);
-		printf("translation: %2.3f, %2.3f, %2.3f\n", translation.x, translation.y, translation.z);
-		printf("\n");
 	}
 
 	for (unsigned int i = 0; i < node->children.size(); ++i)
@@ -265,13 +171,9 @@ void MeshData::UpdateTransforms(float time1, Animation* animation1, float time2,
 	Animation* animation2, float factor, std::vector<glm::mat4>& transforms,
 	std::vector<glm::mat4>& globals, std::vector<glm::mat4>& offsets)
 {
-	if (gDebugPrint)
-		printf("\n===============================================\n\n");
-
 	// Update the node hierarchy, starting from the root node
 	// Update node hierarchy..
 	glm::mat4 identity(1.f);
-	//AnimationNode* rootNode = animation->animationNodes[it->second];
 	UpdateHierarchy(time1, animation1, time2, animation2, factor, mRootNode, identity);
 
 	// Acquire all the matrix information
@@ -303,22 +205,9 @@ void MeshData::UpdateHierarchy(float time1, Animation* animation1, float time2,
 	AnimationNode* anim1Node = FindAnimationNode(animation1, nodeName);
 	AnimationNode* anim2Node = FindAnimationNode(animation2, nodeName);
 
-	bool isPelvis = nodeName.compare("RigPelvis") == 0;
-
-	if (gDebugPrint)
-		printf("\n=========================\nNode: %s\n", nodeName.c_str());
-
 	transformation = node->transformation;
 	if (anim1Node && anim2Node)
 	{
-		if (gDebugPrint)
-		{
-			printf("Animation Info:\n");
-			printf("Time1: %2.3f\n", time1);
-			printf("Time2: %2.3f\n", time2);
-			printf("Factor: %2.3f\n", factor);
-		}
-
 		glm::vec3 scaling1;
 		glm::vec3 scaling2;
 		CalculateScaling(scaling1, time1, anim1Node);
@@ -341,38 +230,11 @@ void MeshData::UpdateHierarchy(float time1, Animation* animation1, float time2,
 		glm::mat4 translationMatrix = glm::translate(glm::mat4(1.f), translation);
 
 		transformation = translationMatrix * rotationMatrix * scalingMatrix;
-
-		if (gDebugPrint)
-		{
-			printf("\nAnimatedTransformation:\n");
-			printf("Scale: %2.3f, %2.3f, %2.3f\n", scaling.x, scaling.y, scaling.z);
-			printf("rotation: %2.3f, %2.3f, %2.3f, %2.3f\n", rotation.x, rotation.y, rotation.z, rotation.w);
-			printf("translation: %2.3f, %2.3f, %2.3f\n", translation.x, translation.y, translation.z);
-			printf("\n");
-		}
-	}
-
-	if (gDebugPrint)
-	{
-		glm::vec3 skew;
-		glm::vec4 perspective;
-
-		glm::vec3 translation;
-		glm::vec3 scaling;
-		glm::quat rotation;
-
-		glm::decompose(transformation, scaling, rotation, translation, skew, perspective);
-
-		printf("\nLocalTransformation:\n");
-		printf("Scale: %2.3f, %2.3f, %2.3f\n", scaling.x, scaling.y, scaling.z);
-		printf("rotation: %2.3f, %2.3f, %2.3f, %2.3f\n", rotation.x, rotation.y, rotation.z, rotation.w);
-		printf("translation: %2.3f, %2.3f, %2.3f\n", translation.x, translation.y, translation.z);
-		printf("\n");
 	}
 
 	glm::mat4 globalTransformation = parentMatrix * transformation;
 	glm::mat4 finalTransformation;
-	auto itBoneMap = mBoneMap.find(nodeName);
+	std::map<std::string, unsigned int>::const_iterator itBoneMap = mBoneMap.find(nodeName);
 	if (itBoneMap != mBoneMap.end())
 	{
 		unsigned int boneIdx = itBoneMap->second;
@@ -381,41 +243,6 @@ void MeshData::UpdateHierarchy(float time1, Animation* animation1, float time2,
 		finalTransformation = mGlobalInvereseTransformation *
 			globalTransformation * mBoneData[boneIdx].BoneOffset;
 		mBoneData[boneIdx].FinalTransformation = finalTransformation;
-	}
-	if (gDebugPrint)
-	{
-		glm::vec3 skew;
-		glm::vec4 perspective;
-
-		glm::vec3 translation;
-		glm::vec3 scaling;
-		glm::quat rotation;
-
-		glm::decompose(globalTransformation, scaling, rotation, translation, skew, perspective);
-
-		printf("\nGlobalTransformation:\n");
-		printf("Scale: %2.3f, %2.3f, %2.3f\n", scaling.x, scaling.y, scaling.z);
-		printf("rotation: %2.3f, %2.3f, %2.3f, %2.3f\n", rotation.x, rotation.y, rotation.z, rotation.w);
-		printf("translation: %2.3f, %2.3f, %2.3f\n", translation.x, translation.y, translation.z);
-		printf("\n");
-	}
-
-	if (itBoneMap != mBoneMap.end() && gDebugPrint)
-	{
-		glm::vec3 skew;
-		glm::vec4 perspective;
-
-		glm::vec3 translation;
-		glm::vec3 scaling;
-		glm::quat rotation;
-
-		glm::decompose(finalTransformation, scaling, rotation, translation, skew, perspective);
-
-		printf("\nFinalTransformation:\n");
-		printf("Scale: %2.3f, %2.3f, %2.3f\n", scaling.x, scaling.y, scaling.z);
-		printf("rotation: %2.3f, %2.3f, %2.3f, %2.3f\n", rotation.x, rotation.y, rotation.z, rotation.w);
-		printf("translation: %2.3f, %2.3f, %2.3f\n", translation.x, translation.y, translation.z);
-		printf("\n");
 	}
 
 	for (unsigned int i = 0; i < node->children.size(); ++i)
@@ -439,11 +266,6 @@ void MeshData::CalculateScaling(glm::vec3& scaling, float time, AnimationNode* n
 	const glm::vec3 startScale = node->keyFrameScales[scalingIndex].scale;
 	const glm::vec3 endScale = node->keyFrameScales[nextScalingIndex].scale;
 	scaling = startScale + (endScale - startScale) * factor;
-
-	if (gDebugPrint)
-	{
-		printf("ScaleIdx: %d\n", scalingIndex);
-	}
 }
 
 void MeshData::CalculateRotation(glm::quat& rotation, float time, AnimationNode* node)
@@ -462,11 +284,6 @@ void MeshData::CalculateRotation(glm::quat& rotation, float time, AnimationNode*
 	const glm::quat endRotation = node->keyFrameRotations[nextRotationIndex].rotation;
 	rotation = glm::slerp(startRotation, endRotation, factor);
 	glm::normalize(rotation);
-
-	if (gDebugPrint)
-	{
-		printf("RotationIdx: %d\n", rotationIndex);
-	}
 }
 
 void MeshData::CalculateTranslation(glm::vec3& translation, float time, AnimationNode* node)
@@ -484,11 +301,6 @@ void MeshData::CalculateTranslation(glm::vec3& translation, float time, Animatio
 	const glm::vec3 startPosition = node->keyFramePositions[positionIndex].position;
 	const glm::vec3 endPosition = node->keyFramePositions[nextPositionIndex].position;
 	translation = startPosition + (endPosition - startPosition) * factor;
-
-	if (gDebugPrint)
-	{
-		printf("TranslationIdx: %d\n", positionIndex);
-	}
 }
 
 

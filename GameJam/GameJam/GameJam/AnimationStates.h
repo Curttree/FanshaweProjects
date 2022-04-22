@@ -1,5 +1,5 @@
 #pragma once
-#include "GameEvents.h"
+class GameEvent;
 
 enum class AnimationState
 {

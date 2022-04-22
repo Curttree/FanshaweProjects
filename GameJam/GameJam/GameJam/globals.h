@@ -85,6 +85,8 @@ extern cMesh* g_pFullScreenQuad; // = NULL
 // The FBO that the full screen quad is going to use
 extern cFBO* g_pFBO;    // = NULL
 
+extern GLFWwindow* g_pWindow;
+
 extern float g_runTime;
 extern float g_deltaTime;
 
@@ -123,6 +125,7 @@ public:
 
 void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime);
 void handleAsyncMouse(GLFWwindow* pWindow, double deltaTime);
+bool checkMovementKeysDown();
 
 
 // ************************************************

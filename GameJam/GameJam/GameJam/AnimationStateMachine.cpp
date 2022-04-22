@@ -17,6 +17,10 @@ AnimationState AnimationStateMachine::GetCurrentState() {
 	return currentState;
 }
 
+AnimationState AnimationStateMachine::GetTransitioningState() {
+	return transitioningState;
+}
+
 void AnimationStateMachine::Update(float dt)
 {
 	if (transitionInProgress)
@@ -25,7 +29,7 @@ void AnimationStateMachine::Update(float dt)
 		currentTime = glm::clamp(currentTime, 0.f, transitionDuration);
 		factor = currentTime / transitionDuration;
 
-		printf("%1.2f | %1.2f\n", currentTime, transitionDuration);
+		//printf("%1.2f | %1.2f\n", currentTime, transitionDuration);
 
 		if (factor >= 1.f)
 		{
@@ -33,7 +37,7 @@ void AnimationStateMachine::Update(float dt)
 			transitionInProgress = false;
 			currentTime = 0.f;
 			factor = 0.f;
-			printf("Transition complete!\n");
+			//printf("Transition complete!\n");
 		}
 	}
 }
@@ -81,12 +85,12 @@ void AnimationStateMachine::TransitionToState(Transition transition)
 
 	if (transition.duration <= 0.f)
 	{
-		printf("Transition completed immediately!\n");
+		//printf("Transition completed immediately!\n");
 		currentState = transition.to;
 		return;
 	}
 
-	printf("Transition starting!\n");
+	//printf("Transition starting!\n");
 	factor = 0;
 	currentTime = 0.f;
 	transitioningState = transition.to;
@@ -97,7 +101,6 @@ void AnimationStateMachine::TransitionToState(Transition transition)
 bool AnimationStateMachine::FindTransitionToState(AnimationState from, GameEvent* gameEvent, Transition& out)
 {
 	std::map<AnimationState, std::vector<Transition>>::iterator itStateMap = stateTransitions.find(from);
-	//auto itStateMap = std::find(m_StateTransitions.begin(), m_StateTransitions.end(), from);
 	if (itStateMap == stateTransitions.end())
 		return false;
 
@@ -114,4 +117,20 @@ bool AnimationStateMachine::FindTransitionToState(AnimationState from, GameEvent
 		}
 	}
 	return false;
+}
+
+bool AnimationStateMachine::GetTransitioning(Transition& transition, float& transitionFactor) {
+	if (transitionInProgress) {
+		transition.from = currentState;
+		transition.to = transitioningState;
+		transition.duration = transitionDuration;
+		transitionFactor = factor;
+	}
+	else {
+		transition.from = currentState;
+		transition.to = currentState;
+		transition.duration = 0.f;
+		transitionFactor = 0.f;
+	}
+	return transitionInProgress;
 }

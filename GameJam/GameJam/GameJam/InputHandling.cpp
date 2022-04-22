@@ -28,14 +28,14 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
     {
         if (!::g_pGameEngine->g_pGameplayManager->GetAiming()) {
             // Use "fly" camera (keyboard for movement, mouse for aim)
-            if (glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS)
-            {
-                ::g_pFlyCamera->MoveForward_Z(+cameraMoveSpeed);
-            }
-            if (glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_PRESS)	// "backwards"
-            {
-                ::g_pFlyCamera->MoveForward_Z(-cameraMoveSpeed);
-            }
+            //if (glfwGetKey(pWindow, GLFW_KEY_W) == GLFW_PRESS)
+            //{
+            //    ::g_pFlyCamera->MoveForward_Z(+cameraMoveSpeed);
+            //}
+            //if (glfwGetKey(pWindow, GLFW_KEY_S) == GLFW_PRESS)	// "backwards"
+            //{
+            //    ::g_pFlyCamera->MoveForward_Z(-cameraMoveSpeed);
+            //}
         }
         //if ( glfwGetKey(pWindow, GLFW_KEY_A) == GLFW_PRESS )	// "left"
         //{
@@ -45,14 +45,14 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
         //{
         //    ::g_pFlyCamera->MoveLeftRight_X(+cameraMoveSpeed);
         //}
-        if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS )	// "up"
-        {
-            ::g_pFlyCamera->MoveUpDown_Y(-cameraMoveSpeed);
-        }
-        if ( glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS )	// "down"
-        {
-            ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
-        }
+        //if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS )	// "up"
+        //{
+        //    ::g_pFlyCamera->MoveUpDown_Y(-cameraMoveSpeed);
+        //}
+        //if ( glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS )	// "down"
+        //{
+        //    ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
+        //}
 
         std::stringstream strTitle;
         // std::cout << 
@@ -170,6 +170,9 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
     return;
 }
 
+bool checkMovementKeysDown() {
+    return (glfwGetKey(::g_pWindow, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(::g_pWindow, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(::g_pWindow, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(::g_pWindow, GLFW_KEY_D) == GLFW_PRESS);
+}
 
 // We call these every frame
 void handleAsyncMouse(GLFWwindow* window, double deltaTime)

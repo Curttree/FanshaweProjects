@@ -93,6 +93,7 @@ int main(void) {
     glfwMakeContextCurrent(pWindow);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     glfwSwapInterval(1);
+    ::g_pWindow = pWindow;
     
     // See how many active uniform variables (registers) I can have
     GLint max_uniform_location = 0;
@@ -196,8 +197,8 @@ int main(void) {
     vecModelsToLoad.push_back("Isosphere_Smooth_Inverted_Normals_for_SkyBox.ply");
     vecModelsToLoad.push_back("can.ply");
     vecModelsToLoad.push_back("SM_Prop_CarboardBox_02.ply");
-    vecModelsToLoad.push_back("billiardball.ply");
-    vecModelsToLoad.push_back("debugMan.ply");
+    vecModelsToLoad.push_back("ColtPython.ply");
+
 
     unsigned int totalVerticesLoaded = 0;
     unsigned int totalTrianglesLoaded = 0;
@@ -234,13 +235,11 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("PolygonCity_Texture2.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("PolygonCity_Road_01.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("city_imposter.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("15.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Concrete_012.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("UnderwaterNormals.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("cue.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Fish_BaseColor.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("Adventurer Aland-Blue.bmp", true);
-   
+    ::g_pTextureManager->Create2DTextureFromBMPFile("BrushedMetalSilver2.bmp", true);
+
     // Add a skybox texture
     std::string errorTextString;
     ::g_pTextureManager->SetBasePath("assets/textures/cubemaps");
@@ -335,10 +334,13 @@ int main(void) {
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Env_Sidewalk_Corner_01.fbx", program);
     
    // ::g_pVAOManager->LoadMeshWithAssimp("blobby.fbx", program);
-    //::g_pVAOManager->LoadMeshWithAssimp("Adventurer Aland@Walk.FBX", program);
+    //::g_pVAOManager->LoadMeshWithAssimp("oldMan.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("detective@idle.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("detective@aim.fbx", program);
-    //::g_pVAOManager->LoadMeshWithAssimp("oldMan.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("detective@shoot.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("detective@wait.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("detective@walk.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("detective@run.fbx", program);
     
 
     ::g_pGameEngine->g_pGameplayManager->GameStart();
@@ -349,7 +351,6 @@ int main(void) {
     std::string oldState = ::g_pGameEngine->entityManager.GetPlayer()->GetAnimationStateAsString();
     ::g_pGameEngine->entityManager.GetPlayer()->LoadAnimation();
     ::g_pGameEngine->entityManager.GetPlayer()->LoadBones();
-    std::cout << oldState << std::endl;
     std::string currentState;
 
     ::g_pFlyCamera->MoveUpDown_Y(2.f);
@@ -359,7 +360,7 @@ int main(void) {
     while (!glfwWindowShouldClose(pWindow)) {
         currentState = ::g_pGameEngine->entityManager.GetPlayer()->GetAnimationStateAsString();
         if (oldState != currentState) {
-            std::cout << currentState << std::endl;
+            //std::cout << currentState << std::endl;
             ::g_pGameEngine->entityManager.GetPlayer()->LoadAnimation();
             oldState = currentState;
         }

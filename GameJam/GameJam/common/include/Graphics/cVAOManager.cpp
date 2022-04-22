@@ -66,7 +66,7 @@ void MapBoneHierarchy(aiNode* node, cBoneHierarchy& boneHierarchy, const std::ma
 	cBone* bone = nullptr;
 	if (node->mParent != nullptr)
 	{
-		auto nodeIt = aiNodePtrToBoneIdx.find(node);
+		std::map<aiNode*, unsigned int>::const_iterator nodeIt = aiNodePtrToBoneIdx.find(node);
 		if (nodeIt != aiNodePtrToBoneIdx.end())
 		{
 			bone = boneHierarchy.bones[nodeIt->second];
@@ -75,22 +75,13 @@ void MapBoneHierarchy(aiNode* node, cBoneHierarchy& boneHierarchy, const std::ma
 		}
 	}
 
-	printf("\n");
-	for (int i = 0; i < depth; i++)
-		printf("  ");
-
-	if (bone != nullptr)
-		printf("[b] ");
-
-	printf("%s", node->mName.C_Str());
-
 	for (int nodeIdx = 0; nodeIdx < node->mNumChildren; nodeIdx++)
 	{
 		aiNode* child = node->mChildren[nodeIdx];
 
 		if (node->mParent != nullptr && bone != nullptr)
 		{
-			auto childIt = aiNodePtrToBoneIdx.find(child);
+			std::map<aiNode*, unsigned int>::const_iterator childIt = aiNodePtrToBoneIdx.find(child);
 			if (childIt != aiNodePtrToBoneIdx.end())
 			{
 				cBone* childBone = boneHierarchy.bones[childIt->second];
@@ -728,15 +719,11 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 
 				meshData->boneHierarchy.currentTransforms[boneIdx].value = BoneModelMatrix;
 
-				//bone->SetModelMatrix(meshData->boneHierarchy.currentTransforms[boneIdx].value);
-
 				bone->name = assimpBone->mName.C_Str();
 				bone->SetModelMatrix(BoneModelMatrix);
 
 				aiNodePtrToBoneIdx[assimpNode] = meshData->boneHierarchy.bones.size();
 				meshData->boneHierarchy.bones.push_back(bone);
-
-				//printf("[%d] %s\n", boneIdx, bone->name.c_str());
 			}
 
 			rootNode = mesh->mBones[0]->mNode;
@@ -760,12 +747,7 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 				animation->ticksPerSecond = aiAnim->mTicksPerSecond;
 				animation->numTicks = aiAnim->mDuration;
 				animation->name = aiAnim->mName.C_Str();
-				animation->duration = animation->numTicks / animation->ticksPerSecond;
-
-				printf("Animation:\n");
-				printf(" Name: %s\n", animation->name.c_str());
-				printf(" TicksPerSecond: %d\n", animation->ticksPerSecond);
-				printf(" NumTicks: %d\n", animation->numTicks);
+				animation->duration = (float)animation->numTicks / (float)animation->ticksPerSecond;
 
 				unsigned int numChannels = aiAnim->mNumChannels;
 
@@ -778,10 +760,7 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 
 					animation->animationNodes.push_back(node);
 
-					printf("  [%d] %s\n", channelIdx, node->name.c_str());
-
 					unsigned int numPositionKeys = aiNode->mNumPositionKeys;
-					printf("   Positions (%d):\n", numPositionKeys);
 					for (int positionKeyIdx = 0; positionKeyIdx < numPositionKeys; ++positionKeyIdx)
 					{
 						aiVectorKey aiKeyframe = aiNode->mPositionKeys[positionKeyIdx];
@@ -793,7 +772,6 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 					}
 
 					unsigned int numScaleKeys = aiNode->mNumScalingKeys;
-					//printf("   Scales (%d):\n", numScaleKeys);
 					for (int scaleKeyIdx = 0; scaleKeyIdx < numScaleKeys; ++scaleKeyIdx)
 					{
 						aiVectorKey aiKeyframe = aiNode->mScalingKeys[scaleKeyIdx];
@@ -806,7 +784,6 @@ bool cVAOManager::LoadMeshWithAssimp(const std::string& filename,
 					}
 
 					unsigned int numRotationKeys = aiNode->mNumRotationKeys;
-					//printf("   Rotations (%d):\n", numRotationKeys);
 					for (int rotationKeyIdx = 0; rotationKeyIdx < numRotationKeys; ++rotationKeyIdx)
 					{
 						aiQuatKey aiKeyframe = aiNode->mRotationKeys[rotationKeyIdx];

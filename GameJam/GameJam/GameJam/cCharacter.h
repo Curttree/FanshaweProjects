@@ -16,6 +16,7 @@ public:
 	virtual void Notify(GameEventType type, void* data);
 
 	virtual AnimationState GetAnimationState(void);
+	virtual AnimationState GetFutureAnimationState(void);
 	virtual std::string GetAnimationStateAsString(void);
 	virtual void SetNeutralOrientation();
 	virtual void ResetToNeutralOrientation();
@@ -30,16 +31,27 @@ private:
 
 	float idleTimer = 0.f;
 	float maxIdleTime = 10.f;
+	float stoppingTimer = 0.f;
+	float maxStoppingTime = 0.5f;
 	bool isIdle;
+	bool isStopping;
 	glm::quat neutralOrientation;
 
 	Animation* current_animation;
 	cBoneHierarchy* current_bones;
 
+	unsigned int rightHandIndex;
+
 	std::map<AnimationState, std::string> map_animations;
 
 	void BuildAnimationTransitions(void);
 	void BuildAnimationMap(void);
+	std::string GetAnimationFromState(AnimationState state);
+
+	void UpdateAnimationBlend(void);
+
+	//Gets the position to draw the gun. Returns false if it should not be drawn.
+	bool GetGunPosition(glm::vec3& position);
 
 	//Temp map for debugging.
 	std::map<AnimationState, std::string> states;

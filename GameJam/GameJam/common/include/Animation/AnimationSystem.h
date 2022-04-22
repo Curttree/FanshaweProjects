@@ -14,8 +14,8 @@ public:
 private:
 	//const KeyFramePosition& FindCurrentKeyFramePosition(Animation* animation, float time);
 	//const KeyFrameScale& FindCurrentKeyFrameScale(Animation* animation, float time);
-	void UpdateAnimationTime(Animation* animation, float dt);
-	//void BlendAnimationUpdate(cEntity* pEntity, float dt);
+	void UpdateAnimationTime(Animation* animation, float dt, cEntity* pEntity, bool fromBlend=false);
+	void BlendAnimationUpdate(cEntity* pEntity, float dt);
 	void SingleAnimationUpdate(cEntity* pEntity, float dt);
 	int FindKeyFramePositionIndex(Animation* animation, float time);
 	int FindKeyFrameScaleIndex(Animation* animation, float time);

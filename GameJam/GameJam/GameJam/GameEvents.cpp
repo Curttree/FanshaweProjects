@@ -34,8 +34,7 @@ bool GameEvent_BackInAction::CompareData(GameEvent* gameEvent)
 }
 bool GameEvent_AnimationExit::CompareData(GameEvent* gameEvent)
 {
-	//TODO: Verify if we need an extra piece of info to verify identity.
 	GameEvent_AnimationExit* animationExit = dynamic_cast<GameEvent_AnimationExit*>(gameEvent);
-	return animationExit == nullptr ? false: true;
+	return animationExit == nullptr ? false: animationExit->GetAnim() == animID;
 }
 

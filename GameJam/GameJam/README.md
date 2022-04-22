@@ -1,4 +1,4 @@
-# INFO 6022 - Physics & Simulation 2 - Project 3 / Final Part 1
+# INFO 6045 - Animation - Final Project Parts 1 & 2
 ## By: Curtis Tremblay (Student Number: 1049697)
 
 
@@ -7,8 +7,10 @@
 
 ## Running the Project
 - Controls are:
-    - W : Move forward
-    - S : Move backward
+    - No input : Idle Animation
+    - W/A/S/D : Walk Animation
+    - Shift + W/A/S/D : Run Animation
+    - Q / Don't press anything for  a while : Waiting Animation
     - Right Click : Aim
-    - Left Click : Fire projectile
-- This submission only contains the Bullet implementation. Part Two will be submitted separately.
+    - Left Click (while Aiming) : Shoot
+- This submission is for both parts one and two. Animations blend when transitioning between each other.

@@ -24,6 +24,8 @@ bool g_bShowDebugShere = true;
 unsigned int g_selectedObject = 0;
 unsigned int g_selectedLight = 0;
 
+GLFWwindow* g_pWindow = 0;
+
 std::map< std::string, GLint> g_uniformLocations;
 
 // Full screen quad mesh for 2nd rendering pass

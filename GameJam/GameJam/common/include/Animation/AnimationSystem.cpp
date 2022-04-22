@@ -4,6 +4,7 @@
 
 #include <extern/glm/gtx/easing.hpp>
 #include <iostream>
+#include "../../../GameJam/globals.h"
 
 void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt) {
 	cEntity* currentEntityPtr = 0;
@@ -15,7 +16,7 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt) {
 		currentEntityPtr = entities[i];
 
 		if (currentEntityPtr->animationBlend.anim1 != nullptr && currentEntityPtr->animationBlend.anim2 != nullptr) {
-			//BlendAnimationUpdate(currentEntityPtr, dt);
+			BlendAnimationUpdate(currentEntityPtr, dt);
 		}
 		else {
 			SingleAnimationUpdate(currentEntityPtr, dt);
@@ -23,11 +24,25 @@ void AnimationSystem::Process(const std::vector<cEntity*>& entities, float dt) {
 	}
 }
 
-void AnimationSystem::UpdateAnimationTime(Animation* animation, float dt) {
+void AnimationSystem::UpdateAnimationTime(Animation* animation, float dt, cEntity* pEntity, bool fromBlend) {
 	if (!animation->shouldPlay)
 		return;
 
 	animation->currentTime += dt * animation->speed;
+	if (animation->currentTime > animation->duration && ::g_pGameEngine->entityManager.GetPlayer() == pEntity) {
+		AnimationState state = AnimationState::Idle;	//Setting to idle but it should be replaced below.
+		if (!fromBlend) {
+			state = ::g_pGameEngine->entityManager.GetPlayer()->GetAnimationState();
+		}
+		else if (animation == pEntity->animationBlend.anim1) {
+			state = ::g_pGameEngine->entityManager.GetPlayer()->GetAnimationState();
+		}
+		else {
+			state = ::g_pGameEngine->entityManager.GetPlayer()->GetFutureAnimationState();
+		}
+		GameEvent_AnimationExit* g_event = new GameEvent_AnimationExit(static_cast<unsigned int>(state));
+		::g_pGameEngine->entityManager.GetPlayer()->Notify(GameEventType::ANIMATION_EXIT, g_event);
+	}
 
 	while (animation->currentTime > animation->duration)
 		animation->currentTime -= animation->duration;
@@ -40,24 +55,47 @@ void AnimationSystem::SingleAnimationUpdate(cEntity* pEntity, float dt)
 	if (!animationPtr->shouldPlay)
 		return;
 
-	UpdateAnimationTime(animationPtr, dt);
+	UpdateAnimationTime(animationPtr, dt, pEntity);
+
+	std::vector<glm::mat4> transforms;
+	std::vector<glm::mat4> globals;
+	std::vector<glm::mat4> offsets;
+
+	pEntity->mesh->meshData->UpdateTransforms(animationPtr->currentTime, animationPtr, transforms, globals, offsets);
+
+	return;
+}
+
+void AnimationSystem::BlendAnimationUpdate(cEntity* pEntity, float dt)
+{
+	AnimationBlend* animationBlendPtr = &pEntity->animationBlend;
+
+	if (animationBlendPtr == 0)
+		return;
+
+	Animation* anim1 = animationBlendPtr->anim1;
+	Animation* anim2 = animationBlendPtr->anim2;
+
+	if (anim1 == 0 || anim2 == 0)
+		return;
+
+	UpdateAnimationTime(anim1, dt, pEntity);
+	UpdateAnimationTime(anim2, dt, pEntity,true);
+
+	animationBlendPtr->factor += animationBlendPtr->direction * animationBlendPtr->speed * dt;
+	animationBlendPtr->factor = glm::clamp(animationBlendPtr->factor, 0.f, 1.f);
+	float animTime1 = anim1->currentTime;
+	float animTime2 = anim2->currentTime;
 
 	std::vector<glm::mat4> transforms;
 	std::vector<glm::mat4> globals;
 	std::vector<glm::mat4> offsets;
 
 
-	// Since we only have a single animated character using this animation
-	// We don't need to do anything with the transforms, globals, and offsets.
-	// Since we are grabbing the data directly from the MeshData in RenderSystem
-	// as-well.
-
-	// Test a specific time
-
-	pEntity->mesh->meshData->UpdateTransforms(animationPtr->currentTime, animationPtr, transforms, globals, offsets);
-
-	return;
+	pEntity->mesh->meshData->UpdateTransforms(animTime1, anim1, animTime2, anim2, animationBlendPtr->factor,
+		transforms, globals, offsets);
 }
+
 void AnimationSystem::Process_Old(const std::vector<cEntity*>& entities, float dt)
 {
 	Animation* animPtr;

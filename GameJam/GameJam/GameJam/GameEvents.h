@@ -1,5 +1,7 @@
 #pragma once
 
+class Animation;
+
 enum class GameEventType
 {
 	NONE,
@@ -114,10 +116,14 @@ public:
 class GameEvent_AnimationExit : public GameEvent
 {
 public:
-	GameEvent_AnimationExit()
-		: GameEvent(GameEventType::ANIMATION_EXIT) { }
+	GameEvent_AnimationExit(unsigned int _anim)
+		: GameEvent(GameEventType::ANIMATION_EXIT),
+	animID(_anim) { }
 	virtual ~GameEvent_AnimationExit() { }
+	unsigned int GetAnim() const {return animID;}
 	virtual bool CompareData(GameEvent* gameEvent);
+private:
+	unsigned int animID;
 };
 
 

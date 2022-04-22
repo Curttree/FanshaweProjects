@@ -67,7 +67,7 @@
     <Filter Include="GameJam\Events">
       <UniqueIdentifier>{d5b92016-d5d5-40c1-93cf-1ec5385b9145}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameJam\States">
+    <Filter Include="Animation\States">
       <UniqueIdentifier>{869b0e94-4f43-4503-8137-ae0e9d49dfdb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -202,7 +202,7 @@
       <Filter>GameJam\Events</Filter>
     </ClCompile>
     <ClCompile Include="AnimationStateMachine.cpp">
-      <Filter>GameJam\States</Filter>
+      <Filter>Animation\States</Filter>
     </ClCompile>
     <ClCompile Include="cCharacter.cpp">
       <Filter>GameJam</Filter>
@@ -357,10 +357,10 @@
       <Filter>GameJam\Events</Filter>
     </ClInclude>
     <ClInclude Include="AnimationStates.h">
-      <Filter>GameJam\States</Filter>
+      <Filter>Animation\States</Filter>
     </ClInclude>
     <ClInclude Include="AnimationStateMachine.h">
-      <Filter>GameJam\States</Filter>
+      <Filter>Animation\States</Filter>
     </ClInclude>
     <ClInclude Include="DecorationManager.h">
       <Filter>GameEngine\Managers</Filter>
