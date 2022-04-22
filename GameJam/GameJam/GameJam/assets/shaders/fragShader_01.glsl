@@ -200,7 +200,7 @@ void main()
 		vec3 blurColour = sampleColour;
 		for (float i = 1; i < 6; i++)
 		{
-			float offset = i * 0.0002f;
+			float offset = i * 0.002f;
 			vec2 UVlookup;
 			UVlookup.x = gl_FragCoord.x / screenWidthHeight.x+offset;	// Width
 			UVlookup.y = gl_FragCoord.y / screenWidthHeight.y+offset;	// Height
@@ -221,9 +221,9 @@ void main()
 		blurColour /= 11.f;
 		//For a funky effect, enable this line.
 		//sampleColour += (blurColour - sampleColour) * texture(texture_07, UVlookup).r * 10.f;
-		if (texture(texture_08, UVlookup).r - 0.42f > 0.f){
+		if (texture(texture_08, UVlookup).r  > 0.5f){
 		
-		sampleColour += (blurColour - sampleColour) * (texture(texture_08, UVlookup).r - 0.42f);
+		sampleColour += (blurColour - sampleColour) * (texture(texture_08, UVlookup).r - 0.5f);
 		}
 		
 		if (totalTime < 4.2f){

@@ -4,6 +4,7 @@
 #include "globals.h"
 #include <iostream>
 #include <glm/gtx/matrix_decompose.hpp>
+#include <PhysicsConversion.h>
 
 cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     //Mesh
@@ -34,7 +35,17 @@ cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     BuildAnimationMap();
 
     //Physics
-    physicsCharacter = new gdp2022Physics::Character();
+    btVector3 up;
+    gdp2022Physics::CastBulletVector3(glm::vec3(0.f, 1.f, 0.f), &up);
+    //TODO: Implement ghost object.
+    //m_ghostObject->setWorldTransform(startTransform);
+    //sweepBP->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+    //btScalar characterHeight = 1.75;
+    //btScalar characterWidth = 1.75;
+    //btConvexShape* capsule = new btCapsuleShape(characterWidth, characterHeight);
+    //m_ghostObject->setCollisionShape(capsule);
+    //m_ghostObject->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+    physicsCharacter = new gdp2022Physics::Character((btCollisionWorld*)::g_pGameEngine->m_PhysicsWorld->getDynamicsWorld(),up);
     physicsCharacter->Initialize();
 
 
@@ -88,6 +99,7 @@ void cCharacter::LoadAnimation() {
 
 //via cEntity
 void cCharacter::TimeStep(float deltaTime) {
+   // physicsCharacter->TimeStep(deltaTime);
     animationStateMachine.Update(deltaTime);
     
     UpdateAnimationBlend();
@@ -276,6 +288,7 @@ void cCharacter::BuildAnimationTransitions(void) {
 
     ::g_pVAOManager->FindAnimationByName(GetAnimationFromState(AnimationState::Shoot), shootAnim);
     animationStateMachine.AddTransition(new GameEvent_MousePress(GLFW_MOUSE_BUTTON_LEFT), AnimationState::Aim, AnimationState::Shoot, 0.25f);
+    animationStateMachine.AddTransition(new GameEvent_MousePress(GLFW_MOUSE_BUTTON_LEFT), AnimationState::Shoot, AnimationState::Shoot, 0.1f);
     animationStateMachine.AddTransition(new GameEvent_AnimationExit(static_cast<unsigned int>(AnimationState::Shoot)), AnimationState::Shoot, AnimationState::Aim, 0.5f);
 
     animationStateMachine.AddTransition(new GameEvent_MouseRelease(GLFW_MOUSE_BUTTON_RIGHT), AnimationState::Aim, AnimationState::Idle, 1.0f);

@@ -59,6 +59,7 @@ public:
 	unsigned int getUniqueID(void);
 
 	bool bUseDiscardTransparency;
+	glm::vec3 discardColour = glm::vec3(0.f);
 
 	// All the "child" mesh objects
 	std::vector< cMesh* > vec_pChildMeshes;

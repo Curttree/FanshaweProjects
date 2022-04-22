@@ -167,7 +167,7 @@ int main(void) {
 //    ::g_pTheLights->theLights[0].param1.x = 1.0f;    // Spot light
     ::g_pTheLights->theLights[0].param1.x = 2.0f;    // Directional light
     ::g_pTheLights->theLights[0].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
-    ::g_pTheLights->theLights[0].diffuse = glm::vec4(0.9922f, 0.9843f, 0.8275f, 1.0f);
+    ::g_pTheLights->theLights[0].diffuse = glm::vec4(0.5529f, 0.3725f, 0.5882f, 1.0f);
     ::g_pTheLights->theLights[0].param1.y = 15.0f;   // Inner
     ::g_pTheLights->theLights[0].param1.z = 30.0f;   // Outer
     ::g_pTheLights->theLights[0].atten.y = 0.000001f;
@@ -239,6 +239,7 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("UnderwaterNormals.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Fish_BaseColor.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("BrushedMetalSilver2.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Bubble.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;
@@ -500,26 +501,26 @@ int main(void) {
             program,
             ::g_pVAOManager);
 
-        //std::vector<cParticle*> particles = ::g_pGameEngine->entityManager.GetParticles();
-        //for (unsigned int index = 0; index != particles.size(); index++)
-        //{
-        //    cMesh* pCurrentMesh = particles[index]->mesh;
+        std::vector<cParticle*> particles = ::g_pGameEngine->entityManager.GetParticles();
+        for (unsigned int index = 0; index != particles.size(); index++)
+        {
+            cMesh* pCurrentMesh = particles[index]->mesh;
 
-        //    //if (!cFrustumCullingHandler::Instance()->isWithinFrustum(frustum, pCurrentMesh)) {
-        //    //    //Object isn't in view. Don't bother drawing.
-        //    //    continue;
-        //    //}
+            //if (!cFrustumCullingHandler::Instance()->isWithinFrustum(frustum, pCurrentMesh)) {
+            //    //Object isn't in view. Don't bother drawing.
+            //    continue;
+            //}
 
-        //    //TODO: After they are culled, update sorting so we aren't overdrawing particles as regularly.
+            //TODO: After they are culled, update sorting so we aren't overdrawing particles as regularly.
 
 
-        //    DrawObject(pCurrentMesh,
-        //        matModel,
-        //        matModel_Location,
-        //        matModelInverseTranspose_Location,
-        //        program,
-        //        ::g_pVAOManager);
-        //}
+            DrawObject(pCurrentMesh,
+                matModel,
+                matModel_Location,
+                matModelInverseTranspose_Location,
+                program,
+                ::g_pVAOManager);
+        }
         // Scene is drawn
         // **********************************************************************   
 

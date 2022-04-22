@@ -30,7 +30,7 @@ void GameplayManager::SetupScene(void) {
     cPropFactory::Instance()->createProp(PROP_CITY_IMPOSTER, glm::vec3(0.f, 20.f, 200.f));
     cPropFactory::Instance()->createProp(PROP_TEST_GROUND, glm::vec3(0.f, -3.5f, 50.f));
 
-    cParticleFactory::Instance()->createParticle(PARTICLE_TEST, glm::vec3(0.f,0.f,40.f), true);
+    cParticleFactory::Instance()->createParticle(PARTICLE_TEST, glm::vec3(0.f,10.f,40.f), false);
 
     canList.push_back(can1);
     canList.push_back(can2);

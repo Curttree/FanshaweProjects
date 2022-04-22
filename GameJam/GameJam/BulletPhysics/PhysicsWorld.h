@@ -29,6 +29,8 @@ namespace gdp2022Physics
 
 		virtual const std::string& GetVersion();
 
+		void* getDynamicsWorld() { return mDynamicsWorld; };
+
 	private:
 		btBroadphaseInterface* mBroadphase = 0;
 		btDefaultCollisionConfiguration* mCollisionConfiguration = 0;

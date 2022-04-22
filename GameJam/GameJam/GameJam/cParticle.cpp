@@ -5,13 +5,15 @@ cParticle::cParticle(std::string texture, float _lifeSpan, glm::vec3 _position, 
 	cMesh* prop_mesh = new cMesh("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply");
 	prop_mesh->scale = _scale;
 	prop_mesh->positionXYZ = _position;
-	prop_mesh->textureNames[0] = texture;
+	prop_mesh->textureNames[8] = texture;
+	prop_mesh->bUseDiscardTransparency = true;
 	prop_mesh->orientationXYZ = glm::vec3(0.f, 0.f, glm::pi<float>());
 	prop_mesh->textureRatios[0] = 1.f;
 	mesh = prop_mesh;
 	this->position = prop_mesh->positionXYZ;
 	this->scale = prop_mesh->scale;
 	this->rotation = prop_mesh->orientationXYZ;
+	mesh->alphaTransparency = 0.1f;
 }
 
 void cParticle::TimeStep(float deltaTime) {
@@ -51,6 +53,10 @@ void cParticle::OrientToCamera() {
 	//rotate.z = a.z;
 	//rotate.w = sqrt((glm::length(v1) * glm::length(v1)) * (glm::length(v2) * glm::length(v2)) + glm::dot(v1, v2));
 
-	rotation == ::g_pFlyCamera->getQOrientation();
-	mesh->orientationXYZ = glm::eulerAngles(rotation);
+	//rotation == ::g_pFlyCamera->getQOrientation();
+	//mesh->orientationXYZ = glm::eulerAngles(rotation); 
+	float angle = atan2(position.x - ::g_pFlyCamera->getEye().x, position.z - ::g_pFlyCamera->getEye().z);
+
+	rotation = glm::quat(glm::vec3(0.0f, angle, 0.0f));
+	mesh->orientationXYZ = glm::vec3(0.0f, angle, 0.0f);
 }
