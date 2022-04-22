@@ -335,12 +335,12 @@ int main(void) {
     
    // ::g_pVAOManager->LoadMeshWithAssimp("blobby.fbx", program);
     //::g_pVAOManager->LoadMeshWithAssimp("oldMan.fbx", program);
-    ::g_pVAOManager->LoadMeshWithAssimp("detective@idle.fbx", program);
-    ::g_pVAOManager->LoadMeshWithAssimp("detective@aim.fbx", program);
-    ::g_pVAOManager->LoadMeshWithAssimp("detective@shoot.fbx", program);
-    ::g_pVAOManager->LoadMeshWithAssimp("detective@wait.fbx", program);
-    ::g_pVAOManager->LoadMeshWithAssimp("detective@walk.fbx", program);
-    ::g_pVAOManager->LoadMeshWithAssimp("detective@run.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("Characters/Detective/detective@idle.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("Characters/Detective/detective@aim.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("Characters/Detective/detective@shoot.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("Characters/Detective/detective@wait.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("Characters/Detective/detective@walk.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("Characters/Detective/detective@run.fbx", program);
     
 
     ::g_pGameEngine->g_pGameplayManager->GameStart();

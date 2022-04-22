@@ -7,7 +7,7 @@
 
 cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     //Mesh
-    cMesh* character_mesh = new cMesh("detective@aim.fbx");
+    cMesh* character_mesh = new cMesh("Characters/Detective/detective@aim.fbx");
     character_mesh->scale = glm::vec3(0.00025f);
     //character_mesh->scale = glm::vec3(0.05f);
     character_mesh->positionXYZ = startPosition;
@@ -55,7 +55,7 @@ bool cCharacter::GetGunPosition(glm::vec3& position) {
 }
 
 void cCharacter::LoadBones() {
-    ::g_pVAOManager->FindBonesByModelName("detective@aim.fbx", mesh->bones);
+    ::g_pVAOManager->FindBonesByModelName("Characters/Detective/detective@aim.fbx", mesh->bones);
     if (mesh->bones->bones.size()>0) {
         mesh->bUseBones = true;
     }
@@ -160,7 +160,7 @@ AnimationState cCharacter::GetFutureAnimationState(void) {
 
 std::string cCharacter::GetAnimationFromState(AnimationState state) {
     std::map< AnimationState, std::string>::iterator anim = map_animations.find(state);
-    return  anim != map_animations.end() ? anim->second : "detective@idle.fbx";
+    return  anim != map_animations.end() ? anim->second : "Characters/Detective/detective@idle.fbx";
 }
 
 //via iGameEventListener
@@ -211,12 +211,12 @@ void cCharacter::ResetToNeutralOrientation() {
 }
 
 void cCharacter::BuildAnimationMap(void) {
-    map_animations.insert(std::make_pair(AnimationState::Idle, "detective@idle.fbx"));
-    map_animations.insert(std::make_pair(AnimationState::Aim, "detective@aim.fbx"));
-    map_animations.insert(std::make_pair(AnimationState::Shoot, "detective@shoot.fbx"));
-    map_animations.insert(std::make_pair(AnimationState::Waiting, "detective@wait.fbx"));
-    map_animations.insert(std::make_pair(AnimationState::Walk, "detective@walk.fbx"));
-    map_animations.insert(std::make_pair(AnimationState::Run, "detective@run.fbx"));
+    map_animations.insert(std::make_pair(AnimationState::Idle, "Characters/Detective/detective@idle.fbx"));
+    map_animations.insert(std::make_pair(AnimationState::Aim, "Characters/Detective/detective@aim.fbx"));
+    map_animations.insert(std::make_pair(AnimationState::Shoot, "Characters/Detective/detective@shoot.fbx"));
+    map_animations.insert(std::make_pair(AnimationState::Waiting, "Characters/Detective/detective@wait.fbx"));
+    map_animations.insert(std::make_pair(AnimationState::Walk, "Characters/Detective/detective@walk.fbx"));
+    map_animations.insert(std::make_pair(AnimationState::Run, "Characters/Detective/detective@run.fbx"));
 }
 
 void cCharacter::BuildAnimationTransitions(void) {
