@@ -50,7 +50,7 @@ void AudioManager::StartUp(void)
     _result = _system->createSound("assets\\sounds\\cans.mp3", FMOD_LOOP_OFF, 0, &_sounds[0]);
     _result = _system->createSound("assets\\sounds\\gun.wav", FMOD_LOOP_OFF, 0, &_sounds[1]);
     _result = _system->createStream("assets\\sounds\\ambience.wav", FMOD_LOOP_NORMAL, 0, &_sounds[2]);
-    _result = _system->createSound("assets\\sounds\\ping.mp3", FMOD_LOOP_OFF, 0, &_sounds[3]);
+    _result = _system->createSound("assets\\sounds\\ping.wav", FMOD_LOOP_OFF, 0, &_sounds[3]);
     if (_result != FMOD_OK) {
         fprintf(stderr, "Unable to create sound");
         return;

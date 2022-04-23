@@ -35,6 +35,8 @@ namespace gdp2022Physics
 		virtual void ApplyTorque(const glm::vec3& torque);
 		virtual void ApplyTorqueImpulse(const glm::vec3& torqueImpulse);
 
+		virtual void SetVelocity(const glm::vec3& velocity);
+
 		btRigidBody* GetBulletBody() { return mBulletBody; }
 	private:
 		btRigidBody* mBulletBody;

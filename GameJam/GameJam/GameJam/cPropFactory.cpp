@@ -25,7 +25,7 @@ cProp* cPropFactory::createProp(int type, glm::vec3 position, glm::vec3 orientat
 		result->mesh->boundingRadius = 1.f;
 		break;
 	case(PROP_BOX):
-		result = ::g_pGameEngine->entityManager.CreateProp("SM_Prop_CarboardBox_02.ply", "PolygonCity_Texture2.bmp", position, eShapeType::Box, glm::vec3(6.f), glm::vec3(1.f,1.f,1.f),5.f, orientation);
+		result = ::g_pGameEngine->entityManager.CreateProp("SM_Prop_CarboardBox_02.ply", "PolygonCity_Texture2.bmp", position, eShapeType::Box, glm::vec3(6.f), glm::vec3(1.f,1.f,1.f),15.f, orientation);
 		result->mesh->lowDetailMeshName = "";
 		result->mesh->boundingRadius = 1.f;
 		break;
@@ -43,7 +43,7 @@ cProp* cPropFactory::createProp(int type, glm::vec3 position, glm::vec3 orientat
 		result->mesh->boundingRadius = 10.f;
 		break;	
 	case(PROP_HOTDOG_STAND):
-		result = ::g_pGameEngine->entityManager.CreateProp("City/SM_Prop_HotdogStand_01.fbx", "PolygonCity_Texture2.bmp", position, eShapeType::Box, glm::vec3(2.5f), glm::vec3(1.5f, 1.4f, 1.5f), 5.f, orientation);
+		result = ::g_pGameEngine->entityManager.CreateProp("City/SM_Prop_HotdogStand_01.fbx", "PolygonCity_Texture2.bmp", position, eShapeType::Box, glm::vec3(2.5f), glm::vec3(1.5f, 1.4f, 1.5f), 500.f, orientation);
 		result->mesh->lowDetailMeshName = "";
 		result->positionOffset = glm::vec3(0.f, -1.f, 0.f);
 		result->mesh->boundingRadius = 1.f;

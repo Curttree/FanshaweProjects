@@ -9,7 +9,7 @@ namespace gdp2022Physics
 {
 	PhysicsWorld::PhysicsWorld()
 	{
-		btVector3 worldMin(-1000, -1000, -1000);
+		btVector3 worldMin(-1000, 0, -1000);
 		btVector3 worldMax(1000, 1000, 1000);
 		mBroadphase = new btAxisSweep3(worldMin, worldMax);
 

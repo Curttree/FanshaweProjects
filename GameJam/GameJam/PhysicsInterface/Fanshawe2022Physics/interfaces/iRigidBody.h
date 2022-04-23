@@ -25,6 +25,8 @@ namespace gdp2022Physics
 
 		virtual void ApplyForce(const glm::vec3& force) = 0;
 
+		virtual void SetVelocity(const glm::vec3& velocity) = 0;
+
 		virtual bool IsStatic() const = 0;
 
 	protected:

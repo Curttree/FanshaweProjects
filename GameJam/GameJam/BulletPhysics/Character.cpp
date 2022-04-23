@@ -4,7 +4,8 @@
 
 namespace gdp2022Physics
 {
-	Character::Character(btCollisionWorld* _world, btVector3 up) : btKinematicCharacterController(new btPairCachingGhostObject(),new btCapsuleShape(1.f,1.f),1.f,up), world(_world){
+	Character::Character(btCollisionWorld* _world, btPairCachingGhostObject* ghost, btVector3 up) : btKinematicCharacterController(ghost,new btCapsuleShape(1.75f,1.75f),1.f,up), world(_world){
+		setUseGhostSweepTest(false);
 
 	}
 	void Character::Initialize() {
@@ -22,6 +23,6 @@ namespace gdp2022Physics
 		return glm::quat(glm::vec3(0.f));
 	}
 	void Character::TimeStep(float deltaTime) {
-		playerStep(world, deltaTime);
+		updateAction(world, deltaTime);
 	}
 }

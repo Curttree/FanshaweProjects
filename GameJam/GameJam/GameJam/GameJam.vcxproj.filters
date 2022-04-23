@@ -210,6 +210,9 @@
     <ClCompile Include="DecorationManager.cpp">
       <Filter>GameEngine\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="cPlayerProxy.cpp">
+      <Filter>GameJam</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -364,6 +367,9 @@
     </ClInclude>
     <ClInclude Include="DecorationManager.h">
       <Filter>GameEngine\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="cPlayerProxy.h">
+      <Filter>GameJam</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -513,10 +513,10 @@ bool cFlyCamera::Update(double deltaTime)
 		pitch = 0.f;
 		yaw = 0.f;
 		roll = 0.f;
+	}
+	if (!aimCam) {
 		this->setEye(::g_pGameEngine->entityManager.GetPlayer()->position + normalCamOffset);
 	}
-	//TODO: Once physics movement is in place and proper bounds are set, uncomment this for the third person cam.
-	//this->setEye(::g_pGameEngine->entityManager.GetPlayer()->position + normalCamOffset);
 	return true;
 }
 

@@ -45,14 +45,14 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
         //{
         //    ::g_pFlyCamera->MoveLeftRight_X(+cameraMoveSpeed);
         //}
-        //if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS )	// "up"
-        //{
-        //    ::g_pFlyCamera->MoveUpDown_Y(-cameraMoveSpeed);
-        //}
-        //if ( glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS )	// "down"
-        //{
-        //    ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
-        //}
+        if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS )	// "up"
+        {
+            ::g_pFlyCamera->MoveUpDown_Y(-cameraMoveSpeed);
+        }
+        if ( glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS )	// "down"
+        {
+            ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
+        }
 
         std::stringstream strTitle;
         // std::cout << 
@@ -174,6 +174,28 @@ bool checkMovementKeysDown() {
     return (glfwGetKey(::g_pWindow, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(::g_pWindow, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(::g_pWindow, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(::g_pWindow, GLFW_KEY_D) == GLFW_PRESS);
 }
 
+bool ApplyPlayerMovement(glm::vec3& netMovement) {
+    netMovement = glm::vec3(0.f);
+    bool movementApplied = false;
+    if (glfwGetKey(::g_pWindow, GLFW_KEY_W) == GLFW_PRESS) {
+        movementApplied = true;
+        netMovement += glm::vec3(0.f, 0.f, 1.f);
+    }
+    else if (glfwGetKey(::g_pWindow, GLFW_KEY_S) == GLFW_PRESS) {
+        movementApplied = true;
+        netMovement += glm::vec3(0.f, 0.f, -1.f);
+    }
+    if (glfwGetKey(::g_pWindow, GLFW_KEY_A) == GLFW_PRESS) {
+        movementApplied = true;
+        netMovement += glm::vec3(1.f, 0.f, 0.f);
+    }
+    else if (glfwGetKey(::g_pWindow, GLFW_KEY_D) == GLFW_PRESS) {
+        movementApplied = true;
+        netMovement += glm::vec3(-1.f, 0.f, 0.f);
+    }
+    return movementApplied;
+}
+
 // We call these every frame
 void handleAsyncMouse(GLFWwindow* window, double deltaTime)
 {
@@ -193,6 +215,7 @@ void handleAsyncMouse(GLFWwindow* window, double deltaTime)
     {
         if (!::g_pGameEngine->g_pGameplayManager->GetAiming()) {
             ::g_pGameEngine->entityManager.GetPlayer()->SetNeutralOrientation();
+            ::g_pGameEngine->entityManager.GetPlayer()->physicsProxy->ResetOrientation();
         }
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         // Mouse button is down so turn the camera

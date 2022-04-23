@@ -51,8 +51,8 @@ void cProp::InitializePhysics(eShapeType shape, float mass, glm::vec3 scale, glm
 	case eShapeType::Box: {
 		gdp2022Physics::iShape* boxShape = new gdp2022Physics::BoxShape(glm::vec3(scale));
 		gdp2022Physics::cRigidBodyDesc boxDesc;
-		boxDesc.linearDamping = 0.01f;
-		boxDesc.angularDamping = 0.01f;
+		boxDesc.linearDamping = 0.1f;
+		boxDesc.angularDamping = 0.1f;
 		boxDesc.isStatic = false;
 		boxDesc.mass = mass;
 		boxDesc.position = position;
@@ -66,8 +66,8 @@ void cProp::InitializePhysics(eShapeType shape, float mass, glm::vec3 scale, glm
 	case eShapeType::Sphere: {
 		gdp2022Physics::iShape* sphereShape = new gdp2022Physics::SphereShape(scale.x);
 		gdp2022Physics::cRigidBodyDesc sphereDesc;
-		sphereDesc.linearDamping = 0.01f;
-		sphereDesc.angularDamping = 0.01f;
+		sphereDesc.linearDamping = 0.1f;
+		sphereDesc.angularDamping = 0.1f;
 		sphereDesc.isStatic = false;
 		sphereDesc.mass = mass;
 		sphereDesc.position = position;
@@ -80,8 +80,8 @@ void cProp::InitializePhysics(eShapeType shape, float mass, glm::vec3 scale, glm
 	case eShapeType::Cylinder: {
 		gdp2022Physics::iShape* cylinderShape = new gdp2022Physics::CylinderShape(scale);
 		gdp2022Physics::cRigidBodyDesc cylinderDesc;
-		cylinderDesc.linearDamping = 0.01f;
-		cylinderDesc.angularDamping = 0.01f;
+		cylinderDesc.linearDamping = 0.1f;
+		cylinderDesc.angularDamping = 0.1f;
 		cylinderDesc.isStatic = false;
 		cylinderDesc.mass = mass;
 		cylinderDesc.position = position;

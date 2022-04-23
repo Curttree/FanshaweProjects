@@ -240,6 +240,7 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("Fish_BaseColor.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("BrushedMetalSilver2.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Bubble.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("red.bmp", true);
 
     // Add a skybox texture
     std::string errorTextString;
@@ -500,6 +501,15 @@ int main(void) {
             matModelInverseTranspose_Location,
             program,
             ::g_pVAOManager);
+
+        //Uncomment if you want to show the physics approximation of the character.
+        //cMesh* proxyMesh = ::g_pGameEngine->entityManager.GetPlayer()->physicsProxy->mesh;
+        //DrawObject(proxyMesh,
+        //    matModel,
+        //    matModel_Location,
+        //    matModelInverseTranspose_Location,
+        //    program,
+        //    ::g_pVAOManager);
 
         std::vector<cParticle*> particles = ::g_pGameEngine->entityManager.GetParticles();
         for (unsigned int index = 0; index != particles.size(); index++)

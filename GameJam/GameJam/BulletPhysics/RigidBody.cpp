@@ -7,6 +7,7 @@
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 #include <iostream>
+#include "../BulletCollision/CollisionDispatch/btCollisionObject.h"
 
 namespace gdp2022Physics
 {
@@ -93,6 +94,19 @@ namespace gdp2022Physics
 		btVector3 btForce;
 		CastBulletVector3(force, &btForce);
 		mBulletBody->applyCentralForce(btForce);
+	}
+	void RigidBody::SetVelocity(const glm::vec3& velocity) {
+		btVector3 btVelocity;
+		CastBulletVector3(velocity, &btVelocity);
+		mBulletBody->setLinearVelocity(btVelocity);
+
+		//Velocity corrections. Ensure the object does not sink below the ground.
+		if (mBulletBody->getCenterOfMassPosition().getY() > 0) {
+			mBulletBody->setGravity(btVector3(0, -9.81, 0));
+		}
+		else {
+			mBulletBody->setGravity(btVector3(0, 0, 0));
+		}
 	}
 
 	void RigidBody::ApplyForceAtPoint(const glm::vec3& force, const glm::vec3& relativePoint)

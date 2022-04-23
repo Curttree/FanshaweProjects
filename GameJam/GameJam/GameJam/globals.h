@@ -53,15 +53,11 @@ extern cLightManager* g_pTheLights;
 extern cMesh* g_pDebugSphere;	// = NULL;
 extern bool g_bShowDebugShere;	// = true;
 
-
 extern unsigned int g_selectedObject;	// = 0;
 extern unsigned int g_selectedLight;	// = 0;
 
-
 // This will be printed in the title bar
 extern std::string g_TitleText;	// = "";
-
-
 
 // List of objects to draw
 extern std::vector< cMesh* > g_vec_pMeshes;
@@ -126,6 +122,7 @@ public:
 void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime);
 void handleAsyncMouse(GLFWwindow* pWindow, double deltaTime);
 bool checkMovementKeysDown();
+bool ApplyPlayerMovement(glm::vec3& netMovement);
 
 
 // ************************************************

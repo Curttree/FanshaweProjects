@@ -3,6 +3,7 @@
 #include "GameEvents.h"
 #include "AnimationStateMachine.h"
 #include <Fanshawe2022Physics/interfaces/iCharacter.h>
+#include "cPlayerProxy.h"
 
 
 class cCharacter : public cEntity, public iGameEventListener {
@@ -22,6 +23,8 @@ public:
 	virtual void ResetToNeutralOrientation();
 	virtual void LoadBones();
 	virtual void LoadAnimation();
+	virtual bool isRunning();
+	cPlayerProxy* physicsProxy;
 private:
 	iCharacter* physicsCharacter;
 	AnimationStateMachine animationStateMachine;
@@ -30,17 +33,16 @@ private:
 	float diameter = 1.f;
 
 	float idleTimer = 0.f;
-	float maxIdleTime = 10.f;
+	float maxIdleTime = 30.f;
 	float stoppingTimer = 0.f;
 	float maxStoppingTime = 0.5f;
 	bool isIdle;
 	bool isStopping;
+	glm::vec3 proxyOffset;
 	glm::quat neutralOrientation;
 
 	Animation* current_animation;
 	cBoneHierarchy* current_bones;
-
-	unsigned int rightHandIndex;
 
 	std::map<AnimationState, std::string> map_animations;
 

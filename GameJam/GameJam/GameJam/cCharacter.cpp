@@ -5,21 +5,21 @@
 #include <iostream>
 #include <glm/gtx/matrix_decompose.hpp>
 #include <PhysicsConversion.h>
+#include <../BulletCollision/CollisionDispatch/btGhostObject.h>
 
 cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     //Mesh
     cMesh* character_mesh = new cMesh("Characters/Detective/detective@aim.fbx");
     character_mesh->scale = glm::vec3(0.00025f);
-    //character_mesh->scale = glm::vec3(0.05f);
     character_mesh->positionXYZ = startPosition;
     character_mesh->orientationXYZ = startOrientation;
     character_mesh->textureNames[0] = "Fish_BaseColor.bmp";
-    //character_mesh->textureNames[0] = "Adventurer Aland-Blue.bmp";
     character_mesh->textureRatios[0] = 1.f;
     mesh = character_mesh;
     this->position = character_mesh->positionXYZ;
     this->rotation = glm::quat(character_mesh->orientationXYZ);
     this->scale = character_mesh->scale;
+    proxyOffset = glm::vec3(0.f, 2.5f, 0.f);
 
     //Child Mesh
     cMesh* gun = new cMesh("ColtPython.ply");
@@ -37,18 +37,34 @@ cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     //Physics
     btVector3 up;
     gdp2022Physics::CastBulletVector3(glm::vec3(0.f, 1.f, 0.f), &up);
-    //TODO: Implement ghost object.
-    //m_ghostObject->setWorldTransform(startTransform);
+
+    btTransform startTransform;
+    startTransform.setIdentity();
+    startTransform.setOrigin(btVector3(0, 0, 0));
+
+    //TODO: Eventually switch to btKinematicCharacter controller. Move this to other project to remove direct bullet dependency.
+    //Ghost object code adapted from https://github.com/kripken/bullet/blob/master/Demos/CharacterDemo/CharacterDemo.cpp
+    //btVector3 worldMin(-1000, -1000, -1000);
+    //btVector3 worldMax(1000, 1000, 1000);
+    //btVector3 charMin(-1, -1, -1);
+    //btVector3 charMax(1, 1, 1);
+    //btPairCachingGhostObject* m_ghostObject = new btPairCachingGhostObject();
+    //m_ghostObject->setWorldTransform(startTransform); 
+    //btAxisSweep3* sweepBP = new btAxisSweep3(worldMin, worldMax);
     //sweepBP->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
     //btScalar characterHeight = 1.75;
     //btScalar characterWidth = 1.75;
     //btConvexShape* capsule = new btCapsuleShape(characterWidth, characterHeight);
     //m_ghostObject->setCollisionShape(capsule);
     //m_ghostObject->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-    physicsCharacter = new gdp2022Physics::Character((btCollisionWorld*)::g_pGameEngine->m_PhysicsWorld->getDynamicsWorld(),up);
-    physicsCharacter->Initialize();
 
+    //btBroadphaseProxy* broadphase = new btBroadphaseProxy(charMin, charMax, m_ghostObject, btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::DefaultFilter);
+    //m_ghostObject->setBroadphaseHandle(broadphase);
+    //broadphase->m_clientObject = m_ghostObject;
+    //physicsCharacter = new gdp2022Physics::Character((btCollisionWorld*)::g_pGameEngine->m_PhysicsWorld->getDynamicsWorld(),m_ghostObject, up);
+    //physicsCharacter->Initialize();
 
+    physicsProxy = new cPlayerProxy(this->position+proxyOffset);
 }
 bool cCharacter::GetGunPosition(glm::vec3& position) {
     switch (animationStateMachine.GetCurrentState()) {
@@ -69,12 +85,6 @@ void cCharacter::LoadBones() {
     ::g_pVAOManager->FindBonesByModelName("Characters/Detective/detective@aim.fbx", mesh->bones);
     if (mesh->bones->bones.size()>0) {
         mesh->bUseBones = true;
-    }
-    for (unsigned int index = 0; index < mesh->bones->bones.size(); index++) {
-        if (mesh->bones->bones[index]->name == "mixamorig:RightHand") {
-            rightHandIndex = index;
-            return;
-        }
     }
 }
 
@@ -97,9 +107,19 @@ void cCharacter::LoadAnimation() {
 
 }
 
+bool cCharacter::isRunning() {
+    return animationStateMachine.GetCurrentState() == AnimationState::Run;
+}
+
+
 //via cEntity
 void cCharacter::TimeStep(float deltaTime) {
-   // physicsCharacter->TimeStep(deltaTime);
+    //physicsCharacter->TimeStep(deltaTime);
+    physicsProxy->TimeStep(deltaTime);
+    if (!::g_pGameEngine->g_pGameplayManager->GetAiming()) {
+        position = physicsProxy->position - proxyOffset;
+        rotation = physicsProxy->rotation;
+    }
     animationStateMachine.Update(deltaTime);
     
     UpdateAnimationBlend();
@@ -121,6 +141,17 @@ void cCharacter::TimeStep(float deltaTime) {
             animationStateMachine.Notify(GameEventType::KEY_RELEASE, g_event);
             isStopping = false;
             stoppingTimer = 0.f;
+        }
+    }
+    if (animationStateMachine.GetCurrentState() == AnimationState::Idle && glm::length(physicsProxy->velocity) > 0.01f) {
+        // Uh oh, a movement input was missed. Do cleanup.
+        if (cGFLWKeyboardModifiers::isModifierDown(::g_pWindow, true, false, false)) {
+            GameEvent_KeyPress* g_event = new GameEvent_KeyPress(GLFW_KEY_W, true);
+            animationStateMachine.Notify(GameEventType::KEY_PRESS, g_event);
+        }
+        else {
+            GameEvent_KeyPress* g_event = new GameEvent_KeyPress(GLFW_KEY_W, false);
+            animationStateMachine.Notify(GameEventType::KEY_PRESS, g_event);
         }
     }
     cEntity::TimeStep(deltaTime);
@@ -192,7 +223,7 @@ void cCharacter::Notify(GameEventType type, void* data) {
     else if (isStopping && type == GameEventType::KEY_PRESS) {
         //They might be moving again. Verify.
         unsigned char key = dynamic_cast<GameEvent_KeyPress*>((GameEvent*)data)->GetKey();
-        if (key == GLFW_KEY_W || key == GLFW_KEY_A || key == GLFW_KEY_S || key == GLFW_KEY_D) {
+        if ((key == GLFW_KEY_W || key == GLFW_KEY_A || key == GLFW_KEY_S || key == GLFW_KEY_D)&& animationStateMachine.GetCurrentState() != AnimationState::Idle) {
             //They are still moving. Reset the stop count and swallow the animation state change.
             stoppingTimer = 0.f;
             isStopping = false;
@@ -237,18 +268,18 @@ void cCharacter::BuildAnimationTransitions(void) {
     Animation* waitAnim;
 
     //Walking states
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_W), AnimationState::Idle, AnimationState::Walk, 0.5f);
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_A), AnimationState::Idle, AnimationState::Walk, 0.5f);
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_S), AnimationState::Idle, AnimationState::Walk, 0.5f);
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_D), AnimationState::Idle, AnimationState::Walk, 0.5f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_W), AnimationState::Idle, AnimationState::Walk, 0.1f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_A), AnimationState::Idle, AnimationState::Walk, 0.1f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_S), AnimationState::Idle, AnimationState::Walk, 0.1f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_D), AnimationState::Idle, AnimationState::Walk, 0.1f);
     animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_W), AnimationState::Waiting, AnimationState::Walk, 0.5f);
     animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_A), AnimationState::Waiting, AnimationState::Walk, 0.5f);
     animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_S), AnimationState::Waiting, AnimationState::Walk, 0.5f);
     animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_D), AnimationState::Waiting, AnimationState::Walk, 0.5f);
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_W), AnimationState::Run, AnimationState::Walk, 1.0f);
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_A), AnimationState::Run, AnimationState::Walk, 1.0f);
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_S), AnimationState::Run, AnimationState::Walk, 1.0f);
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_D), AnimationState::Run, AnimationState::Walk, 1.0f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_W), AnimationState::Run, AnimationState::Walk, 0.25f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_A), AnimationState::Run, AnimationState::Walk, 0.25f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_S), AnimationState::Run, AnimationState::Walk, 0.25f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_D), AnimationState::Run, AnimationState::Walk, 0.25f);
 
     animationStateMachine.AddTransition(new GameEvent_KeyRelease(GLFW_KEY_LEFT_SHIFT), AnimationState::Run, AnimationState::Walk, 1.0f);
 
@@ -275,10 +306,10 @@ void cCharacter::BuildAnimationTransitions(void) {
     animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_LEFT_SHIFT), AnimationState::Walk, AnimationState::Run, 1.0f);
     animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_LEFT_SHIFT, true), AnimationState::Walk, AnimationState::Run, 1.0f);
 
-    animationStateMachine.AddTransition(new GameEvent_KeyRelease(GLFW_KEY_W), AnimationState::Run, AnimationState::Idle, 1.5f);
-    animationStateMachine.AddTransition(new GameEvent_KeyRelease(GLFW_KEY_A), AnimationState::Run, AnimationState::Idle, 1.5f);
-    animationStateMachine.AddTransition(new GameEvent_KeyRelease(GLFW_KEY_S), AnimationState::Run, AnimationState::Idle, 1.5f);
-    animationStateMachine.AddTransition(new GameEvent_KeyRelease(GLFW_KEY_D), AnimationState::Run, AnimationState::Idle, 1.5f);
+    animationStateMachine.AddTransition(new GameEvent_KeyRelease(GLFW_KEY_W), AnimationState::Run, AnimationState::Idle, 0.1f);
+    animationStateMachine.AddTransition(new GameEvent_KeyRelease(GLFW_KEY_A), AnimationState::Run, AnimationState::Idle, 0.1f);
+    animationStateMachine.AddTransition(new GameEvent_KeyRelease(GLFW_KEY_S), AnimationState::Run, AnimationState::Idle, 0.1f);
+    animationStateMachine.AddTransition(new GameEvent_KeyRelease(GLFW_KEY_D), AnimationState::Run, AnimationState::Idle, 0.1f);
 
     //Shooting
     animationStateMachine.AddTransition(new GameEvent_MousePress(GLFW_MOUSE_BUTTON_RIGHT), AnimationState::Idle, AnimationState::Aim, 0.5f);

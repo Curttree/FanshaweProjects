@@ -184,6 +184,7 @@
     <ClCompile Include="cGFLWKeyboardModifiers.cpp" />
     <ClCompile Include="cParticle.cpp" />
     <ClCompile Include="cParticleFactory.cpp" />
+    <ClCompile Include="cPlayerProxy.cpp" />
     <ClCompile Include="cProp.cpp" />
     <ClCompile Include="cPropFactory.cpp" />
     <ClCompile Include="cWinContextMenu.cpp" />
@@ -241,6 +242,7 @@
     <ClInclude Include="cGameEngine.h" />
     <ClInclude Include="cParticle.h" />
     <ClInclude Include="cParticleFactory.h" />
+    <ClInclude Include="cPlayerProxy.h" />
     <ClInclude Include="cProp.h" />
     <ClInclude Include="cPropFactory.h" />
     <ClInclude Include="cWinContextMenu.h" />
