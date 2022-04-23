@@ -20,7 +20,7 @@ cProp* cPropFactory::createProp(int type, glm::vec3 position, glm::vec3 orientat
 	cProp* result = 0;
 	switch (type) {
 	case(PROP_CAN):
-		result = ::g_pGameEngine->entityManager.CreateProp("can.ply", "BrainNerve.bmp", position, eShapeType::Cylinder,glm::vec3(0.5f),glm::vec3(1.f),1.f, orientation);
+		result = ::g_pGameEngine->entityManager.CreateProp("can.ply", "BrainNerve.bmp", position, eShapeType::Cylinder,glm::vec3(0.5f),glm::vec3(1.f),3.f, orientation);
 		result->mesh->lowDetailMeshName = "";
 		result->mesh->boundingRadius = 1.f;
 		break;

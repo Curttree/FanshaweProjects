@@ -67,6 +67,9 @@ cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     physicsProxy = new cPlayerProxy(this->position+proxyOffset);
 }
 bool cCharacter::GetGunPosition(glm::vec3& position) {
+    if (animationStateMachine.GetTransitioning() && animationStateMachine.GetTransitioningState() == AnimationState::Idle) {
+        return false;
+    }
     switch (animationStateMachine.GetCurrentState()) {
     case AnimationState::Aim:
         position = glm::vec3(-500.f, 13200.f, 6200.f);
@@ -93,7 +96,7 @@ void cCharacter::LoadAnimation() {
     if (this->current_animation) {
         animation = *current_animation;
         animation.shouldPlay = true;
-        animation.speed = 1.f;
+        animation.speed = animationStateMachine.GetCurrentState() == AnimationState::Shoot ? 2.f : 1.f;
     }
     // We are loading a new animation. Check to see if the gun should be drawn alongside the animation.
     glm::vec3 gunPos=glm::vec3(0.f);
@@ -153,6 +156,10 @@ void cCharacter::TimeStep(float deltaTime) {
             GameEvent_KeyPress* g_event = new GameEvent_KeyPress(GLFW_KEY_W, false);
             animationStateMachine.Notify(GameEventType::KEY_PRESS, g_event);
         }
+    }
+    glm::vec3 pos;
+    if (!GetGunPosition(pos)) {
+        mesh->vec_pChildMeshes[0]->scale = glm::vec3(0.f);
     }
     cEntity::TimeStep(deltaTime);
 

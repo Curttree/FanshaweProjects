@@ -14,6 +14,7 @@ public:
 	AnimationState GetTransitioningState();
 
 	bool GetTransitioning(Transition& transition, float& transitionFactor);
+	bool GetTransitioning();
 
 	void AddTransition(GameEvent* gameEvent, AnimationState from, AnimationState to,
 		float duration, TransitionType type = TransitionType::Linear);

@@ -48,7 +48,7 @@ void GameplayManager::GameOver() {
 void GameplayManager::Fire() {
     glm::vec3 end = (1000.f * glm::normalize(::g_pFlyCamera->getAtDirection())) + ::g_pFlyCamera->getEye();
     gdp2022Physics::iCollisionBody* rayHit = ::g_pGameEngine->m_PhysicsWorld->RayHit(::g_pFlyCamera->getEye(), end);
-    //cPropFactory::Instance()->createProp(PROP_BULLET, ::g_pFlyCamera->getAt()+::g_pFlyCamera->getCameraDirection() * 5.f);
+    ::g_pGameEngine->audioManager.PlayAudio(SOUND_GUN);
     if (canList.size() > 0) {
         bool hit = false;
         for (unsigned int index = 0; index < canList.size(); index++) {
@@ -69,13 +69,6 @@ void GameplayManager::Fire() {
                 }
             }
         }
-        if (!hit) 
-        {
-            ::g_pGameEngine->audioManager.PlayAudio(SOUND_GUN);
-        }
-    }
-    else {
-        ::g_pGameEngine->audioManager.PlayAudio(SOUND_GUN);
     }
 }
 

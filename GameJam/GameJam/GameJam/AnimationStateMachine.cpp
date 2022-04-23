@@ -134,3 +134,7 @@ bool AnimationStateMachine::GetTransitioning(Transition& transition, float& tran
 	}
 	return transitionInProgress;
 }
+
+bool AnimationStateMachine::GetTransitioning() {
+	return transitionInProgress;
+}
