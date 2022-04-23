@@ -241,6 +241,8 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("BrushedMetalSilver2.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Bubble.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("red.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Male_16_Specular.bmp", true);
+    
 
     // Add a skybox texture
     std::string errorTextString;

@@ -175,6 +175,23 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
         }
     }
 
+    GLint bUseSpecularMap_Location = glGetUniformLocation(shaderProgram, "bUseSpecularMap");
+
+    if (pCurrentMesh->bUseSpecularMap)
+    {
+        glUniform1f(bUseSpecularMap_Location, (float)GL_TRUE);
+        GLuint specMapTextureNumber = ::g_pTextureManager->getTextureIDFromName(pCurrentMesh->specularMapTexture);
+        // Picking texture unit 31 since it's not in use.
+        GLuint specMapTextureUnit = 71;			// Texture unit go from 0 to 79
+        glActiveTexture(specMapTextureUnit + GL_TEXTURE0);	// GL_TEXTURE0 = 33984
+        glBindTexture(GL_TEXTURE_2D, specMapTextureNumber);
+        GLint specMapTexture_LocID = glGetUniformLocation(shaderProgram, "specularMapTexture");
+        glUniform1i(specMapTexture_LocID, specMapTextureUnit);
+    }
+    else {
+        glUniform1f(bUseSpecularMap_Location, (float)GL_FALSE);
+    }
+
     {
         //Crosshairs
         GLint bShowCrossHair_LodID = g_GetUniformLocation(shaderProgram, "bShowCrosshair");

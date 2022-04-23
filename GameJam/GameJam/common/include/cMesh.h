@@ -61,6 +61,9 @@ public:
 	bool bUseDiscardTransparency;
 	glm::vec3 discardColour = glm::vec3(0.f);
 
+	bool bUseSpecularMap;
+	std::string specularMapTexture;
+
 	// All the "child" mesh objects
 	std::vector< cMesh* > vec_pChildMeshes;
 

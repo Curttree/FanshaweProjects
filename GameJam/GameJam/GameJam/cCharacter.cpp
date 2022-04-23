@@ -15,6 +15,9 @@ cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     character_mesh->orientationXYZ = startOrientation;
     character_mesh->textureNames[0] = "Fish_BaseColor.bmp";
     character_mesh->textureRatios[0] = 1.f;
+    character_mesh->bUseSpecularMap = true;
+    character_mesh->specularMapTexture = "Male_16_Specular.bmp";
+    character_mesh->wholeObjectShininess_SpecPower = 0.01f;
     mesh = character_mesh;
     this->position = character_mesh->positionXYZ;
     this->rotation = glm::quat(character_mesh->orientationXYZ);
@@ -27,6 +30,7 @@ cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     gun->positionXYZ = glm::vec3(-500.f,13200.f,6200.f);
     gun->textureNames[0] = "BrushedMetalSilver2.bmp";
     gun->textureRatios[0] = 1.f;
+    gun->wholeObjectShininess_SpecPower = 0.0001f;
     mesh->vec_pChildMeshes.push_back(gun);
 
 
@@ -288,7 +292,7 @@ void cCharacter::BuildAnimationTransitions(void) {
     animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_S), AnimationState::Run, AnimationState::Walk, 0.25f);
     animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_D), AnimationState::Run, AnimationState::Walk, 0.25f);
 
-    animationStateMachine.AddTransition(new GameEvent_KeyRelease(GLFW_KEY_LEFT_SHIFT), AnimationState::Run, AnimationState::Walk, 1.0f);
+    animationStateMachine.AddTransition(new GameEvent_KeyRelease(GLFW_KEY_LEFT_SHIFT), AnimationState::Run, AnimationState::Walk, 0.2f);
 
     animationStateMachine.AddTransition(new GameEvent_KeyRelease(GLFW_KEY_W), AnimationState::Walk, AnimationState::Idle, 0.5f);
     animationStateMachine.AddTransition(new GameEvent_KeyRelease(GLFW_KEY_A), AnimationState::Walk, AnimationState::Idle, 0.5f);
@@ -296,14 +300,14 @@ void cCharacter::BuildAnimationTransitions(void) {
     animationStateMachine.AddTransition(new GameEvent_KeyRelease(GLFW_KEY_D), AnimationState::Walk, AnimationState::Idle, 0.5f);
 
     //Running states
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_W,true), AnimationState::Idle, AnimationState::Run, 0.25f);
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_A, true), AnimationState::Idle, AnimationState::Run, 0.25f);
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_S, true), AnimationState::Idle, AnimationState::Run, 0.25f);
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_D, true), AnimationState::Idle, AnimationState::Run, 0.25f);
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_W, true), AnimationState::Waiting, AnimationState::Run, 0.25f);
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_A, true), AnimationState::Waiting, AnimationState::Run, 0.25f);
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_S, true), AnimationState::Waiting, AnimationState::Run, 0.25f);
-    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_D, true), AnimationState::Waiting, AnimationState::Run, 0.25f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_W,true), AnimationState::Idle, AnimationState::Run, 0.5f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_A, true), AnimationState::Idle, AnimationState::Run, 0.5f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_S, true), AnimationState::Idle, AnimationState::Run, 0.5f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_D, true), AnimationState::Idle, AnimationState::Run, 0.5f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_W, true), AnimationState::Waiting, AnimationState::Run, 0.75f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_A, true), AnimationState::Waiting, AnimationState::Run, 0.75f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_S, true), AnimationState::Waiting, AnimationState::Run, 0.75f);
+    animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_D, true), AnimationState::Waiting, AnimationState::Run, 0.75f);
     animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_W, true), AnimationState::Walk, AnimationState::Run, 0.25f);
     animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_A, true), AnimationState::Walk, AnimationState::Run, 0.25f);
     animationStateMachine.AddTransition(new GameEvent_KeyPress(GLFW_KEY_S, true), AnimationState::Walk, AnimationState::Run, 0.25f);

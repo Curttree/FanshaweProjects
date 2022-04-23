@@ -512,7 +512,7 @@ vec4 calcualteLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 				  theLights[index].atten.z * distanceToLight*distanceToLight );  	
 
 		if( bUseSpecularMap ) {
-			attenuation *= texture( specularMapTexture, fUVx2.xy ).r;
+			attenuation *= texture( specularMapTexture, fUVx2.xy ).r * 0.5f;
 			// 	objectSpecularPower *= 0.f;
 		}		
 		
