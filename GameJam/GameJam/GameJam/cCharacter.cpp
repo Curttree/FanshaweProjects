@@ -7,9 +7,9 @@
 #include <PhysicsConversion.h>
 #include <../BulletCollision/CollisionDispatch/btGhostObject.h>
 
-cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
+cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) : animationStateMachine(AnimationState::Waiting) {
     //Mesh
-    cMesh* character_mesh = new cMesh("Characters/Detective/detective@aim.fbx");
+    cMesh* character_mesh = new cMesh("Characters/Detective/detective@wait.fbx");
     character_mesh->scale = glm::vec3(0.00025f);
     character_mesh->positionXYZ = startPosition;
     character_mesh->orientationXYZ = startOrientation;
@@ -33,6 +33,7 @@ cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) {
     gun->wholeObjectShininess_SpecPower = 0.0001f;
     mesh->vec_pChildMeshes.push_back(gun);
 
+    isIdle = true;
 
     //Animations
     BuildAnimationTransitions(); 

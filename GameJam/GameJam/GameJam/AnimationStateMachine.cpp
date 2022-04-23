@@ -7,6 +7,12 @@ AnimationStateMachine::AnimationStateMachine()
 {
 
 }
+AnimationStateMachine::AnimationStateMachine(AnimationState starting)
+	: transitionInProgress(false)
+	, currentState(starting)
+{
+
+}
 
 AnimationStateMachine::~AnimationStateMachine()
 {

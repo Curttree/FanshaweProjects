@@ -279,6 +279,16 @@ int main(void) {
     {
         std::cout << "FBO Error: " << FBOerrorString << std::endl;
     }
+    cFBO smallFBO;
+    // Set this off screen texture buffer to a smaller size since it is being rendered at a low resolution.
+    if (smallFBO.init(1200, 640, FBOerrorString))
+    {
+        std::cout << "UI FBO is all set!" << std::endl;
+    }
+    else
+    {
+        std::cout << "FBO Error: " << FBOerrorString << std::endl;
+    }
 
     // Clear the Original back buffer once, BEFORE we render anything
     float ratio;
@@ -336,6 +346,8 @@ int main(void) {
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Prop_HotdogStand_01.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Prop_Barrier_01.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Env_Sidewalk_Corner_01.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Stairs_Planter_01.fbx", program);
+    
     
    // ::g_pVAOManager->LoadMeshWithAssimp("blobby.fbx", program);
     //::g_pVAOManager->LoadMeshWithAssimp("oldMan.fbx", program);

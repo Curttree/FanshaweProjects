@@ -104,6 +104,9 @@ namespace gdp2022Physics
 		if (mBulletBody->getCenterOfMassPosition().getY() > 0) {
 			mBulletBody->setGravity(btVector3(0, -9.81, 0));
 		}
+		else if (mBulletBody->getCenterOfMassPosition().getY() < -1) {
+			mBulletBody->setGravity(btVector3(0, 9.81, 0));
+		}
 		else {
 			mBulletBody->setGravity(btVector3(0, 0, 0));
 		}

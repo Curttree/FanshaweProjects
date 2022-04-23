@@ -23,12 +23,19 @@ void GameplayManager::SetupScene(void) {
     cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(13.6f, 0.f, 40.f));
     cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(15.f, 0.f, 35.f), glm::vec3(0.f, glm::pi<float>() / 7.f, 0.f));
     cPropFactory::Instance()->createProp(PROP_HOTDOG_STAND, glm::vec3(14.f, 0.f, 140.f),glm::vec3(0.f,glm::pi<float>() / 2.f,0.f));
-    cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(15.f, 0.f, 380.f));
-    cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(5.f, 0.f, 380.f));
-    cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(-5.f, 0.f, 380.f));
-    cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(-15.f, 0.f, 380.f));
+
+    cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(-21.f, 0.f, 49.5f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(-21.f, 0.f, 150.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(-21.f, 0.f, 349.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(21.5f, 0.f, 106.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(21.5f, 0.f, 230.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
+
+    cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(15.f, -3.f, 380.f));
+    cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(5.f, -3.f, 380.f));
+    cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(-5.f, -3.f, 380.f));
+    cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(-15.f, -3.f, 380.f));
     cPropFactory::Instance()->createProp(PROP_CITY_IMPOSTER, glm::vec3(0.f, 20.f, 200.f));
-    cPropFactory::Instance()->createProp(PROP_TEST_GROUND, glm::vec3(0.f, -3.5f, 50.f));
+    //cPropFactory::Instance()->createProp(PROP_TEST_GROUND, glm::vec3(0.f, -3.5f, 50.f));
 
     cParticleFactory::Instance()->createParticle(PARTICLE_TEST, glm::vec3(0.f,10.f,40.f), false);
 
@@ -36,6 +43,104 @@ void GameplayManager::SetupScene(void) {
     canList.push_back(can2);
     canList.push_back(can3);
     canList.push_back(can4);
+
+    //Set level boundaries.
+    {
+        gdp2022Physics::iRigidBody* rigidBody = 0;
+        gdp2022Physics::iShape* planeShape = new gdp2022Physics::PlaneShape(0, glm::vec3(0.f, 1.f, 0.f));
+        gdp2022Physics::cRigidBodyDesc planeDesc;
+        planeDesc.linearDamping = 0.f;
+        planeDesc.isStatic = true;
+        planeDesc.mass = 0.f;
+        planeDesc.rotation = glm::quat(glm::vec3(0.f));
+        planeDesc.position = glm::vec3(0.f, -3.f, 0.f);
+        planeDesc.linearVelocity = glm::vec3(0.f);
+
+        rigidBody = ::g_pGameEngine->m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
+        if (rigidBody != 0 && ::g_pGameEngine->m_PhysicsWorld) {
+            ::g_pGameEngine->m_PhysicsWorld->AddBody(rigidBody);
+        }
+    }
+    {
+        gdp2022Physics::iRigidBody* rigidBody = 0;
+        gdp2022Physics::iShape* planeShape = new gdp2022Physics::PlaneShape(0, glm::vec3(0.f, -1.f, 0.f));
+        gdp2022Physics::cRigidBodyDesc planeDesc;
+        planeDesc.linearDamping = 0.f;
+        planeDesc.isStatic = true;
+        planeDesc.mass = 0.f;
+        planeDesc.rotation = glm::quat(glm::vec3(0.f));
+        planeDesc.position = glm::vec3(0.f, 1000.f, 0.f);
+        planeDesc.linearVelocity = glm::vec3(0.f);
+
+        rigidBody = ::g_pGameEngine->m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
+        if (rigidBody != 0 && ::g_pGameEngine->m_PhysicsWorld) {
+            ::g_pGameEngine->m_PhysicsWorld->AddBody(rigidBody);
+        }
+    }
+    {
+        gdp2022Physics::iRigidBody* rigidBody = 0;
+        gdp2022Physics::iShape* planeShape = new gdp2022Physics::PlaneShape(0, glm::vec3(1.f, 0.f, 0.f));
+        gdp2022Physics::cRigidBodyDesc planeDesc;
+        planeDesc.linearDamping = 0.f;
+        planeDesc.isStatic = true;
+        planeDesc.mass = 0.f;
+        planeDesc.rotation = glm::quat(glm::vec3(0.f));
+        planeDesc.position = glm::vec3(-24.f, 0.f, 0.f);
+        planeDesc.linearVelocity = glm::vec3(0.f);
+
+        rigidBody = ::g_pGameEngine->m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
+        if (rigidBody != 0 && ::g_pGameEngine->m_PhysicsWorld) {
+            ::g_pGameEngine->m_PhysicsWorld->AddBody(rigidBody);
+        }
+    }
+    {
+        gdp2022Physics::iRigidBody* rigidBody = 0;
+        gdp2022Physics::iShape* planeShape = new gdp2022Physics::PlaneShape(0, glm::vec3(-1.f, 0.f, 0.f));
+        gdp2022Physics::cRigidBodyDesc planeDesc;
+        planeDesc.linearDamping = 0.f;
+        planeDesc.isStatic = true;
+        planeDesc.mass = 0.f;
+        planeDesc.rotation = glm::quat(glm::vec3(0.f));
+        planeDesc.position = glm::vec3(24.f, 0.f, 0.f);
+        planeDesc.linearVelocity = glm::vec3(0.f);
+
+        rigidBody = ::g_pGameEngine->m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
+        if (rigidBody != 0 && ::g_pGameEngine->m_PhysicsWorld) {
+            ::g_pGameEngine->m_PhysicsWorld->AddBody(rigidBody);
+        }
+    }
+    {
+        gdp2022Physics::iRigidBody* rigidBody = 0;
+        gdp2022Physics::iShape* planeShape = new gdp2022Physics::PlaneShape(0, glm::vec3(0.f, 0.f, 1.f));
+        gdp2022Physics::cRigidBodyDesc planeDesc;
+        planeDesc.linearDamping = 0.f;
+        planeDesc.isStatic = true;
+        planeDesc.mass = 0.f;
+        planeDesc.rotation = glm::quat(glm::vec3(0.f));
+        planeDesc.position = glm::vec3(0.f, 0.f, -50.f);
+        planeDesc.linearVelocity = glm::vec3(0.f);
+
+        rigidBody = ::g_pGameEngine->m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
+        if (rigidBody != 0 && ::g_pGameEngine->m_PhysicsWorld) {
+            ::g_pGameEngine->m_PhysicsWorld->AddBody(rigidBody);
+        }
+    }
+    {
+        gdp2022Physics::iRigidBody* rigidBody = 0;
+        gdp2022Physics::iShape* planeShape = new gdp2022Physics::PlaneShape(0, glm::vec3(0.f, 0.f, -1.f));
+        gdp2022Physics::cRigidBodyDesc planeDesc;
+        planeDesc.linearDamping = 0.f;
+        planeDesc.isStatic = true;
+        planeDesc.mass = 0.f;
+        planeDesc.rotation = glm::quat(glm::vec3(0.f));
+        planeDesc.position = glm::vec3(0.f, 0.f, 350.f);
+        planeDesc.linearVelocity = glm::vec3(0.f);
+
+        rigidBody = ::g_pGameEngine->m_PhysicsFactory->CreateRigidBody(planeDesc, planeShape);
+        if (rigidBody != 0 && ::g_pGameEngine->m_PhysicsWorld) {
+            ::g_pGameEngine->m_PhysicsWorld->AddBody(rigidBody);
+        }
+    }
 }
 void GameplayManager::GameStart() {
     ::g_pGameEngine->audioManager.PlayAudio(SOUND_AMBIENCE);

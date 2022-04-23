@@ -20,8 +20,8 @@ cProp::cProp(std::string name, std::string texture, glm::vec3 position, eShapeTy
 
 void cProp::TimeStep(float deltaTime) {
 	if (mesh && rigidBody && !rigidBody->IsStatic()) {
-		position = rigidBody->GetPosition()+positionOffset;
 		rotation = rigidBody->GetOrientation();
+		position = rigidBody->GetPosition() + (positionOffset * rotation);
 	}
 	cEntity::TimeStep(deltaTime);
 	if (dying) {
@@ -51,13 +51,13 @@ void cProp::InitializePhysics(eShapeType shape, float mass, glm::vec3 scale, glm
 	case eShapeType::Box: {
 		gdp2022Physics::iShape* boxShape = new gdp2022Physics::BoxShape(glm::vec3(scale));
 		gdp2022Physics::cRigidBodyDesc boxDesc;
-		boxDesc.linearDamping = 0.1f;
-		boxDesc.angularDamping = 0.1f;
+		boxDesc.linearDamping = 0.33f;
+		boxDesc.angularDamping = 0.33f;
 		boxDesc.isStatic = false;
 		boxDesc.mass = mass;
 		boxDesc.position = position;
 		boxDesc.linearVelocity = velocity;
-		boxDesc.restitution = 0.8f;
+		boxDesc.restitution = 0.4f;
 		boxDesc.rotation = glm::quat(orientation);
 
 		rigidBody = ::g_pGameEngine->m_PhysicsFactory->CreateRigidBody(boxDesc, boxShape);
@@ -66,13 +66,13 @@ void cProp::InitializePhysics(eShapeType shape, float mass, glm::vec3 scale, glm
 	case eShapeType::Sphere: {
 		gdp2022Physics::iShape* sphereShape = new gdp2022Physics::SphereShape(scale.x);
 		gdp2022Physics::cRigidBodyDesc sphereDesc;
-		sphereDesc.linearDamping = 0.1f;
-		sphereDesc.angularDamping = 0.1f;
+		sphereDesc.linearDamping = 0.2;
+		sphereDesc.angularDamping = 0.2f;
 		sphereDesc.isStatic = false;
 		sphereDesc.mass = mass;
 		sphereDesc.position = position;
 		sphereDesc.linearVelocity = velocity;
-		sphereDesc.restitution = 0.8f;
+		sphereDesc.restitution = 0.4f;
 
 		rigidBody = ::g_pGameEngine->m_PhysicsFactory->CreateRigidBody(sphereDesc, sphereShape);
 		break;
@@ -80,13 +80,13 @@ void cProp::InitializePhysics(eShapeType shape, float mass, glm::vec3 scale, glm
 	case eShapeType::Cylinder: {
 		gdp2022Physics::iShape* cylinderShape = new gdp2022Physics::CylinderShape(scale);
 		gdp2022Physics::cRigidBodyDesc cylinderDesc;
-		cylinderDesc.linearDamping = 0.1f;
-		cylinderDesc.angularDamping = 0.1f;
+		cylinderDesc.linearDamping = 0.33f;
+		cylinderDesc.angularDamping = 0.33f;
 		cylinderDesc.isStatic = false;
 		cylinderDesc.mass = mass;
 		cylinderDesc.position = position;
 		cylinderDesc.linearVelocity = velocity;
-		cylinderDesc.restitution = 0.8f;
+		cylinderDesc.restitution = 0.4f;
 		cylinderDesc.rotation = glm::quat(orientation);
 
 		rigidBody = ::g_pGameEngine->m_PhysicsFactory->CreateRigidBody(cylinderDesc, cylinderShape);

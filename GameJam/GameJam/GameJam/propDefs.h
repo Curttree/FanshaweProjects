@@ -7,3 +7,4 @@
 #define PROP_BULLET 5
 #define PROP_HOTDOG_STAND 6
 #define PROP_BARRIER 7
+#define PROP_PLANTER 8

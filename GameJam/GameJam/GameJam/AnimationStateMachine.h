@@ -7,7 +7,8 @@
 class AnimationStateMachine : public iGameEventListener
 {
 public:
-	AnimationStateMachine();
+	AnimationStateMachine(); 
+	AnimationStateMachine(AnimationState starting);
 	~AnimationStateMachine();
 
 	AnimationState GetCurrentState();
