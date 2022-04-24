@@ -49,11 +49,11 @@ this->FOV = 0.6f;			// Field of view
 
 this->m_CurrentState = cFlyCamera::DEFAULT_OR_UNSPECIFIED;
 
-this->maxPitchDegrees = 10.f;
-this->minPitchDegrees = -10.f;
+this->maxPitchDegrees = 15.f;
+this->minPitchDegrees = -15.f;
 
-this->maxYawDegrees = 30.f;
-this->minYawDegrees = -30.f;
+this->maxYawDegrees = 40.f;
+this->minYawDegrees = -40.f;
 
 this->aimCamOffset = glm::vec3(1.5f, 5.5f, -5.f);
 this->normalCamOffset = glm::vec3(0.f, 5.f, -15.f);
@@ -139,7 +139,9 @@ void cFlyCamera::Pitch_UpDown(float angleDegrees)	// around X
 	}
 	pitch += angleDegrees;
 	// Adjust the orientation of the camera by the number of degrees
-	this->adjMeshOrientationEulerAngles(glm::vec3(angleDegrees, 0.0f, 0.0f), true);
+	// Removing the ability for the camera to roll. It isn't needed for this project.
+	//this->adjMeshOrientationEulerAngles(glm::vec3(angleDegrees, 0.0f, 0.0f), true);
+	qOrientation = glm::quat(glm::vec3(0.f)) * glm::angleAxis(glm::radians(yaw), glm::vec3(0.f, 1.f, 0.f)) * glm::angleAxis(glm::radians(pitch), glm::vec3(1.f, 0.f, 0.f));
 
 	this->m_UpdateAtFromOrientation();
 	this->m_UpdateUpFromOrientation();
@@ -155,7 +157,9 @@ void cFlyCamera::Yaw_LeftRight(float angleDegrees)	// around y
 	}
 	yaw += angleDegrees;
 	// Adjust the orientation of the camera by the number of degrees
-	this->adjMeshOrientationEulerAngles(glm::vec3(0.0f, angleDegrees, 0.0f), true);
+	//this->adjMeshOrientationEulerAngles(glm::vec3(0.0f, angleDegrees, 0.0f), true);
+	// Removing the ability for the camera to roll. It isn't needed for this project.
+	qOrientation = glm::quat(glm::vec3(0.f)) * glm::angleAxis(glm::radians(yaw), glm::vec3(0.f, 1.f, 0.f)) * glm::angleAxis(glm::radians(pitch), glm::vec3(1.f, 0.f, 0.f));
 
 	this->m_UpdateAtFromOrientation();
 	this->m_UpdateUpFromOrientation();

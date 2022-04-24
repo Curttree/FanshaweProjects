@@ -213,6 +213,9 @@
     <ClCompile Include="cPlayerProxy.cpp">
       <Filter>GameJam</Filter>
     </ClCompile>
+    <ClCompile Include="cParticleEmitter.cpp">
+      <Filter>GameJam</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -370,6 +373,12 @@
     </ClInclude>
     <ClInclude Include="cPlayerProxy.h">
       <Filter>GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="cParticleEmitter.h">
+      <Filter>GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="globalFunctions.h">
+      <Filter>Global</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

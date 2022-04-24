@@ -1,19 +1,21 @@
 #include "cParticle.h"
 #include "globals.h"
+#include <iostream>
 
-cParticle::cParticle(std::string texture, float _lifeSpan, glm::vec3 _position, bool followCameraPosition, glm::vec3 _scale) : lifeSpan(_lifeSpan), followCamPos(followCameraPosition) {
+cParticle::cParticle(std::string texture, float _lifeSpan, glm::vec3 _position, float transparency, bool followCameraPosition, glm::vec3 _scale, glm::vec3 _velocity) : lifeSpan(_lifeSpan), followCamPos(followCameraPosition), velocity(_velocity) {
 	cMesh* prop_mesh = new cMesh("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply");
+	prop_mesh->midDetailMeshName = "";
+	prop_mesh->lowDetailMeshName = "";
 	prop_mesh->scale = _scale;
 	prop_mesh->positionXYZ = _position;
 	prop_mesh->textureNames[8] = texture;
 	prop_mesh->bUseDiscardTransparency = true;
 	prop_mesh->orientationXYZ = glm::vec3(0.f, 0.f, glm::pi<float>());
-	prop_mesh->textureRatios[0] = 1.f;
 	mesh = prop_mesh;
 	this->position = prop_mesh->positionXYZ;
 	this->scale = prop_mesh->scale;
 	this->rotation = prop_mesh->orientationXYZ;
-	mesh->alphaTransparency = 0.1f;
+	mesh->alphaTransparency = transparency;
 }
 
 void cParticle::TimeStep(float deltaTime) {
@@ -23,11 +25,18 @@ void cParticle::TimeStep(float deltaTime) {
 		//position = glm::vec3(0.0f, 0.0f, 490.0f);
 		mesh->positionXYZ = this->position;
 	}
+	else if (velocity != glm::vec3(0.f))  {
+		this->position += velocity;
+		mesh->positionXYZ = this->position;
+	}
 	if (lifeSpan < 0.f) {
 		//Don't bother incrementing, it lives forever.
 		return;
 	}
 	aliveTimer += deltaTime;
+	if (textures.size() > 0) {
+		mesh->textureNames[8] = GetCurrentTexture();
+	}
 	if (aliveTimer > lifeSpan) {
 		::g_pGameEngine->entityManager.DeleteParticle(this);
 	}
@@ -59,4 +68,11 @@ void cParticle::OrientToCamera() {
 
 	rotation = glm::quat(glm::vec3(0.0f, angle, 0.0f));
 	mesh->orientationXYZ = glm::vec3(0.0f, angle, 0.0f);
+}
+
+std::string cParticle::GetCurrentTexture() {
+	//Figure out what texture we should be playing based on where we are at in the lifespan.
+	float factor = aliveTimer / lifeSpan;
+	int test = (int)(factor * (textures.size()-1));
+	return textures.size() > 0 ? textures[test] : mesh->textureNames[8];
 }

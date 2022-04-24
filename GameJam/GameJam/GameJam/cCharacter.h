@@ -33,7 +33,7 @@ private:
 	float diameter = 1.f;
 
 	float idleTimer = 0.f;
-	float maxIdleTime = 30.f;
+	float maxIdleTime = 15.f;
 	float stoppingTimer = 0.f;
 	float maxStoppingTime = 0.5f;
 	bool isIdle;

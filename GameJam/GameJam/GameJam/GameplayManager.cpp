@@ -37,7 +37,7 @@ void GameplayManager::SetupScene(void) {
     cPropFactory::Instance()->createProp(PROP_CITY_IMPOSTER, glm::vec3(0.f, 20.f, 200.f));
     //cPropFactory::Instance()->createProp(PROP_TEST_GROUND, glm::vec3(0.f, -3.5f, 50.f));
 
-    cParticleFactory::Instance()->createParticle(PARTICLE_TEST, glm::vec3(0.f,10.f,40.f), false);
+    //cParticleFactory::Instance()->createParticle(PARTICLE_TEST, glm::vec3(0.f,10.f,40.f), false);
 
     canList.push_back(can1);
     canList.push_back(can2);
@@ -152,7 +152,7 @@ void GameplayManager::GameOver() {
 
 void GameplayManager::Fire() {
     glm::vec3 end = (1000.f * glm::normalize(::g_pFlyCamera->getAtDirection())) + ::g_pFlyCamera->getEye();
-    gdp2022Physics::iCollisionBody* rayHit = ::g_pGameEngine->m_PhysicsWorld->RayHit(::g_pFlyCamera->getEye(), end);
+    gdp2022Physics::iCollisionBody* rayHit = ::g_pGameEngine->m_PhysicsWorld->RayHit((::g_pFlyCamera->getEye() + (::g_pFlyCamera->getAtDirection() * glm::length(glm::vec3(1.5f, 5.5f, -5.f)))), end);
     ::g_pGameEngine->audioManager.PlayAudio(SOUND_GUN);
     if (canList.size() > 0) {
         bool hit = false;
@@ -161,6 +161,7 @@ void GameplayManager::Fire() {
                 float dist = glm::distance(::g_pFlyCamera->getEye(), canList[index]->mesh->positionXYZ);
                 glm::vec3 point = (dist * glm::normalize(::g_pFlyCamera->getAtDirection())) + ::g_pFlyCamera->getEye();
                 float distance = glm::distance(canList[index]->mesh->positionXYZ, point);
+
                 if (distance < 1.f) {
                     ::g_pGameEngine->audioManager.PlayAudio(SOUND_PING);
                     canList[index]->rigidBody->ApplyImpulseAtPoint((canList[index]->mesh->positionXYZ - point) * 0.5f, point);
@@ -173,8 +174,9 @@ void GameplayManager::Fire() {
                     return;
                 }
             }
-        }
+        }                   
     }
+    cParticleFactory::Instance()->createParticle(PARTICLE_SMOKE, end, false);
 }
 
 void GameplayManager::SetAiming(bool _aiming) {

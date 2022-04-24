@@ -50,20 +50,29 @@ void EntityManager::DeleteEntity(cEntity* entity)
 const std::vector<cParticle*>& EntityManager::GetParticles(void) {
 	return particles;
 }
-cParticle* EntityManager::CreateParticle(std::string texture, float _lifeSpan, glm::vec3 _position, bool followCameraPosition, glm::vec3 _scale) {
-	cParticle* newParticle = new cParticle(texture, _lifeSpan, _position, followCameraPosition, _scale);
+cParticle* EntityManager::CreateParticle(std::string texture, float _lifeSpan, glm::vec3 _position, float transparency, bool followCameraPosition, glm::vec3 _scale) {
+	cParticle* newParticle = new cParticle(texture, _lifeSpan, _position, transparency, followCameraPosition, _scale);
 	particles.push_back(newParticle);
 	return newParticle;
 }
 
 void EntityManager::DeleteParticle(cParticle* particle) {
+	//Flag it to delete next loop.
+	particlesToDelete.push_back(particle);
+}
+void EntityManager::CleanupParticles() {
 	//Could choose better data structure to optimize. For now take brute force approach.
-	for (unsigned int index = 0; index < particles.size(); index++) {
-		if (particles[index] == particle) {
-			particles.erase(particles.begin() + index);
+	for (unsigned int delIndex = 0; delIndex < particlesToDelete.size(); delIndex++) {
+		for (unsigned int index = 0; index < particles.size(); index++) {
+			if (particles[index] == particlesToDelete[delIndex]) {
+				particles.erase(particles.begin() + index);
+				break;
+			}
 		}
+		delete particlesToDelete[delIndex];
+		particlesToDelete[delIndex] = 0;
 	}
-	delete particle;
+	particlesToDelete.clear();
 }
 
 cProp* EntityManager::CreateProp(std::string name, std::string texture, glm::vec3 position, eShapeType physicsShape, glm::vec3 scale, glm::vec3 physicsScale, float mass, glm::vec3 orientation, glm::vec3 velocity)
@@ -75,14 +84,17 @@ cProp* EntityManager::CreateProp(std::string name, std::string texture, glm::vec
 
 void EntityManager::TimeStep(float deltaTime) {
 	player->TimeStep(deltaTime);
+	for (cParticle* particle : particles) {
+		if (particle != nullptr) {
+			particle->TimeStep(deltaTime);
+		}
+	}
 	for (cEntity* entity : entities) {
 		if (entity->mesh) {
 			entity->TimeStep(deltaTime);
 		}
 	}
-	for (cParticle* particle : particles) {
-		particle->TimeStep(deltaTime);
-	}
+	CleanupParticles();
 }
 
 cCharacter* EntityManager::GetPlayer(void) {

@@ -85,7 +85,7 @@ namespace gdp2022Physics
 		return mVersion;
 	}
 
-	iCollisionBody* PhysicsWorld::RayHit(glm::vec3 start, glm::vec3 end) {
+	iCollisionBody* PhysicsWorld::RayHit(glm::vec3 start, glm::vec3& end) {
 		btVector3 b_start;
 		btVector3 b_end;
 		CastBulletVector3(start, &b_start);
@@ -94,6 +94,7 @@ namespace gdp2022Physics
 		mDynamicsWorld->rayTest(b_start, b_end, RayCallback);
 		if (RayCallback.hasHit()) {
 			const btCollisionObject* hit = RayCallback.m_collisionObject; 
+			CastGLMVector3(RayCallback.m_hitPointWorld, &end);
 			gdp2022Physics::iRigidBody* rigid;
 			for (iCollisionBody* body : mBodies) {
 				if (body->GetBodyType() == RIGID_BODY && CastBulletRigidBody(body) == btRigidBody::upcast(hit)) {

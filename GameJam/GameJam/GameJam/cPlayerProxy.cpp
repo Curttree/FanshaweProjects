@@ -16,8 +16,8 @@ cPlayerProxy::cPlayerProxy(glm::vec3 position) {
     this->scale = glm::vec3(1.f,2.5f,1.f);
     rotation = proxy_mesh->orientationXYZ;
 
-    walkSpeed = 7.f;
-    runSpeed = 15.f;
+    walkSpeed = 150.f;
+    runSpeed = 400.f;
 
     InitializePhysics(eShapeType::Cylinder, 50.f, this->scale);
 }
@@ -26,7 +26,7 @@ void cPlayerProxy::TimeStep(float deltaTime) {
     if (mesh && rigidBody && !rigidBody->IsStatic()) {
         glm::vec3 movement = glm::vec3(0.f);
         if (ApplyPlayerMovement(movement)) {
-            rigidBody->SetVelocity(glm::normalize(movement) * (::g_pGameEngine->entityManager.GetPlayer()->isRunning() ? runSpeed : walkSpeed));
+            rigidBody->SetVelocity(glm::normalize(movement) * (::g_pGameEngine->entityManager.GetPlayer()->isRunning() ? runSpeed : walkSpeed) * deltaTime);
             rotation = glm::quat(glm::vec3(0.f, atan2(movement.x, movement.z), 0.f));
         }
         else {

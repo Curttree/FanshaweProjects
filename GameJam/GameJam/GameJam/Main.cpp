@@ -239,9 +239,14 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("UnderwaterNormals.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Fish_BaseColor.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("BrushedMetalSilver2.bmp", true);
-    ::g_pTextureManager->Create2DTextureFromBMPFile("Bubble.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("bubble.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("red.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Male_16_Specular.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Animations/smoke00.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Animations/smoke01.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Animations/smoke02.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Animations/smoke03.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("Animations/smoke04.bmp", true);
     
 
     // Add a skybox texture
@@ -347,6 +352,7 @@ int main(void) {
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Prop_Barrier_01.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Env_Sidewalk_Corner_01.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Bld_Apartment_Stairs_Planter_01.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Env_Sidewalk_Gutter_01.fbx", program);
     
     
    // ::g_pVAOManager->LoadMeshWithAssimp("blobby.fbx", program);

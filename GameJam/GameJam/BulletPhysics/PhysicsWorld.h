@@ -25,7 +25,7 @@ namespace gdp2022Physics
 		virtual void AddBody(iCollisionBody* body);
 		virtual void RemoveBody(iCollisionBody* body);
 
-		virtual iCollisionBody* RayHit(glm::vec3 start, glm::vec3 end);
+		virtual iCollisionBody* RayHit(glm::vec3 start, glm::vec3& end);
 
 		virtual const std::string& GetVersion();
 

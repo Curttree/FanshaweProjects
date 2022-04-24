@@ -8,6 +8,7 @@
 // If I am going to continue to add commands, I should switch to a factory.
 #include <Animation/cCommand_ConsoleOutput.h>
 #include <Animation/cCommand_PlaySound.h>
+#include "DecorationManager.h"
 
 cGameEngine::cGameEngine(void)
 {
@@ -55,6 +56,7 @@ void cGameEngine::Update(float dt)
 		m_PhysicsWorld->TimeStep(dt);
 	}
 	entityManager.TimeStep(dt);
+	DecorationManager::Instance()->TimeStep(dt);
 	HandlePlayerInput();
 }
 

@@ -1,5 +1,6 @@
 #include "DecorationManager.h"
 #include "globals.h"
+#include "particleDefs.h"
 
 DecorationManager* DecorationManager::_instance = 0;
 DecorationManager::DecorationManager() {
@@ -14,12 +15,56 @@ DecorationManager* DecorationManager::Instance() {
     return _instance;
 }
 void DecorationManager::DecorateScene() {
+    rightVents = { 0,50,100,150,200,250,300 };
+    leftVents = { 20,70,120,170,220,270,320 };
+    BuildStreet();
+    AddVents();
+}
+
+void DecorationManager::GetBuildingParts(std::string& door, std::string& stack, std::string& roof) {
+    int doorNum = rand() % 2;
+    switch (doorNum) {
+    case 0:
+        door = "City/SM_Bld_Apartment_Door_01.fbx";
+        break;
+    default:
+        door = "City/SM_Bld_Apartment_Door_02.fbx";
+        break;
+    }
+    int stackNum = rand() % 3;
+    switch (stackNum) {
+    case 0:
+        stack = "City/SM_Bld_Apartment_Stack_01.fbx";
+        break;
+    case 1:
+        stack = "City/SM_Bld_Apartment_Stack_02.fbx";
+        break;
+    default:
+        stack = "City/SM_Bld_Apartment_Stack_03.fbx";
+        break;
+    }
+    int roofNum = rand() % 3;
+    switch (roofNum) {
+    case 0:
+        roof = "City/SM_Bld_Apartment_Roof_01.fbx";
+        break;
+    case 1:
+        roof = "City/SM_Bld_Apartment_Roof_02.fbx";
+        break;
+    default:
+        roof = "City/SM_Bld_Apartment_Roof_03.fbx";
+        break;
+    }
+    return;
+}
+
+void DecorationManager::BuildStreet() {
     int startZ = -50;
     int endZ = 400;
     float boundingRadius = -1.f;
     bool drawBuildings = true;
     std::string door, stack, roof;
-    for (int currentZ = startZ; currentZ <endZ; currentZ += 10)
+    for (int currentZ = startZ; currentZ < endZ; currentZ += 10)
     {
         if (drawBuildings && currentZ < 380) {
             GetBuildingParts(door, stack, roof);
@@ -41,7 +86,7 @@ void DecorationManager::DecorateScene() {
             stack1->textureRatios[0] = 1.f;
             stack1->boundingRadius = boundingRadius;
             ::g_vec_pMeshes.push_back(stack1);
-            cMesh * roof1 = new cMesh(roof);
+            cMesh* roof1 = new cMesh(roof);
             roof1->lowDetailMeshName = "";
             roof1->scale = glm::vec3(4.0f);
             roof1->positionXYZ = glm::vec3(25.f, 42.f, (float)currentZ);
@@ -55,7 +100,7 @@ void DecorationManager::DecorateScene() {
             cMesh* door2 = new cMesh(door);
             door2->lowDetailMeshName = "";
             door2->scale = glm::vec3(4.0f);
-            door2->positionXYZ = glm::vec3(-25.f, -3.f, (float)currentZ+20.f);
+            door2->positionXYZ = glm::vec3(-25.f, -3.f, (float)currentZ + 20.f);
             door2->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f);
             door2->textureNames[0] = "PolygonCity_Texture2.bmp";
             door2->textureRatios[0] = 1.f;
@@ -93,7 +138,7 @@ void DecorationManager::DecorateScene() {
         side1extra->textureRatios[0] = 1.f;
         side1extra->boundingRadius = boundingRadius;
         ::g_vec_pMeshes.push_back(side1extra);
-        cMesh* side1 = new cMesh("City/SM_Env_Sidewalk_Straight_01.fbx");
+        cMesh* side1 = new cMesh(ShouldAddVent(currentZ, true) ? "City/SM_Env_Sidewalk_Gutter_01.fbx" : "City/SM_Env_Sidewalk_Straight_01.fbx");
         side1->lowDetailMeshName = "";
         side1->scale = glm::vec3(2.0f);
         side1->positionXYZ = glm::vec3(10.f, -3.f, (float)currentZ);
@@ -114,13 +159,13 @@ void DecorationManager::DecorateScene() {
         cMesh* road2 = new cMesh("City/SM_Env_Road_YellowLines_02.fbx");
         road2->lowDetailMeshName = "";
         road2->scale = glm::vec3(2.0f);
-        road2->positionXYZ = glm::vec3(-10.f, -3.f, (float)currentZ+10.f);
+        road2->positionXYZ = glm::vec3(-10.f, -3.f, (float)currentZ + 10.f);
         road2->orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
         road2->textureNames[0] = "PolygonCity_Road_01.bmp";
         road2->textureRatios[0] = 1.f;
         road2->boundingRadius = boundingRadius;
         ::g_vec_pMeshes.push_back(road2);
-        cMesh* side2 = new cMesh("City/SM_Env_Sidewalk_Straight_01.fbx");
+        cMesh* side2 = new cMesh(ShouldAddVent(currentZ, false) ? "City/SM_Env_Sidewalk_Gutter_01.fbx" : "City/SM_Env_Sidewalk_Straight_01.fbx");
         side2->lowDetailMeshName = "";
         side2->scale = glm::vec3(2.0f);
         side2->positionXYZ = glm::vec3(-10.f, -3.f, (float)currentZ + 10.f);
@@ -169,39 +214,39 @@ void DecorationManager::DecorateScene() {
     ::g_vec_pMeshes.push_back(corner2);
 }
 
-void DecorationManager::GetBuildingParts(std::string& door, std::string& stack, std::string& roof) {
-    int doorNum = rand() % 2;
-    switch (doorNum) {
-    case 0:
-        door = "City/SM_Bld_Apartment_Door_01.fbx";
-        break;
-    default:
-        door = "City/SM_Bld_Apartment_Door_02.fbx";
-        break;
+void DecorationManager::AddVents() {
+    for (int i : leftVents) {
+        cParticleEmitter* vent = new cParticleEmitter(PARTICLE_BUBBLE, glm::vec3(10.f, -0.1f, (float)i), 0.5f, glm::vec3(0.f, 3.0f, 0.f), 0.2f, 0.1f, 0.7f);
+        vents.push_back(vent);
     }
-    int stackNum = rand() % 3;
-    switch (stackNum) {
-    case 0:
-        stack = "City/SM_Bld_Apartment_Stack_01.fbx";
-        break;
-    case 1:
-        stack = "City/SM_Bld_Apartment_Stack_02.fbx";
-        break;
-    default:
-        stack = "City/SM_Bld_Apartment_Stack_03.fbx";
-        break;
+    for (int i : rightVents) {
+        cParticleEmitter* vent = new cParticleEmitter(PARTICLE_BUBBLE, glm::vec3(-10.f, -0.1f, (float)i), 0.5f, glm::vec3(0.f, 3.0f, 0.f), 0.2f, 0.1f, 0.7f);
+        vents.push_back(vent);
     }
-    int roofNum = rand() % 3;
-    switch (roofNum) {
-    case 0:
-        roof = "City/SM_Bld_Apartment_Roof_01.fbx";
-        break;
-    case 1:
-        roof = "City/SM_Bld_Apartment_Roof_02.fbx";
-        break;
-    default:
-        roof = "City/SM_Bld_Apartment_Roof_03.fbx";
-        break;
+}
+
+void DecorationManager::TimeStep(float deltaTime) {
+    for (cParticleEmitter* vent : vents) {
+        vent->TimeStep(deltaTime);
     }
-    return;
+}
+
+bool DecorationManager::ShouldAddVent(int location, bool onLeft) {
+    //Number of vents is small so can stick with vectors. May want other data structure if this is going to grow.
+    if (onLeft) {
+        for (int i : leftVents) {
+            if (i == location) {
+                return true;
+            }
+        }
+        return false;
+    }
+    else {
+        for (int i : rightVents) {
+            if (i == location) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
