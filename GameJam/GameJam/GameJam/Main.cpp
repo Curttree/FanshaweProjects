@@ -356,6 +356,8 @@ int main(void) {
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Prop_LightPole_Base_01.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Prop_ParkingMeter_01.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Prop_ParkBench_01.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Env_Road_Bare_01.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Env_Sidewalk_01.fbx", program);
     
     
    // ::g_pVAOManager->LoadMeshWithAssimp("blobby.fbx", program);

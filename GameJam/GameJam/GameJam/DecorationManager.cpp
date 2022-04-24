@@ -17,8 +17,10 @@ DecorationManager* DecorationManager::Instance() {
 void DecorationManager::DecorateScene() {
     rightVents = { 0,50,100,150,200,250,300 };
     leftVents = { 20,70,120,170,220,270,320 };
-    BuildStreet();
-    AddVents();
+    
+    BuildStreet(-50,400); 
+    BuildStreetsAhead(400.f);
+   // AddVents();
 }
 
 void DecorationManager::GetBuildingParts(std::string& door, std::string& stack, std::string& roof) {
@@ -58,15 +60,398 @@ void DecorationManager::GetBuildingParts(std::string& door, std::string& stack, 
     return;
 }
 
-void DecorationManager::BuildStreet() {
-    int startZ = -50;
-    int endZ = 400;
+void DecorationManager::BuildStreetsAhead(float starting) {
+    //This is pure brute force environment building. It will only be used to generate a sample of the rest of the building.
+    //Should be cleaned up if running as part of execution.
+    float boundingRadius = -1.f;
+    {
+        cMesh* side1 = new cMesh("City/SM_Env_Sidewalk_Straight_01.fbx");
+        side1->lowDetailMeshName = "";
+        side1->scale = glm::vec3(2.0f);
+        side1->positionXYZ = glm::vec3(10.f, -3.f, starting - 10.f);
+        side1->orientationXYZ = glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f);
+        side1->textureNames[0] = "PolygonCity_Texture2.bmp";
+        side1->textureRatios[0] = 1.f;
+        side1->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(side1);
+    }
+    {
+        cMesh* side1 = new cMesh("City/SM_Env_Sidewalk_Straight_01.fbx");
+        side1->lowDetailMeshName = "";
+        side1->scale = glm::vec3(2.0f);
+        side1->positionXYZ = glm::vec3(10.f, -3.f, starting + 0.f);
+        side1->orientationXYZ = glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f);
+        side1->textureNames[0] = "PolygonCity_Texture2.bmp";
+        side1->textureRatios[0] = 1.f;
+        side1->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(side1);
+    }
+    {
+        cMesh* road1 = new cMesh("City/SM_Env_Road_YellowLines_02.fbx");
+        road1->lowDetailMeshName = "";
+        road1->scale = glm::vec3(2.0f);
+        road1->positionXYZ = glm::vec3(10.f, -3.f, starting + 0.f);
+        road1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+        road1->textureNames[0] = "PolygonCity_Road_01.bmp";
+        road1->textureRatios[0] = 1.f;
+        road1->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(road1);
+        cMesh* road2 = new cMesh("City/SM_Env_Road_YellowLines_02.fbx");
+        road2->lowDetailMeshName = "";
+        road2->scale = glm::vec3(2.0f);
+        road2->positionXYZ = glm::vec3(-10.f, -3.f, starting + 10.f);
+        road2->orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
+        road2->textureNames[0] = "PolygonCity_Road_01.bmp";
+        road2->textureRatios[0] = 1.f;
+        road2->boundingRadius = boundingRadius; 
+        ::g_vec_pMeshes.push_back(road2);
+    }
+    {
+        cMesh* road1 = new cMesh("City/SM_Env_Road_YellowLines_02.fbx");
+        road1->lowDetailMeshName = "";
+        road1->scale = glm::vec3(2.0f);
+        road1->positionXYZ = glm::vec3(10.f, -3.f, starting - 10.f);
+        road1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+        road1->textureNames[0] = "PolygonCity_Road_01.bmp";
+        road1->textureRatios[0] = 1.f;
+        road1->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(road1);
+        cMesh* road2 = new cMesh("City/SM_Env_Road_YellowLines_02.fbx");
+        road2->lowDetailMeshName = "";
+        road2->scale = glm::vec3(2.0f);
+        road2->positionXYZ = glm::vec3(-10.f, -3.f, starting);
+        road2->orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
+        road2->textureNames[0] = "PolygonCity_Road_01.bmp";
+        road2->textureRatios[0] = 1.f;
+        road2->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(road2);
+    }
+    {
+        cMesh* road1 = new cMesh("City/SM_Env_Road_YellowLines_02.fbx");
+        road1->lowDetailMeshName = "";
+        road1->scale = glm::vec3(2.0f);
+        road1->positionXYZ = glm::vec3(10.f, -3.f, starting + 10.f);
+        road1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+        road1->textureNames[0] = "PolygonCity_Road_01.bmp";
+        road1->textureRatios[0] = 1.f;
+        road1->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(road1);
+        cMesh* road2 = new cMesh("City/SM_Env_Road_YellowLines_02.fbx");
+        road2->lowDetailMeshName = "";
+        road2->scale = glm::vec3(2.0f);
+        road2->positionXYZ = glm::vec3(-10.f, -3.f, starting + 20.f);
+        road2->orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
+        road2->textureNames[0] = "PolygonCity_Road_01.bmp";
+        road2->textureRatios[0] = 1.f;
+        road2->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(road2);
+    }
+    {
+        cMesh* road1 = new cMesh("City/SM_Env_Road_YellowLines_02.fbx");
+        road1->lowDetailMeshName = "";
+        road1->scale = glm::vec3(2.0f);
+        road1->positionXYZ = glm::vec3(10.f, -3.f, starting + 60.f);
+        road1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+        road1->textureNames[0] = "PolygonCity_Road_01.bmp";
+        road1->textureRatios[0] = 1.f;
+        road1->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(road1);
+        cMesh* road2 = new cMesh("City/SM_Env_Road_YellowLines_02.fbx");
+        road2->lowDetailMeshName = "";
+        road2->scale = glm::vec3(2.0f);
+        road2->positionXYZ = glm::vec3(-10.f, -3.f, starting + 70.f);
+        road2->orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
+        road2->textureNames[0] = "PolygonCity_Road_01.bmp";
+        road2->textureRatios[0] = 1.f;
+        road2->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(road2);
+    }
+    //Build intersecting road.
+    for (float x = -50.f; x < 60.f; x += 10.f) {
+        {
+            cMesh* road1 = new cMesh("City/SM_Env_Road_Bare_01.fbx");
+            road1->lowDetailMeshName = "";
+            road1->scale = glm::vec3(2.0f);
+            road1->positionXYZ = glm::vec3(x, -3.f, starting + 40.f);
+            road1->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
+            road1->textureNames[0] = "PolygonCity_Road_01.bmp";
+            road1->textureRatios[0] = 1.f;
+            road1->boundingRadius = boundingRadius;
+            ::g_vec_pMeshes.push_back(road1);
+            cMesh* road2 = new cMesh("City/SM_Env_Road_Bare_01.fbx");
+            road2->lowDetailMeshName = "";
+            road2->scale = glm::vec3(2.0f);
+            road2->positionXYZ = glm::vec3(x, -3.f, starting + 30.f);
+            road2->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
+            road2->textureNames[0] = "PolygonCity_Road_01.bmp";
+            road2->textureRatios[0] = 1.f;
+            road2->boundingRadius = boundingRadius;
+            ::g_vec_pMeshes.push_back(road2);
+        }
+        {
+            cMesh* road1 = new cMesh("City/SM_Env_Road_Bare_01.fbx");
+            road1->lowDetailMeshName = "";
+            road1->scale = glm::vec3(2.0f);
+            road1->positionXYZ = glm::vec3(x, -3.f, starting + 50.f);
+            road1->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
+            road1->textureNames[0] = "PolygonCity_Road_01.bmp";
+            road1->textureRatios[0] = 1.f;
+            road1->boundingRadius = boundingRadius;
+            ::g_vec_pMeshes.push_back(road1);
+            cMesh* road2 = new cMesh("City/SM_Env_Road_Bare_01.fbx");
+            road2->lowDetailMeshName = "";
+            road2->scale = glm::vec3(2.0f);
+            road2->positionXYZ = glm::vec3(x, -3.f, starting + 60.f);
+            road2->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2, 0.f);
+            road2->textureNames[0] = "PolygonCity_Road_01.bmp";
+            road2->textureRatios[0] = 1.f;
+            road2->boundingRadius = boundingRadius;
+            ::g_vec_pMeshes.push_back(road2);
+        }
+    }
+    
+    {
+        cMesh* side2 = new cMesh("City/SM_Env_Sidewalk_Straight_01.fbx");
+        side2->lowDetailMeshName = "";
+        side2->scale = glm::vec3(2.0f);
+        side2->positionXYZ = glm::vec3(-10.f, -3.f, starting + 0.f);
+        side2->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f);
+        side2->textureNames[0] = "PolygonCity_Texture2.bmp";
+        side2->textureRatios[0] = 1.f;
+        side2->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(side2);
+    }
+    {
+        cMesh* side2 = new cMesh("City/SM_Env_Sidewalk_Straight_01.fbx");
+        side2->lowDetailMeshName = "";
+        side2->scale = glm::vec3(2.0f);
+        side2->positionXYZ = glm::vec3(-10.f, -3.f, starting + 10.f);
+        side2->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f);
+        side2->textureNames[0] = "PolygonCity_Texture2.bmp";
+        side2->textureRatios[0] = 1.f;
+        side2->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(side2);
+    }
+    {
+        cMesh* side1 = new cMesh("City/SM_Env_Sidewalk_01.fbx");
+        side1->lowDetailMeshName = "";
+        side1->scale = glm::vec3(2.0f);
+        side1->positionXYZ = glm::vec3(-30.f, -3.f, starting - 10.f);
+        side1->orientationXYZ = glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f);
+        side1->textureNames[0] = "PolygonCity_Texture2.bmp";
+        side1->textureRatios[0] = 1.f;
+        side1->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(side1);
+    }
+    {
+        cMesh* side1 = new cMesh("City/SM_Env_Sidewalk_01.fbx");
+        side1->lowDetailMeshName = "";
+        side1->scale = glm::vec3(2.0f);
+        side1->positionXYZ = glm::vec3(-30.f, -3.f, starting + 0.f);
+        side1->orientationXYZ = glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f);
+        side1->textureNames[0] = "PolygonCity_Texture2.bmp";
+        side1->textureRatios[0] = 1.f;
+        side1->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(side1);
+    }
+    //Corners
+    {
+        cMesh* corner = new cMesh("City/SM_Env_Sidewalk_Corner_01.fbx");
+        corner->lowDetailMeshName = "";
+        corner->scale = glm::vec3(2.0f);
+        corner->positionXYZ = glm::vec3(10.f, -3.f, starting + 20.f);
+        corner->orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
+        corner->textureNames[0] = "PolygonCity_Texture2.bmp";
+        corner->textureRatios[0] = 1.f;
+        corner->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(corner);
+        cMesh* corner2 = new cMesh("City/SM_Env_Sidewalk_Corner_01.fbx");
+        corner2->lowDetailMeshName = "";
+        corner2->scale = glm::vec3(2.0f);
+        corner2->positionXYZ = glm::vec3(-10.f, -3.f, starting + 20.f);
+        corner2->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f);
+        corner2->textureNames[0] = "PolygonCity_Texture2.bmp";
+        corner2->textureRatios[0] = 1.f;
+        corner2->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(corner2);
+    }
+    {
+        cMesh* corner = new cMesh("City/SM_Env_Sidewalk_Corner_01.fbx");
+        corner->lowDetailMeshName = "";
+        corner->scale = glm::vec3(2.0f);
+        corner->positionXYZ = glm::vec3(-10.f, -3.f, starting + 60.f);
+        corner->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+        corner->textureNames[0] = "PolygonCity_Texture2.bmp";
+        corner->textureRatios[0] = 1.f;
+        corner->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(corner);
+        cMesh* corner2 = new cMesh("City/SM_Env_Sidewalk_Corner_01.fbx");
+        corner2->lowDetailMeshName = "";
+        corner2->scale = glm::vec3(2.0f);
+        corner2->positionXYZ = glm::vec3(10.f, -3.f, starting + 60.f);
+        corner2->orientationXYZ = glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f);
+        corner2->textureNames[0] = "PolygonCity_Texture2.bmp";
+        corner2->textureRatios[0] = 1.f;
+        corner2->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(corner2);
+    }
+
+    for (float i = -30.f; i > -80.f; i -= 10.f) {
+        cMesh* side = new cMesh("City/SM_Env_Sidewalk_Straight_01.fbx");
+        side->lowDetailMeshName = "";
+        side->scale = glm::vec3(2.0f);
+        side->positionXYZ = glm::vec3(i, -3.f, starting + 20.f);
+        side->orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
+        side->textureNames[0] = "PolygonCity_Texture2.bmp";
+        side->textureRatios[0] = 1.f;
+        side->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(side);
+        cMesh* side1 = new cMesh("City/SM_Env_Sidewalk_01.fbx");
+        side1->lowDetailMeshName = "";
+        side1->scale = glm::vec3(2.0f);
+        side1->positionXYZ = glm::vec3(i, -3.f, starting + 10.f);
+        side1->orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
+        side1->textureNames[0] = "PolygonCity_Texture2.bmp";
+        side1->textureRatios[0] = 1.f;
+        side1->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(side1); 
+        {
+            cMesh* side = new cMesh("City/SM_Env_Sidewalk_Straight_01.fbx");
+            side->lowDetailMeshName = "";
+            side->scale = glm::vec3(2.0f);
+            side->positionXYZ = glm::vec3(i+10.f, -3.f, starting + 60.f);
+            side->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+            side->textureNames[0] = "PolygonCity_Texture2.bmp";
+            side->textureRatios[0] = 1.f;
+            side->boundingRadius = boundingRadius;
+            ::g_vec_pMeshes.push_back(side);
+            cMesh* side1 = new cMesh("City/SM_Env_Sidewalk_01.fbx");
+            side1->lowDetailMeshName = "";
+            side1->scale = glm::vec3(2.0f);
+            side1->positionXYZ = glm::vec3(i+10.f, -3.f, starting + 70.f);
+            side1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+            side1->textureNames[0] = "PolygonCity_Texture2.bmp";
+            side1->textureRatios[0] = 1.f;
+            side1->boundingRadius = boundingRadius;
+            ::g_vec_pMeshes.push_back(side1);
+        }
+    }
+    for (float i = 20.f; i < 80.f; i += 10.f) {
+        cMesh* side = new cMesh("City/SM_Env_Sidewalk_Straight_01.fbx");
+        side->lowDetailMeshName = "";
+        side->scale = glm::vec3(2.0f);
+        side->positionXYZ = glm::vec3(i, -3.f, starting + 20.f);
+        side->orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
+        side->textureNames[0] = "PolygonCity_Texture2.bmp";
+        side->textureRatios[0] = 1.f;
+        side->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(side);
+        cMesh* side1 = new cMesh("City/SM_Env_Sidewalk_01.fbx");
+        side1->lowDetailMeshName = "";
+        side1->scale = glm::vec3(2.0f);
+        side1->positionXYZ = glm::vec3(i, -3.f, starting + 10.f);
+        side1->orientationXYZ = glm::vec3(0.f, 0.f, 0.f);
+        side1->textureNames[0] = "PolygonCity_Texture2.bmp";
+        side1->textureRatios[0] = 1.f;
+        side1->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(side1);
+        {
+            cMesh* side = new cMesh("City/SM_Env_Sidewalk_Straight_01.fbx");
+            side->lowDetailMeshName = "";
+            side->scale = glm::vec3(2.0f);
+            side->positionXYZ = glm::vec3(i + 10.f, -3.f, starting + 60.f);
+            side->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+            side->textureNames[0] = "PolygonCity_Texture2.bmp";
+            side->textureRatios[0] = 1.f;
+            side->boundingRadius = boundingRadius;
+            ::g_vec_pMeshes.push_back(side);
+            cMesh* side1 = new cMesh("City/SM_Env_Sidewalk_01.fbx");
+            side1->lowDetailMeshName = "";
+            side1->scale = glm::vec3(2.0f);
+            side1->positionXYZ = glm::vec3(i + 10.f, -3.f, starting + 70.f);
+            side1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+            side1->textureNames[0] = "PolygonCity_Texture2.bmp";
+            side1->textureRatios[0] = 1.f;
+            side1->boundingRadius = boundingRadius;
+            ::g_vec_pMeshes.push_back(side1);
+        }
+    }
+    std::string door, stack, roof;
+    for (int x = 65.f; x < 105.f; x+=20.f)
+    {
+    GetBuildingParts(door, stack, roof);
+    cMesh* door1 = new cMesh(door);
+    door1->lowDetailMeshName = "";
+    door1->scale = glm::vec3(4.0f);
+    door1->positionXYZ = glm::vec3(x, -3.f, (float)starting+70.f);
+    door1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+    door1->textureNames[0] = "PolygonCity_Texture2.bmp";
+    door1->textureRatios[0] = 1.f;
+    door1->boundingRadius = boundingRadius;
+    ::g_vec_pMeshes.push_back(door1);
+    cMesh* stack1 = new cMesh(stack);
+    stack1->lowDetailMeshName = "";
+    stack1->scale = glm::vec3(4.0f);
+    stack1->positionXYZ = glm::vec3(x, 7.f, (float)starting + 70.f);
+    stack1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+    stack1->textureNames[0] = "PolygonCity_Texture2.bmp";
+    stack1->textureRatios[0] = 1.f;
+    stack1->boundingRadius = boundingRadius;
+    ::g_vec_pMeshes.push_back(stack1);
+    cMesh* roof1 = new cMesh(roof);
+    roof1->lowDetailMeshName = "";
+    roof1->scale = glm::vec3(4.0f);
+    roof1->positionXYZ = glm::vec3(x, 42.f, (float)starting + 70.f);
+    roof1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+    roof1->textureNames[0] = "PolygonCity_Texture2.bmp";
+    roof1->textureRatios[0] = 1.f;
+    roof1->boundingRadius = boundingRadius;
+    ::g_vec_pMeshes.push_back(roof1); 
+    }
+    for (int x = -105.f; x <= -45.f; x += 20.f)
+    {
+        GetBuildingParts(door, stack, roof);
+        cMesh* door1 = new cMesh(door);
+        door1->lowDetailMeshName = "";
+        door1->scale = glm::vec3(4.0f);
+        door1->positionXYZ = glm::vec3(x, -3.f, (float)starting + 70.f);
+        door1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+        door1->textureNames[0] = "PolygonCity_Texture2.bmp";
+        door1->textureRatios[0] = 1.f;
+        door1->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(door1);
+        cMesh* stack1 = new cMesh(stack);
+        stack1->lowDetailMeshName = "";
+        stack1->scale = glm::vec3(4.0f);
+        stack1->positionXYZ = glm::vec3(x, 7.f, (float)starting + 70.f);
+        stack1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+        stack1->textureNames[0] = "PolygonCity_Texture2.bmp";
+        stack1->textureRatios[0] = 1.f;
+        stack1->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(stack1);
+        cMesh* roof1 = new cMesh(roof);
+        roof1->lowDetailMeshName = "";
+        roof1->scale = glm::vec3(4.0f);
+        roof1->positionXYZ = glm::vec3(x, 42.f, (float)starting + 70.f);
+        roof1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
+        roof1->textureNames[0] = "PolygonCity_Texture2.bmp";
+        roof1->textureRatios[0] = 1.f;
+        roof1->boundingRadius = boundingRadius;
+        ::g_vec_pMeshes.push_back(roof1);
+    }
+
+    //Now that we are done with the intersection, build ahead.
+    BuildStreet((int)(starting + 70), (int)(starting + 670));
+}
+
+
+void DecorationManager::BuildStreet(int startZ, int endZ) {
     float boundingRadius = -1.f;
     bool drawBuildings = true;
     std::string door, stack, roof;
     for (int currentZ = startZ; currentZ < endZ; currentZ += 10)
     {
-        if (drawBuildings && currentZ < 380) {
+        if (drawBuildings && currentZ < startZ + 430) {
             GetBuildingParts(door, stack, roof);
             cMesh* door1 = new cMesh(door);
             door1->lowDetailMeshName = "";
@@ -185,33 +570,6 @@ void DecorationManager::BuildStreet() {
         ::g_vec_pMeshes.push_back(side2extra);
     }
 
-    cMesh* side1 = new cMesh("City/SM_Env_Sidewalk_Straight_01.fbx");
-    side1->lowDetailMeshName = "";
-    side1->scale = glm::vec3(2.0f);
-    side1->positionXYZ = glm::vec3(10.f, -3.f, 400.f);
-    side1->orientationXYZ = glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f);
-    side1->textureNames[0] = "PolygonCity_Texture2.bmp";
-    side1->textureRatios[0] = 1.f;
-    side1->boundingRadius = boundingRadius;
-    ::g_vec_pMeshes.push_back(side1);
-    cMesh* corner1 = new cMesh("City/SM_Env_Road_YellowLines_02.fbx");
-    corner1->lowDetailMeshName = "";
-    corner1->scale = glm::vec3(2.0f);
-    corner1->positionXYZ = glm::vec3(10.f, -3.f, 410.f);
-    corner1->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
-    corner1->textureNames[0] = "PolygonCity_Road_01.bmp";
-    corner1->textureRatios[0] = 1.f;
-    corner1->boundingRadius = boundingRadius;
-    ::g_vec_pMeshes.push_back(corner1);
-    cMesh* corner2 = new cMesh("City/SM_Env_Sidewalk_Corner_01.fbx");
-    corner2->lowDetailMeshName = "";
-    corner2->scale = glm::vec3(2.0f);
-    corner2->positionXYZ = glm::vec3(-10.f, -3.f, 420.f);
-    corner2->orientationXYZ = glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f);
-    corner2->textureNames[0] = "PolygonCity_Texture2.bmp";
-    corner2->textureRatios[0] = 1.f;
-    corner2->boundingRadius = boundingRadius;
-    ::g_vec_pMeshes.push_back(corner2);
 }
 
 void DecorationManager::AddVents() {
