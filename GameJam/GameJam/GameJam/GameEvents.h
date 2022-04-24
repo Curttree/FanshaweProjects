@@ -11,7 +11,9 @@ enum class GameEventType
 	MOUSE_RELEASE,
 	AFK,
 	BACK_IN_ACTION,
-	ANIMATION_EXIT
+	ANIMATION_EXIT,
+	CAN_SHOT,
+	MISSION_COMPLETE
 };
 
 class GameEvent
@@ -95,6 +97,35 @@ private:
 	unsigned int m_Button;
 };
 
+class GameEvent_CanShot : public GameEvent
+{
+public:
+	GameEvent_CanShot(unsigned int index)
+		: GameEvent(GameEventType::CAN_SHOT)
+		, m_index(index) { }
+	virtual ~GameEvent_CanShot() { }
+
+	unsigned int GetIndex() const { return m_index; }
+	virtual bool CompareData(GameEvent* gameEvent);
+private:
+
+	unsigned int m_index;
+};
+
+class GameEvent_MissionComplete : public GameEvent
+{
+public:
+	GameEvent_MissionComplete(unsigned int index)
+		: GameEvent(GameEventType::MISSION_COMPLETE)
+		, m_index(index) { }
+	virtual ~GameEvent_MissionComplete() { }
+
+	unsigned int GetIndex() const { return m_index; }
+	virtual bool CompareData(GameEvent* gameEvent);
+private:
+
+	unsigned int m_index;
+};
 class GameEvent_AFK : public GameEvent
 {
 public:

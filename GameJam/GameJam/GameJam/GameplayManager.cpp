@@ -6,6 +6,7 @@
 #include "particleDefs.h"
 #include "soundDefs.h"
 #include <iostream>
+#include "UIManager.h"
 
 GameplayManager::GameplayManager() {
     this->canList.clear();
@@ -59,6 +60,7 @@ void GameplayManager::SetupScene(void) {
     canList.push_back(can3);
     canList.push_back(can4);
     canList.push_back(can5);
+    cansRemaining = canList.size();
 
     //Set level boundaries.
     {
@@ -175,6 +177,9 @@ void GameplayManager::Fire() {
     if (canList.size() > 0) {
         bool hit = false;
         for (unsigned int index = 0; index < canList.size(); index++) {
+            if (canList[index] == 0) {
+                continue;
+            }
             if (rayHit == canList[index]->rigidBody) {
                 float dist = glm::distance(::g_pFlyCamera->getEye(), canList[index]->mesh->positionXYZ);
                 glm::vec3 point = (dist * glm::normalize(::g_pFlyCamera->getAtDirection())) + ::g_pFlyCamera->getEye();
@@ -182,11 +187,23 @@ void GameplayManager::Fire() {
 
                 if (distance < 1.f) {
                     ::g_pGameEngine->audioManager.PlayAudio(SOUND_PING);
+
+                    GameEvent_CanShot* g_event = new GameEvent_CanShot(index);
+                    UIManager::Instance()->Notify(GameEventType::CAN_SHOT, g_event);
+                    delete g_event;
+
                     canList[index]->rigidBody->ApplyImpulseAtPoint((canList[index]->mesh->positionXYZ - point) * 20.0f / dist, point);
                     canList[index]->Destroy(3.f);
-                    canList.erase(canList.begin() + index);
-                    if (canList.size() == 0) {
+                    canList[index] = 0;
+
+                    cansRemaining--;
+
+                    if (cansRemaining <= 0) {
                         GameOver();
+                        //Supporting IDs for this, even though there is currently only one mission
+                        GameEvent_MissionComplete* g_event = new GameEvent_MissionComplete(0);
+                        UIManager::Instance()->Notify(GameEventType::MISSION_COMPLETE, g_event);
+                        delete g_event;
                     }
                     cParticleFactory::Instance()->createParticle(PARTICLE_SMOKE, end, false);
                     //Exit early.

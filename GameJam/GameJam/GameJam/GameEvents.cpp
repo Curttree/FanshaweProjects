@@ -37,4 +37,13 @@ bool GameEvent_AnimationExit::CompareData(GameEvent* gameEvent)
 	GameEvent_AnimationExit* animationExit = dynamic_cast<GameEvent_AnimationExit*>(gameEvent);
 	return animationExit == nullptr ? false: animationExit->GetAnim() == animID;
 }
-
+bool GameEvent_CanShot::CompareData(GameEvent* gameEvent)
+{
+	GameEvent_CanShot* shot = dynamic_cast<GameEvent_CanShot*>(gameEvent);
+	return shot == nullptr ? false : shot->GetIndex() == m_index;
+}
+bool GameEvent_MissionComplete::CompareData(GameEvent* gameEvent)
+{
+	GameEvent_MissionComplete* mission = dynamic_cast<GameEvent_MissionComplete*>(gameEvent);
+	return mission == nullptr ? false : mission->GetIndex() == m_index;
+}

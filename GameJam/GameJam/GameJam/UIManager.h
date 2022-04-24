@@ -1,15 +1,17 @@
 #pragma once
 #include <vector>
+#include "GameEvents.h"
 #include <cEntity.h>
 #include "UIState.h"
 
-class UIManager {
+class UIManager : public iGameEventListener{
 public:
 	static UIManager* Instance();
 	void Initialize();
 	void TimeStep(float deltaTime);
+	//via iGameEventListener
+	virtual void Notify(GameEventType type, void* data);
 	//Can be made private/ otherwise abstracted.
-	std::vector<int> cans;
 private:
 	static UIManager* _instance;
 	UIManager();
