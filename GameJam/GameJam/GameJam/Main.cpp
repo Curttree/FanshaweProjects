@@ -304,9 +304,9 @@ int main(void) {
     {
         std::cout << "FBO Error: " << FBOerrorString << std::endl;
     }
-    cFBO smallFBO;
+    cFBO uiFBO;
     // Set this off screen texture buffer to a smaller size since it is being rendered at a low resolution.
-    if (smallFBO.init(1200, 640, FBOerrorString))
+    if (uiFBO.init(1200, 640, FBOerrorString))
     {
         std::cout << "UI FBO is all set!" << std::endl;
     }
@@ -403,6 +403,9 @@ int main(void) {
 
     ::g_pFlyCamera->MoveUpDown_Y(2.f);
 
+    glm::vec3 uiEye = ::g_pFlyCamera->getEye();
+    glm::vec3 uiAt = ::g_pFlyCamera->getAtInWorldSpace();
+    glm::vec3 uiUp = ::g_pFlyCamera->getUpVector();
 
 #pragma endregion
     while (!glfwWindowShouldClose(pWindow)) {
@@ -433,20 +436,9 @@ int main(void) {
         ::g_pGameEngine->Update(deltaTime);
 
         // Set the output of the renderer to the screen (default FBO)
-        GLuint FBO_ID = ::g_pFBO->ID;
-        glBindFramebuffer(GL_FRAMEBUFFER, ::g_pFBO->ID);
-
-        // Set the viewport to the size of my offscreen texture (FBO)
-        glViewport(0, 0, ::g_pFBO->width, ::g_pFBO->height);
+        ClearFBO(::g_pFBO);
+        ClearFBO(&uiFBO);
         ratio = ::g_pFBO->width / (float)::g_pFBO->height;
-
-        // Turn on the depth buffer
-        //glEnable(GL_DEPTH);         // Turns on the depth buffer
-        glEnable(GL_DEPTH_TEST);    // Check if the pixel is already closer
-
-        //glViewport(0, 0, width, height);
-        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        ::g_pFBO->clearBuffers(true, true);
 
         // *******************************************************
         // Screen is cleared and we are ready to draw the scene...
@@ -479,32 +471,68 @@ int main(void) {
         ::g_pFlyCamera->Update(deltaTime);
         ::g_pGameEngine->entityManager.TimeStep(deltaTime);
 
-        glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
-        glm::vec3 cameraAt = ::g_pFlyCamera->getAtInWorldSpace();
-        glm::vec3 cameraUp = ::g_pFlyCamera->getUpVector();
 
+        matModel = glm::mat4(1.0f);
 
-        matView = glm::mat4(1.0f);
-        matView = glm::lookAt(cameraEye,   // "eye"
-            cameraAt,    // "at"
-            cameraUp);
 
         cShaderManager::cShaderProgram* pShaderProc = ::g_pShaderManager->pGetShaderProgramFromFriendlyName("Shader#1");
 
-        glUniformMatrix4fv(pShaderProc->getUniformID_From_Name("matView"),
-            1, GL_FALSE, glm::value_ptr(matView));
 
 
         glUniformMatrix4fv(matProjection_Location, 1, GL_FALSE, glm::value_ptr(matProjection));
 
         sFrustum frustum = cFrustumCullingHandler::Instance()->createFromCamera(::g_pFlyCamera);
 
+        matView = glm::mat4(1.0f);
+        matView = glm::lookAt(uiEye,   // "eye"
+            uiAt,    // "at"
+            uiUp);
+
+        glUniformMatrix4fv(pShaderProc->getUniformID_From_Name("matView"),
+            1, GL_FALSE, glm::value_ptr(matView));
+
+        std::vector<cEntity*> ui_entities = ::g_pGameEngine->entityManager.GetUIEntities();
+        for (unsigned int index = 0; index != ui_entities.size(); index++)
+        {
+            // So the code is a little easier...
+            cMesh* pCurrentMesh = ui_entities[index]->mesh;
+
+            DrawObject(pCurrentMesh,
+                matModel,
+                matModel_Location,
+                matModelInverseTranspose_Location,
+                program,
+                ::g_pVAOManager);
+        }
+        {
+            GLuint FSQ_textureUnit = 33;	    // We picked 7 just because yolo (i.e. it doesn't matter, we just had to pick one)
+            glActiveTexture(FSQ_textureUnit + GL_TEXTURE0);
+            GLuint TextureNumber = uiFBO.colourTexture_0_ID;
+            glBindTexture(GL_TEXTURE_2D, TextureNumber);
+
+            // uniform sampler2D texture_07;
+            GLint FSQ_textureSamplerID = glGetUniformLocation(program, "uiTexture");
+            glUniform1i(FSQ_textureSamplerID, FSQ_textureUnit);
+        }
+
+        glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
+        glm::vec3 cameraAt = ::g_pFlyCamera->getAtInWorldSpace();
+        glm::vec3 cameraUp = ::g_pFlyCamera->getUpVector();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, ::g_pFBO->ID);
+        glViewport(0, 0, ::g_pFBO->width, ::g_pFBO->height);
+        matView = glm::mat4(1.0f);
+        matView = glm::lookAt(cameraEye,   // "eye"
+            cameraAt,    // "at"
+            cameraUp);
+
+        glUniformMatrix4fv(pShaderProc->getUniformID_From_Name("matView"),
+            1, GL_FALSE, glm::value_ptr(matView));
         // **********************************************************************
         // Draw the "scene" of all objects.
         // i.e. go through the vector and draw each one...
         // **********************************************************************
 
-        matModel = glm::mat4(1.0f);
         for (unsigned int index = 0; index != ::g_vec_pMeshes.size(); index++)
         {
             // So the code is a little easier...

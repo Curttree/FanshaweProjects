@@ -250,6 +250,13 @@ void main()
 			sampleColour.b += texture(crosshair, UVlookupCrosshair).b;
 		}
 		
+		vec2 UVlookupUI;
+		UVlookupUI.x = gl_FragCoord.x / screenWidthHeight.x;	// Width
+		UVlookupUI.y = gl_FragCoord.y / screenWidthHeight.y;	// Height
+		sampleColour.r += texture(uiTexture, UVlookupUI).r;
+		sampleColour.g += texture(uiTexture, UVlookupUI).g;
+		sampleColour.b += texture(uiTexture, UVlookupUI).b;
+		
 		pixelOutputFragColour.rgb = sampleColour.rgb;
 		//Does this need to be 100%? TODO: See if I can turn down alpha.
 		pixelOutputFragColour.a = 1.0f;

@@ -106,6 +106,11 @@ void EntityManager::TimeStep(float deltaTime) {
 			entity->TimeStep(deltaTime);
 		}
 	}
+	for (cEntity* entity : ui_entities) {
+		if (entity->mesh) {
+			entity->TimeStep(deltaTime);
+		}
+	}
 	CleanupParticles();
 }
 
