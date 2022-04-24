@@ -31,10 +31,14 @@ cProp* cPropFactory::createProp(int type, glm::vec3 position, glm::vec3 orientat
 		result->mesh->boundingRadius = 1.f;
 		break;
 	case(PROP_CITY_IMPOSTER):
-		result = ::g_pGameEngine->entityManager.CreateProp("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply", "city_imposter.bmp", position, eShapeType::None, glm::vec3(200.f,150.f,10.f));
+		result = ::g_pGameEngine->entityManager.CreateProp("Imposter_Shapes/Quad_1_sided_aligned_on_XY_plane.ply", "city_imposter.bmp", position, eShapeType::None, glm::vec3(160.f,50.f,10.f));
 		result->mesh->orientationXYZ = glm::vec3(0.f, glm::pi<float>(), 0.f);
-		result->rotation = result->mesh->orientationXYZ;
+		result->mesh->textureNames[8] = "city_imposter.bmp";
+		result->mesh->bUseDiscardTransparency = true;
 		result->mesh->meshName = "";
+		result->mesh->highDetailMeshName = "";
+		result->mesh->bDontLight = true;
+		result->rotation = result->mesh->orientationXYZ;
 		result->mesh->boundingRadius = 10.f;
 		break;	
 	case(PROP_TEST_GROUND):

@@ -253,12 +253,12 @@ int main(void) {
     std::string errorTextString;
     ::g_pTextureManager->SetBasePath("assets/textures/cubemaps");
     if (!::g_pTextureManager->CreateCubeTextureFromBMPFiles("Skybox",
-        "uw_lf.bmp",    /* posX_fileName */
-        "uw_rt.bmp",     /*negX_fileName */
+        "uw_rt.bmp",    /* posX_fileName */
+        "uw_lf.bmp",     /*negX_fileName */
         "uw_dn.bmp",     /*negY_fileName*/
         "uw_up.bmp",       /*posY_fileName*/
-        "uw_ft.bmp",    /*posZ_fileName*/
-        "uw_bk.bmp",      /*negZ_fileName*/
+        "uw_bk.bmp",    /*posZ_fileName*/
+        "uw_ft.bmp",      /*negZ_fileName*/
         true, errorTextString))
     {
         std::cout << "Didn't load because: " << errorTextString << std::endl;
@@ -358,6 +358,7 @@ int main(void) {
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Prop_ParkBench_01.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Env_Road_Bare_01.fbx", program);
     ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Env_Sidewalk_01.fbx", program);
+    ::g_pVAOManager->LoadMeshWithAssimp("City/SM_Prop_LightPole_Arm_01.fbx", program);
     
     
    // ::g_pVAOManager->LoadMeshWithAssimp("blobby.fbx", program);

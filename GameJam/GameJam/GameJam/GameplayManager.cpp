@@ -16,49 +16,49 @@ GameplayManager::~GameplayManager() {
 }
 
 void GameplayManager::SetupScene(void) {
-    //cProp* can1 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(13.2f, 1.f, 39.8f));
-    //cProp* can2 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(-22.f, 1.f, 66.f),glm::vec3(0.f,glm::pi<float>()/2.f,0.f));
-    //cProp* can3 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(13.5f, 4.f, 140.f), glm::vec3(0.f, glm::pi<float>() / 5.f, 0.f));
-    //cProp* can4 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(15.f, 1.f, 210.f), glm::vec3(0.f, -glm::pi<float>() / 6.f, 0.f));
-    //cProp* can5 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(-13.f, 4.f, 230.f));
-    //cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(13.6f, -3.f, 40.f));
-    //cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(15.f, -3.f, 35.f), glm::vec3(0.f, glm::pi<float>() / 7.f, 0.f));
-    //cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(13.6f, -3.f, 300.f), glm::vec3(0.f, glm::pi<float>() / 4.f, 0.f));
-    //cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(12.f, -3.f, 285.f), glm::vec3(0.f, -glm::pi<float>() / 5.f, 0.f));
+    cProp* can1 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(13.2f, 1.f, 39.8f));
+    cProp* can2 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(-22.f, 1.f, 66.f),glm::vec3(0.f,glm::pi<float>()/2.f,0.f));
+    cProp* can3 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(13.5f, 4.f, 140.f), glm::vec3(0.f, glm::pi<float>() / 5.f, 0.f));
+    cProp* can4 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(15.f, 1.f, 210.f), glm::vec3(0.f, -glm::pi<float>() / 6.f, 0.f));
+    cProp* can5 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(-13.f, 4.f, 230.f));
+    cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(13.6f, -3.f, 40.f));
+    cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(15.f, -3.f, 35.f), glm::vec3(0.f, glm::pi<float>() / 7.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(13.6f, -3.f, 300.f), glm::vec3(0.f, glm::pi<float>() / 4.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(12.f, -3.f, 285.f), glm::vec3(0.f, -glm::pi<float>() / 5.f, 0.f));
 
-    //cPropFactory::Instance()->createProp(PROP_HOTDOG_STAND, glm::vec3(14.f, 0.f, 140.f),glm::vec3(0.f,glm::pi<float>() / 2.f,0.f));
+    cPropFactory::Instance()->createProp(PROP_HOTDOG_STAND, glm::vec3(14.f, 0.f, 140.f),glm::vec3(0.f,glm::pi<float>() / 2.f,0.f));
 
-    //cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(15.f, 0.f, 0.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
-    //cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(15.f, 0.f, 200.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
-    //cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(15.f, 0.f, 400.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
-    //cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(-15.f, 0.f, 100.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
-    //cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(-15.f, 0.f, 300.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(15.f, 0.f, 0.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(15.f, 0.f, 200.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(15.f, 0.f, 400.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(-15.f, 0.f, 100.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(-15.f, 0.f, 300.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
 
-    //cPropFactory::Instance()->createProp(PROP_PARKING, glm::vec3(13.f, 0.f, 50.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
-    //cPropFactory::Instance()->createProp(PROP_PARKING, glm::vec3(-13.f, 0.f, 250.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
-    //cPropFactory::Instance()->createProp(PROP_PARKING, glm::vec3(-13.f, 0.f, -50.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_PARKING, glm::vec3(13.f, 0.f, 50.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_PARKING, glm::vec3(-13.f, 0.f, 250.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_PARKING, glm::vec3(-13.f, 0.f, -50.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
 
-    //cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(-21.f, 0.f, 49.5f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
-    //cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(-21.f, 0.f, 150.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
-    //cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(-21.f, 0.f, 349.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
-    //cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(21.5f, 0.f, 106.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
-    //cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(21.5f, 0.f, 230.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(-21.f, 0.f, 49.5f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(-21.f, 0.f, 150.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(-21.f, 0.f, 349.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(21.5f, 0.f, 106.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(21.5f, 0.f, 230.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
 
 
-    //cPropFactory::Instance()->createProp(PROP_BENCH, glm::vec3(-13.f, 0.f, 230.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_BENCH, glm::vec3(-13.f, 0.f, 230.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
 
-    //cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(15.f, -3.f, 380.f));
-    //cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(5.f, -3.f, 380.f));
-    //cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(-5.f, -3.f, 380.f));
-    //cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(-15.f, -3.f, 380.f));
+    cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(15.f, -3.f, 380.f));
+    cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(5.f, -3.f, 380.f));
+    cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(-5.f, -3.f, 380.f));
+    cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(-15.f, -3.f, 380.f));
 
-    ////cPropFactory::Instance()->createProp(PROP_CITY_IMPOSTER, glm::vec3(0.f, 65.f, 450.f));
+    cPropFactory::Instance()->createProp(PROP_CITY_IMPOSTER, glm::vec3(0.f, 17.f, 450.f));
 
-    //canList.push_back(can1);
-    //canList.push_back(can2);
-    //canList.push_back(can3);
-    //canList.push_back(can4);
-    //canList.push_back(can5);
+    canList.push_back(can1);
+    canList.push_back(can2);
+    canList.push_back(can3);
+    canList.push_back(can4);
+    canList.push_back(can5);
 
     //Set level boundaries.
     {
@@ -171,9 +171,6 @@ void GameplayManager::Fire() {
     glm::vec3 end = (1000.f * glm::normalize(::g_pFlyCamera->getAtDirection())) + ::g_pFlyCamera->getEye();
     gdp2022Physics::iCollisionBody* rayHit = ::g_pGameEngine->m_PhysicsWorld->RayHit(start, end);
     ::g_pGameEngine->audioManager.PlayAudio(SOUND_GUN);
-
-    //cParticleFactory::Instance()->createParticle(PARTICLE_SMOKE, start, false);
-    std::cout << (int)glm::distance(start, end)/20 << std::endl;
 
     if (canList.size() > 0) {
         bool hit = false;

@@ -1,7 +1,7 @@
 #include "cMesh.h"
 #include "../../GameJam/globals.h"
 
-cMesh::cMesh(std::string _meshName) : meshName(_meshName), lowDetailMeshName(_meshName), midDetailMeshName(_meshName)
+cMesh::cMesh(std::string _meshName) : meshName(_meshName), lowDetailMeshName(_meshName), midDetailMeshName(_meshName), highDetailMeshName(_meshName)
 {
 	this->positionXYZ = glm::vec3(0.0f, 0.0f, 0.0f);
 	this->orientationXYZ = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -60,6 +60,7 @@ void cMesh::setAllMeshNames(std::string name) {
 	meshName = name;
 	lowDetailMeshName = name;
 	midDetailMeshName = name;
+	highDetailMeshName = name;
 }
 
 void cMesh::UpdateTransforms(float time1, Animation* animation1, float time2,

@@ -262,8 +262,11 @@ std::string GetAppropriateModel(cMesh* pCurrentMesh) {
     if (distance > 400.f) {
         return pCurrentMesh->lowDetailMeshName;
     }
-    else if (distance > 100.f) {
+    else if (distance > 200.f) {
         return pCurrentMesh->midDetailMeshName;
+    }
+    else if (distance > 100.f) {
+        return pCurrentMesh->highDetailMeshName;
     }
     return pCurrentMesh->meshName;
 }

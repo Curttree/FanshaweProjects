@@ -281,7 +281,7 @@ void main()
 		vec3 vec3DisSample = texture( discardTexture, fUVx2.xy ).rgb;
 		// Take average of this RGB sample
 		//
-		if (abs(discardColour.r - vec3DisSample.r) < 0.01f &&  abs(discardColour.g - vec3DisSample.g) < 0.01f && abs(discardColour.b - vec3DisSample.b) < 0.01f)
+		if (abs(discardColour.r - vec3DisSample.r) < 0.1f &&  abs(discardColour.g - vec3DisSample.g) < 0.1f && abs(discardColour.b - vec3DisSample.b) < 0.1f)
 		{	// "close enough"
 		
 			// DON'T even draw the pixel here

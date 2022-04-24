@@ -15,6 +15,7 @@ class cMesh
 public:
 	cMesh(std::string _name);
 	std::string meshName;		// The 3D Mesh model we are drawing. Should be made private if I think it will be abused. Really should use settter instead of calling directly.
+	std::string highDetailMeshName;
 	std::string midDetailMeshName;
 	std::string lowDetailMeshName;
 	void setAllMeshNames(std::string name);

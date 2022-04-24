@@ -20,7 +20,7 @@ void DecorationManager::DecorateScene() {
     
     BuildStreet(-50,400); 
     BuildStreetsAhead(400.f);
-   // AddVents();
+    AddVents();
 }
 
 void DecorationManager::GetBuildingParts(std::string& door, std::string& stack, std::string& roof) {
