@@ -167,9 +167,14 @@ void GameplayManager::GameOver() {
 }
 
 void GameplayManager::Fire() {
+    glm::vec3 start = ::g_pFlyCamera->getEye() + (::g_pFlyCamera->getAtDirection() * glm::length(glm::vec3(1.5f, 5.5f, -5.f)));
     glm::vec3 end = (1000.f * glm::normalize(::g_pFlyCamera->getAtDirection())) + ::g_pFlyCamera->getEye();
-    gdp2022Physics::iCollisionBody* rayHit = ::g_pGameEngine->m_PhysicsWorld->RayHit((::g_pFlyCamera->getEye() + (::g_pFlyCamera->getAtDirection() * glm::length(glm::vec3(1.5f, 5.5f, -5.f)))), end);
+    gdp2022Physics::iCollisionBody* rayHit = ::g_pGameEngine->m_PhysicsWorld->RayHit(start, end);
     ::g_pGameEngine->audioManager.PlayAudio(SOUND_GUN);
+
+    //cParticleFactory::Instance()->createParticle(PARTICLE_SMOKE, start, false);
+    std::cout << (int)glm::distance(start, end)/20 << std::endl;
+
     if (canList.size() > 0) {
         bool hit = false;
         for (unsigned int index = 0; index < canList.size(); index++) {

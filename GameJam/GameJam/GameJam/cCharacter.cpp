@@ -7,7 +7,7 @@
 #include <PhysicsConversion.h>
 #include "particleDefs.h"
 
-cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) : animationStateMachine(AnimationState::Waiting), particleEmitter(PARTICLE_BUBBLE, startPosition + glm::vec3(0.f,5.f,0.f), 0.05f, glm::vec3(0.f,0.01f,0.f), 0.5f, 1.f, 0.1f ){
+cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) : animationStateMachine(AnimationState::Waiting), particleEmitter(PARTICLE_BUBBLE, startPosition + glm::vec3(0.f,2.f,0.f), 0.1f, glm::vec3(0.f,0.01f,0.f), 0.1f, 1.f, 0.1f ){
     //Mesh
     cMesh* character_mesh = new cMesh("Characters/Detective/detective@wait.fbx");
     character_mesh->scale = glm::vec3(0.00025f);
@@ -34,6 +34,7 @@ cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) : an
     mesh->vec_pChildMeshes.push_back(gun);
 
     isIdle = true;
+    smokeDelay = 15.f;
 
     //Animations
     BuildAnimationTransitions(); 
@@ -112,6 +113,13 @@ void cCharacter::LoadAnimation() {
     else {
         mesh->vec_pChildMeshes[0]->scale = glm::vec3(0.f);
     }
+    if (animationStateMachine.GetCurrentState() == AnimationState::Waiting) {
+        particleEmitter.SetPosition(this->position + glm::vec3(0.f, 5.f, 0.f));
+        waitingTimer = 0.001f;
+    }
+    else {
+        waitingTimer = 0.f;
+    }
 
 }
 
@@ -166,8 +174,16 @@ void cCharacter::TimeStep(float deltaTime) {
     if (!GetGunPosition(pos)) {
         mesh->vec_pChildMeshes[0]->scale = glm::vec3(0.f);
     }
-    //TODO: Check to see if smoking, update emitter position according to position/rotation.
-    particleEmitter.TimeStep(deltaTime);
+    //This is a last minute hack to make the particles appear correctly. Should be rewritten as part of a state machine.
+    if (waitingTimer > 0.f) {
+        waitingTimer += deltaTime;
+        if (waitingTimer >= 20.f) {
+            waitingTimer = 0.f;
+        }
+        if (waitingTimer > smokeDelay) {
+            particleEmitter.TimeStep(deltaTime);
+        }
+    }
 
     cEntity::TimeStep(deltaTime);
    

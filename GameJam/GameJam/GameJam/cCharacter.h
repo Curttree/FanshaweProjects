@@ -36,8 +36,14 @@ private:
 
 	float idleTimer = 0.f;
 	float maxIdleTime = 15.f;
+
 	float stoppingTimer = 0.f;
 	float maxStoppingTime = 0.5f;
+
+	float smokeDelay = 10.f;
+	float waitingTimer = 0.f;
+
+
 	bool isIdle;
 	bool isStopping;
 	glm::vec3 proxyOffset;

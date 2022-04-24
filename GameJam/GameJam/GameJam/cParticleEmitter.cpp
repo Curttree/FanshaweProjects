@@ -8,7 +8,7 @@ cParticleEmitter::cParticleEmitter(unsigned int _particleType, glm::vec3 _positi
 
 }
 cParticleEmitter::~cParticleEmitter() {
-
+	//Any created particles will be disposed of by the entityManager.
 }
 
 void cParticleEmitter::TimeStep(float deltaTime) {
@@ -24,3 +24,8 @@ void cParticleEmitter::TimeStep(float deltaTime) {
 
 	}
 }
+
+void cParticleEmitter::SetPosition(glm::vec3 newPos) {
+	position = newPos;
+}
+

@@ -5,6 +5,7 @@ class cParticleEmitter {
 public:
 	cParticleEmitter(unsigned int _particleType, glm::vec3 _position, float _spread, glm::vec3 _direction, float _spawnTime, float _maxScale = 1.f, float _minScale = 1.f);
 	virtual ~cParticleEmitter();
+	void SetPosition(glm::vec3 newPos);
 	void TimeStep(float deltaTime);
 private:
 	float spawnTimer = 0.f;
