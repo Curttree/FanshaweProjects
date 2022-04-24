@@ -45,24 +45,24 @@ void handleAsyncKeyboard(GLFWwindow* pWindow, double deltaTime)
         //{
         //    ::g_pFlyCamera->MoveLeftRight_X(+cameraMoveSpeed);
         //}
-        if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS )	// "up"
-        {
-            ::g_pFlyCamera->MoveUpDown_Y(-cameraMoveSpeed);
-        }
-        if ( glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS )	// "down"
-        {
-            ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
-        }
+        //if ( glfwGetKey(pWindow, GLFW_KEY_Q) == GLFW_PRESS )	// "up"
+        //{
+        //    ::g_pFlyCamera->MoveUpDown_Y(-cameraMoveSpeed);
+        //}
+        //if ( glfwGetKey(pWindow, GLFW_KEY_E) == GLFW_PRESS )	// "down"
+        //{
+        //    ::g_pFlyCamera->MoveUpDown_Y(+cameraMoveSpeed);
+        //}
 
-        std::stringstream strTitle;
-        // std::cout << 
-        glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
-        strTitle << "Camera: "
-            << cameraEye.x << ", "
-            << cameraEye.y << ", "
-            << cameraEye.z; //<< std::endl;
+        //std::stringstream strTitle;
+        //// std::cout << 
+        //glm::vec3 cameraEye = ::g_pFlyCamera->getEye();
+        //strTitle << "Camera: "
+        //    << cameraEye.x << ", "
+        //    << cameraEye.y << ", "
+        //    << cameraEye.z; //<< std::endl;
 
-        ::g_TitleText = strTitle.str();
+        //::g_TitleText = strTitle.str();
 
     }//if ( cGFLWKeyboardModifiers::areAllModsUp(pWindow) )
 

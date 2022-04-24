@@ -24,7 +24,7 @@ cParticle* cParticleFactory::createParticle(int type, glm::vec3 position, bool f
 		break;
 	}
 	case PARTICLE_BUBBLE: {
-		result = ::g_pGameEngine->entityManager.CreateParticle("bubble.bmp", 3.f, position, 0.2f, followCameraPosition, glm::vec3(0.5f));
+		result = ::g_pGameEngine->entityManager.CreateParticle("bubble.bmp", 3.f, position, 0.5f, followCameraPosition, glm::vec3(0.5f));
 		result->velocity = glm::vec3(0.f, 0.1f, 0.f);
 		break;
 	}

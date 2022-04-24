@@ -29,10 +29,22 @@ const std::vector<cEntity*>&EntityManager::GetEntities(void)
 	return entities;
 }
 
+const std::vector<cEntity*>& EntityManager::GetUIEntities(void)
+{
+	return ui_entities;
+}
+
 cEntity* EntityManager::CreateEntity(void)
 {
 	cEntity* newEntity = new cEntity();
 	entities.push_back(newEntity);
+	return newEntity;
+}
+
+cEntity* EntityManager::CreateUIEntity(void)
+{
+	cEntity* newEntity = new cEntity();
+	ui_entities.push_back(newEntity);
 	return newEntity;
 }
 

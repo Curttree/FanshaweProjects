@@ -20,7 +20,11 @@ public:
 	cCharacter* GetPlayer(void);
 
 	const std::vector<cEntity*>& GetEntities(void);
+	const std::vector<cEntity*>& GetUIEntities(void);
+
 	cEntity* CreateEntity(void);
+	cEntity* CreateUIEntity(void);
+
 	void DeleteEntity(cEntity* entity);
 
 	const std::vector<cParticle*>& GetParticles(void);
@@ -32,6 +36,7 @@ public:
 private:
 	void CleanupParticles();
 	std::vector<cEntity*> entities;
+	std::vector<cEntity*> ui_entities;
 	std::vector<cParticle*> particles;
 	std::vector<cParticle*> particlesToDelete;
 	cCharacter* player;

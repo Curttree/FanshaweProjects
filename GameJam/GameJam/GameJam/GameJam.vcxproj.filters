@@ -216,6 +216,9 @@
     <ClCompile Include="cParticleEmitter.cpp">
       <Filter>GameJam</Filter>
     </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>GameEngine\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -379,6 +382,12 @@
     </ClInclude>
     <ClInclude Include="globalFunctions.h">
       <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>GameEngine\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="UIState.h">
+      <Filter>Enums</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

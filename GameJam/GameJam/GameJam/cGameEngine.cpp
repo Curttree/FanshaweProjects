@@ -9,6 +9,7 @@
 #include <Animation/cCommand_ConsoleOutput.h>
 #include <Animation/cCommand_PlaySound.h>
 #include "DecorationManager.h"
+#include "UIManager.h"
 
 cGameEngine::cGameEngine(void)
 {
@@ -39,6 +40,7 @@ bool cGameEngine::Initialize(void)
 	m_PhysicsWorld = m_PhysicsFactory->CreateWorld();	
 	m_PhysicsWorld->SetGravity(glm::vec3(0.f, -4.905f, 0.f));
 
+	UIManager::Instance()->Initialize();
 	return true;
 }
 
@@ -57,6 +59,7 @@ void cGameEngine::Update(float dt)
 	}
 	entityManager.TimeStep(dt);
 	DecorationManager::Instance()->TimeStep(dt);
+	UIManager::Instance()->TimeStep(dt);
 	HandlePlayerInput();
 }
 

@@ -58,6 +58,22 @@ void Shutdown(GLFWwindow* pWindow){
     exit(EXIT_SUCCESS);
 }
 
+void ClearFBO(cFBO* fbo) {
+
+    // Set the output of the renderer to the fbo
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo->ID);
+
+    // Set the viewport to the size of my offscreen texture (FBO)
+    glViewport(0, 0, fbo->width, fbo->height);
+
+    // Turn on the depth buffer
+    glEnable(GL_DEPTH);         // Turns on the depth buffer
+    glEnable(GL_DEPTH_TEST);    // Check if the pixel is already closer
+
+    fbo->clearBuffers(true, true);
+
+}
+
 int main(void) {
     //Seed rand.
     srand(time(NULL));
@@ -167,11 +183,11 @@ int main(void) {
 //    ::g_pTheLights->theLights[0].param1.x = 1.0f;    // Spot light
     ::g_pTheLights->theLights[0].param1.x = 2.0f;    // Directional light
     ::g_pTheLights->theLights[0].direction = glm::vec4(0.0f, -1.0f, 0.0f, 1.0f);
-    ::g_pTheLights->theLights[0].diffuse = glm::vec4(0.5529f, 0.3725f, 0.5882f, 1.0f);
+    ::g_pTheLights->theLights[0].diffuse = glm::vec4(0.5725f, 0.3725f, 0.5882f, 1.0f);
     ::g_pTheLights->theLights[0].param1.y = 15.0f;   // Inner
     ::g_pTheLights->theLights[0].param1.z = 30.0f;   // Outer
-    ::g_pTheLights->theLights[0].atten.y = 0.000001f;
-    ::g_pTheLights->theLights[0].atten.z = 0.00000001f;
+    ::g_pTheLights->theLights[0].atten.y = 0.001f;
+    ::g_pTheLights->theLights[0].atten.z = 0.00001f;
     ::g_pTheLights->TurnOnLight(0);  // Or this!
 
     // Get the uniform locations of the light shader values
@@ -247,6 +263,10 @@ int main(void) {
     ::g_pTextureManager->Create2DTextureFromBMPFile("Animations/smoke02.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Animations/smoke03.bmp", true);
     ::g_pTextureManager->Create2DTextureFromBMPFile("Animations/smoke04.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("mission_title.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("mission_complete.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("can_icon.bmp", true);
+    ::g_pTextureManager->Create2DTextureFromBMPFile("can_icon_x.bmp", true);
     
 
     // Add a skybox texture

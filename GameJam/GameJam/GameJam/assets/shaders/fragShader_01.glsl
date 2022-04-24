@@ -138,6 +138,7 @@ uniform sampler2D specularMapTexture;
 // Effect textures
 uniform sampler2D staticTexture;
 uniform sampler2D waterTexture;
+uniform sampler2D uiTexture;
 
 uniform vec3 maxDepthColour;
 uniform vec3 depthColourMultiplier;
@@ -230,8 +231,15 @@ void main()
 		sampleColour.rgb *= totalTime / 6.0f;
 		}
 
-		// Tint the colour blue.
-		sampleColour.b *= 1.25f;
+		// Tint the colour based on its distance.
+		sampleColour.b *= 1.65f * texture(texture_08, UVlookup).b;
+		if (texture(texture_08, UVlookup).r != 0.f){
+			sampleColour.r *= 1.34f / texture(texture_08, UVlookup).r;
+		}
+		
+		sampleColour.r *= min(0.4f, 0.7f / pow(texture(texture_08, UVlookup).r,3));
+		sampleColour.g *= min(0.4f, 0.7f / pow(texture(texture_08, UVlookup).g,3));
+		sampleColour.b *= min(0.4f, 0.7f / pow(texture(texture_08, UVlookup).b,3));
 		
 		if (bShowCrosshair){
 			vec2 UVlookupCrosshair;
