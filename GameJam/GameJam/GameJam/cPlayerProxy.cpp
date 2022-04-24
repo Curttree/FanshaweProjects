@@ -16,7 +16,7 @@ cPlayerProxy::cPlayerProxy(glm::vec3 position) {
     this->scale = glm::vec3(1.f,2.5f,1.f);
     rotation = proxy_mesh->orientationXYZ;
 
-    walkSpeed = 150.f;
+    walkSpeed = 200.f;
     runSpeed = 400.f;
 
     InitializePhysics(eShapeType::Cylinder, 50.f, this->scale);

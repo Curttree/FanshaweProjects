@@ -49,10 +49,10 @@ this->FOV = 0.6f;			// Field of view
 
 this->m_CurrentState = cFlyCamera::DEFAULT_OR_UNSPECIFIED;
 
-this->maxPitchDegrees = 15.f;
+this->maxPitchDegrees = 10.f;
 this->minPitchDegrees = -15.f;
 
-this->maxYawDegrees = 40.f;
+this->maxYawDegrees = 35.f;
 this->minYawDegrees = -40.f;
 
 this->aimCamOffset = glm::vec3(1.5f, 5.5f, -5.f);
