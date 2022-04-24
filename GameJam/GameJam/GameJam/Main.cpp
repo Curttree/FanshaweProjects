@@ -91,7 +91,7 @@ int main(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    pWindow = glfwCreateWindow(1200, 640, "Curtis Tremblay - Game Jam Project", NULL, NULL);
+    pWindow = glfwCreateWindow(1200, 640, "'Something's Fishy' | Curtis Tremblay - Fanshawe 2022 Game Jam Project", NULL, NULL);
 
     if (!pWindow)
     {
@@ -445,7 +445,7 @@ int main(void) {
         // *******************************************************
 
         // Update the title text
-        glfwSetWindowTitle(pWindow, ::g_TitleText.c_str());
+        //glfwSetWindowTitle(pWindow, "'Something's Fishy' | Curtis Tremblay - Fanshawe 2022 Game Jam Project");
 
 
         // Copy the light information into the shader to draw the scene

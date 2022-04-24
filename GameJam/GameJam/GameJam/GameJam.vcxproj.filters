@@ -389,6 +389,7 @@
     <ClInclude Include="UIState.h">
       <Filter>Enums</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\fragShader_01.glsl">
@@ -412,5 +413,11 @@
     <None Include="assets\shaders\geomShader_01.glsl">
       <Filter>Graphics\ShaderManager\Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameJam.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
 </Project>

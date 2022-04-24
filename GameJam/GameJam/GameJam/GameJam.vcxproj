@@ -257,6 +257,7 @@
     <ClInclude Include="globals.h" />
     <ClInclude Include="particleDefs.h" />
     <ClInclude Include="propDefs.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="soundDefs.h" />
     <ClInclude Include="TextureMapping\C24BitBMPpixel.h" />
     <ClInclude Include="TextureMapping\cBasicTextureManager.h" />
@@ -273,6 +274,12 @@
     <None Include="assimp-vc142-mdd.dll" />
     <None Include="assimp-vc142-mt.dll" />
     <None Include="assimp-vc142-mtd.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameJam.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
