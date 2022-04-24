@@ -1,6 +1,6 @@
 #pragma once
 
-class Animation;
+struct Animation;
 
 enum class GameEventType
 {

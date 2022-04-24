@@ -16,13 +16,27 @@ GameplayManager::~GameplayManager() {
 }
 
 void GameplayManager::SetupScene(void) {
-    cProp* can1 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(0.f, 3.f, 230.f));
-    cProp* can2 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(-22.f, 3.f, 66.f),glm::vec3(0.f,glm::pi<float>()/2.f,0.f));
+    cProp* can1 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(13.2f, 1.f, 39.8f));
+    cProp* can2 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(-22.f, 1.f, 66.f),glm::vec3(0.f,glm::pi<float>()/2.f,0.f));
     cProp* can3 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(13.5f, 4.f, 140.f), glm::vec3(0.f, glm::pi<float>() / 5.f, 0.f));
-    cProp* can4 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(13.2f, 2.f, 39.8f));
-    cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(13.6f, 0.f, 40.f));
-    cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(15.f, 0.f, 35.f), glm::vec3(0.f, glm::pi<float>() / 7.f, 0.f));
+    cProp* can4 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(15.f, 1.f, 210.f), glm::vec3(0.f, -glm::pi<float>() / 6.f, 0.f));
+    cProp* can5 = cPropFactory::Instance()->createProp(PROP_CAN, glm::vec3(-13.f, 4.f, 230.f));
+    cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(13.6f, -3.f, 40.f));
+    cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(15.f, -3.f, 35.f), glm::vec3(0.f, glm::pi<float>() / 7.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(13.6f, -3.f, 300.f), glm::vec3(0.f, glm::pi<float>() / 4.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_BOX, glm::vec3(12.f, -3.f, 285.f), glm::vec3(0.f, -glm::pi<float>() / 5.f, 0.f));
+
     cPropFactory::Instance()->createProp(PROP_HOTDOG_STAND, glm::vec3(14.f, 0.f, 140.f),glm::vec3(0.f,glm::pi<float>() / 2.f,0.f));
+
+    cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(15.f, 0.f, 0.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(15.f, 0.f, 200.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(15.f, 0.f, 400.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(-15.f, 0.f, 100.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_LIGHT, glm::vec3(-15.f, 0.f, 300.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
+
+    cPropFactory::Instance()->createProp(PROP_PARKING, glm::vec3(13.f, 0.f, 50.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_PARKING, glm::vec3(-13.f, 0.f, 250.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
+    cPropFactory::Instance()->createProp(PROP_PARKING, glm::vec3(-13.f, 0.f, -50.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
 
     cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(-21.f, 0.f, 49.5f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
     cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(-21.f, 0.f, 150.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
@@ -30,19 +44,21 @@ void GameplayManager::SetupScene(void) {
     cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(21.5f, 0.f, 106.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
     cPropFactory::Instance()->createProp(PROP_PLANTER, glm::vec3(21.5f, 0.f, 230.f), glm::vec3(0.f, -glm::pi<float>() / 2.f, 0.f));
 
+
+    cPropFactory::Instance()->createProp(PROP_BENCH, glm::vec3(-13.f, 0.f, 230.f), glm::vec3(0.f, glm::pi<float>() / 2.f, 0.f));
+
     cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(15.f, -3.f, 380.f));
     cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(5.f, -3.f, 380.f));
     cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(-5.f, -3.f, 380.f));
     cPropFactory::Instance()->createProp(PROP_BARRIER, glm::vec3(-15.f, -3.f, 380.f));
-    cPropFactory::Instance()->createProp(PROP_CITY_IMPOSTER, glm::vec3(0.f, 20.f, 200.f));
-    //cPropFactory::Instance()->createProp(PROP_TEST_GROUND, glm::vec3(0.f, -3.5f, 50.f));
 
-    //cParticleFactory::Instance()->createParticle(PARTICLE_TEST, glm::vec3(0.f,10.f,40.f), false);
+    cPropFactory::Instance()->createProp(PROP_CITY_IMPOSTER, glm::vec3(0.f, 65.f, 450.f));
 
     canList.push_back(can1);
     canList.push_back(can2);
     canList.push_back(can3);
     canList.push_back(can4);
+    canList.push_back(can5);
 
     //Set level boundaries.
     {
@@ -170,6 +186,7 @@ void GameplayManager::Fire() {
                     if (canList.size() == 0) {
                         GameOver();
                     }
+                    cParticleFactory::Instance()->createParticle(PARTICLE_SMOKE, end, false);
                     //Exit early.
                     return;
                 }

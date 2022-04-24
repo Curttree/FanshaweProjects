@@ -11,6 +11,8 @@ public:
 private:
 	std::vector<int> leftVents;
 	std::vector<int> rightVents;
+	std::vector<int> leftLights;
+	std::vector<int> rightLights;
 	DecorationManager();
 	void AddVents();
 	void BuildStreet();

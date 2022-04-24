@@ -226,8 +226,8 @@ void main()
 		sampleColour += (blurColour - sampleColour) * (texture(texture_08, UVlookup).r - 0.5f);
 		}
 		
-		if (totalTime < 4.2f){
-		sampleColour.rgb *= totalTime / 4.2f;
+		if (totalTime < 6.0f){
+		sampleColour.rgb *= totalTime / 6.0f;
 		}
 
 		// Tint the colour blue.

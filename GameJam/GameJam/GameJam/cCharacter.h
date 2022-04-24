@@ -4,6 +4,7 @@
 #include "AnimationStateMachine.h"
 #include <Fanshawe2022Physics/interfaces/iCharacter.h>
 #include "cPlayerProxy.h"
+#include "cParticleEmitter.h"
 
 
 class cCharacter : public cEntity, public iGameEventListener {
@@ -28,6 +29,7 @@ public:
 private:
 	iCharacter* physicsCharacter;
 	AnimationStateMachine animationStateMachine;
+	cParticleEmitter particleEmitter;
 
 	float height = 1.f;
 	float diameter = 1.f;

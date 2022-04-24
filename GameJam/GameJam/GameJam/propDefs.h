@@ -8,3 +8,6 @@
 #define PROP_HOTDOG_STAND 6
 #define PROP_BARRIER 7
 #define PROP_PLANTER 8
+#define PROP_LIGHT 9
+#define PROP_PARKING 10
+#define PROP_BENCH 11

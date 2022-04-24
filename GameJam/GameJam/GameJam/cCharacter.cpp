@@ -5,9 +5,9 @@
 #include <iostream>
 #include <glm/gtx/matrix_decompose.hpp>
 #include <PhysicsConversion.h>
-#include <../BulletCollision/CollisionDispatch/btGhostObject.h>
+#include "particleDefs.h"
 
-cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) : animationStateMachine(AnimationState::Waiting) {
+cCharacter::cCharacter(glm::vec3 startPosition, glm::vec3 startOrientation) : animationStateMachine(AnimationState::Waiting), particleEmitter(PARTICLE_BUBBLE, startPosition + glm::vec3(0.f,5.f,0.f), 0.05f, glm::vec3(0.f,0.01f,0.f), 0.5f, 1.f, 0.1f ){
     //Mesh
     cMesh* character_mesh = new cMesh("Characters/Detective/detective@wait.fbx");
     character_mesh->scale = glm::vec3(0.00025f);
@@ -166,20 +166,11 @@ void cCharacter::TimeStep(float deltaTime) {
     if (!GetGunPosition(pos)) {
         mesh->vec_pChildMeshes[0]->scale = glm::vec3(0.f);
     }
-    cEntity::TimeStep(deltaTime);
+    //TODO: Check to see if smoking, update emitter position according to position/rotation.
+    particleEmitter.TimeStep(deltaTime);
 
-    //glm::vec3 glmScale;
-    //glm::quat glmOrientation;
-    //glm::vec3 glmTranslation;
-    //glm::vec3 glmSkew;
-    //glm::vec4 glmPerspective;
-    //glm::vec3 positionQuestionMark = glm::vec4(0.f);
-    //positionQuestionMark += mesh->meshData->mBoneData[rightHandIndex].FinalTransformation * glm::vec4(position,1.f) * vBoneWeights[0];
-    //positionQuestionMark += BoneMatrices[int(vBoneIDs[1])] * vPosition * vBoneWeights[1];
-    //positionQuestionMark += BoneMatrices[int(vBoneIDs[2])] * vPosition * vBoneWeights[2];
-    //positionQuestionMark += BoneMatrices[int(vBoneIDs[3])] * vPosition * vBoneWeights[3];
-    //glm::decompose(mesh->meshData->mBoneData[rightHandIndex].GlobalTransformation, glmScale, glmOrientation, glmTranslation, glmSkew, glmPerspective);
-    //std::cout << glmTranslation.x << " " << glmTranslation.y <<" "<< glmTranslation.z <<  std::endl;
+    cEntity::TimeStep(deltaTime);
+   
 }
 
 void cCharacter::UpdateAnimationBlend() {

@@ -259,7 +259,7 @@ void SetUpTextures(cMesh* pCurrentMesh, GLuint shaderProgram)
 
 std::string GetAppropriateModel(cMesh* pCurrentMesh) {
     float distance = glm::distance(pCurrentMesh->positionXYZ, ::g_pFlyCamera->getEye());
-    if (distance > 500.f) {
+    if (distance > 400.f) {
         return pCurrentMesh->lowDetailMeshName;
     }
     else if (distance > 100.f) {
